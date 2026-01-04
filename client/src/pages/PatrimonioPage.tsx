@@ -31,8 +31,7 @@ import {
 } from "lucide-react";
 import { Link } from "wouter";
 import { SEOHead, useSEOPerformance } from "@/components/SEOHead";
-// Temporary placeholder for book cover - replace with actual image path when available
-const libroCopertina = "https://via.placeholder.com/200x280/4F46E5/FFFFFF?text=Libro+Copertina";
+const libroCopertina = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='280'%3E%3Crect fill='%234F46E5' width='200' height='280'/%3E%3Ctext x='50%25' y='50%25' font-size='14' fill='%23FFFFFF' text-anchor='middle' dy='.3em'%3ELibro Copertina%3C/text%3E%3C/svg%3E";
 
 export default function PatrimonioPage() {
   // SEO Performance monitoring
@@ -283,6 +282,10 @@ export default function PatrimonioPage() {
                       src={libroCopertina} 
                       alt="Copertina libro Comanda le tue Finanze" 
                       className="w-full max-w-[200px] mx-auto rounded-lg shadow-lg"
+                      width="200"
+                      height="280"
+                      loading="lazy"
+                      decoding="async"
                       data-testid="libro-copertina"
                     />
                   </div>

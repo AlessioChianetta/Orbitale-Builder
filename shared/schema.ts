@@ -436,6 +436,15 @@ export const globalSeoSettings = pgTable("global_seo_settings", {
   // Advanced Settings
   noindexPages: jsonb("noindex_pages").$type<string[]>().default([]), // Array of slugs to noindex
   customHeadCode: text("custom_head_code"), // Custom HTML for <head>
+  
+  // Favicon URLs for different sizes
+  faviconUrl: varchar("favicon_url", { length: 255 }), // Standard favicon.ico or 32x32 PNG
+  favicon16Url: varchar("favicon_16_url", { length: 255 }), // 16x16 PNG
+  favicon32Url: varchar("favicon_32_url", { length: 255 }), // 32x32 PNG
+  favicon96Url: varchar("favicon_96_url", { length: 255 }), // 96x96 PNG
+  appleTouchIconUrl: varchar("apple_touch_icon_url", { length: 255 }), // 180x180 for iOS
+  androidChrome192Url: varchar("android_chrome_192_url", { length: 255 }), // 192x192 for Android
+  androidChrome512Url: varchar("android_chrome_512_url", { length: 255 }), // 512x512 for PWA
 
   // Personal Branding (Schema.org Person)
   enablePersonalBranding: boolean("enable_personal_branding").default(false),
@@ -527,6 +536,19 @@ export const googleSheetsSyncLog = pgTable("google_sheets_sync_log", {
   errorMessage: text("error_message"),
   syncStartedAt: timestamp("sync_started_at").defaultNow().notNull(),
   syncCompletedAt: timestamp("sync_completed_at"),
+});
+
+// API Keys table - for authenticating public API requests
+export const apiKeys = pgTable("api_keys", {
+  id: serial("id").primaryKey(),
+  tenantId: integer("tenant_id").references(() => tenants.id, { onDelete: "cascade" }).notNull(),
+  key: varchar("key", { length: 255 }).unique().notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  scopes: jsonb("scopes").$type<string[]>().default([]).notNull(),
+  isActive: boolean("is_active").default(true).notNull(),
+  lastUsedAt: timestamp("last_used_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 // Zod schemas
@@ -689,6 +711,13 @@ export const insertGoogleSheetsSyncLogSchema = createInsertSchema(googleSheetsSy
   syncStartedAt: true,
 });
 
+export const insertApiKeySchema = createInsertSchema(apiKeys).omit({
+  id: true,
+  lastUsedAt: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 // Types
 export type InsertTenant = z.infer<typeof insertTenantSchema>;
 export type Tenant = typeof tenants.$inferSelect;
@@ -736,3 +765,5 @@ export type InsertGoogleSheetsCampaign = z.infer<typeof insertGoogleSheetsCampai
 export type GoogleSheetsCampaign = typeof googleSheetsCampaigns.$inferSelect;
 export type InsertGoogleSheetsSyncLog = z.infer<typeof insertGoogleSheetsSyncLogSchema>;
 export type GoogleSheetsSyncLog = typeof googleSheetsSyncLog.$inferSelect;
+export type InsertApiKey = z.infer<typeof insertApiKeySchema>;
+export type ApiKey = typeof apiKeys.$inferSelect;

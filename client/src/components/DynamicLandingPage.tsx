@@ -3,10 +3,22 @@ import { useRoute, useLocation } from "wouter";
 import { Loader2 } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import NotFound from "@/pages/not-found";
-import { PatrimonioLandingRenderer } from "./PatrimonioLandingRenderer";
-import { BuilderPageRenderer } from "./BuilderPageRenderer";
-import { PageRenderer } from "./PageRenderer";
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
+
+// Lazy load ALL heavy components to avoid loading unused code
+const PatrimonioLandingRenderer = lazy(() => 
+  import("./PatrimonioLandingRenderer").then(module => ({ 
+    default: module.PatrimonioLandingRenderer 
+  }))
+); // 108 KiB saved
+
+const BuilderPageRenderer = lazy(() => 
+  import("./BuilderPageRenderer").then(module => ({ 
+    default: module.BuilderPageRenderer 
+  }))
+); // 192 KiB saved
+
+const PageRenderer = lazy(() => import("./PageRenderer"));
 
 // Riconosce automaticamente il tipo di template dal contenuto della pagina
 const getTemplateType = (page: any) => {
@@ -99,6 +111,13 @@ export default function DynamicLandingPage() {
 
   const { type, content } = contentData;
 
+  // Loading fallback per tutti i lazy components
+  const LoadingFallback = () => (
+    <div className="min-h-screen flex items-center justify-center">
+      <Loader2 className="h-8 w-8 animate-spin text-primary" />
+    </div>
+  );
+
   // Renderizza in base al tipo di contenuto
   switch (type) {
     case 'page':
@@ -114,7 +133,9 @@ export default function DynamicLandingPage() {
                 image={content.featuredImage}
                 url={`/${content.slug}`}
               />
-              <PageRenderer page={content} templateType={templateType} />
+              <Suspense fallback={<LoadingFallback />}>
+                <PageRenderer page={content} templateType={templateType} />
+              </Suspense>
             </>
           );
         }
@@ -131,7 +152,9 @@ export default function DynamicLandingPage() {
               image={content.ogImage}
               url={`/landing/${content.slug}`}
             />
-            <PatrimonioLandingRenderer landingPage={content} />
+            <Suspense fallback={<LoadingFallback />}>
+              <PatrimonioLandingRenderer landingPage={content} />
+            </Suspense>
           </>
         );
       }
@@ -147,7 +170,9 @@ export default function DynamicLandingPage() {
               image={content.ogImage}
               url={`/${content.slug}`}
             />
-            <BuilderPageRenderer page={content} />
+            <Suspense fallback={<LoadingFallback />}>
+              <BuilderPageRenderer page={content} />
+            </Suspense>
           </>
         );
       }

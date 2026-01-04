@@ -2,7 +2,9 @@ import { Helmet } from 'react-helmet';
 import { useState, useMemo } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
-import { CheckCircle, ArrowRight, Play, MapPin, Menu, Layout, Sparkles, AlertTriangle, X, Shield, Target, TrendingDown, Star, Users, Lightbulb, Award, TrendingUp, Heart, Quote, Clock, Zap, XCircle, PlayCircle, Search, Trophy, Rocket, Code, Briefcase, Handshake, ExternalLink, Calendar, BookOpen, User, Filter, Mail, HelpCircle, ChevronDown, ChevronUp, MessageCircle, Phone, Headphones, Palette, BarChart, Megaphone, Globe, Smartphone, Euro, ShieldCheck } from "lucide-react";
+import { 
+  CheckCircle, ArrowRight, Play, MapPin, Menu, Layout, Sparkles, AlertTriangle, X, Shield, Target, TrendingDown, Star, Users, Lightbulb, Award, TrendingUp, Heart, Quote, Clock, Zap, XCircle, PlayCircle, Search, Trophy, Rocket, Code, Briefcase, Handshake, ExternalLink, Calendar, BookOpen, User, Filter, Mail, HelpCircle, ChevronDown, ChevronUp, MessageCircle, Phone, Headphones, Palette, BarChart, Megaphone, Globe, Smartphone, Euro, ShieldCheck, Loader2
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,6 +20,8 @@ import { useQuery } from '@tanstack/react-query';
 import { Link } from 'wouter';
 import type { Project, BlogPostWithRelations } from '@shared/schema';
 import { SEOHead } from './SEOHead';
+import { LazyWistiaVideo } from './LazyWistiaVideo';
+import type { LucideIcon } from 'lucide-react';
 interface ComponentData {
   id: string;
   type: string;
@@ -51,10 +55,8 @@ interface ComponentProps {
   children?: React.ReactNode;
 }
 
-// Define icons object for dynamic icon rendering
-const icons = {
-  Shield,
-  ShieldCheck,
+// Optimized icon map - only essential icons loaded
+const icons: Record<string, LucideIcon> = {
   CheckCircle,
   ArrowRight,
   Play,
@@ -64,6 +66,7 @@ const icons = {
   Sparkles,
   AlertTriangle,
   X,
+  Shield,
   Target,
   TrendingDown,
   Star,
@@ -100,7 +103,9 @@ const icons = {
   Megaphone,
   Globe,
   Smartphone,
-  Euro
+  Euro,
+  ShieldCheck,
+  Loader2
 };
 
 // Component Renderers
@@ -142,6 +147,11 @@ function HeroComponent({ props }: { props: any }) {
     return url;
   };
 
+  const getWistiaVideoId = (url: string) => {
+    if (!url) return null;
+    return url.match(/wistia\.com\/medias\/([a-zA-Z0-9]+)/)?.[1] || url.match(/wi\.st\/([a-zA-Z0-9]+)/)?.[1] || null;
+  };
+
   return (
     <section 
       className={`relative px-4 ${textAlignClass}`} 
@@ -169,15 +179,24 @@ function HeroComponent({ props }: { props: any }) {
         {/* Video Section */}
         {props.videoUrl && (
           <div className="mb-8 max-w-4xl mx-auto">
-            <div className="aspect-video rounded-lg overflow-hidden shadow-2xl">
-              <iframe
-                src={getVideoEmbedUrl(props.videoUrl, props.videoProvider || 'youtube')}
-                className="w-full h-full"
-                frameBorder="0"
-                allowFullScreen
-                title="Hero Video"
+            {props.videoProvider === 'wistia' && getWistiaVideoId(props.videoUrl) ? (
+              <LazyWistiaVideo
+                videoId={getWistiaVideoId(props.videoUrl)!}
+                thumbnailUrl={props.videoThumbnail}
+                title={props.title}
+                className="aspect-video"
               />
-            </div>
+            ) : (
+              <div className="aspect-video rounded-lg overflow-hidden shadow-2xl">
+                <iframe
+                  src={getVideoEmbedUrl(props.videoUrl, props.videoProvider || 'youtube')}
+                  className="w-full h-full"
+                  frameBorder="0"
+                  allowFullScreen
+                  title="Hero Video"
+                />
+              </div>
+            )}
           </div>
         )}
 
@@ -240,6 +259,10 @@ function ImageComponent({ props }: { props: any }) {
   };
   const radiusClass = radiusMap[props.borderRadius || 'lg'] || 'rounded-lg';
 
+  // Use explicit dimensions if provided, otherwise use aspect ratio defaults
+  const imgWidth = props.imageWidth || 1200;
+  const imgHeight = props.imageHeight || (imgWidth * 9 / 16); // 16:9 default aspect ratio
+
   return (
     <div 
       className="px-4"
@@ -253,8 +276,13 @@ function ImageComponent({ props }: { props: any }) {
           <img 
             src={props.src} 
             alt={props.alt || 'Immagine'} 
-            style={{ width: props.width || '100%' }}
+            style={{ width: props.width || '100%', aspectRatio: `${imgWidth} / ${imgHeight}` }}
             className={radiusClass}
+            width={imgWidth}
+            height={imgHeight}
+            loading="lazy"
+            decoding="async"
+            fetchPriority="auto"
           />
         ) : (
           <div className={`bg-muted ${radiusClass} h-64 flex items-center justify-center`}>
@@ -610,7 +638,15 @@ function VideoComponent({ props }: { props: any }) {
             aria-label="Play video"
           >
             {thumbnailUrl ? (
-              <img src={thumbnailUrl} alt="Video thumbnail" className="absolute top-0 left-0 w-full h-full object-cover" loading="lazy" />
+              <img 
+                src={thumbnailUrl} 
+                alt="Video thumbnail" 
+                className="absolute top-0 left-0 w-full h-full object-cover" 
+                width="800"
+                height="450"
+                loading="lazy"
+                decoding="async"
+              />
             ) : (
               <div className="w-full h-full bg-black"></div>
             )}
@@ -1975,10 +2011,13 @@ function HeroHomeComponent({ props }: { props: any }) {
                 <div className="aspect-video bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center relative">
                   <div className="absolute inset-0 bg-slate-800"></div>
                   <img 
-                    src="https://via.placeholder.com/1280x720/1e293b/ffffff?text=Guarda+il+Video+Sales+Letter" 
+                    src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1280' height='720'%3E%3Crect fill='%231e293b' width='1280' height='720'/%3E%3Ctext x='50%25' y='50%25' font-size='20' fill='%23ffffff' text-anchor='middle' dy='.3em'%3EGuarda il Video Sales Letter%3C/text%3E%3C/svg%3E"
                     alt="Video Sales Letter" 
                     className="w-full h-full object-cover opacity-80 relative z-10"
+                    width="1280"
+                    height="720"
                     loading="eager"
+                    decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-black/60 transition-all duration-500 group-hover:from-black/40 group-hover:to-black/40 z-20"></div>
                   <div className="absolute z-30">
@@ -2011,11 +2050,11 @@ function HeroHomeComponent({ props }: { props: any }) {
 // Social Proof Logos Component
 function SocialProofLogosComponent({ props }: { props: any }) {
   const clientLogos = props.clientLogos || [
-    { name: "Client A", logo: "https://via.placeholder.com/160x60/e2e8f0/64748b?text=CLIENT+A" },
-    { name: "Client B", logo: "https://via.placeholder.com/160x60/e2e8f0/64748b?text=CLIENT+B" },
-    { name: "Client C", logo: "https://via.placeholder.com/160x60/e2e8f0/64748b?text=CLIENT+C" },
-    { name: "Client D", logo: "https://via.placeholder.com/160x60/e2e8f0/64748b?text=CLIENT+D" },
-    { name: "Client E", logo: "https://via.placeholder.com/160x60/e2e8f0/64748b?text=CLIENT+E" },
+    { name: "Client A", logo: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='60'%3E%3Crect fill='%23e2e8f0' width='160' height='60'/%3E%3Ctext x='50%25' y='50%25' font-size='12' fill='%2364748b' text-anchor='middle' dy='.3em'%3ECLIENT A%3C/text%3E%3C/svg%3E" },
+    { name: "Client B", logo: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='60'%3E%3Crect fill='%23e2e8f0' width='160' height='60'/%3E%3Ctext x='50%25' y='50%25' font-size='12' fill='%2364748b' text-anchor='middle' dy='.3em'%3ECLIENT B%3C/text%3E%3C/svg%3E" },
+    { name: "Client C", logo: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='60'%3E%3Crect fill='%23e2e8f0' width='160' height='60'/%3E%3Ctext x='50%25' y='50%25' font-size='12' fill='%2364748b' text-anchor='middle' dy='.3em'%3ECLIENT C%3C/text%3E%3C/svg%3E" },
+    { name: "Client D", logo: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='60'%3E%3Crect fill='%23e2e8f0' width='160' height='60'/%3E%3Ctext x='50%25' y='50%25' font-size='12' fill='%2364748b' text-anchor='middle' dy='.3em'%3ECLIENT D%3C/text%3E%3C/svg%3E" },
+    { name: "Client E", logo: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='60'%3E%3Crect fill='%23e2e8f0' width='160' height='60'/%3E%3Ctext x='50%25' y='50%25' font-size='12' fill='%2364748b' text-anchor='middle' dy='.3em'%3ECLIENT E%3C/text%3E%3C/svg%3E" },
   ];
 
   return (
@@ -2067,6 +2106,8 @@ function SocialProofLogosComponent({ props }: { props: any }) {
                           src={logo.logo}
                           alt={logo.name}
                           className="h-12 sm:h-16 lg:h-20 w-auto object-contain filter grayscale group-hover:grayscale-0 transition-all duration-500 opacity-70 group-hover:opacity-100"
+                          width="160"
+                          height="60"
                           loading="lazy"
                           decoding="async"
                         />
@@ -2088,6 +2129,8 @@ function SocialProofLogosComponent({ props }: { props: any }) {
                           src={logo.logo}
                           alt={logo.name}
                           className="h-12 sm:h-16 lg:h-20 w-auto object-contain filter grayscale group-hover:grayscale-0 transition-all duration-500 opacity-70 group-hover:opacity-100"
+                          width="160"
+                          height="60"
                           loading="lazy"
                           decoding="async"
                         />
@@ -2108,6 +2151,8 @@ function SocialProofLogosComponent({ props }: { props: any }) {
                           src={logo.logo}
                           alt={logo.name}
                           className="h-12 sm:h-16 lg:h-20 w-auto object-contain filter grayscale group-hover:grayscale-0 transition-all duration-500 opacity-70 group-hover:opacity-100"
+                          width="160"
+                          height="60"
                           loading="lazy"
                           decoding="async"
                         />
@@ -2141,7 +2186,10 @@ function SocialProofLogosComponent({ props }: { props: any }) {
   );
 }
 
-// Problem Solution Component - VERSIONE MIGLIORATA GRAFICAMENTE
+
+
+
+// Problem Solution Component - VERSIONE OTTIMIZZATA CON FIX RESPONSIVE
 function ProblemSolutionComponent({ props }: { props: any }) {
   const [activeTab, setActiveTab] = useState<'problem' | 'solution'>('problem');
   const problems = Array.isArray(props.problems) ? props.problems : [];
@@ -2151,34 +2199,25 @@ function ProblemSolutionComponent({ props }: { props: any }) {
     <section 
       className="section-padding relative overflow-hidden"
       style={{
-        background: props.backgroundColor || 'linear-gradient(135deg, #f8fafc 0%, #ffffff 50%, #f1f5f9 100%)',
+        background: props.backgroundColor || 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
         paddingTop: `${props.paddingY || 96}px`,
         paddingBottom: `${props.paddingY || 96}px`
       }}
     >
-      {/* Animated Background Pattern */}
-      <div className="absolute inset-0 opacity-[0.03]" style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='1'%3E%3Ccircle cx='7' cy='7' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-      }}></div>
-
-      {/* Decorative Gradient Orbs */}
-      <div className="absolute top-20 -left-40 w-96 h-96 bg-red-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
-      <div className="absolute bottom-20 -right-40 w-96 h-96 bg-green-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '2s' }}></div>
-
       <div className="relative max-w-7xl mx-auto container-padding">
-        {/* Header Section */}
+        {/* Header Section (invariato) */}
         <div className="text-center space-y-6 mb-16">
-          <Badge className="border-primary/30 text-primary bg-white/90 backdrop-blur-sm font-bold px-6 py-3 rounded-full text-sm shadow-lg hover:shadow-xl transition-all duration-300">
-            <AlertTriangle className="w-4 h-4 mr-2 inline animate-pulse" />
+          <Badge className="border-primary/30 text-primary bg-white backdrop-blur-sm font-bold px-6 py-3 rounded-full text-sm shadow-lg">
+            <AlertTriangle className="w-4 h-4 mr-2 inline" />
             {props.badge || '🎯 IL PUNTO DI SVOLTA'}
           </Badge>
 
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading font-black text-slate-900 leading-tight">
             {props.title || (
               <>
-                Da <span className="bg-gradient-to-r from-red-600 via-red-500 to-orange-600 bg-clip-text text-transparent">Problema</span>
+                Da <span className="text-red-600">Problema</span>
                 {' '}a{' '}
-                <span className="bg-gradient-to-r from-green-600 via-emerald-500 to-emerald-600 bg-clip-text text-transparent">Soluzione</span>
+                <span className="text-emerald-600">Soluzione</span>
               </>
             )}
           </h2>
@@ -2188,35 +2227,35 @@ function ProblemSolutionComponent({ props }: { props: any }) {
           </p>
         </div>
 
-        {/* Enhanced Tabs Navigation */}
-        <div className="flex justify-center mb-6">
-          <div className="inline-flex items-center bg-white/80 backdrop-blur-sm rounded-2xl p-2 shadow-xl border border-slate-200/50">
+        {/* Tabs Navigation Semplificata (invariato) */}
+        <div className="flex justify-center mb-10">
+          <div className="inline-flex items-center bg-slate-100 rounded-full p-1.5 shadow-inner">
             <button
               onClick={() => setActiveTab('problem')}
-              className={`flex items-center gap-3 px-8 py-4 rounded-xl font-bold transition-all duration-300 ${
+              className={`flex items-center gap-2 px-6 py-3 rounded-full font-bold text-sm sm:text-base transition-colors duration-300 ${
                 activeTab === 'problem' 
-                  ? 'bg-gradient-to-r from-red-500 via-red-400 to-orange-500 text-white shadow-2xl shadow-red-500/50 scale-105' 
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                  ? 'bg-white text-red-600 shadow-md' 
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              <XCircle className={`h-5 w-5 ${activeTab === 'problem' ? 'animate-pulse' : ''}`} />
+              <XCircle className="h-5 w-5" />
               <span>Il Problema</span>
             </button>
             <button
               onClick={() => setActiveTab('solution')}
-              className={`flex items-center gap-3 px-8 py-4 rounded-xl font-bold transition-all duration-300 ${
+              className={`flex items-center gap-2 px-6 py-3 rounded-full font-bold text-sm sm:text-base transition-colors duration-300 ${
                 activeTab === 'solution' 
-                  ? 'bg-gradient-to-r from-green-500 via-emerald-400 to-emerald-500 text-white shadow-2xl shadow-green-500/50 scale-105' 
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                  ? 'bg-white text-emerald-600 shadow-md' 
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              <CheckCircle className={`h-5 w-5 ${activeTab === 'solution' ? 'animate-pulse' : ''}`} />
+              <CheckCircle className="h-5 w-5" />
               <span>La Soluzione</span>
             </button>
           </div>
         </div>
 
-        {/* Content Area with Enhanced Animation */}
+        {/* Content Area con animazione leggera (invariato) */}
         <div className="relative min-h-[400px]">
           {/* Problem Cards */}
           {activeTab === 'problem' && (
@@ -2224,15 +2263,15 @@ function ProblemSolutionComponent({ props }: { props: any }) {
               {problems.map((problem: any, index: number) => (
                 <Card 
                   key={index} 
-                  className="group border-2 bg-white hover:bg-gradient-to-br hover:from-red-50 hover:to-orange-50 border-red-200/50 hover:border-red-400 hover:shadow-2xl hover:shadow-red-500/20 transition-all duration-300 hover:-translate-y-2"
+                  className="group bg-white border-2 border-transparent hover:border-red-300 shadow-lg hover:shadow-xl transition-all duration-300"
                 >
                   <CardContent className="p-6 space-y-4">
                     <div className="flex items-start gap-4">
-                      <div className="p-3 rounded-2xl bg-gradient-to-br from-red-100 to-orange-100 group-hover:from-red-200 group-hover:to-orange-200 flex-shrink-0 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
+                      <div className="p-3 rounded-xl bg-red-100 flex-shrink-0">
                         <AlertTriangle className="w-6 h-6 text-red-600" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-bold text-lg mb-2 break-words text-slate-900 group-hover:text-red-700 transition-colors">
+                        <h3 className="font-bold text-lg mb-2 break-words text-slate-900">
                           {problem.title || 'Problema'}
                         </h3>
                         <p className="text-sm text-slate-600 break-words leading-relaxed">
@@ -2252,15 +2291,15 @@ function ProblemSolutionComponent({ props }: { props: any }) {
               {solutions.map((solution: any, index: number) => (
                 <Card 
                   key={index} 
-                  className="group border-2 bg-white hover:bg-gradient-to-br hover:from-green-50 hover:to-emerald-50 border-green-200/50 hover:border-green-400 hover:shadow-2xl hover:shadow-green-500/20 transition-all duration-300 hover:-translate-y-2"
+                  className="group bg-white border-2 border-transparent hover:border-emerald-300 shadow-lg hover:shadow-xl transition-all duration-300"
                 >
                   <CardContent className="p-6 space-y-4">
                     <div className="flex items-start gap-4">
-                      <div className="p-3 rounded-2xl bg-gradient-to-br from-green-100 to-emerald-100 group-hover:from-green-200 group-hover:to-emerald-200 flex-shrink-0 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
-                        <CheckCircle className="w-6 h-6 text-green-600" />
+                      <div className="p-3 rounded-xl bg-emerald-100 flex-shrink-0">
+                        <CheckCircle className="w-6 h-6 text-emerald-600" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-bold text-lg mb-2 break-words text-slate-900 group-hover:text-green-700 transition-colors">
+                        <h3 className="font-bold text-lg mb-2 break-words text-slate-900">
                           {solution.title || 'Soluzione'}
                         </h3>
                         <p className="text-sm text-slate-600 break-words leading-relaxed">
@@ -2275,21 +2314,23 @@ function ProblemSolutionComponent({ props }: { props: any }) {
           )}
         </div>
 
-        {/* Enhanced CTA Section */}
+        {/* Enhanced CTA Section - CON FIX */}
         {props.ctaText && (
-          <div className="mt-4 text-center">
+          // 1. Ridotto il margine superiore da mt-16 a mt-12
+          <div className="mt-12 text-center">
             <div className="inline-flex flex-col items-center gap-3">
               <p className="text-xl text-slate-700 font-semibold">
                 {props.ctaSubtext || 'Pronto a trasformare il tuo business?'}
               </p>
               <Button 
-                size="lg" 
-                className="px-12 py-7 text-lg font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white shadow-2xl shadow-blue-500/50 rounded-2xl hover:shadow-3xl hover:shadow-blue-600/60 hover:scale-105 group transition-all duration-300"
+                size="lg"
+                // 2. Aggiunte classi responsive per il pulsante
+                className="w-full sm:w-auto px-8 sm:px-12 py-6 sm:py-7 text-base sm:text-lg font-bold bg-blue-600 hover:bg-blue-700 text-white shadow-lg rounded-2xl hover:shadow-xl hover:scale-105 group transition-all duration-300"
                 asChild
               >
                 <a href={props.ctaLink || '#'}>
                   {props.ctaText}
-                  <ArrowRight className="ml-3 h-5 w-5 group-hover:translate-x-2 transition-transform duration-300" />
+                  <ArrowRight className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
                 </a>
               </Button>
             </div>
@@ -2299,6 +2340,65 @@ function ProblemSolutionComponent({ props }: { props: any }) {
     </section>
   );
 }
+
+
+
+
+
+function SimpleTextHeroComponent({ props }: { props: any }) {
+  const titleSizeMap: Record<string, string> = {
+    '2xl': 'text-2xl',
+    '3xl': 'text-3xl',
+    '4xl': 'text-4xl',
+    '5xl': 'text-5xl font-bold',
+    '6xl': 'text-6xl font-bold',
+  };
+  const titleClass = titleSizeMap[props.titleSize || '5xl'] || 'text-5xl font-bold';
+
+  const subtitleSizeMap: Record<string, string> = {
+    'base': 'text-base',
+    'lg': 'text-lg',
+    'xl': 'text-xl',
+  };
+  const subtitleClass = subtitleSizeMap[props.subtitleSize || 'lg'] || 'text-lg';
+
+  return (
+    <section 
+      className="py-16 px-4"
+      style={{
+        backgroundColor: props.backgroundColor || '#ffffff',
+        paddingTop: `${props.paddingY || 64}px`,
+        paddingBottom: `${props.paddingY || 64}px`,
+      }}
+    >
+      <div className="max-w-4xl mx-auto text-center">
+        {props.badgeText && (
+          <Badge 
+            variant="outline" 
+            className="mb-6 font-semibold"
+          >
+            {props.badgeText}
+          </Badge>
+        )}
+
+        <h1 
+          className={`${titleClass} text-slate-800 mb-6`}
+          style={{ color: props.titleColor || undefined }}
+        >
+          {props.title || 'Da Ferita a Forza'}
+        </h1>
+
+        <p 
+          className={`${subtitleClass} text-slate-600 max-w-3xl mx-auto leading-relaxed`}
+          style={{ color: props.subtitleColor || undefined }}
+        >
+          {props.subtitle || 'Ogni difficoltà può diventare la base della tua rinascita. Io stesso ho imparato che il dolore, se accolto, diventa energia vitale.'}
+        </p>
+      </div>
+    </section>
+  );
+}
+
 
 // Service Showcase Component (Ruota del Criceto)
 function ServiceShowcaseComponent({ props }: { props: any }) {
@@ -2489,6 +2589,109 @@ function TestimonialsGridComponent({ props }: { props: any }) {
 
 
 // ==================== CHI SIAMO COMPONENTS ====================
+
+
+// BuilderPageRenderer.tsx -> Aggiungi questa nuova funzione
+
+function LongFormComponent({ props }: { props: any }) {
+  const contentBlocks = props.contentBlocks || [];
+
+  // Funzione per convertire la sintassi semplificata in HTML sicuro
+  const parseTextToHtml = (text = '') => {
+    // Gestisce newline prima di altre conversioni
+    let html = text.replace(/\n/g, '<br />');
+
+    // Converte **testo** in <strong>testo</strong>
+    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'); 
+
+    // Converte [testo](link) in <a href="link">testo</a>
+    html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" class="text-blue-600 underline" target="_blank" rel="noopener noreferrer">$1</a>');
+
+    return html;
+  };
+
+  const renderBlock = (block: any, index: number) => {
+    const createMarkup = (text: string) => ({ __html: parseTextToHtml(text) });
+
+    switch (block.type) {
+      case 'main-heading':
+        return (
+          <h1 
+            key={index} 
+            className="text-4xl font-bold text-slate-800 mb-6"
+            dangerouslySetInnerHTML={createMarkup(block.text || 'Titolo Principale')}
+          />
+        );
+
+      case 'sub-heading':
+        return (
+          <h2 
+            key={index} 
+            className="text-2xl font-bold text-slate-800 mt-10 mb-4 border-l-4 border-blue-500 pl-4"
+            dangerouslySetInnerHTML={createMarkup(block.text || 'Sottotitolo di Sezione')}
+          />
+        );
+
+      case 'paragraph':
+        return (
+          <p 
+            key={index} 
+            className="text-lg text-slate-600 leading-relaxed mb-6"
+            dangerouslySetInnerHTML={createMarkup(block.text || 'Paragrafo di testo.')}
+          />
+        );
+
+      case 'emphasis-paragraph':
+        return (
+          <p 
+            key={index} 
+            className="text-lg text-blue-800 bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg mb-6"
+            dangerouslySetInnerHTML={createMarkup(block.text || 'Paragrafo con enfasi.')}
+          />
+        );
+
+      case 'list':
+        const items = (block.text || '').split('\n').filter((item: string) => item.trim() !== '');
+        return (
+          <ul key={index} className="space-y-3 my-6">
+            {items.map((item: string, i: number) => (
+              <li key={i} className="flex items-start">
+                <CheckCircle className="h-6 w-6 text-green-500 mr-3 mt-1 flex-shrink-0" />
+                <span className="text-lg text-slate-700 leading-relaxed" dangerouslySetInnerHTML={createMarkup(item)} />
+              </li>
+            ))}
+          </ul>
+        );
+
+      case 'callout':
+        return (
+          <div key={index} className="bg-slate-100 border-l-4 border-slate-400 p-6 my-8 rounded-r-lg">
+             <p 
+                className="text-lg text-slate-700 leading-relaxed italic"
+                dangerouslySetInnerHTML={createMarkup(block.text || 'Testo evidenziato nel box.')}
+             />
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <section 
+      style={{
+        backgroundColor: props.backgroundColor || '#ffffff',
+        paddingTop: `${props.paddingY || 64}px`,
+        paddingBottom: `${props.paddingY || 64}px`,
+      }}
+    >
+      <div className="max-w-3xl mx-auto px-4">
+        {contentBlocks.map(renderBlock)}
+      </div>
+    </section>
+  );
+}
 
 // Hero Chi Siamo Component
 function HeroChiSiamoComponent({ props }: { props: any }) {
@@ -2755,9 +2958,13 @@ function TeamGridComponent({ props }: { props: any }) {
               <CardContent className="p-6 text-center">
                 <div className="mb-6">
                   <img
-                    src={member.image || 'https://via.placeholder.com/200x200'}
+                    src={member.image || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23e2e8f0' width='200' height='200'/%3E%3Ctext x='50%25' y='50%25' font-size='60' fill='%2364748b' text-anchor='middle' dy='.3em'%3E%3F%3C/text%3E%3C/svg%3E"}
                     alt={member.name}
                     className="w-32 h-32 rounded-full mx-auto object-cover border-4 border-primary/20"
+                    width="200"
+                    height="200"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
                 <h3 className="text-xl font-bold text-slate-900 mb-1">{member.name}</h3>
@@ -3258,8 +3465,13 @@ function renderComponent(
 
     // Homepage Components
     'hero-home': (props) => <HeroHomeComponent props={props} />,
+    'simple-text-hero': (props) => <SimpleTextHeroComponent props={props} />, // <-- AGGIUNGI QUESTA LINEA
     'social-proof-logos': (props) => <SocialProofLogosComponent props={props} />,
     'problem-solution': (props) => <ProblemSolutionComponent props={props} />,
+    // --- AGGIUNGI QUESTA NUOVA RIGA QUI ---
+    'long-form-copy': (props) => <LongFormComponent props={props} />,
+    // --- FINE AGGIUNTA ---
+
     'service-showcase': (props) => <ServiceShowcaseComponent props={props} />,
     'filter-section': (props) => <FilterSectionComponent props={props} />,
     'testimonials-grid': (props) => <TestimonialsGridComponent props={props} />,
@@ -3653,7 +3865,15 @@ function renderComponent(
                         <div className="relative overflow-hidden">
                           {project.featuredImage ? (
                             <div className="aspect-video overflow-hidden relative">
-                              <img src={project.featuredImage} alt={project.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                              <img 
+                                src={project.featuredImage} 
+                                alt={project.title} 
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+                                width="800"
+                                height="450"
+                                loading="lazy"
+                                decoding="async"
+                              />
                               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                             </div>
                           ) : (
@@ -4140,7 +4360,15 @@ function renderComponent(
                       <div className="relative overflow-hidden">
                         {post.featuredImage ? (
                           <div className="aspect-video overflow-hidden">
-                            <img src={post.featuredImage} alt={post.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                            <img 
+                              src={post.featuredImage} 
+                              alt={post.title} 
+                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                              width="800"
+                              height="450"
+                              loading="lazy"
+                              decoding="async"
+                            />
                           </div>
                         ) : (
                           <div className="aspect-video flex items-center justify-center bg-gradient-to-br from-primary/10 via-primary/5 to-transparent">
@@ -4689,6 +4917,128 @@ function renderComponent(
             <p className="mt-8 text-sm text-blue-300/80 max-w-2xl mx-auto italic">
               {disclaimer}
             </p>
+          </div>
+        </section>
+      );
+    },
+
+    // Hero Dashboard Preview - Modern Landing Style
+    'hero-dashboard-preview': (props) => {
+      const {
+        badgeIcon = '✓',
+        badgeText = 'REAL RESULTS IN NO-TIME',
+        title = 'Optimize your eCommerce',
+        titleLineTwo = 'for Google and LLMs',
+        highlightedTitle = 'in 48h with AI',
+        subtitle = 'Speed Performances, SEO results, Security, UX & Accessibility.',
+        videoUrl = '',
+        videoProvider = 'youtube',
+        videoAutoplay = false,
+        videoMuted = true,
+        videoControls = true,
+        ctaText = 'Turbocharge your website',
+        ctaLink = '#',
+        backgroundColor = '#030c2d',
+        badgeBackgroundColor = '#10b98133',
+        badgeTextColor = '#10b981',
+        badgeBorderColor = '#10b981',
+        titleColor = '#ffffff',
+        subtitleColor = '#cbd5e1',
+        highlightColor = '#60a5fa',
+        ctaBackgroundColor = '#3b82f6',
+        ctaTextColor = '#ffffff',
+        paddingY = 100
+      } = props;
+
+      // Video embed URL generator
+      const getVideoEmbedUrl = () => {
+        if (!videoUrl) return '';
+
+        if (videoProvider === 'youtube') {
+          const videoId = videoUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/)?.[1];
+          return videoId ? `https://www.youtube.com/embed/${videoId}?autoplay=${videoAutoplay ? 1 : 0}&mute=${videoMuted ? 1 : 0}&controls=${videoControls ? 1 : 0}` : '';
+        }
+
+        if (videoProvider === 'vimeo') {
+          const videoId = videoUrl.match(/vimeo\.com\/(\d+)/)?.[1];
+          return videoId ? `https://player.vimeo.com/video/${videoId}?autoplay=${videoAutoplay ? 1 : 0}&muted=${videoMuted ? 1 : 0}` : '';
+        }
+
+        if (videoProvider === 'wistia') {
+          const videoId = videoUrl.match(/wistia\.com\/medias\/([a-zA-Z0-9]+)/)?.[1] || videoUrl.match(/wi\.st\/([a-zA-Z0-9]+)/)?.[1];
+          return videoId ? `https://fast.wistia.net/embed/iframe/${videoId}?autoplay=${videoAutoplay ? 1 : 0}&muted=${videoMuted ? 1 : 0}&controlsVisibleOnLoad=${videoControls ? 'true' : 'false'}` : '';
+        }
+
+        return videoUrl;
+      };
+
+      return (
+        <section
+          className="relative overflow-hidden"
+          style={{
+            backgroundColor,
+            paddingTop: `${paddingY}px`,
+            paddingBottom: `${paddingY}px`
+          }}
+        >
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+            <div className="text-center">
+              {/* Badge */}
+              <div 
+                className="mb-6 inline-flex items-center gap-2 rounded-full px-4 py-2 border"
+                style={{
+                  backgroundColor: badgeBackgroundColor,
+                  borderColor: badgeBorderColor
+                }}
+              >
+                <span className="text-sm font-medium" style={{ color: badgeTextColor }}>{badgeIcon}</span>
+                <span className="text-sm font-semibold uppercase tracking-wide" style={{ color: badgeTextColor }}>{badgeText}</span>
+              </div>
+
+              {/* Title */}
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6">
+                <span className="block" style={{ color: titleColor }}>{title}</span>
+                <span className="block" style={{ color: titleColor }}>{titleLineTwo}</span>
+                <span className="block mt-2" style={{ color: highlightColor }}>{highlightedTitle}</span>
+              </h1>
+
+              {/* Subtitle */}
+              <p 
+                className="text-lg sm:text-xl md:text-2xl max-w-4xl mx-auto mb-12"
+                style={{ color: subtitleColor }}
+              >
+                {subtitle}
+              </p>
+
+              {/* Video */}
+              {videoUrl && (
+                <div className="mb-12 max-w-5xl mx-auto">
+                  <div className="aspect-video rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+                    <iframe
+                      src={getVideoEmbedUrl()}
+                      className="w-full h-full"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* CTA Button */}
+              <div className="mt-8">
+                <Button
+                  asChild
+                  size="lg"
+                  className="text-lg px-8 py-6 rounded-xl font-semibold shadow-lg hover:scale-105 transition-transform"
+                  style={{
+                    backgroundColor: ctaBackgroundColor,
+                    color: ctaTextColor
+                  }}
+                >
+                  <a href={ctaLink}>{ctaText}</a>
+                </Button>
+              </div>
+            </div>
           </div>
         </section>
       );

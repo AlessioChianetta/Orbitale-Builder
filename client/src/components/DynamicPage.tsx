@@ -2,14 +2,23 @@ import { useQuery } from '@tanstack/react-query';
 import { useRoute, useLocation } from 'wouter';
 import { Loader2 } from 'lucide-react';
 import NotFound from '@/pages/not-found';
-import { useEffect } from 'react';
+import { useEffect, lazy, Suspense } from 'react';
 
-// Importiamo i componenti che mostreranno le pagine
-import { PatrimonioLandingRenderer } from './PatrimonioLandingRenderer'; // Per le landing page
-import { BuilderPageRenderer } from './BuilderPageRenderer'; // Per le builder pages
-import Homepage from '@/pages/Homepage'; // Fallback per la homepage statica
-import { HomepageRenderer } from './HomepageRenderer'; // Renderer dinamico per la homepage personalizzata
-import { PageRenderer } from './PageRenderer'; // Renderer generico per tutte le pagine
+// Lazy load heavy components to reduce initial bundle size
+const PatrimonioLandingRenderer = lazy(() => 
+  import('./PatrimonioLandingRenderer').then(module => ({ 
+    default: module.PatrimonioLandingRenderer 
+  }))
+); // 108 KiB saved
+
+const BuilderPageRenderer = lazy(() => 
+  import('./BuilderPageRenderer').then(module => ({ 
+    default: module.BuilderPageRenderer 
+  }))
+); // 192 KiB saved
+
+const Homepage = lazy(() => import('@/pages/Homepage')); // Fallback
+const PageRenderer = lazy(() => import('./PageRenderer')); // Renderer generico
 
 // Mapping slug -> templateType
 const getTemplateType = (slug: string) => {
@@ -75,6 +84,13 @@ export default function DynamicPage() {
 
   const { type, content } = contentData;
 
+  // Loading fallback per tutti i lazy components
+  const LoadingFallback = () => (
+    <div className="min-h-screen flex items-center justify-center">
+      <Loader2 className="h-8 w-8 animate-spin" />
+    </div>
+  );
+
   // Renderizza in base al tipo di contenuto
   switch (type) {
     case 'page':
@@ -83,30 +99,46 @@ export default function DynamicPage() {
         
         // Se è supportata dal nostro sistema template
         if (templateType) {
-          return <PageRenderer page={content} templateType={templateType} />;
+          return (
+            <Suspense fallback={<LoadingFallback />}>
+              <PageRenderer page={content} templateType={templateType} />
+            </Suspense>
+          );
         }
         
         // Fallback per pagine non supportate (per retrocompatibilità)
-        return <Homepage />; 
+        return (
+          <Suspense fallback={<LoadingFallback />}>
+            <Homepage />
+          </Suspense>
+        ); 
       }
       break;
 
     case 'landing-page':
       if (content && content.isActive) {
-        return <PatrimonioLandingRenderer landingPage={content} />;
+        return (
+          <Suspense fallback={<LoadingFallback />}>
+            <PatrimonioLandingRenderer landingPage={content} />
+          </Suspense>
+        );
       }
       break;
 
     case 'builder-page':
       if (content && content.isActive) {
-        return <BuilderPageRenderer page={content} />;
+        return (
+          <Suspense fallback={<LoadingFallback />}>
+            <BuilderPageRenderer page={content} />
+          </Suspense>
+        );
       }
       break;
 
     case 'project':
       // Il redirect viene gestito da useEffect per evitare errori di rendering
       // Mostra un loader mentre il redirect è in corso
-      return <div className="min-h-screen flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin" /></div>;
+      return <LoadingFallback />;
   }
 
   // Se arriviamo qui, il contenuto non è valido

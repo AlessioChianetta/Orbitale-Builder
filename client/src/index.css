@@ -1,3 +1,35 @@
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/inter-latin-400-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/inter-latin-600-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/poppins-latin-400-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/poppins-latin-600-normal.woff2') format('woff2');
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -39,6 +71,23 @@
   .prevent-shift {
     contain: layout style paint;
   }
+}
+
+/* Performance: defer below-fold rendering */
+@media (min-width: 768px) {
+  section:not(:first-of-type) {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 500px;
+  }
+}
+
+/* Optimize long lists for better rendering performance */
+.blog-list > *,
+.project-list > *,
+[class*="list"] > article,
+[class*="grid"] > article {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 300px;
 }
 
 /* Animazione scroll infinito per i loghi (spostato fuori dalla media query e ottimizzato) */
@@ -438,7 +487,7 @@
     pointer-events: none;
   }
 
-  /* Modern line clamp utilities */
+  /* Line clamp utilities - essential only */
   .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -453,33 +502,7 @@
     overflow: hidden;
   }
 
-  /* GPU acceleration utilities */
-  .will-animate {
-    will-change: transform, opacity;
-  }
-
-  .gpu-accelerate {
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    perspective: 1000px;
-    -webkit-perspective: 1000px;
-  }
-
-  .hardware-accelerate {
-    transform: translate3d(0, 0, 0);
-    -webkit-transform: translate3d(0, 0, 0);
-  }
-  
-  .line-clamp-4 {
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  /* Modern glass morphism effects */
+  /* Glass morphism - used in many components */
   .glass {
     background: var(--glass-bg);
     backdrop-filter: var(--glass-blur);
@@ -490,28 +513,14 @@
     @apply glass rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300;
   }
 
-  /* Modern gradient backgrounds */
+  /* Gradient utilities - used in components */
   .gradient-primary {
     background: var(--gradient-primary);
   }
 
-  .gradient-surface {
-    background: var(--gradient-surface);
-  }
-
-  .gradient-accent {
-    background: var(--gradient-accent);
-  }
-
-  /* Modern hover effects - GPU optimized */
+  /* Hover effects - used throughout the site */
   .hover-lift {
     @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-lg;
-    transform: translateZ(0);
-    will-change: transform;
-  }
-
-  .hover-scale {
-    @apply transition-transform duration-300 hover:scale-105;
     transform: translateZ(0);
     will-change: transform;
   }
@@ -520,79 +529,6 @@
     @apply transition-all duration-300 hover:shadow-lg hover:shadow-primary/25;
     transform: translateZ(0);
     will-change: box-shadow;
-  }
-
-  /* Modern animations */
-  .animate-fade-in {
-    animation: fadeIn 0.6s var(--animation-curve) forwards;
-  }
-
-  .animate-slide-up {
-    animation: slideUp 0.6s var(--animation-curve) forwards;
-  }
-
-  .animate-slide-down {
-    animation: slideDown 0.6s var(--animation-curve) forwards;
-  }
-
-  .animate-bounce-in {
-    animation: bounceIn 0.8s var(--animation-bounce) forwards;
-  }
-
-  .animate-scale-in {
-    animation: scaleIn 0.5s var(--animation-curve) forwards;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  @keyframes slideUp {
-    from {
-      opacity: 0;
-      transform: translateY(2rem);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes slideDown {
-    from {
-      opacity: 0;
-      transform: translateY(-2rem);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes bounceIn {
-    from {
-      opacity: 0;
-      transform: scale(0.3);
-    }
-    50% {
-      transform: scale(1.05);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-
-  @keyframes scaleIn {
-    from {
-      opacity: 0;
-      transform: scale(0.8);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
   }
 
   /* Mobile-first responsive text */

@@ -115,7 +115,6 @@ Sitemap: ${baseUrl}/sitemap.xml
 Disallow: /admin/
 Disallow: /superadmin/
 Disallow: /login
-Disallow: /api/
 Disallow: /uploads/private/
 
 # Crawl delay
@@ -229,11 +228,8 @@ Crawl-delay: 1`;
     <meta name="msvalidate.01" content="${seoSettings.bingWebmasterCode}">`;
     }
 
-    // Add custom head code if available
-    if (seoSettings?.customHeadCode) {
-      metaTags += `
-    ${seoSettings.customHeadCode}`;
-    }
+    // Custom head code removed - causes syntax errors when injected server-side
+    // It's already handled by FacebookPixelInitializer and AnalyticsInitializer components client-side
 
     metaTags += `
     `;

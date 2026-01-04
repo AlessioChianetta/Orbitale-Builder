@@ -1,0 +1,255 @@
+
+First Contentful Paint
+3,7 s
+Largest Contentful Paint
+4,3 s
+Total Blocking Time
+140 ms
+Cumulative Layout Shift
+0.001
+Speed Index
+5,5 s
+Captured at 5 nov 2025, 11:17 CET
+Moto G Power emulato with Lighthouse 13.0.1
+Sessione di una sola pagina
+Caricamento pagina iniziale
+Limitazione a 4G lenta
+Using HeadlessChromium 137.0.7151.119 with lr
+Visualizza Treemap
+Screenshot
+Screenshot
+Screenshot
+Screenshot
+Screenshot
+Screenshot
+Screenshot
+Screenshot
+Mostra controlli relativi a:
+
+All
+
+FCP
+
+LCP
+
+TBT
+
+CLS
+Approfondimenti
+Richieste di blocco del rendering Risparmio stimato di 1.080 ms
+Le richieste stanno bloccando il rendering iniziale della pagina, il che potrebbe ritardare l'LCP. Rimandare o incorporare può spostare queste richieste di rete fuori dal percorso critico.LCPFCPSenza punteggio
+URL
+Dimensioni trasferimento
+Durata
+alessiochianetta.it Proprietarie
+168,8 KiB	1.690 ms
+/assets/index-CkOkkYTx.css(alessiochianetta.it)
+168,8 KiB
+1.690 ms
+Suddivisione LCP
+Ogni sottoparte prevede strategie di miglioramento specifiche. Idealmente, la maggior parte del tempo LCP dovrebbe essere impiegato per caricare le risorse, non nei ritardi.LCPSenza punteggio
+Sottoparte
+Durata
+Time to First Byte
+0 ms
+Ritardo di rendering dell'elemento
+2.590 ms
+Il sistema scientifico per imprenditori, professionisti e dipendenti determinat…
+<p class="text-xl md:text-2xl text-slate-600 leading-relaxed max-w-4xl mx-auto" data-testid="hero-subtitle">
+Albero delle dipendenze di rete
+Evita di concatenare le richieste fondamentali riducendo la lunghezza delle catene e le dimensioni del download delle risorse oppure rimandando il download delle risorse non necessarie per velocizzare il caricamento pagina.LCPSenza punteggio
+Latenza massima del percorso critico: 2.247 ms
+Navigazione iniziale
+/patrimonio(alessiochianetta.it) - 308 ms, 1,88 KiB
+/assets/index-CAE3_95Z.js(alessiochianetta.it) - 987 ms, 334,96 KiB
+/assets/PatrimonioPage-DQjRyF_S.js(alessiochianetta.it) - 1.409 ms, 37,46 KiB
+/assets/card-D0k3-duk.js(alessiochianetta.it) - 1.466 ms, 1,53 KiB
+/assets/badge-DW4nlqPu.js(alessiochianetta.it) - 1.453 ms, 1,23 KiB
+/assets/SEOHead-CSr5DQzG.js(alessiochianetta.it) - 1.501 ms, 27,62 KiB
+…pages/patrimonio(alessiochianetta.it) - 2.247 ms, 0,45 KiB
+/assets/trending-up-BUBkScfp.js(alessiochianetta.it) - 1.571 ms, 0,88 KiB
+/assets/arrow-right-BJzOkZVV.js(alessiochianetta.it) - 1.345 ms, 0,84 KiB
+/assets/triangle-….js(alessiochianetta.it) - 1.344 ms, 0,94 KiB
+/assets/circle-ch….js(alessiochianetta.it) - 1.346 ms, 0,86 KiB
+/assets/sparkles-CPNpJAeV.js(alessiochianetta.it) - 1.335 ms, 1,18 KiB
+/assets/building-….js(alessiochianetta.it) - 1.800 ms, 1,11 KiB
+/assets/chart-column-CrlvpV_n.js(alessiochianetta.it) - 1.553 ms, 0,93 KiB
+/assets/target-Behkv_i-.js(alessiochianetta.it) - 1.334 ms, 0,90 KiB
+/assets/shield-DppmegLH.js(alessiochianetta.it) - 1.462 ms, 0,95 KiB
+/assets/trending-….js(alessiochianetta.it) - 1.796 ms, 1,95 KiB
+/assets/rocket-CoLXmnmS.js(alessiochianetta.it) - 1.463 ms, 1,12 KiB
+/assets/book-open-EdvhvAM9.js(alessiochianetta.it) - 1.809 ms, 0,95 KiB
+/assets/users-D76nFh3L.js(alessiochianetta.it) - 1.346 ms, 0,98 KiB
+/assets/clock-BuICb1DI.js(alessiochianetta.it) - 1.570 ms, 0,86 KiB
+…seo-settings/public(alessiochianetta.it) - 1.681 ms, 3,46 KiB
+…tenant/public(alessiochianetta.it) - 1.453 ms, 0,57 KiB
+…settings/public(alessiochianetta.it) - 1.563 ms, 0,42 KiB
+…settings/navbar(alessiochianetta.it) - 2.029 ms, 1,02 KiB
+/assets/index-CkOkkYTx.css(alessiochianetta.it) - 929 ms, 168,78 KiB
+/fonts/inter-latin-600-normal.woff2(alessiochianetta.it) - 1.749 ms, 24,37 KiB
+Origini precollegate
+Gli hint di precollegamento aiutano il browser a stabilire una connessione prima del caricamento pagina, consentendo di risparmiare tempo quando viene effettuata la prima richiesta per quell'origine. Di seguito sono riportate le origini a cui la pagina si è precollegata.
+nessuna origine è stata precollegata
+Candidati per il precollegamento
+Aggiungi hint di precollegamento alle origini più importanti, ma cerca usarne al massimo 4.
+Nessuna origine aggiuntiva è un buon candidato per il precollegamento
+Utilizza durate della memorizzazione nella cache efficienti Risparmio stimato di 82 KiB
+La memorizzazione nella cache per un lungo periodo di tempo può velocizzare le visite abituali alla tua pagina. Scopri di più.LCPFCPSenza punteggio
+Richiesta
+TTL cache
+Dimensioni trasferimento
+Facebook social 
+93 KiB
+/en_US/fbevents.js(connect.facebook.net)
+20min
+85 KiB
+…config/313…?v=…(connect.facebook.net)
+20min
+7 KiB
+/tr?id=313…&ev=PageView&noscript=1(www.facebook.com)
+None
+0 KiB
+Migliora il caricamento delle immagini Risparmio stimato di 981 KiB
+La riduzione del tempo di download delle immagini può migliorare il tempo di caricamento percepito della pagina e il l'LCP. Scopri di più sull'ottimizzazione delle dimensioni delle immaginiLCPFCPSenza punteggio
+URL
+Dimensioni risorsa
+Risparmi stimati
+ibb.co
+981,6 KiB	981,3 KiB
+Alessio Chianetta - Metodo Orbitale
+<img src="https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png" alt="Alessio Chianetta - Metodo Orbitale " class="h-8 w-auto" width="32" height="32" loading="eager" decoding="async">
+/n8Np4b1t/FOTO-COPERTINA-BUONA.png(i.ibb.co)
+981,6 KiB
+981,3 KiB
+L'utilizzo di un formato dell'immagine moderno (WebP, AVIF) o l'aumento della compressione dell'immagine potrebbero migliorare le dimensioni di download di questa immagine.
+881,6 KiB
+Questo file immagine è più grande del necessario (640x960) per le dimensioni visualizzate (37x56). Utilizza le immagini adattabili per ridurre le dimensioni di download delle immagini.
+978,3 KiB
+JavaScript precedente Risparmio stimato di 12 KiB
+Polyfill e trasformazioni consentono ai browser precedenti di usare nuove funzionalità JavaScript. Tanti non sono però necessari per i browser moderni. Valuta la possibilità di modificare il processo di compilazione di JavaScript in modo da non transcompilare le funzionalità di base, a meno che non sia necessario supportare i browser precedenti. Scopri perché la maggior parte dei siti può eseguire il deployment del codice ES6+ senza transcompilazioneLCPFCPSenza punteggio
+URL
+Byte sprecati
+Facebook social 
+12,4 KiB
+/en_US/fbevents.js(connect.facebook.net)
+12,4 KiB
+/en_US/fbevents.js:24:3580(connect.facebook.net)
+@babel/plugin-transform-classes
+/en_US/fbevents.js:24:4444(connect.facebook.net)
+@babel/plugin-transform-spread
+/en_US/fbevents.js:262:22971(connect.facebook.net)
+Array.from
+/en_US/fbevents.js:262:25544(connect.facebook.net)
+Array.prototype.filter
+/en_US/fbevents.js:262:28561(connect.facebook.net)
+Array.prototype.find
+/en_US/fbevents.js:262:25087(connect.facebook.net)
+Array.prototype.includes
+/en_US/fbevents.js:262:28066(connect.facebook.net)
+Array.prototype.indexOf
+/en_US/fbevents.js:262:15256(connect.facebook.net)
+Array.prototype.map
+/en_US/fbevents.js:262:27003(connect.facebook.net)
+String.prototype.startsWith
+Responsabili delle variazioni del layout
+Le variazioni del layout si verificano quando gli elementi si spostano senza alcuna interazione da parte dell'utente. Esamina le cause delle variazioni del layout, come l'aggiunta o la rimozione di elementi o la modifica dei relativi caratteri durante il caricamento della pagina.CLSSenza punteggio
+Elemento
+Punteggio della variazione del layout
+Totale
+0,001
+Alessio Chianetta - Metodo Orbitale
+<span class="font-heading font-bold text-xl text-foreground">
+0,001
+Alessio Chianetta - Metodo Orbitale
+<img src="https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png" alt="Alessio Chianetta - Metodo Orbitale " class="h-8 w-auto" width="32" height="32" loading="eager" decoding="async">
+Elemento immagine senza dimensioni
+Ottimizza le dimensioni del DOM
+Un DOM di grandi dimensioni può aumentare la durata dei calcoli di stile e degli adattamenti dinamici del layout, con ripercussioni sull'adattabilità della pagina. Inoltre, un DOM di grandi dimensioni aumenta la memoria utilizzata. Scopri come evitare dimensioni eccessive del DOM.Senza punteggio
+Statistica
+Elemento
+Valore
+Elementi totali
+646
+Profondità DOM
+💡 Ecco il "segreto" :
+<strong>
+16
+Più elementi secondari
+Metodo ORBITALE Costruisci il Tuo Patrimonio 🚀 Hybrid 💎 Patrimonio CANDIDATI …
+<div class="min-h-screen bg-slate-50" data-testid="page-patrimonio">
+12
+Terze parti
+Il codice di terze parti può incidere notevolmente sulle prestazioni del caricamento. Riduci e posticipa il caricamento del codice di terze parti per dare la priorità ai contenuti della pagina.Senza punteggio
+Di terze parti
+Dimensioni trasferimento
+Tempo thread principale
+Google Tag Manager tag-manager 
+280 KiB	307 ms
+/gtag/js?id=G-2XEWBZ9ZLS(www.googletagmanager.com)
+140 KiB
+237 ms
+/gtm.js?id=GT-5NXSBBN(www.googletagmanager.com)
+140 KiB
+70 ms
+Facebook social 
+93 KiB	66 ms
+/en_US/fbevents.js(connect.facebook.net)
+85 KiB
+54 ms
+…config/313…?v=…(connect.facebook.net)
+7 KiB
+12 ms
+/tr?id=313…&ev=PageView&noscript=1(www.facebook.com)
+0 KiB
+0 ms
+Other Google APIs/SDKs utility 
+1 KiB	0 ms
+/ads/ga-audiences?v=…(www.google.nl)
+1 KiB
+0 ms
+google.com
+1 KiB	0 ms
+/g/collect?v=…(region1.analytics.google.com)
+1 KiB
+0 ms
+ibb.co
+982 KiB	0 ms
+/n8Np4b1t/FOTO-COPERTINA-BUONA.png(i.ibb.co)
+982 KiB
+0 ms
+Queste informazioni sono disponibili anche nel riquadro Prestazioni di Chrome DevTools: registra una traccia per visualizzare informazioni più dettagliate.
+Diagnostica
+Riduci il codice JavaScript inutilizzato Risparmio stimato di 425 KiB
+Riduci il codice JavaScript inutilizzato e rimanda il caricamento degli script finché non sono necessari al fine di ridurre i byte consumati dall'attività di rete. Scopri come ridurre il codice JavaScript inutilizzato.LCPFCPSenza punteggio
+URL
+Dimensioni trasferimento
+Risparmi stimati
+Google Tag Manager tag-manager 
+417,5 KiB	247,6 KiB
+/gtag/js?id=G-2XEWBZ9ZLS(www.googletagmanager.com)
+139,2 KiB
+97,0 KiB
+/gtm.js?id=GT-5NXSBBN(www.googletagmanager.com)
+139,2 KiB
+97,0 KiB
+/gtag/js?id=G-2XEWBZ9ZLS(www.googletagmanager.com)
+139,2 KiB
+53,5 KiB
+alessiochianetta.it Proprietarie
+334,1 KiB	146,5 KiB
+/assets/index-CAE3_95Z.js(alessiochianetta.it)
+334,1 KiB
+146,5 KiB
+Facebook social 
+81,4 KiB	31,2 KiB
+/en_US/fbevents.js(connect.facebook.net)
+81,4 KiB
+31,2 KiB
+Riduci i contenuti CSS inutilizzati Risparmio stimato di 140 KiB
+Riduci le regole inutilizzate dei fogli di stile e rimanda i contenuti CSS non usati per i contenuti above the fold al fine di ridurre i byte consumati dall'attività di rete. Scopri come ridurre il CSS inutilizzato.LCPFCPSenza punteggio
+URL
+Dimensioni trasferimento
+Risparmi stimati
+alessiochianetta.it Proprietarie
+168,3 KiB	139,7 KiB
+/assets/index-CkOkkYTx.css(alessiochianetta.it)

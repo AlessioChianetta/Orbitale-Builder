@@ -42,7 +42,10 @@ const renderBlock = (block: { type: string; data: any; id: string }, manager: He
               context: 'content'
             })}
             className="w-full h-auto rounded-lg"
+            width="800"
+            height="450"
             loading="lazy"
+            decoding="async"
           />
           {block.data.caption && (
             <p className="text-sm text-muted-foreground mt-2 text-center italic">

@@ -3,6 +3,7 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { identifyTenant } from "./middleware/tenant";
+import { seoInjectionMiddleware } from "./middleware/seoInjection";
 import cors from 'cors';
 
 const app = express();
@@ -16,6 +17,10 @@ app.use(express.json());
 // Apply tenant identification middleware to all routes
 // This middleware will use authenticated user's tenant when available
 app.use(identifyTenant);
+
+// Apply SEO injection middleware AFTER tenant identification
+// This will inject meta tags and structured data for crawlers
+app.use(seoInjectionMiddleware);
 
 app.use((req, res, next) => {
   const start = Date.now();

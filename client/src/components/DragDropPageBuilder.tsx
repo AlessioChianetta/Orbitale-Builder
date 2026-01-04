@@ -13,6 +13,7 @@ import { Separator } from "@/components/ui/separator";
 import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
@@ -21,7 +22,8 @@ import {
   Square, Sparkles, Users, CheckCircle, ArrowRight, Save, ChevronDown, Trash2, PlusCircle, Layers,
   AlertTriangle, Target, Shield, DollarSign, Star, Plus,
   Calendar, Briefcase, Grid, Quote, BarChart, Filter, Heart, MessageSquare, List, Award,
-  BookOpen, Mail, Phone, HelpCircle, Headphones, Trophy, Zap, CalendarDays
+  BookOpen, Mail, Phone, HelpCircle, Headphones, Trophy, Zap, CalendarDays, PlayCircle,
+  Settings, Package, Box, ChevronUp, Menu 
 } from "lucide-react";
 import { BuilderPageRenderer } from "./BuilderPageRenderer";
 
@@ -96,6 +98,13 @@ const COMPONENT_TYPES = [
     description: 'Contenitore principale per un\'area della pagina.',
     category: 'Layout'
   },
+     {
+        type: 'long-form-copy',
+        label: 'Long Form Copy',
+        icon: BookOpen,
+        description: 'Crea testi lunghi e strutturati per pagine di vendita o articoli.',
+        category: 'Contenuto'
+      },
   {
     type: 'column',
     label: 'Colonna',
@@ -166,6 +175,14 @@ const COMPONENT_TYPES = [
     category: 'Interattivo'
   },
 
+    {
+        type: 'simple-text-hero',
+        label: 'Testo Hero Semplice',
+        icon: Type, // o un'altra icona a tua scelta
+        description: 'Un blocco di testo centrato con badge, titolo e sottotitolo.',
+        category: 'Testo'
+      },
+    
   // WIDGET ELENCHI
   {
     type: 'icon-list',
@@ -329,6 +346,15 @@ const COMPONENT_TYPES = [
     description: 'Form per catturare lead con campi personalizzabili.',
     category: 'Rendita Dipendente'
   },
+
+  // HERO MODERN LANDING
+  {
+    type: 'hero-dashboard-preview',
+    label: 'Hero Dashboard Preview',
+    icon: PlayCircle,
+    description: 'Hero moderno con badge, titolo evidenziato, video embed e CTA.',
+    category: 'Rendita Dipendente'
+  },
 ];
 
 // Props predefinite per ogni tipo di componente
@@ -362,6 +388,9 @@ const DEFAULT_PROPS: Record<string, any> = {
     containerId: '',
   },
 
+
+   
+    
   // WIDGET DI TESTO
   heading: {
     text: 'La Tua Intestazione Qui',
@@ -430,6 +459,20 @@ const DEFAULT_PROPS: Record<string, any> = {
     paddingY: '16',
   },
 
+
+    // --- NUOVO COMPONENTE ---
+      'simple-text-hero': {
+        badgeText: 'LA SFIDA',
+        title: 'Da Ferita a Forza',
+        subtitle: 'Ogni difficoltà può diventare la base della tua rinascita. Io stesso ho imparato che il dolore, se accolto, diventa energia vitale.',
+        titleSize: '5xl',
+        subtitleSize: 'lg',
+        backgroundColor: '#ffffff',
+        titleColor: '#1e293b',
+        subtitleColor: '#475569',
+        paddingY: 96,
+      },
+    
   // WIDGET ELENCHI
   'icon-list': {
     items: [
@@ -662,6 +705,10 @@ const DEFAULT_PROPS: Record<string, any> = {
     paddingY: '80',
   },
 
+
+   
+
+    
   // COMPONENTI RENDITA DIPENDENTE
   'vsl-hero-block': {
     topHeadline: 'ESCLUSIVO PER DIPENDENTI, PROFESSIONISTI E TECNICI',
@@ -837,6 +884,33 @@ const DEFAULT_PROPS: Record<string, any> = {
     paddingY: '80'
   },
   // --- END NEW COMPONENT ---
+
+  // --- Hero Dashboard Preview (Modern Landing Style) ---
+  'hero-dashboard-preview': {
+    badgeIcon: '✓',
+    badgeText: 'REAL RESULTS IN NO-TIME',
+    title: 'Optimize your eCommerce',
+    titleLineTwo: 'for Google and LLMs',
+    highlightedTitle: 'in 48h with AI',
+    subtitle: 'Speed Performances, SEO results, Security, UX & Accessibility. The results of a web & IT marketing team in one AI tool.',
+    videoUrl: '',
+    videoProvider: 'youtube',
+    videoAutoplay: false,
+    videoMuted: true,
+    videoControls: true,
+    ctaText: 'Turbocharge your website',
+    ctaLink: '#',
+    backgroundColor: '#030c2d',
+    badgeBackgroundColor: '#10b98133',
+    badgeTextColor: '#10b981',
+    badgeBorderColor: '#10b981',
+    titleColor: '#ffffff',
+    subtitleColor: '#cbd5e1',
+    highlightColor: '#60a5fa',
+    ctaBackgroundColor: '#3b82f6',
+    ctaTextColor: '#ffffff',
+    paddingY: 100
+  },
 };
 
 const ELEMENTI_PREDEFINITI = [
@@ -960,6 +1034,81 @@ const ELEMENTI_PREDEFINITI = [
             }
         ]
     },
+
+
+    // --- AGGIUNGI QUESTO NUOVO BLOCCO QUI ---
+    {
+        key: 'long-form-copy-block',
+        label: 'Blocco Testo Lungo (Sales Page)',
+        icon: BookOpen,
+        description: 'Un template per pagine di vendita con vari stili di testo, come nell\'esempio.',
+        category: 'Blocchi Avanzati', // O la categoria che preferisci
+        components: [
+            {
+                id: `component-${Date.now()}-longform`,
+                type: 'long-form-copy',
+                // SOSTITUISCI IL BLOCCO "props: { ... }" CON QUESTO:
+                props: {
+                    backgroundColor: '#ffffff',
+                    paddingY: 80,
+                    contentBlocks: [
+                      { 
+                        type: 'main-heading', 
+                        text: 'Ciao e benvenuto! Sono Sofia.' 
+                      },
+                      { 
+                        type: 'paragraph', 
+                        text: 'Se sei qui oggi, probabilmente è perché sei un dipendente, un professionista, un tecnico. Ami il tuo lavoro, o forse un tempo lo amavi, ma ogni giorno combatti una battaglia silenziosa.' 
+                      },
+                      { 
+                        type: 'emphasis-paragraph', 
+                        text: "La battaglia contro l'ansia della domenica sera. La battaglia contro la sveglia del lunedì mattina. La battaglia contro la frustrazione di vedere lo stipendio svanire prima della fine del mese, senza che nulla cambi davvero."
+                      },
+                      {
+                        type: 'paragraph',
+                        text: 'E forse, la battaglia più grande: quella di vedere **gli anni migliori della tua vita svanire** senza costruire un futuro finanziario solido e libero per te e la tua famiglia.'
+                      },
+                      {
+                        type: 'callout',
+                        text: 'Se ti riconosci in questo, resta con me, perché sto per mostrarti come trasformare radicalmente la tua carriera e la tua vita finanziaria.'
+                      },
+                      { 
+                        type: 'sub-heading', 
+                        text: 'L\'Ecosistema che Cambia Tutto' 
+                      },
+                      {
+                        type: 'paragraph',
+                        text: "La singola 'COSA' che separa i dipendenti che subiscono il lavoro da quelli che creano la propria libertà non è un singolo elemento.\n\nÈ **un ecosistema**. È quello che noi chiamiamo la combinazione sinergica dell'Acceleratore di Business Remoto e dell'Acceleratore di Patrimonio Personale."
+                      },
+                      {
+                        type: 'sub-heading',
+                        text: 'Il Caso di Maria: da Dipendente a Imprenditrice Digitale'
+                      },
+                      {
+                        type: 'paragraph',
+                        text: "Maria era un'analista contabile. Brava, precisa, ma intrappolata in una routine che non le dava più stimoli. Oggi, grazie al nostro sistema, gestisce un'attività di consulenza online che le genera un'**entrata slegata dal suo tempo** e dal suo cartellino."
+                      },
+                      {
+                        type: 'sub-heading',
+                        text: 'SEGRETO #2: Non hai bisogno di più soldi, hai bisogno di un sistema migliore'
+                      },
+                      {
+                        type: 'list',
+                        text: "Un'attività che puoi gestire da dove vuoi.\nChe si basa sulle tue passioni o competenze.\nChe non richiede enormi capitali per iniziare.\nUn motore che, silenziosamente, ti genera un'**entrata slegata dal tuo tempo e dal tuo cartellino**."
+                      },
+                      {
+                        type: 'paragraph',
+                        text: 'Non devi diventare un esperto di finanza. La complessità la gestiamo noi, a te la serenità. Per maggiori informazioni, [visita il nostro sito](https://esempio.com).'
+                      }
+                    ]
+                },
+                children: []
+            }
+        ]
+    },
+    // --- FINE DEL NUOVO BLOCCO ---
+
+    
     {
         key: 'filter-transparency',
         label: 'Sezione Trasparenza',
@@ -1399,10 +1548,10 @@ const ELEMENTI_PREDEFINITI = [
                     badge: 'SCELTI DA',
                     title: 'Più di 500 aziende si fidano di noi',
                     logos: [
-                        { name: 'Google', url: 'https://via.placeholder.com/120x40?text=Google' },
-                        { name: 'Microsoft', url: 'https://via.placeholder.com/120x40?text=Microsoft' },
-                        { name: 'Amazon', url: 'https://via.placeholder.com/120x40?text=Amazon' },
-                        { name: 'Meta', url: 'https://via.placeholder.com/120x40?text=Meta' }
+                        { name: 'Google', url: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='40'%3E%3Crect fill='%23f8fafc' width='120' height='40'/%3E%3Ctext x='50%25' y='50%25' font-size='10' fill='%2364748b' text-anchor='middle' dy='.3em'%3EGoogle%3C/text%3E%3C/svg%3E" },
+                        { name: 'Microsoft', url: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='40'%3E%3Crect fill='%23f8fafc' width='120' height='40'/%3E%3Ctext x='50%25' y='50%25' font-size='10' fill='%2364748b' text-anchor='middle' dy='.3em'%3EMicrosoft%3C/text%3E%3C/svg%3E" },
+                        { name: 'Amazon', url: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='40'%3E%3Crect fill='%23f8fafc' width='120' height='40'/%3E%3Ctext x='50%25' y='50%25' font-size='10' fill='%2364748b' text-anchor='middle' dy='.3em'%3EAmazon%3C/text%3E%3C/svg%3E" },
+                        { name: 'Meta', url: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='40'%3E%3Crect fill='%23f8fafc' width='120' height='40'/%3E%3Ctext x='50%25' y='50%25' font-size='10' fill='%2364748b' text-anchor='middle' dy='.3em'%3EMeta%3C/text%3E%3C/svg%3E" }
                     ],
                     backgroundColor: '#f8fafc',
                     paddingY: 60
@@ -1707,7 +1856,7 @@ const ELEMENTI_PREDEFINITI = [
                             title: 'Founder & Lead Strategist',
                             role: 'CEO',
                             bio: 'Unisce la logica ingegneristica del codice con i principi scientifici del marketing a risposta diretta.',
-                            image: 'https://via.placeholder.com/500x500/3b82f6/ffffff?text=AR',
+                            image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500'%3E%3Crect fill='%233b82f6' width='500' height='500'/%3E%3Ctext x='50%25' y='50%25' font-size='120' fill='%23ffffff' text-anchor='middle' dy='.3em'%3EAR%3C/text%3E%3C/svg%3E",
                             specialties: ['Marketing Strategy', 'Business Growth', 'Data Analytics']
                         },
                         {
@@ -1715,7 +1864,7 @@ const ELEMENTI_PREDEFINITI = [
                             title: 'Head of Operations',
                             role: 'COO',
                             bio: 'Organizza e ottimizza i processi per garantire che ogni progetto venga consegnato con la massima qualità.',
-                            image: 'https://via.placeholder.com/500x500/10b981/ffffff?text=LB',
+                            image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500'%3E%3Crect fill='%2310b981' width='500' height='500'/%3E%3Ctext x='50%25' y='50%25' font-size='120' fill='%23ffffff' text-anchor='middle' dy='.3em'%3ELB%3C/text%3E%3C/svg%3E",
                             specialties: ['Project Management', 'Team Leadership', 'Process Optimization']
                         },
                         {
@@ -1723,7 +1872,7 @@ const ELEMENTI_PREDEFINITI = [
                             title: 'Lead Developer',
                             role: 'CTO',
                             bio: 'Trasforma le strategie in piattaforme web performanti, scalabili e facili da gestire per i nostri clienti.',
-                            image: 'https://via.placeholder.com/500x500/8b5cf6/ffffff?text=MV',
+                            image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500'%3E%3Crect fill='%238b5cf6' width='500' height='500'/%3E%3Ctext x='50%25' y='50%25' font-size='120' fill='%23ffffff' text-anchor='middle' dy='.3em'%3EMV%3C/text%3E%3C/svg%3E",
                             specialties: ['Full-Stack Development', 'System Architecture', 'DevOps']
                         },
                         {
@@ -1731,7 +1880,7 @@ const ELEMENTI_PREDEFINITI = [
                             title: 'Senior Copywriter',
                             role: 'Creative Director',
                             bio: 'Specializzata nella scrittura di testi persuasivi che convertono i visitatori in clienti fedeli.',
-                            image: 'https://via.placeholder.com/500x500/f59e0b/ffffff?text=SN',
+                            image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500'%3E%3Crect fill='%23f59e0b' width='500' height='500'/%3E%3Ctext x='50%25' y='50%25' font-size='120' fill='%23ffffff' text-anchor='middle' dy='.3em'%3ESN%3C/text%3E%3C/svg%3E",
                             specialties: ['Copywriting', 'Content Strategy', 'Brand Messaging']
                         }
                     ],
@@ -2523,9 +2672,8 @@ function BlockLibraryItem({ block }: { block: typeof ELEMENTI_PREDEFINITI[0] }) 
     );
 }
 
-// --- EDITOR PROPRIETÀ COMPONENTE ---
+// SOSTITUISCI la vecchia funzione RepeaterField con questa
 
-// Campo Ripetitore per la gestione di array di oggetti
 function RepeaterField({ label, value = [], fields, onChange }: {
   label: string;
   value: any[];
@@ -2538,82 +2686,117 @@ function RepeaterField({ label, value = [], fields, onChange }: {
     onChange(newItems);
   };
 
-  const handleAddItem = () => {
+  const handleAddItem = (type = 'paragraph') => {
     const newItem = fields.reduce((acc, field) => {
       acc[field.key] = field.defaultValue || '';
       return acc;
-    }, {});
-    onChange([...value, newItem]);
+    }, {} as Record<string, any>);
+    newItem.type = type;
+    onChange([...(value || []), newItem]);
   };
 
   const handleRemoveItem = (index: number) => {
-    const newItems = value.filter((_, i) => i !== index);
+    if (confirm('Sei sicuro di voler eliminare questo blocco?')) {
+      const newItems = value.filter((_, i) => i !== index);
+      onChange(newItems);
+    }
+  };
+  
+  const handleMoveItem = (index: number, direction: 'up' | 'down') => {
+    const newItems = [...value];
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= newItems.length) return;
+    [newItems[index], newItems[targetIndex]] = [newItems[targetIndex], newItems[index]];
     onChange(newItems);
   };
 
+  const blockTypes = fields.find(f => f.key === 'type')?.options || [];
+
   return (
-    <div className="space-y-2">
-      <Label className="text-sm font-medium">{label}</Label>
-      <div className="space-y-4 rounded-lg border p-4">
-        {value.map((item, index) => (
-          <div key={index} className="rounded border p-3 relative bg-background">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="absolute top-1 right-1 h-6 w-6 p-0"
-              onClick={() => handleRemoveItem(index)}
-            >
-              <Trash2 className="h-3 w-3" />
-            </Button>
-            <div className="space-y-3">
-              {fields.map(field => (
-                <div key={field.key}>
-                  <Label className="text-xs">{field.label}</Label>
-                  {field.type === 'textarea' ? (
-                    <Textarea
-                      value={item[field.key] || ''}
-                      onChange={(e) => handleItemChange(index, field.key, e.target.value)}
-                      placeholder={field.label}
-                      className="mt-1"
-                      rows={3}
-                    />
-                  ) : field.type === 'number' ? (
-                      <Input
-                        type="number"
-                        value={item[field.key] || ''}
-                        onChange={(e) => handleItemChange(index, field.key, parseInt(e.target.value, 10))}
-                        placeholder={field.label}
-                        className="mt-1"
-                      />
-                  ) : field.type === 'list' ? (
+    <div className="space-y-4">
+      <Label className="text-lg font-semibold">{label}</Label>
+      <div className="space-y-3 rounded-lg border p-4 bg-muted/30">
+        {(value || []).map((item, index) => (
+          <Collapsible key={index} defaultOpen={true} className="bg-background rounded-md border shadow-sm">
+            <CollapsibleTrigger className="flex items-center w-full p-3 text-left">
+              <span className="font-semibold text-sm flex-1 truncate pr-2">
+                {item.type ? item.type.replace('-', ' ') : 'Elemento'}: <span className="text-muted-foreground font-normal italic">{item.text?.substring(0, 30) || 'Vuoto'}...</span>
+              </span>
+              <div className="flex items-center gap-1 ml-auto">
+                <Button variant="ghost" size="icon" className="h-7 w-7" onClick={(e) => { e.stopPropagation(); handleMoveItem(index, 'up'); }} disabled={index === 0}>
+                  <ChevronUp className="h-4 w-4" />
+                </Button>
+                <Button variant="ghost" size="icon" className="h-7 w-7" onClick={(e) => { e.stopPropagation(); handleMoveItem(index, 'down'); }} disabled={index === value.length - 1}>
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+                <Button variant="ghost" size="icon" className="h-7 w-7 text-red-500 hover:text-red-600" onClick={(e) => { e.stopPropagation(); handleRemoveItem(index); }}>
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+              <ChevronDown className="h-4 w-4 transition-transform ui-open:rotate-180 ml-2" />
+            </CollapsibleTrigger>
+            <CollapsibleContent className="p-4 border-t space-y-4">
+              {fields.map(field => {
+                if (field.type === 'select') {
+                  return (
+                     <div key={field.key}>
+                        <Label className="text-xs">{field.label}</Label>
+                        <Select value={item[field.key] || ''} onValueChange={(val) => handleItemChange(index, field.key, val)}>
+                          <SelectTrigger><SelectValue /></SelectTrigger>
+                          <SelectContent>
+                            {field.options.map((opt: any) => (
+                              <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                     </div>
+                  );
+                }
+                if (field.type === 'textarea') {
+                  return (
+                    <div key={field.key}>
+                      <Label className="text-xs">{field.label}</Label>
                       <Textarea
-                        value={Array.isArray(item[field.key]) ? item[field.key].join('\n') : ''}
-                        onChange={(e) => handleItemChange(index, field.key, e.target.value.split('\n'))}
-                        placeholder={field.label}
-                        className="mt-1"
-                        rows={3}
+                        value={item[field.key] || ''}
+                        onChange={(e) => handleItemChange(index, field.key, e.target.value)}
+                        placeholder="Scrivi qui..."
+                        rows={item.type === 'list' ? 6 : 4}
                       />
-                   ) : (
-                    <Input
-                      value={item[field.key] || ''}
-                      onChange={(e) => handleItemChange(index, field.key, e.target.value)}
-                      placeholder={field.label}
-                      className="mt-1"
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
+                       <p className="text-xs text-muted-foreground mt-1">
+                        Usa **testo** per il grassetto e [testo link](url) per i link.
+                      </p>
+                    </div>
+                  );
+                }
+                return null;
+              })}
+            </CollapsibleContent>
+          </Collapsible>
         ))}
-        <Button variant="outline" size="sm" onClick={handleAddItem} className="w-full">
-          <PlusCircle className="h-4 w-4 mr-2" />
-          Aggiungi {label}
-        </Button>
+        
+        <Collapsible>
+            <CollapsibleTrigger asChild>
+                <Button variant="outline" className="w-full">
+                    <PlusCircle className="h-4 w-4 mr-2" />
+                    Aggiungi Blocco
+                </Button>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="p-2 mt-2 border rounded-md bg-background">
+                <div className="grid grid-cols-2 gap-2">
+                    {blockTypes.map((type: any) => (
+                        <Button key={type.value} variant="ghost" size="sm" className="justify-start text-xs" onClick={() => handleAddItem(type.value)}>
+                            {type.label}
+                        </Button>
+                    ))}
+                </div>
+            </CollapsibleContent>
+        </Collapsible>
+
       </div>
     </div>
   );
 }
+
 
 // Funzione principale per renderizzare un singolo campo in base alla sua configurazione
 function renderField(fieldConfig: any, value: any, onUpdate: (newProps: any) => void) {
@@ -3072,6 +3255,68 @@ const COMPONENT_EDITOR_CONFIG: Record<string, any> = {
       { key: 'paddingY', type: 'slider', label: 'Padding Verticale', min: 0, max: 200, step: 4 }
     ]
   },
+
+
+    // --- NUOVO COMPONENTE ---
+      'simple-text-hero': {
+        content: [
+          { key: 'badgeText', type: 'text', label: 'Testo del Badge' },
+          { key: 'title', type: 'textarea', label: 'Titolo Principale' },
+          { key: 'subtitle', type: 'textarea', label: 'Sottotitolo' },
+        ],
+        style: [
+          { key: 'titleSize', type: 'select', label: 'Dimensione Titolo', options: [
+              { value: '2xl', label: '2XL' }, { value: '3xl', label: '3XL' }, 
+              { value: '4xl', label: '4XL' }, { value: '5xl', label: '5XL' }, { value: '6xl', label: '6XL' }
+          ]},
+          { key: 'subtitleSize', type: 'select', label: 'Dimensione Sottotitolo', options: [
+              { value: 'base', label: 'Base' }, { value: 'lg', label: 'Grande' }, { value: 'xl', label: 'XL' }
+          ]},
+          { key: 'backgroundColor', type: 'color', label: 'Colore Sfondo' },
+          { key: 'titleColor', type: 'color', label: 'Colore Titolo' },
+          { key: 'subtitleColor', type: 'color', label: 'Colore Sottotitolo' },
+        ],
+        spacing: [
+          { key: 'paddingY', type: 'slider', label: 'Padding Verticale', min: 24, max: 200, step: 8 },
+        ]
+      },
+      // --- INCOLLA QUESTO BLOCCO QUI ---
+      'long-form-copy': {
+        content: [
+          {
+            key: 'contentBlocks',
+            type: 'repeater',
+            label: 'Blocchi di Contenuto',
+            fields: [
+              {
+                key: 'type',
+                label: 'Tipo di Blocco',
+                type: 'select',
+                options: [
+                  { value: 'main-heading', label: 'Titolo Principale' },
+                  { value: 'sub-heading', label: 'Sottotitolo di Sezione' },
+                  { value: 'paragraph', label: 'Paragrafo' },
+                  { value: 'emphasis-paragraph', label: 'Paragrafo con Enfasi' },
+                  { value: 'list', label: 'Lista Puntata' },
+                  { value: 'callout', label: 'Box di Evidenziazione' },
+                ]
+              },
+              {
+                key: 'text',
+                label: 'Contenuto (per le liste, un punto per riga)',
+                type: 'textarea'
+              }
+            ]
+          }
+        ],
+        style: [
+          { key: 'backgroundColor', type: 'color', label: 'Colore Sfondo' }
+        ],
+        spacing: [
+          { key: 'paddingY', type: 'slider', label: 'Padding Verticale', min: 0, max: 200, step: 8 }
+        ]
+      },
+      // --- FINE BLOCCO DA INCOLLARE ---
   'posts-grid': {
       content: [
            { key: 'title', type: 'text', label: 'Titolo Sezione' }
@@ -3522,6 +3767,11 @@ const COMPONENT_EDITOR_CONFIG: Record<string, any> = {
           { key: 'paddingY', type: 'slider', label: 'Padding Verticale', min: 40, max: 200, step: 8 }
         ]
       },
+
+
+
+   
+    
   // --- HOMEPAGE COMPONENTS ---
   'hero-home': {
       content: [
@@ -4094,6 +4344,43 @@ const COMPONENT_EDITOR_CONFIG: Record<string, any> = {
       spacing: [
           { key: 'paddingY', type: 'slider', label: 'Padding Verticale', min: 0, max: 200, step: 4 }
       ]
+  },
+
+  // Hero Dashboard Preview (Modern Landing)
+  'hero-dashboard-preview': {
+    content: [
+      { key: 'badgeIcon', type: 'text', label: 'Icona Badge (emoji o simbolo)' },
+      { key: 'badgeText', type: 'text', label: 'Testo Badge' },
+      { key: 'title', type: 'text', label: 'Titolo Linea 1' },
+      { key: 'titleLineTwo', type: 'text', label: 'Titolo Linea 2' },
+      { key: 'highlightedTitle', type: 'text', label: 'Titolo Evidenziato (Colorato)' },
+      { key: 'subtitle', type: 'textarea', label: 'Sottotitolo/Descrizione' },
+      { key: 'videoUrl', type: 'text', label: 'URL Video (YouTube/Vimeo/Wistia)' },
+      { key: 'videoProvider', type: 'select', label: 'Provider Video', options: [
+        { value: 'youtube', label: 'YouTube' },
+        { value: 'vimeo', label: 'Vimeo' },
+        { value: 'wistia', label: 'Wistia' }
+      ]},
+      { key: 'videoAutoplay', type: 'boolean', label: 'Autoplay Video' },
+      { key: 'videoMuted', type: 'boolean', label: 'Video Muto' },
+      { key: 'videoControls', type: 'boolean', label: 'Mostra Controlli Video' },
+      { key: 'ctaText', type: 'text', label: 'Testo Pulsante CTA' },
+      { key: 'ctaLink', type: 'text', label: 'Link Pulsante CTA' }
+    ],
+    style: [
+      { key: 'backgroundColor', type: 'color', label: 'Colore Sfondo' },
+      { key: 'badgeBackgroundColor', type: 'color', label: 'Colore Sfondo Badge' },
+      { key: 'badgeTextColor', type: 'color', label: 'Colore Testo Badge' },
+      { key: 'badgeBorderColor', type: 'color', label: 'Colore Bordo Badge' },
+      { key: 'titleColor', type: 'color', label: 'Colore Titolo' },
+      { key: 'subtitleColor', type: 'color', label: 'Colore Sottotitolo' },
+      { key: 'highlightColor', type: 'color', label: 'Colore Testo Evidenziato' },
+      { key: 'ctaBackgroundColor', type: 'color', label: 'Colore Sfondo CTA' },
+      { key: 'ctaTextColor', type: 'color', label: 'Colore Testo CTA' }
+    ],
+    spacing: [
+      { key: 'paddingY', type: 'slider', label: 'Padding Verticale', min: 0, max: 200, step: 4 }
+    ]
   }
 };
 
@@ -4665,7 +4952,12 @@ export function DragDropPageBuilder({ pageToEdit, onClose }: DragDropPageBuilder
   const [components, setComponents] = useState<ComponentData[]>(pageToEdit?.components || []);
   const [selectedComponent, setSelectedComponent] = useState<ComponentData | null>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
+     // --- AGGIUNGI QUESTA RIGA ---
+      const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+      // --- FINE AGGIUNTA ---
+    
   // Sync selected component with components array
   useEffect(() => {
     if (selectedComponent) {
@@ -4828,216 +5120,245 @@ export function DragDropPageBuilder({ pageToEdit, onClose }: DragDropPageBuilder
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
       <div className="fixed inset-0 z-50 bg-background">
         <div className="flex h-full flex-col">
-        {/* Intestazione */}
-        <div className="border-b p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-2xl font-bold">Costruttore di Pagine</h2>
-              <p className="text-sm text-muted-foreground">Costruisci la tua pagina con il drag & drop</p>
-            </div>
-            <div className="flex gap-2">
-              <Button variant="outline" onClick={onClose} data-testid="button-close-builder">
-                Annulla
-              </Button>
-              <Button onClick={handleSave} disabled={saveMutation.isPending} data-testid="button-save-page">
-                <Save className="h-4 w-4 mr-2" />
-                {saveMutation.isPending ? 'Salvataggio...' : 'Salva Pagina'}
-              </Button>
+          {/* Intestazione */}
+          <div className="border-b p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-bold">Costruttore di Pagine</h2>
+                <p className="text-sm text-muted-foreground">Costruisci la tua pagina con il drag & drop</p>
+              </div>
+              <div className="flex gap-2">
+                <Button variant="outline" onClick={onClose} data-testid="button-close-builder">
+                  Annulla
+                </Button>
+                <Button onClick={handleSave} disabled={saveMutation.isPending} data-testid="button-save-page">
+                  <Save className="h-4 w-4 mr-2" />
+                  {saveMutation.isPending ? 'Salvataggio...' : 'Salva Pagina'}
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Contenuto Principale */}
-        <div className="flex flex-1 overflow-hidden">
-          {/* Barra Laterale Sinistra */}
-          <div className="w-72 border-r bg-muted/30 p-4 overflow-y-auto">
-            <div className="space-y-6">
-              {/* Impostazioni Pagina */}
-              <Collapsible defaultOpen>
-                   <CollapsibleTrigger className="flex items-center gap-2 mb-4 w-full hover:opacity-80 transition-opacity">
-                    <h3 className="font-bold text-lg">Impostazioni Pagina</h3>
-                    <ChevronDown className="h-4 w-4 ml-auto transition-transform ui-state-open:rotate-180" />
-                  </CollapsibleTrigger>
-                  <CollapsibleContent>
-                      <Card>
-                        <CardContent className="p-4 space-y-3">
-                          <div>
-                            <Label className="text-xs font-medium">Titolo Pagina</Label>
-                            <Input
-                              value={formData.title}
-                              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                              placeholder="Inserisci il titolo"
-                              data-testid="input-page-title"
-                            />
-                          </div>
-                          <div>
-                            <Label className="text-xs font-medium">URL Slug</Label>
-                            <Input
-                              value={formData.slug}
-                              onChange={(e) => setFormData({ ...formData, slug: e.target.value.toLowerCase().replace(/\s+/g, '-') })}
-                              placeholder="url-della-pagina"
-                              data-testid="input-page-slug"
-                            />
-                          </div>
+          {/* Contenuto Principale */}
+          <div className="flex flex-1 overflow-hidden">
 
-                          <Separator className="my-4" />
+            {/* Barra Laterale Sinistra (con logica condizionale) */}
+            {isSidebarVisible && (
+              <div className="w-72 border-r bg-muted/30 flex flex-col h-full transition-all duration-300 animate-in slide-in-from-left-2">
+                <Tabs defaultValue="components" className="flex-1 flex flex-col h-full">
+                  <TabsList className="w-full grid grid-cols-3 rounded-none border-b bg-muted/50 flex-shrink-0">
+                    <TabsTrigger value="settings" className="gap-2">
+                      <Settings className="h-4 w-4" />
+                      <span className="hidden sm:inline">Impostazioni</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="blocks" className="gap-2">
+                      <Package className="h-4 w-4" />
+                      <span className="hidden sm:inline">Blocchi</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="components" className="gap-2">
+                      <Box className="h-4 w-4" />
+                      <span className="hidden sm:inline">Componenti</span>
+                    </TabsTrigger>
+                  </TabsList>
 
-                          <div className="space-y-3">
-                            <Label className="text-xs font-medium text-muted-foreground">SEO</Label>
+                  <TabsContent value="settings" className="flex-1 overflow-y-auto p-4 mt-0 h-0">
+                    <div className="space-y-4">
+                      <div>
+                        <Label className="text-xs font-medium">Titolo Pagina</Label>
+                        <Input
+                          value={formData.title}
+                          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                          placeholder="Inserisci il titolo"
+                          data-testid="input-page-title"
+                        />
+                      </div>
+                      <div>
+                        <Label className="text-xs font-medium">URL Slug</Label>
+                        <Input
+                          value={formData.slug}
+                          onChange={(e) => setFormData({ ...formData, slug: e.target.value.toLowerCase().replace(/\s+/g, '-') })}
+                          placeholder="url-della-pagina"
+                          data-testid="input-page-slug"
+                        />
+                      </div>
+                      <Separator className="my-4" />
+                      <div className="space-y-3">
+                        <Label className="text-sm font-semibold">SEO</Label>
+                        <div>
+                          <Label className="text-xs font-medium">Meta Title</Label>
+                          <Input
+                            value={formData.metaTitle || ''}
+                            onChange={(e) => setFormData({ ...formData, metaTitle: e.target.value })}
+                            placeholder="Titolo SEO (30-60 caratteri)"
+                            maxLength={60}
+                            data-testid="input-meta-title"
+                          />
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {formData.metaTitle?.length || 0}/60 caratteri
+                          </p>
+                        </div>
+                        <div>
+                          <Label className="text-xs font-medium">Meta Description</Label>
+                          <Textarea
+                            value={formData.metaDescription || ''}
+                            onChange={(e) => setFormData({ ...formData, metaDescription: e.target.value })}
+                            placeholder="Descrizione SEO (120-160 caratteri)"
+                            maxLength={160}
+                            rows={3}
+                            data-testid="textarea-meta-description"
+                          />
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {formData.metaDescription?.length || 0}/160 caratteri
+                          </p>
+                        </div>
+                        <div>
+                          <Label className="text-xs font-medium">OG Image</Label>
+                          <Input
+                            value={formData.ogImage || ''}
+                            onChange={(e) => setFormData({ ...formData, ogImage: e.target.value })}
+                            placeholder="URL immagine per social media"
+                            data-testid="input-og-image"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </TabsContent>
 
-                            <div>
-                              <Label className="text-xs font-medium">Meta Title</Label>
-                              <Input
-                                value={formData.metaTitle || ''}
-                                onChange={(e) => setFormData({ ...formData, metaTitle: e.target.value })}
-                                placeholder="Titolo SEO (30-60 caratteri)"
-                                maxLength={60}
-                                data-testid="input-meta-title"
-                              />
-                              <p className="text-xs text-muted-foreground mt-1">
-                                {formData.metaTitle?.length || 0}/60 caratteri
-                              </p>
-                            </div>
-
-                            <div>
-                              <Label className="text-xs font-medium">Meta Description</Label>
-                              <Textarea
-                                value={formData.metaDescription || ''}
-                                onChange={(e) => setFormData({ ...formData, metaDescription: e.target.value })}
-                                placeholder="Descrizione SEO (120-160 caratteri)"
-                                maxLength={160}
-                                rows={3}
-                                data-testid="textarea-meta-description"
-                              />
-                              <p className="text-xs text-muted-foreground mt-1">
-                                {formData.metaDescription?.length || 0}/160 caratteri
-                              </p>
-                            </div>
-
-                            <div>
-                              <Label className="text-xs font-medium">OG Image</Label>
-                              <Input
-                                value={formData.ogImage || ''}
-                                onChange={(e) => setFormData({ ...formData, ogImage: e.target.value })}
-                                placeholder="URL immagine per social media"
-                                data-testid="input-og-image"
-                              />
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </CollapsibleContent>
-                </Collapsible>
-
-                {/* Logica per raggruppare solo Blocchi Avanzati (esclusi Blocchi e Pagine) */}
-                {Object.entries(
-                    ELEMENTI_PREDEFINITI.reduce((acc, elemento) => {
-                        const category = elemento.category || 'Altro';
-                        // Esclude le categorie "Blocchi" e "Pagine"
-                        if (category === 'Blocchi' || category === 'Pagine') {
-                            return acc;
-                        }
-                        if (!acc[category]) acc[category] = [];
-                        acc[category].push(elemento);
-                        return acc;
-                    }, {} as Record<string, typeof ELEMENTI_PREDEFINITI>)
-                ).map(([category, elements]) => (
-                    <Collapsible key={category} defaultOpen>
-                        <CollapsibleTrigger className="flex items-center gap-2 mb-4 w-full hover:opacity-80 transition-opacity">
-                            <h3 className="font-bold text-lg">{category}</h3>
-                            <ChevronDown className="h-4 w-4 ml-auto transition-transform ui-state-open:rotate-180" />
-                        </CollapsibleTrigger>
-                        <CollapsibleContent className="space-y-2">
-                            {elements.map((block) => (
-                                <BlockLibraryItem key={block.key} block={block} />
-                            ))}
-                        </CollapsibleContent>
-                    </Collapsible>
-                ))}
-
-              {/* Libreria Componenti */}
-              <Collapsible defaultOpen>
-                  <CollapsibleTrigger className="flex items-center gap-2 mb-4 w-full hover:opacity-80 transition-opacity">
-                    <h3 className="font-bold text-lg">Componenti</h3>
-                    <ChevronDown className="h-4 w-4 ml-auto transition-transform ui-state-open:rotate-180" />
-                  </CollapsibleTrigger>
-                  <CollapsibleContent>
+                  <TabsContent value="blocks" className="flex-1 overflow-y-auto p-4 mt-0 h-0">
+                    <div className="space-y-3">
                       {Object.entries(
-                        COMPONENT_TYPES.reduce((acc, component) => {
-                            const category = component.category || 'Altro';
-                            if (!acc[category]) acc[category] = [];
-                            acc[category].push(component);
+                        ELEMENTI_PREDEFINITI.reduce((acc, elemento) => {
+                          const category = elemento.category || 'Altro';
+                          if (category === 'Blocchi' || category === 'Pagine') {
                             return acc;
-                        }, {} as Record<string, typeof COMPONENT_TYPES>)
-                    ).map(([category, components]) => (
-                      <div key={category} className="mb-4">
-                        <h4 className="text-sm font-semibold text-muted-foreground mb-2 uppercase tracking-wide">
-                          {category}
-                        </h4>
-                        <div className="grid grid-cols-1 gap-2">
-                          {components.map((componentType) => (
-                               <ComponentLibraryItem key={componentType.type} componentType={componentType} />
+                          }
+                          if (!acc[category]) acc[category] = [];
+                          acc[category].push(elemento);
+                          return acc;
+                        }, {} as Record<string, typeof ELEMENTI_PREDEFINITI>)
+                      ).map(([category, elements]) => (
+                        <Collapsible key={category} defaultOpen={true}>
+                          <CollapsibleTrigger className="flex items-center gap-2 w-full hover:opacity-80 transition-opacity py-2 sticky top-0 bg-muted/30 z-10 -mx-4 px-4">
+                            <h3 className="font-semibold text-sm">{category}</h3>
+                            <span className="text-xs text-muted-foreground">({elements.length})</span>
+                            <ChevronDown className="h-4 w-4 ml-auto transition-transform ui-state-open:rotate-180" />
+                          </CollapsibleTrigger>
+                          <CollapsibleContent className="space-y-2 mt-2">
+                            {elements.map((block) => (
+                              <BlockLibraryItem key={block.key} block={block} />
+                            ))}
+                          </CollapsibleContent>
+                        </Collapsible>
+                      ))}
+                    </div>
+                  </TabsContent>
+
+                  <TabsContent value="components" className="flex-1 overflow-hidden p-0 mt-0 h-0">
+                    <div className="h-full flex flex-col">
+                      <div className="p-4 border-b">
+                        <Input
+                          placeholder="🔍 Cerca componente..."
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          className="w-full"
+                        />
+                      </div>
+                      <div className="flex-1 overflow-y-auto p-4">
+                        <div className="space-y-4">
+                          {Object.entries(
+                            COMPONENT_TYPES
+                              .filter(component => {
+                                if (!searchQuery.trim()) return true;
+                                const query = searchQuery.toLowerCase();
+                                return (
+                                  component.label.toLowerCase().includes(query) ||
+                                  component.description?.toLowerCase().includes(query) ||
+                                  component.type.toLowerCase().includes(query)
+                                );
+                              })
+                              .reduce((acc, component) => {
+                                const category = component.category || 'Altro';
+                                if (!acc[category]) acc[category] = [];
+                                acc[category].push(component);
+                                return acc;
+                              }, {} as Record<string, typeof COMPONENT_TYPES>)
+                          ).map(([category, components]) => (
+                            <div key={category} className="space-y-2">
+                              <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide sticky top-0 bg-muted/30 py-1 z-10 -mx-4 px-4">
+                                {category}
+                              </h4>
+                              <div className="grid grid-cols-1 gap-2">
+                                {components.map((componentType) => (
+                                  <ComponentLibraryItem key={componentType.type} componentType={componentType} />
+                                ))}
+                              </div>
+                            </div>
                           ))}
                         </div>
                       </div>
-                      ))}</CollapsibleContent>
-              </Collapsible>
-            </div>
-          </div>
+                    </div>
+                  </TabsContent>
+                </Tabs>
+              </div>
+            )}
 
-          {/* Centro - Anteprima Live */}
-          <div className="flex-1 overflow-y-auto bg-muted/20">
-            <div className="h-full p-4">
-                 {components.length === 0 ? (
-                    <EmptyDropZone />
-                 ) : (
-                    <SortableContext items={components.map(c => c.id)} strategy={verticalListSortingStrategy}>
-                        <BuilderPageRenderer
-                           page={{
-                            ...formData,
-                            components,
-                            id: pageToEdit?.id || 0,
-                            isActive: true,
-                            description: formData.description || null,
-                            metaTitle: formData.metaTitle || null,
-                            metaDescription: formData.metaDescription || null,
-                            ogImage: formData.ogImage || null,
-                          }}
-                          isEditing={true}
-                          onComponentClick={handleEditComponent}
-                          onComponentDelete={handleDeleteComponent}
-                          selectedComponentId={selectedComponent?.id}
-                        />
-                    </SortableContext>
-                 )}
-            </div>
-          </div>
-
-          {/* Barra Laterale Destra */}
-          {selectedComponent && (
-            <div className="w-80 border-l p-4 overflow-y-auto bg-muted/30">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-semibold">Modifica Componente</h3>
-                <Button size="sm" variant="ghost" onClick={() => setSelectedComponent(null)}>
-                  <X className="h-4 w-4" />
+            {/* Centro - Anteprima Live con pulsante */}
+            <div className="relative flex-1 overflow-y-auto bg-slate-200">
+              <div className="absolute top-2 left-2 z-20">
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => setIsSidebarVisible(!isSidebarVisible)}
+                  className="shadow-md"
+                  aria-label="Mostra/Nascondi barra laterale"
+                >
+                  <Menu className="h-4 w-4" />
                 </Button>
               </div>
 
-              {/* Renderizza editor universale basato su COMPONENT_EDITOR_CONFIG */}
-              <ComponentPropertiesEditor
-                component={selectedComponent}
-                onUpdate={(newProps) => handleUpdateComponentProps(selectedComponent.id, newProps)}
-              />
-
-              {/* Renderizza editor specifico se esiste (per componenti complessi come pricing-plans) */}
-              <RenderComponentEditor
-                component={selectedComponent}
-                onUpdateComponent={handleUpdateComponentProps}
-              />
+              <div className="h-full p-4">
+                {components.length === 0 ? (
+                  <EmptyDropZone />
+                ) : (
+                  <SortableContext items={components.map(c => c.id)} strategy={verticalListSortingStrategy}>
+                      <BuilderPageRenderer
+                        page={{
+                          ...formData,
+                          components,
+                          id: pageToEdit?.id || 0,
+                          isActive: true,
+                          description: formData.description || null,
+                          metaTitle: formData.metaTitle || null,
+                          metaDescription: formData.metaDescription || null,
+                          ogImage: formData.ogImage || null,
+                        }}
+                        isEditing={true}
+                        onComponentClick={handleEditComponent}
+                        onComponentDelete={handleDeleteComponent}
+                        selectedComponentId={selectedComponent?.id}
+                      />
+                  </SortableContext>
+                )}
+              </div>
             </div>
-          )}
+
+            {/* Barra Laterale Destra */}
+            {selectedComponent && (
+              <div className="w-100 border-l p-4 overflow-y-auto bg-muted/30 animate-in slide-in-from-right-2">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-semibold">Modifica Componente</h3>
+                  <Button size="sm" variant="ghost" onClick={() => setSelectedComponent(null)}>
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+                <ComponentPropertiesEditor
+                  component={selectedComponent}
+                  onUpdate={(newProps) => handleUpdateComponentProps(selectedComponent.id, newProps)}
+                />
+              </div>
+            )}
+          </div>
         </div>
-      </div>
 
         <DragOverlay>
           {activeId ? (

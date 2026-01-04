@@ -402,7 +402,7 @@ export function HomepageEditor({ pageToEdit, onClose }: { pageToEdit?: any; onCl
           onChange={newValue => updateSectionElement(sectionId, elementKey, {...element, value: newValue})} 
           fields={[{key: 'name', placeholder: 'Nome Cliente'}, {key: 'logo', placeholder: 'URL Logo'}]} 
           titleKey='name' 
-          addItemTemplate={{name: 'Nuovo Cliente', logo: 'https://via.placeholder.com/160x60'}} 
+          addItemTemplate={{name: 'Nuovo Cliente', logo: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='60'%3E%3Crect fill='%23e2e8f0' width='160' height='60'/%3E%3Ctext x='50%25' y='50%25' font-size='12' fill='%2364748b' text-anchor='middle' dy='.3em'%3ECliente%3C/text%3E%3C/svg%3E"}} 
         />;
       }
       if (elementKey === 'problems') {

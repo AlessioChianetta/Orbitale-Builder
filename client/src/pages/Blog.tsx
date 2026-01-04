@@ -65,6 +65,10 @@ const BlogCard = ({ post, variant = "default" }: { post: BlogPostWithRelations; 
                 src={post.featuredImage} 
                 alt={post.title} 
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                width="800"
+                height="450"
+                loading="lazy"
+                decoding="async"
               />
             </div>
           ) : (

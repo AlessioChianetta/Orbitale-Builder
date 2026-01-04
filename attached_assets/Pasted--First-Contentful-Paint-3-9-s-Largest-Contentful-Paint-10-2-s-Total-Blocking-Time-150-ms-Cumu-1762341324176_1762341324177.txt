@@ -1,0 +1,193 @@
+
+First Contentful Paint
+3,9 s
+Largest Contentful Paint
+10,2 s
+Total Blocking Time
+150 ms
+Cumulative Layout Shift
+0.013
+Speed Index
+8,5 s
+Captured at 5 nov 2025, 12:14 CET
+Moto G Power emulato with Lighthouse 13.0.1
+Sessione di una sola pagina
+Caricamento pagina iniziale
+Limitazione a 4G lenta
+Using HeadlessChromium 137.0.7151.119 with lr
+Visualizza Treemap
+Screenshot
+Screenshot
+Screenshot
+Screenshot
+Screenshot
+Screenshot
+Screenshot
+Screenshot
+Mostra controlli relativi a:
+
+All
+
+FCP
+
+LCP
+
+TBT
+
+CLS
+Approfondimenti
+Richieste di blocco del rendering Risparmio stimato di 1.050 ms
+Le richieste stanno bloccando il rendering iniziale della pagina, il che potrebbe ritardare l'LCP. Rimandare o incorporare può spostare queste richieste di rete fuori dal percorso critico.LCPFCPSenza punteggio
+URL
+Dimensioni trasferimento
+Durata
+alessiochianetta.it Proprietarie
+169,3 KiB	1.800 ms
+/assets/index-BQkB9JH5.css(alessiochianetta.it)
+169,3 KiB
+1.800 ms
+Utilizza durate della memorizzazione nella cache efficienti Risparmio stimato di 82 KiB
+La memorizzazione nella cache per un lungo periodo di tempo può velocizzare le visite abituali alla tua pagina. Scopri di più.LCPFCPSenza punteggio
+Richiesta
+TTL cache
+Dimensioni trasferimento
+Facebook social 
+93 KiB
+/en_US/fbevents.js(connect.facebook.net)
+20min
+85 KiB
+…config/313…?v=…(connect.facebook.net)
+20min
+7 KiB
+/tr?id=313…&ev=PageView&noscript=1(www.facebook.com)
+None
+0 KiB
+Suddivisione LCP
+Ogni sottoparte prevede strategie di miglioramento specifiche. Idealmente, la maggior parte del tempo LCP dovrebbe essere impiegato per caricare le risorse, non nei ritardi.LCPSenza punteggio
+Sottoparte
+Durata
+Time to First Byte
+0 ms
+Ritardo di rendering dell'elemento
+4.400 ms
+siamo consulenti e... costruttori di patrimoni. ... I tuoi consulenti Per la tu…
+<h1 class="text-3xl md:text-5xl lg:text-6xl font-black leading-tight text-white">
+Albero delle dipendenze di rete
+Evita di concatenare le richieste fondamentali riducendo la lunghezza delle catene e le dimensioni del download delle risorse oppure rimandando il download delle risorse non necessarie per velocizzare il caricamento pagina.LCPSenza punteggio
+Latenza massima del percorso critico: 4.551 ms
+Navigazione iniziale
+/chi-siamo(alessiochianetta.it) - 375 ms, 4,17 KiB
+/assets/index-Bd_xY2fG.js(alessiochianetta.it) - 1.163 ms, 341,88 KiB
+/assets/DynamicPa….js(alessiochianetta.it) - 2.766 ms, 5,44 KiB
+…content/chi-siamo(alessiochianetta.it) - 3.655 ms, 7,59 KiB
+/assets/BuilderPa….js(alessiochianetta.it) - 4.235 ms, 192,83 KiB
+/assets/dialog-CbG4pXjX.js(alessiochianetta.it) - 3.944 ms, 7,42 KiB
+/assets/play-DNcU7cnz.js(alessiochianetta.it) - 3.948 ms, 0,81 KiB
+/assets/not-found-DeoAX9kN.js(alessiochianetta.it) - 2.233 ms, 1,17 KiB
+/assets/card-BVVGXApN.js(alessiochianetta.it) - 2.305 ms, 1,53 KiB
+/assets/circle-alert-DqZgTMMo.js(alessiochianetta.it) - 2.869 ms, 0,92 KiB
+/assets/PatrimonioLandingRenderer-CmagPydR.js(alessiochianetta.it) - 3.008 ms, 108,37 KiB
+/assets/SEOHead-Bhi4tnOr.js(alessiochianetta.it) - 2.892 ms, 28,03 KiB
+/assets/badge-FDpsnmqJ.js(alessiochianetta.it) - 2.311 ms, 1,23 KiB
+/assets/zap-BRjQ6o5N.js(alessiochianetta.it) - 2.431 ms, 0,94 KiB
+/assets/circle-pl….js(alessiochianetta.it) - 2.311 ms, 0,86 KiB
+/assets/arrow-rig….js(alessiochianetta.it) - 2.320 ms, 0,84 KiB
+/assets/star-BbblyMZF.js(alessiochianetta.it) - 2.413 ms, 0,89 KiB
+/assets/circle-ch….js(alessiochianetta.it) - 2.313 ms, 0,86 KiB
+/assets/circle-x-Zn-q1GD_.js(alessiochianetta.it) - 2.312 ms, 0,88 KiB
+/assets/target-eL2fc4Ix.js(alessiochianetta.it) - 2.777 ms, 0,90 KiB
+/assets/triangle-….js(alessiochianetta.it) - 2.654 ms, 0,94 KiB
+/assets/trending-up-DA-NzJQF.js(alessiochianetta.it) - 2.767 ms, 0,88 KiB
+/assets/users-BRV8PXSG.js(alessiochianetta.it) - 2.527 ms, 0,98 KiB
+/assets/award-BW99ztoB.js(alessiochianetta.it) - 2.322 ms, 0,95 KiB
+/assets/shield-CsNedPU2.js(alessiochianetta.it) - 2.416 ms, 0,95 KiB
+/assets/heart-BzFOiuxk.js(alessiochianetta.it) - 2.768 ms, 0,92 KiB
+/assets/quote-DNZywLjJ.js(alessiochianetta.it) - 2.767 ms, 1,06 KiB
+/assets/lightbulb-ChOeRG_U.js(alessiochianetta.it) - 2.528 ms, 0,96 KiB
+/assets/clock-598_MIoB.js(alessiochianetta.it) - 2.433 ms, 0,86 KiB
+/assets/message-c….js(alessiochianetta.it) - 2.879 ms, 1,55 KiB
+/assets/search-CgYX7pgK.js(alessiochianetta.it) - 2.332 ms, 0,84 KiB
+/assets/chevron-u….js(alessiochianetta.it) - 2.772 ms, 1,05 KiB
+/assets/globe-RfKoFasv.js(alessiochianetta.it) - 2.548 ms, 0,92 KiB
+/assets/smartphon….js(alessiochianetta.it) - 2.546 ms, 1,90 KiB
+/assets/chart-col….js(alessiochianetta.it) - 2.526 ms, 0,93 KiB
+/assets/rocket-eCLTYsdM.js(alessiochianetta.it) - 2.428 ms, 1,12 KiB
+/assets/tabs-mqYwPRGd.js(alessiochianetta.it) - 2.544 ms, 3,62 KiB
+/assets/input-qJF3XgBA.js(alessiochianetta.it) - 2.416 ms, 1,08 KiB
+/assets/trophy-DIO4W6PY.js(alessiochianetta.it) - 2.552 ms, 1,14 KiB
+/assets/filter-CxVPxSp8.js(alessiochianetta.it) - 2.432 ms, 0,84 KiB
+/assets/handshake-sBkWaI_w.js(alessiochianetta.it) - 2.545 ms, 2,11 KiB
+/assets/calendar-Cia8xgjg.js(alessiochianetta.it) - 2.638 ms, 0,93 KiB
+/assets/book-open-Ck5MEH8B.js(alessiochianetta.it) - 2.545 ms, 0,95 KiB
+/assets/proxy-ucoEhbgm.js(alessiochianetta.it) - 2.399 ms, 109,50 KiB
+/assets/form-58PETLZ6.js(alessiochianetta.it) - 2.636 ms, 87,34 KiB
+/assets/select-DaeddoxT.js(alessiochianetta.it) - 2.652 ms, 24,67 KiB
+/assets/textarea-CY4EUqUQ.js(alessiochianetta.it) - 2.656 ms, 1,00 KiB
+/assets/accordion-DOEiS453.js(alessiochianetta.it) - 2.665 ms, 6,94 KiB
+/assets/send-CyvYLFb_.js(alessiochianetta.it) - 2.751 ms, 0,96 KiB
+/assets/headphones-BHYuuBrP.js(alessiochianetta.it) - 2.545 ms, 0,91 KiB
+/assets/sparkles-CkdS1VF-.js(alessiochianetta.it) - 2.637 ms, 1,18 KiB
+/assets/trending-….js(alessiochianetta.it) - 2.860 ms, 1,95 KiB
+/assets/building-….js(alessiochianetta.it) - 2.655 ms, 1,11 KiB
+/assets/Homepage-BgDk7aaJ.js(alessiochianetta.it) - 2.660 ms, 23,04 KiB
+/assets/seoUtils-Ddirx6Ye.js(alessiochianetta.it) - 2.861 ms, 2,45 KiB
+…seo-settings/public(alessiochianetta.it) - 2.980 ms, 3,46 KiB
+…tenant/public(alessiochianetta.it) - 2.752 ms, 0,57 KiB
+…settings/public(alessiochianetta.it) - 2.980 ms, 0,42 KiB
+…settings/navbar(alessiochianetta.it) - 3.247 ms, 1,02 KiB
+/assets/index-BQkB9JH5.css(alessiochianetta.it) - 1.475 ms, 169,29 KiB
+/fonts/inter-latin-600-normal.woff2(alessiochianetta.it) - 2.760 ms, 24,37 KiB
+/fonts/inter-latin-600-normal.woff2(alessiochianetta.it) - 4.551 ms, 0,45 KiB
+Origini precollegate
+Gli hint di precollegamento aiutano il browser a stabilire una connessione prima del caricamento pagina, consentendo di risparmiare tempo quando viene effettuata la prima richiesta per quell'origine. Di seguito sono riportate le origini a cui la pagina si è precollegata.
+nessuna origine è stata precollegata
+Candidati per il precollegamento
+Aggiungi hint di precollegamento alle origini più importanti, ma cerca usarne al massimo 4.
+Nessuna origine aggiuntiva è un buon candidato per il precollegamento
+Latenza di richiesta di download del documento Risparmio stimato di 2 KiB
+JavaScript precedente Risparmio stimato di 12 KiB
+Responsabili delle variazioni del layout
+Terze parti
+Queste informazioni sono disponibili anche nel riquadro Prestazioni di Chrome DevTools: registra una traccia per visualizzare informazioni più dettagliate.
+Diagnostica
+Riduci il codice JavaScript inutilizzato Risparmio stimato di 890 KiB
+Riduci il codice JavaScript inutilizzato e rimanda il caricamento degli script finché non sono necessari al fine di ridurre i byte consumati dall'attività di rete. Scopri come ridurre il codice JavaScript inutilizzato.LCPFCPSenza punteggio
+URL
+Dimensioni trasferimento
+Risparmi stimati
+alessiochianetta.it Proprietarie
+860,5 KiB	610,4 KiB
+/assets/BuilderPa….js(alessiochianetta.it)
+192,2 KiB
+166,0 KiB
+/assets/index-Bd_xY2fG.js(alessiochianetta.it)
+341,0 KiB
+144,7 KiB
+/assets/PatrimonioLandingRenderer-CmagPydR.js(alessiochianetta.it)
+107,3 KiB
+104,2 KiB
+/assets/proxy-ucoEhbgm.js(alessiochianetta.it)
+109,0 KiB
+98,3 KiB
+/assets/form-58PETLZ6.js(alessiochianetta.it)
+86,8 KiB
+75,8 KiB
+/assets/select-DaeddoxT.js(alessiochianetta.it)
+24,1 KiB
+21,4 KiB
+Google Tag Manager tag-manager 
+416,7 KiB	248,8 KiB
+/gtag/js?id=G-2XEWBZ9ZLS(www.googletagmanager.com)
+138,9 KiB
+96,9 KiB
+/gtm.js?id=GT-5NXSBBN(www.googletagmanager.com)
+138,8 KiB
+96,8 KiB
+/gtag/js?id=G-2XEWBZ9ZLS(www.googletagmanager.com)
+138,9 KiB
+55,1 KiB
+Facebook social 
+81,4 KiB	31,2 KiB
+/en_US/fbevents.js(connect.facebook.net)
+81,4 KiB
+31,2 KiB

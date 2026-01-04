@@ -29,7 +29,17 @@ export default function SEOSettings() {
   // Update form data when settings are loaded
   useEffect(() => {
     if (settings) {
-      setFormData(settings);
+      // Ensure all favicon fields are properly initialized
+      setFormData({
+        ...settings,
+        faviconUrl: settings.faviconUrl || '',
+        favicon16Url: settings.favicon16Url || '',
+        favicon32Url: settings.favicon32Url || '',
+        favicon96Url: settings.favicon96Url || '',
+        appleTouchIconUrl: settings.appleTouchIconUrl || '',
+        androidChrome192Url: settings.androidChrome192Url || '',
+        androidChrome512Url: settings.androidChrome512Url || ''
+      });
     }
   }, [settings]);
 
@@ -73,7 +83,7 @@ export default function SEOSettings() {
   };
 
   const updateField = (field: keyof InsertGlobalSeoSettings, value: string | null) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData(prev => ({ ...prev, [field]: value || '' }));
   };
 
   const updateBooleanField = (field: keyof InsertGlobalSeoSettings, value: boolean) => {
@@ -255,6 +265,96 @@ export default function SEOSettings() {
                     placeholder="https://example.com/og-image.jpg"
                     data-testid="input-default-og-image"
                   />
+                </div>
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold">Favicon e Icone</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Configura le icone per tutti i dispositivi e contesti (browser, iOS, Android, PWA)
+                  </p>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="faviconUrl">Favicon Standard (.ico o 32x32 PNG)</Label>
+                      <Input
+                        id="faviconUrl"
+                        value={formData.faviconUrl || ''}
+                        onChange={(e) => updateField('faviconUrl', e.target.value)}
+                        placeholder="https://example.com/favicon.ico"
+                        data-testid="input-favicon-url"
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="favicon16Url">Favicon 16x16</Label>
+                      <Input
+                        id="favicon16Url"
+                        value={formData.favicon16Url || ''}
+                        onChange={(e) => updateField('favicon16Url', e.target.value)}
+                        placeholder="https://example.com/favicon-16x16.png"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="favicon32Url">Favicon 32x32</Label>
+                      <Input
+                        id="favicon32Url"
+                        value={formData.favicon32Url || ''}
+                        onChange={(e) => updateField('favicon32Url', e.target.value)}
+                        placeholder="https://example.com/favicon-32x32.png"
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="favicon96Url">Favicon 96x96</Label>
+                      <Input
+                        id="favicon96Url"
+                        value={formData.favicon96Url || ''}
+                        onChange={(e) => updateField('favicon96Url', e.target.value)}
+                        placeholder="https://example.com/favicon-96x96.png"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="appleTouchIconUrl">Apple Touch Icon (180x180)</Label>
+                      <Input
+                        id="appleTouchIconUrl"
+                        value={formData.appleTouchIconUrl || ''}
+                        onChange={(e) => updateField('appleTouchIconUrl', e.target.value)}
+                        placeholder="https://example.com/apple-touch-icon.png"
+                      />
+                      <p className="text-xs text-muted-foreground">Per iOS (Home Screen)</p>
+                    </div>
+                    
+                    <div className="space-y-2"></div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="androidChrome192Url">Android Chrome 192x192</Label>
+                      <Input
+                        id="androidChrome192Url"
+                        value={formData.androidChrome192Url || ''}
+                        onChange={(e) => updateField('androidChrome192Url', e.target.value)}
+                        placeholder="https://example.com/android-chrome-192x192.png"
+                      />
+                      <p className="text-xs text-muted-foreground">Per Android (Home Screen)</p>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="androidChrome512Url">Android Chrome 512x512</Label>
+                      <Input
+                        id="androidChrome512Url"
+                        value={formData.androidChrome512Url || ''}
+                        onChange={(e) => updateField('androidChrome512Url', e.target.value)}
+                        placeholder="https://example.com/android-chrome-512x512.png"
+                      />
+                      <p className="text-xs text-muted-foreground">Per PWA e Splash Screen</p>
+                    </div>
+                  </div>
                 </div>
                 <Separator />
                 <div className="grid grid-cols-2 gap-4">

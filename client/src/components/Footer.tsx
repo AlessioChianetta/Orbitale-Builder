@@ -17,9 +17,17 @@ interface FooterSettings {
   showContactInfo?: boolean;
 }
 
+interface User {
+  id: string;
+  username: string;
+  email: string;
+  role: string;
+  tenantId: number;
+}
+
 export default function Footer() {
   // Carica informazioni del tenant, usando l'utente autenticato se disponibile
-  const { data: user } = useQuery({
+  const { data: user } = useQuery<User>({
     queryKey: ['/api/auth/me'],
     enabled: !!localStorage.getItem('token'),
     retry: false
@@ -85,7 +93,25 @@ export default function Footer() {
           {/* Brand Section */}
           <div className="flex items-center space-x-2">
             {tenantInfo?.logo ? (
-              <img src={tenantInfo.logo} alt={tenantInfo.name} className="h-6 w-auto" />
+              <picture>
+                <source 
+                  type="image/avif" 
+                  srcSet="/images/logo-optimized.avif 1x, /images/logo-optimized@2x.avif 2x" 
+                />
+                <source 
+                  type="image/webp" 
+                  srcSet="/images/logo-optimized.webp 1x, /images/logo-optimized@2x.webp 2x" 
+                />
+                <img 
+                  src={tenantInfo.logo}
+                  alt={tenantInfo.name}
+                  className="h-6 w-auto"
+                  width="24"
+                  height="24"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
             ) : (
               <div className="h-6 w-6 bg-primary rounded-md flex items-center justify-center">
                 <span className="text-primary-foreground font-bold text-sm">

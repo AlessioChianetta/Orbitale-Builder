@@ -79,3 +79,29 @@ Preferred communication style: Simple, everyday language.
 - **Template-Based Landing Pages**: Pre-built templates for quick deployment
 - **Conversion Tracking**: Analytics system for measuring form submissions and user engagement
 - **Admin Dashboard**: Comprehensive management interface for all system components
+
+## Facebook Pixel Analytics Integration
+- **Multi-Tenant Facebook Pixel**: Each tenant can configure their own Facebook Pixel ID in SEO settings
+- **Route-Based Event Tracking**: Configure custom Facebook Pixel events for each route in Analytics Dashboard
+- **Automatic Event Triggering**: Custom hook `useFacebookPixelTracking` automatically fires configured events
+- **Idempotency Guarantee**: Events fire exactly once per page view, even in React Strict Mode
+- **Hardcoded Routes Support**: Static routes (/orbitale, /thank-you, /candidatura, etc.) appear in Analytics Dashboard
+- **Cross-Tenant Routing**: Authenticated users' events use their tenant configuration, not the domain's tenant
+- **Event Configuration**: Configure event name, custom data, and activation status per route in admin panel
+- **Comprehensive Logging**: Detailed console logging for debugging event tracking and tenant routing
+
+## API Keys System
+- **External API Authentication**: Secure API key authentication for third-party integrations
+- **Key Generation**: 41-character API keys with environment prefixes (crm_live_ or crm_test_)
+- **Scope-Based Authorization**: Fine-grained access control with scopes (marketing_leads:read, marketing_leads:write, etc.)
+- **Multi-Tenant Isolation**: Complete data isolation between tenants enforced at query level
+- **Authentication Methods**: Supports both X-API-Key header and Authorization: Bearer token
+- **Key Management**: Full lifecycle management with revocation and last-used tracking
+
+## External Marketing Leads API
+- **GET /api/external/marketing-leads**: List all marketing leads with pagination and filtering
+- **GET /api/external/marketing-leads/:id**: Get single lead by ID with tenant isolation
+- **GET /api/external/marketing-leads/stats**: Aggregate statistics with breakdowns by source, campaign, and daily trends
+- **CSV Export**: Support for CSV export format via Accept header
+- **Filters**: Support for date range (days), source, campaign, status, and field selection
+- **Security**: All endpoints protected by API key authentication and scope validation

@@ -13,6 +13,13 @@ type PublicSeoSettings = {
   defaultMetaTitle: string | null;
   defaultMetaDescription: string | null;
   defaultOgImage: string | null;
+  faviconUrl: string | null;
+  favicon16Url: string | null;
+  favicon32Url: string | null;
+  favicon96Url: string | null;
+  appleTouchIconUrl: string | null;
+  androidChrome192Url: string | null;
+  androidChrome512Url: string | null;
   twitterHandle: string | null;
   facebookAppId: string | null;
   facebookPixelId: string | null;
@@ -123,7 +130,7 @@ export function SEOHead({
     return match ? match[1] : code;
   };
 
-  const verificationCode = extractVerificationCode(seoSettings?.googleSearchConsoleCode);
+  const verificationCode = extractVerificationCode(seoSettings?.googleSearchConsoleCode ?? null);
 
   // Check if the current route should be noindexed (e.g., admin pages)
   const isAdminRoute = url.startsWith('/admin'); // Example: adjust this logic as needed
@@ -228,6 +235,21 @@ export function SEOHead({
 
   return (
     <Helmet>
+      {/* Performance Optimizations - Preconnect to third-party domains */}
+      <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
+      <link rel="preconnect" href="https://connect.facebook.net" crossOrigin="anonymous" />
+      <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+      
+      {/* Font Preloading with fetchpriority */}
+      <link 
+        rel="preload" 
+        href="/fonts/inter-latin-600-normal.woff2" 
+        as="font" 
+        type="font/woff2" 
+        crossOrigin="anonymous"
+        fetchPriority="high"
+      />
+      
       {/* Basic Meta Tags */}
       <title>{finalTitle}</title>
       <meta name="description" content={finalDescription} />
@@ -286,6 +308,29 @@ export function SEOHead({
         <meta property="fb:app_id" content={seoSettings.facebookAppId} />
       )}
 
+      {/* Favicon per tutti i dispositivi */}
+      {seoSettings?.faviconUrl && seoSettings.faviconUrl.trim() !== '' && (
+        <link rel="icon" type="image/x-icon" href={seoSettings.faviconUrl} />
+      )}
+      {seoSettings?.favicon16Url && seoSettings.favicon16Url.trim() !== '' && (
+        <link rel="icon" type="image/png" sizes="16x16" href={seoSettings.favicon16Url} />
+      )}
+      {seoSettings?.favicon32Url && seoSettings.favicon32Url.trim() !== '' && (
+        <link rel="icon" type="image/png" sizes="32x32" href={seoSettings.favicon32Url} />
+      )}
+      {seoSettings?.favicon96Url && seoSettings.favicon96Url.trim() !== '' && (
+        <link rel="icon" type="image/png" sizes="96x96" href={seoSettings.favicon96Url} />
+      )}
+      {seoSettings?.appleTouchIconUrl && seoSettings.appleTouchIconUrl.trim() !== '' && (
+        <link rel="apple-touch-icon" sizes="180x180" href={seoSettings.appleTouchIconUrl} />
+      )}
+      {seoSettings?.androidChrome192Url && seoSettings.androidChrome192Url.trim() !== '' && (
+        <link rel="icon" type="image/png" sizes="192x192" href={seoSettings.androidChrome192Url} />
+      )}
+      {seoSettings?.androidChrome512Url && seoSettings.androidChrome512Url.trim() !== '' && (
+        <link rel="icon" type="image/png" sizes="512x512" href={seoSettings.androidChrome512Url} />
+      )}
+
       {/* Google Analytics */}
       {seoSettings?.googleAnalyticsId && [
         <script key="ga-script" async src={`https://www.googletagmanager.com/gtag/js?id=${seoSettings.googleAnalyticsId}`} />,
@@ -312,10 +357,7 @@ export function SEOHead({
         </script>
       )}
 
-      {/* Custom Head Code */}
-      {seoSettings?.customHeadCode && (
-        <script key="custom-head" dangerouslySetInnerHTML={{ __html: seoSettings.customHeadCode }} />
-      )}
+      {/* Custom Head Code - Handled by AnalyticsInitializer and FacebookPixelInitializer components */}
 
       {/* Schema.org Person for Personal Branding */}
       {seoSettings?.enablePersonalBranding && seoSettings?.personName && (

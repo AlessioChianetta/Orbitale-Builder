@@ -2,16 +2,34 @@
 <html lang="it">
   <head>
     <meta charset="UTF-8" />
-    <!-- Title and description will be set dynamically by SEOHead component using global SEO settings -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet">
+    
+    <!-- Critical CSS Inlined for Fast FCP/LCP -->
+    <style>*,::before,::after{box-sizing:border-box;border-width:0;border-style:solid;border-color:hsl(215 16% 87%)}html{-webkit-text-size-adjust:100%;font-family:Inter,ui-sans-serif,system-ui,sans-serif;line-height:1.5;tab-size:4}body{margin:0;line-height:inherit;background:hsl(210 40% 98%);color:hsl(222 84% 12%)}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:600}.max-w-6xl{max-width:72rem}.max-w-4xl{max-width:56rem}.mx-auto{margin-left:auto;margin-right:auto}.px-4{padding-left:1rem;padding-right:1rem}.py-16{padding-top:4rem;padding-bottom:4rem}.flex{display:flex}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-4{gap:1rem}header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,0.95);backdrop-filter:blur(8px);border-bottom:1px solid hsl(215 16% 87%)}.nav-link{color:hsl(215 16% 46%);transition:color 0.2s;padding:0.5rem 1rem}.nav-link:hover{color:hsl(213 59% 59%)}.btn{display:inline-flex;align-items:center;justify-content:center;border-radius:0.5rem;font-weight:500;transition:all 0.2s;padding:0.625rem 1.25rem;font-size:0.875rem}.btn-primary{background:hsl(213 59% 59%);color:hsl(210 40% 98%);border:1px solid hsl(213 59% 51%)}.btn-primary:hover{background:hsl(213 59% 51%)}.grid{display:grid}.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}@media(min-width:768px){.md\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}}.text-center{text-align:center}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-bold{font-weight:700}.text-muted-foreground{color:hsl(215 16% 46%)}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.mb-12{margin-bottom:3rem}.min-h-screen{min-height:100vh}.hidden{display:none}@media(min-width:768px){.md\:block{display:block}}@keyframes spin{to{transform:rotate(360deg)}}.animate-spin{animation:spin 1s linear infinite}.dark{--background:222 84% 5%;--foreground:210 40% 92%;--primary:213 59% 59%;--primary-foreground:210 40% 98%}.dark body{background:hsl(222 84% 5%);color:hsl(210 40% 92%)}.dark header{background:rgba(15,23,42,0.95);border-bottom-color:hsl(215 25% 14%)}</style>
+    
+    <!-- Preconnect to critical third-party origins -->
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
+    <link rel="preconnect" href="https://connect.facebook.net" crossorigin>
+    <link rel="preconnect" href="https://fast.wistia.com" crossorigin>
+    <link rel="dns-prefetch" href="https://www.facebook.com">
+    <link rel="dns-prefetch" href="https://i.ibb.co">
+    
+    <!-- Preload critical fonts with font-display swap and fetchpriority -->
+    <link rel="preload" href="/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
+    <link rel="preload" href="/fonts/inter-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <meta name="theme-color" content="#ffffff" />
+
+    <!-- Title and description will be set dynamically by SEOHead component using global SEO settings -->
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <!-- This is a replit script which adds a banner on the top of the page when opened in development mode outside the replit environment -->
-    <script type="text/javascript" src="https://replit.com/public/js/replit-dev-banner.js"></script>
   </body>
 </html>

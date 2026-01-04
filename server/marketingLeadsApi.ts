@@ -1,19 +1,105 @@
 
 import { Request, Response, Router } from "express";
 import { db } from "./db";
-import { sql } from "drizzle-orm";
+import { sql, eq, and, gte, isNotNull, count, countDistinct, desc } from "drizzle-orm";
 import { authenticateToken } from "./auth";
 import { marketingLeads } from "../shared/schema";
+import { validateApiKey, requireScope, ApiKeyRequest } from "./middleware/apiKey";
 
 const router = Router();
 
 // ============================================================================
-// API PUBBLICHE - Per integrazione CRM esterno (senza autenticazione)
+// ENDPOINT DEPRECATI - Mantiene backward compatibility
+// ============================================================================
+// Questi endpoint sono deprecati in favore di /external/leads
+// Delegano alla stessa logica ma mantengono il formato di risposta legacy
+// Possono essere rimossi in una futura versione
 // ============================================================================
 
-// GET /api/external/marketing-leads - Recupera tutti i lead (API pubblica)
-router.get("/external/marketing-leads", async (req: Request, res: Response) => {
+// Helper function per parsing additionalData con formResponses
+function parseLeadAdditionalData(lead: any) {
+  let parsedAdditionalData = {};
+  let formQuestions = {};
+  
+  try {
+    if (lead.additionalData || lead.additional_data) {
+      const additionalDataObj = typeof (lead.additionalData || lead.additional_data) === 'string' 
+        ? JSON.parse(lead.additionalData || lead.additional_data) 
+        : (lead.additionalData || lead.additional_data);
+      
+      parsedAdditionalData = additionalDataObj;
+      
+      // Estrai i dati del questionario (escludi metadati interni)
+      Object.keys(additionalDataObj).forEach(key => {
+        if (!['facebookId', 'googleSheetTimestamp'].includes(key)) {
+          // Converti chiavi snake_case in camelCase e rendi leggibili
+          let readableKey = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+          
+          // Mapping specifico per campi comuni
+          const keyMappings: Record<string, string> = {
+            'situazione_professionale': 'Situazione Professionale',
+            'obiettivo': 'Obiettivo',
+            'tipo_locale': 'Tipo di Locale',
+            'ruolo': 'Ruolo nel Locale',
+            'cosa_migliorare': 'Cosa Desidera Migliorare'
+          };
+          
+          const finalKey = keyMappings[key] || readableKey;
+          formQuestions[finalKey] = additionalDataObj[key];
+        }
+      });
+    }
+  } catch (error) {
+    console.error('❌ [API External] Errore parsing additionalData per lead', lead.id, error);
+    parsedAdditionalData = (lead.additionalData || lead.additional_data) || {};
+  }
+
+  return { parsedAdditionalData, formQuestions };
+}
+
+// Helper function per mappare lead al formato legacy
+function mapLeadToLegacyFormat(lead: any) {
+  const { parsedAdditionalData, formQuestions } = parseLeadAdditionalData(lead);
+  
+  return {
+    id: lead.id,
+    businessName: lead.businessName || lead.business_name,
+    firstName: lead.firstName || lead.first_name,
+    lastName: lead.lastName || lead.last_name,
+    fullName: `${lead.firstName || lead.first_name || ''} ${lead.lastName || lead.last_name || ''}`.trim(),
+    email: lead.email,
+    phone: lead.phone,
+    source: lead.source,
+    campaign: lead.campaign,
+    emailSent: lead.emailSent || lead.email_sent,
+    whatsappSent: lead.whatsappSent || lead.whatsapp_sent,
+    utmSource: lead.utmSource || lead.utm_source,
+    utmMedium: lead.utmMedium || lead.utm_medium,
+    utmCampaign: lead.utmCampaign || lead.utm_campaign,
+    utmContent: lead.utmContent || lead.utm_content,
+    utmTerm: lead.utmTerm || lead.utm_term,
+    referrer: lead.referrer,
+    userAgent: lead.userAgent || lead.user_agent,
+    ipAddress: lead.ipAddress || lead.ip_address,
+    videoWatchTime: lead.videoWatchTime || lead.video_watch_time,
+    videoProgress: lead.videoProgress || lead.video_progress,
+    pixelEvents: lead.pixelEvents || lead.pixel_events,
+    landingPage: lead.landingPage || lead.landing_page,
+    deviceType: lead.deviceType || lead.device_type,
+    browserInfo: lead.browserInfo || lead.browser_info,
+    additionalData: parsedAdditionalData,
+    formResponses: formQuestions,
+    createdAt: lead.createdAt || lead.created_at,
+    updatedAt: lead.updatedAt || lead.updated_at
+  };
+}
+
+// GET /api/external/marketing-leads - Recupera tutti i lead marketing (DEPRECATO)
+// Delega alla stessa logica di /external/leads?type=marketing
+router.get("/external/marketing-leads", validateApiKey, requireScope('marketing_leads:read'), async (req: ApiKeyRequest, res: Response) => {
+  console.warn("⚠️ [DEPRECATED] /external/marketing-leads is deprecated. Use /external/leads?type=marketing instead");
   console.log("🔗 [External API] Richiesta GET /api/external/marketing-leads");
+  console.log("🔑 [External API] API Key:", req.apiKey?.name, "- Tenant:", req.tenant?.name);
   console.log("📋 [External API] Query params:", req.query);
 
   try {
@@ -29,7 +115,7 @@ router.get("/external/marketing-leads", async (req: Request, res: Response) => {
 
     // Validazione parametri
     const pageNum = Math.max(1, parseInt(page as string));
-    const limitNum = Math.min(1000, Math.max(1, parseInt(limit as string))); // Max 1000 per performance
+    const limitNum = Math.min(1000, Math.max(1, parseInt(limit as string)));
     const offset = (pageNum - 1) * limitNum;
 
     console.log("🔧 [External API] Parametri validati:", { 
@@ -41,220 +127,49 @@ router.get("/external/marketing-leads", async (req: Request, res: Response) => {
       since 
     });
 
-    // Costruzione query dinamica
-    let whereConditions: string[] = [];
-    let queryParams: any[] = [];
-    let paramIndex = 1;
-
-    // Filtro per sorgente
-    if (source && source !== 'all') {
-      whereConditions.push(`source = $${paramIndex}`);
-      queryParams.push(source);
-      paramIndex++;
-    }
-
-    // Filtro per campagna
-    if (campaign && campaign !== 'all') {
-      whereConditions.push(`campaign = $${paramIndex}`);
-      queryParams.push(campaign);
-      paramIndex++;
-    }
-
-    // Filtro per data (since)
+    // Parsing del filtro data
+    let parsedSince: Date | null = null;
     if (since) {
       const sinceDate = new Date(since as string);
       if (!isNaN(sinceDate.getTime())) {
-        whereConditions.push(`created_at >= $${paramIndex}`);
-        queryParams.push(sinceDate.toISOString());
-        paramIndex++;
+        parsedSince = sinceDate;
       }
     }
 
-    // Costruzione WHERE clause
-    const whereClause = whereConditions.length > 0 ? 
-      `WHERE ${whereConditions.join(' AND ')}` : '';
-
-    // Selezione campi (se specificata)
-    let selectedFields = `
-      id, 
-      business_name, 
-      first_name, 
-      last_name, 
-      email, 
-      phone, 
-      source, 
-      campaign, 
-      email_sent,
-      whatsapp_sent,
-      utm_source,
-      utm_medium,
-      utm_campaign,
-      utm_content,
-      utm_term,
-      referrer,
-      user_agent,
-      ip_address,
-      video_watch_time,
-      video_progress,
-      pixel_events,
-      landing_page,
-      device_type,
-      browser_info,
-      additional_data,
-      created_at,
-      updated_at
-    `;
-
-    if (fields) {
-      const requestedFields = (fields as string).split(',').map(f => f.trim());
-      // Validazione basic dei campi richiesti (security)
-      const allowedFields = [
-        'id', 'business_name', 'first_name', 'last_name', 'email', 'phone', 
-        'source', 'campaign', 'email_sent', 'whatsapp_sent', 'utm_source', 
-        'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'referrer',
-        'user_agent', 'ip_address', 'video_watch_time', 'video_progress',
-        'pixel_events', 'landing_page', 'device_type', 'browser_info',
-        'additional_data', 'created_at', 'updated_at'
-      ];
-      const validFields = requestedFields.filter(field => allowedFields.includes(field));
-      if (validFields.length > 0) {
-        selectedFields = validFields.join(', ');
-      }
-    }
-
-    // Costruisci query con drizzle-orm invece di SQL raw
-    let query = db.select().from(marketingLeads);
+    // Costruisci query - LOGICA UNIFICATA (solo marketing leads)
+    const conditions = [eq(marketingLeads.tenantId, req.tenant!.id)];
     
-    // Applica filtri se presenti
-    if (whereConditions.length > 0) {
-      const { and, eq, gte } = await import('drizzle-orm');
-      const conditions = [];
-      
-      let paramIdx = 0;
-      if (source && source !== 'all') {
-        conditions.push(eq(marketingLeads.source, queryParams[paramIdx++]));
-      }
-      if (campaign && campaign !== 'all') {
-        conditions.push(eq(marketingLeads.campaign, queryParams[paramIdx++]));
-      }
-      if (since) {
-        conditions.push(gte(marketingLeads.createdAt, new Date(queryParams[paramIdx++])));
-      }
-      
-      if (conditions.length > 0) {
-        query = query.where(and(...conditions));
-      }
+    if (source && source !== 'all') {
+      conditions.push(eq(marketingLeads.source, source as string));
+    }
+    if (campaign && campaign !== 'all') {
+      conditions.push(eq(marketingLeads.campaign, campaign as string));
+    }
+    if (parsedSince) {
+      conditions.push(gte(marketingLeads.createdAt, parsedSince));
     }
     
-    // Applica ordinamento e paginazione
-    const { desc } = await import('drizzle-orm');
-    const result = await query
+    // Query con paginazione
+    const result = await db.select()
+      .from(marketingLeads)
+      .where(and(...conditions))
       .orderBy(desc(marketingLeads.createdAt))
       .limit(limitNum)
       .offset(offset);
 
     console.log(`✅ [External API] Query eseguita: ${result.length} risultati`);
 
-    // Query per il conteggio totale
-    let countQuery = db.select({ count: sql`count(*)` }).from(marketingLeads);
-    if (whereConditions.length > 0) {
-      const { and, eq, gte } = await import('drizzle-orm');
-      const conditions = [];
-      
-      let paramIdx = 0;
-      if (source && source !== 'all') {
-        conditions.push(eq(marketingLeads.source, queryParams[paramIdx++]));
-      }
-      if (campaign && campaign !== 'all') {
-        conditions.push(eq(marketingLeads.campaign, queryParams[paramIdx++]));
-      }
-      if (since) {
-        conditions.push(gte(marketingLeads.createdAt, new Date(queryParams[paramIdx++])));
-      }
-      
-      if (conditions.length > 0) {
-        countQuery = countQuery.where(and(...conditions));
-      }
-    }
+    // Conteggio totale
+    const countResult = await db.select({ count: sql`count(*)` })
+      .from(marketingLeads)
+      .where(and(...conditions));
     
-    const countResult = await countQuery;
     const total = parseInt(countResult[0]?.count || '0');
 
-    console.log(`✅ [External API] Query eseguita: ${result.length} risultati, ${total} totali`);
+    console.log(`✅ [External API] Totale: ${total} lead`);
 
-    // Mapping dei dati per l'output con parsing dei dati aggiuntivi
-    const mappedLeads = result.map(lead => {
-      // Parse dei dati aggiuntivi dal modulo
-      let parsedAdditionalData = {};
-      let formQuestions = {};
-      
-      try {
-        if (lead.additionalData) {
-          const additionalDataObj = typeof lead.additionalData === 'string' 
-            ? JSON.parse(lead.additionalData) 
-            : lead.additionalData;
-          
-          parsedAdditionalData = additionalDataObj;
-          
-          // Estrai i dati del questionario (escludi metadati interni)
-          Object.keys(additionalDataObj).forEach(key => {
-            if (!['facebookId', 'googleSheetTimestamp'].includes(key)) {
-              // Converti chiavi snake_case in camelCase e rendi leggibili
-              let readableKey = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-              
-              // Mapping specifico per campi comuni
-              const keyMappings = {
-                'situazione_professionale': 'Situazione Professionale',
-                'obiettivo': 'Obiettivo',
-                'tipo_locale': 'Tipo di Locale',
-                'ruolo': 'Ruolo nel Locale',
-                'cosa_migliorare': 'Cosa Desidera Migliorare'
-              };
-              
-              const finalKey = keyMappings[key] || readableKey;
-              formQuestions[finalKey] = additionalDataObj[key];
-            }
-          });
-        }
-      } catch (error) {
-        console.error('❌ [API External] Errore parsing additionalData per lead', lead.id, error);
-        parsedAdditionalData = lead.additionalData || {};
-      }
-
-      return {
-        id: lead.id,
-        businessName: lead.businessName,
-        firstName: lead.firstName,
-        lastName: lead.lastName,
-        fullName: `${lead.firstName || ''} ${lead.lastName || ''}`.trim(),
-        email: lead.email,
-        phone: lead.phone,
-        source: lead.source,
-        campaign: lead.campaign,
-        emailSent: lead.emailSent,
-        whatsappSent: lead.whatsappSent,
-        utmSource: lead.utmSource,
-        utmMedium: lead.utmMedium,
-        utmCampaign: lead.utmCampaign,
-        utmContent: lead.utmContent,
-        utmTerm: lead.utmTerm,
-        referrer: lead.referrer,
-        userAgent: lead.userAgent,
-        ipAddress: lead.ipAddress,
-        videoWatchTime: lead.videoWatchTime,
-        videoProgress: lead.videoProgress,
-        pixelEvents: lead.pixelEvents,
-        landingPage: lead.landingPage,
-        deviceType: lead.deviceType,
-        browserInfo: lead.browserInfo,
-        // Mantieni il campo originale per compatibilità
-        additionalData: parsedAdditionalData,
-        // Nuovo campo con le risposte del questionario strutturate
-        formResponses: formQuestions,
-        createdAt: lead.createdAt,
-        updatedAt: lead.updatedAt
-      };
-    });
+    // Mapping al formato legacy per backward compatibility
+    const mappedLeads = result.map(mapLeadToLegacyFormat);
 
     // Preparazione risposta
     const responseData = {
@@ -276,12 +191,18 @@ router.get("/external/marketing-leads", async (req: Request, res: Response) => {
       meta: {
         timestamp: new Date().toISOString(),
         version: '1.0',
-        endpoint: 'external/marketing-leads'
+        endpoint: 'external/marketing-leads',
+        deprecated: true,
+        message: 'This endpoint is deprecated. Use /external/leads?type=marketing instead'
       }
     };
 
     // Supporto per formato CSV
     if (format === 'csv') {
+      if (mappedLeads.length === 0) {
+        return res.status(200).send('');
+      }
+      
       const csvHeaders = Object.keys(mappedLeads[0] || {}).join(',');
       const csvRows = mappedLeads.map(lead => 
         Object.values(lead).map(value => 
@@ -298,7 +219,7 @@ router.get("/external/marketing-leads", async (req: Request, res: Response) => {
     console.log("✅ [External API] Risposta preparata con successo");
     res.json(responseData);
 
-  } catch (error) {
+  } catch (error: any) {
     console.error("❌ [External API] Errore nel recupero dei lead:", error);
     res.status(500).json({ 
       success: false, 
@@ -308,9 +229,137 @@ router.get("/external/marketing-leads", async (req: Request, res: Response) => {
   }
 });
 
-// GET /api/external/marketing-leads/:id - Recupera singolo lead (API pubblica)
-router.get("/external/marketing-leads/:id", async (req: Request, res: Response) => {
+// GET /api/external/marketing-leads/stats - Statistiche marketing leads (DEPRECATO)
+// Delega alla stessa logica di /external/leads/stats?type=marketing
+router.get("/external/marketing-leads/stats", validateApiKey, requireScope('marketing_leads:read'), async (req: ApiKeyRequest, res: Response) => {
+  console.warn("⚠️ [DEPRECATED] /external/marketing-leads/stats is deprecated. Use /external/leads/stats?type=marketing instead");
+  console.log("📊 [External API] Richiesta GET /api/external/marketing-leads/stats");
+  console.log("🔑 [External API] API Key:", req.apiKey?.name, "- Tenant:", req.tenant?.name);
+
+  try {
+    const { days = '30', source, campaign } = req.query;
+
+    // Costruzione delle condizioni WHERE - LOGICA UNIFICATA (solo marketing)
+    let baseConditions = eq(marketingLeads.tenantId, req.tenant!.id);
+    
+    // Aggiungi filtro data se necessario
+    if (days !== 'all') {
+      const daysNumber = parseInt(days as string);
+      if (!isNaN(daysNumber) && daysNumber > 0) {
+        baseConditions = and(
+          baseConditions,
+          sql`${marketingLeads.createdAt} >= NOW() - INTERVAL '${sql.raw(daysNumber.toString())} days'`
+        ) as any;
+      }
+    }
+    
+    // Aggiungi filtro source se necessario
+    if (source && source !== 'all') {
+      baseConditions = and(baseConditions, eq(marketingLeads.source, source as string)) as any;
+    }
+    
+    // Aggiungi filtro campaign se necessario
+    if (campaign && campaign !== 'all') {
+      baseConditions = and(baseConditions, eq(marketingLeads.campaign, campaign as string)) as any;
+    }
+
+    // 1. Statistiche generali
+    const statsResult = await db.select({
+      total_leads: count(),
+      unique_sources: countDistinct(marketingLeads.source),
+      unique_campaigns: countDistinct(marketingLeads.campaign),
+      emails_sent: sql<number>`COUNT(CASE WHEN ${marketingLeads.emailSent} = true THEN 1 END)`,
+      whatsapp_sent: sql<number>`COUNT(CASE WHEN ${marketingLeads.whatsappSent} = true THEN 1 END)`,
+      leads_last_24h: sql<number>`COUNT(CASE WHEN ${marketingLeads.createdAt} >= NOW() - INTERVAL '24 hours' THEN 1 END)`,
+      leads_last_7d: sql<number>`COUNT(CASE WHEN ${marketingLeads.createdAt} >= NOW() - INTERVAL '7 days' THEN 1 END)`
+    })
+    .from(marketingLeads)
+    .where(baseConditions);
+
+    // 2. Breakdown per sorgente
+    const sourceBreakdownResult = await db.select({
+      source: marketingLeads.source,
+      count: count(),
+      recent_count: sql<number>`COUNT(CASE WHEN ${marketingLeads.createdAt} >= NOW() - INTERVAL '24 hours' THEN 1 END)`
+    })
+    .from(marketingLeads)
+    .where(baseConditions)
+    .groupBy(marketingLeads.source)
+    .orderBy(desc(count()));
+
+    // 3. Breakdown per campagna
+    let campaignConditions = and(baseConditions, isNotNull(marketingLeads.campaign)) as any;
+
+    const campaignBreakdownResult = await db.select({
+      campaign: marketingLeads.campaign,
+      count: count(),
+      recent_count: sql<number>`COUNT(CASE WHEN ${marketingLeads.createdAt} >= NOW() - INTERVAL '24 hours' THEN 1 END)`
+    })
+    .from(marketingLeads)
+    .where(campaignConditions)
+    .groupBy(marketingLeads.campaign)
+    .orderBy(desc(count()));
+
+    // 4. Trend giornaliero ultimi 30 giorni
+    let trendConditions = and(
+      baseConditions,
+      sql`${marketingLeads.createdAt} >= NOW() - INTERVAL '30 days'`
+    ) as any;
+
+    const dailyTrendResult = await db.select({
+      date: sql<string>`DATE(${marketingLeads.createdAt})`,
+      count: count()
+    })
+    .from(marketingLeads)
+    .where(trendConditions)
+    .groupBy(sql`DATE(${marketingLeads.createdAt})`)
+    .orderBy(sql`DATE(${marketingLeads.createdAt}) ASC`);
+
+    const responseData = {
+      success: true,
+      data: {
+        general: statsResult[0],
+        breakdown: {
+          by_source: sourceBreakdownResult,
+          by_campaign: campaignBreakdownResult
+        },
+        trends: {
+          daily: dailyTrendResult
+        }
+      },
+      filters: {
+        days: days,
+        source: source || null,
+        campaign: campaign || null
+      },
+      meta: {
+        timestamp: new Date().toISOString(),
+        version: '1.0',
+        endpoint: 'external/marketing-leads/stats',
+        deprecated: true,
+        message: 'This endpoint is deprecated. Use /external/leads/stats?type=marketing instead'
+      }
+    };
+
+    console.log("✅ [External API] Statistiche calcolate con successo");
+    res.json(responseData);
+
+  } catch (error: any) {
+    console.error("❌ [External API] Errore calcolo statistiche:", error);
+    res.status(500).json({
+      success: false,
+      error: "Errore nel calcolo delle statistiche",
+      message: error.message
+    });
+  }
+});
+
+// GET /api/external/marketing-leads/:id - Recupera singolo lead marketing (DEPRECATO)
+// Delega alla stessa logica di /external/leads/:id ma verifica che sia marketing
+router.get("/external/marketing-leads/:id", validateApiKey, requireScope('marketing_leads:read'), async (req: ApiKeyRequest, res: Response) => {
+  console.warn("⚠️ [DEPRECATED] /external/marketing-leads/:id is deprecated. Use /external/leads/:id instead");
   console.log(`🔗 [External API] Richiesta GET /api/external/marketing-leads/${req.params.id}`);
+  console.log("🔑 [External API] API Key:", req.apiKey?.name, "- Tenant:", req.tenant?.name);
 
   try {
     const { id } = req.params;
@@ -323,8 +372,13 @@ router.get("/external/marketing-leads/:id", async (req: Request, res: Response) 
       });
     }
 
-    const { eq } = await import('drizzle-orm');
-    const result = await db.select().from(marketingLeads).where(eq(marketingLeads.id, leadId));
+    // LOGICA UNIFICATA - Cerca solo in marketing_leads (tipo marketing)
+    const result = await db.select().from(marketingLeads).where(
+      and(
+        eq(marketingLeads.id, leadId),
+        eq(marketingLeads.tenantId, req.tenant!.id)
+      )
+    );
 
     if (result.length === 0) {
       return res.status(404).json({
@@ -334,76 +388,9 @@ router.get("/external/marketing-leads/:id", async (req: Request, res: Response) 
     }
 
     const lead = result[0];
-    // Parse dei dati aggiuntivi dal modulo per lead singolo
-    let parsedAdditionalData = {};
-    let formQuestions = {};
     
-    try {
-      if (lead.additional_data) {
-        const additionalDataObj = typeof lead.additional_data === 'string' 
-          ? JSON.parse(lead.additional_data) 
-          : lead.additional_data;
-        
-        parsedAdditionalData = additionalDataObj;
-        
-        // Estrai i dati del questionario (escludi metadati interni)
-        Object.keys(additionalDataObj).forEach(key => {
-          if (!['facebookId', 'googleSheetTimestamp'].includes(key)) {
-            // Converti chiavi snake_case in camelCase e rendi leggibili
-            let readableKey = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-            
-            // Mapping specifico per campi comuni
-            const keyMappings = {
-              'situazione_professionale': 'Situazione Professionale',
-              'obiettivo': 'Obiettivo',
-              'tipo_locale': 'Tipo di Locale',
-              'ruolo': 'Ruolo nel Locale',
-              'cosa_migliorare': 'Cosa Desidera Migliorare'
-            };
-            
-            const finalKey = keyMappings[key] || readableKey;
-            formQuestions[finalKey] = additionalDataObj[key];
-          }
-        });
-      }
-    } catch (error) {
-      console.error('❌ [API External] Errore parsing additionalData per lead singolo', lead.id, error);
-      parsedAdditionalData = lead.additional_data || {};
-    }
-
-    const mappedLead = {
-      id: lead.id,
-      businessName: lead.business_name,
-      firstName: lead.first_name,
-      lastName: lead.last_name,
-      fullName: `${lead.first_name || ''} ${lead.last_name || ''}`.trim(),
-      email: lead.email,
-      phone: lead.phone,
-      source: lead.source,
-      campaign: lead.campaign,
-      emailSent: lead.email_sent,
-      whatsappSent: lead.whatsapp_sent,
-      utmSource: lead.utm_source,
-      utmMedium: lead.utm_medium,
-      utmCampaign: lead.utm_campaign,
-      utmContent: lead.utm_content,
-      utmTerm: lead.utm_term,
-      referrer: lead.referrer,
-      userAgent: lead.user_agent,
-      ipAddress: lead.ip_address,
-      videoWatchTime: lead.video_watch_time,
-      videoProgress: lead.video_progress,
-      pixelEvents: lead.pixel_events,
-      landingPage: lead.landing_page,
-      deviceType: lead.device_type,
-      browserInfo: lead.browser_info,
-      // Mantieni il campo originale per compatibilità
-      additionalData: parsedAdditionalData,
-      // Nuovo campo con le risposte del questionario strutturate
-      formResponses: formQuestions,
-      createdAt: lead.created_at,
-      updatedAt: lead.updated_at
-    };
+    // Mapping al formato legacy per backward compatibility
+    const mappedLead = mapLeadToLegacyFormat(lead);
 
     console.log(`✅ [External API] Lead ${leadId} recuperato con successo`);
     res.json({
@@ -412,147 +399,17 @@ router.get("/external/marketing-leads/:id", async (req: Request, res: Response) 
       meta: {
         timestamp: new Date().toISOString(),
         version: '1.0',
-        endpoint: `external/marketing-leads/${id}`
+        endpoint: `external/marketing-leads/${id}`,
+        deprecated: true,
+        message: 'This endpoint is deprecated. Use /external/leads/:id instead'
       }
     });
 
-  } catch (error) {
+  } catch (error: any) {
     console.error(`❌ [External API] Errore recupero lead ${req.params.id}:`, error);
     res.status(500).json({
       success: false,
       error: "Errore nel recupero del lead",
-      message: error.message
-    });
-  }
-});
-
-// GET /api/external/marketing-leads/stats - Statistiche aggregate (API pubblica)
-router.get("/external/marketing-leads/stats", async (req: Request, res: Response) => {
-  console.log("📊 [External API] Richiesta GET /api/external/marketing-leads/stats");
-
-  try {
-    const { days = '30', source, campaign } = req.query;
-
-    let whereConditions: string[] = [];
-    let queryParams: any[] = [];
-    let paramIndex = 1;
-
-    // Filtro per data
-    if (days !== 'all') {
-      const daysNumber = parseInt(days as string);
-      if (!isNaN(daysNumber) && daysNumber > 0) {
-        whereConditions.push(`created_at >= NOW() - INTERVAL '${daysNumber} days'`);
-      }
-    }
-
-    // Filtro per sorgente
-    if (source && source !== 'all') {
-      whereConditions.push(`source = $${paramIndex}`);
-      queryParams.push(source);
-      paramIndex++;
-    }
-
-    // Filtro per campagna
-    if (campaign && campaign !== 'all') {
-      whereConditions.push(`campaign = $${paramIndex}`);
-      queryParams.push(campaign);
-      paramIndex++;
-    }
-
-    const whereClause = whereConditions.length > 0 ? 
-      `WHERE ${whereConditions.join(' AND ')}` : '';
-
-    // Statistiche generali
-    const statsQuery = `
-      SELECT 
-        COUNT(*) as total_leads,
-        COUNT(DISTINCT source) as unique_sources,
-        COUNT(DISTINCT campaign) as unique_campaigns,
-        COUNT(CASE WHEN email_sent = true THEN 1 END) as emails_sent,
-        COUNT(CASE WHEN whatsapp_sent = true THEN 1 END) as whatsapp_sent,
-        AVG(video_watch_time) as avg_video_watch_time,
-        AVG(video_progress) as avg_video_progress,
-        COUNT(CASE WHEN created_at >= NOW() - INTERVAL '24 hours' THEN 1 END) as leads_last_24h,
-        COUNT(CASE WHEN created_at >= NOW() - INTERVAL '7 days' THEN 1 END) as leads_last_7d
-      FROM marketing_leads ${whereClause}
-    `;
-
-    const statsResult = await db.execute(sql.raw(statsQuery, queryParams));
-
-    // Breakdown per sorgente
-    const sourceBreakdownQuery = `
-      SELECT 
-        source,
-        COUNT(*) as count,
-        COUNT(CASE WHEN created_at >= NOW() - INTERVAL '24 hours' THEN 1 END) as recent_count,
-        AVG(video_watch_time) as avg_watch_time,
-        AVG(video_progress) as avg_progress
-      FROM marketing_leads ${whereClause}
-      GROUP BY source
-      ORDER BY count DESC
-    `;
-
-    const sourceBreakdownResult = await db.execute(sql.raw(sourceBreakdownQuery, queryParams));
-
-    // Breakdown per campagna
-    const campaignBreakdownQuery = `
-      SELECT 
-        campaign,
-        COUNT(*) as count,
-        COUNT(CASE WHEN created_at >= NOW() - INTERVAL '24 hours' THEN 1 END) as recent_count
-      FROM marketing_leads ${whereClause}
-      AND campaign IS NOT NULL
-      GROUP BY campaign
-      ORDER BY count DESC
-    `;
-
-    const campaignBreakdownResult = await db.execute(sql.raw(campaignBreakdownQuery, queryParams));
-
-    // Trend giornaliero ultimi 30 giorni
-    const dailyTrendQuery = `
-      SELECT 
-        DATE(created_at) as date,
-        COUNT(*) as count
-      FROM marketing_leads ${whereClause}
-      ${whereConditions.length > 0 ? 'AND' : 'WHERE'} created_at >= NOW() - INTERVAL '30 days'
-      GROUP BY DATE(created_at)
-      ORDER BY date ASC
-    `;
-
-    const dailyTrendResult = await db.execute(sql.raw(dailyTrendQuery, queryParams));
-
-    const responseData = {
-      success: true,
-      data: {
-        general: statsResult.rows[0],
-        breakdown: {
-          by_source: sourceBreakdownResult.rows,
-          by_campaign: campaignBreakdownResult.rows
-        },
-        trends: {
-          daily: dailyTrendResult.rows
-        }
-      },
-      filters: {
-        days: days,
-        source: source || null,
-        campaign: campaign || null
-      },
-      meta: {
-        timestamp: new Date().toISOString(),
-        version: '1.0',
-        endpoint: 'external/marketing-leads/stats'
-      }
-    };
-
-    console.log("✅ [External API] Statistiche calcolate con successo");
-    res.json(responseData);
-
-  } catch (error) {
-    console.error("❌ [External API] Errore calcolo statistiche:", error);
-    res.status(500).json({
-      success: false,
-      error: "Errore nel calcolo delle statistiche",
       message: error.message
     });
   }
@@ -648,14 +505,14 @@ router.put("/external/marketing-leads/:id", authenticateToken, async (req: Reque
 
     updateFields.push(`updated_at = NOW()`);
 
-    if (updateFields.length === 1) { // Solo updated_at
+    if (updateFields.length === 1) {
       return res.status(400).json({
         success: false,
         error: "Nessun campo da aggiornare fornito"
       });
     }
 
-    updateParams.push(leadId); // ID per WHERE clause
+    updateParams.push(leadId);
 
     const updateQuery = `
       UPDATE marketing_leads 
@@ -684,7 +541,7 @@ router.put("/external/marketing-leads/:id", authenticateToken, async (req: Reque
       }
     });
 
-  } catch (error) {
+  } catch (error: any) {
     console.error(`❌ [External API Private] Errore aggiornamento lead ${req.params.id}:`, error);
     res.status(500).json({
       success: false,
@@ -709,13 +566,9 @@ router.delete("/external/marketing-leads/:id", authenticateToken, async (req: Re
       });
     }
 
-    const deleteQuery = `
-      DELETE FROM marketing_leads 
-      WHERE id = $1
-      RETURNING id, email, business_name
-    `;
-
-    const result = await db.execute(sql.raw(deleteQuery, [leadId]));
+    const result = await db.execute(
+      sql`DELETE FROM marketing_leads WHERE id = ${leadId} RETURNING *`
+    );
 
     if (result.rows.length === 0) {
       return res.status(404).json({
@@ -727,10 +580,6 @@ router.delete("/external/marketing-leads/:id", authenticateToken, async (req: Re
     console.log(`✅ [External API Private] Lead ${leadId} eliminato con successo`);
     res.json({
       success: true,
-      data: {
-        deletedLead: result.rows[0],
-        message: "Lead eliminato con successo"
-      },
       meta: {
         timestamp: new Date().toISOString(),
         action: 'delete',
@@ -738,7 +587,7 @@ router.delete("/external/marketing-leads/:id", authenticateToken, async (req: Re
       }
     });
 
-  } catch (error) {
+  } catch (error: any) {
     console.error(`❌ [External API Private] Errore eliminazione lead ${req.params.id}:`, error);
     res.status(500).json({
       success: false,
@@ -748,121 +597,4 @@ router.delete("/external/marketing-leads/:id", authenticateToken, async (req: Re
   }
 });
 
-// POST /api/external/marketing-leads/bulk-export - Export bulk con filtri avanzati (API privata)
-router.post("/external/marketing-leads/bulk-export", authenticateToken, async (req: Request, res: Response) => {
-  console.log("🔐 [External API Private] Richiesta POST /api/external/marketing-leads/bulk-export");
-
-  try {
-    const {
-      sources = [],
-      campaigns = [],
-      dateFrom,
-      dateTo,
-      format = 'json',
-      includeFields = 'all'
-    } = req.body;
-
-    let whereConditions: string[] = [];
-    let queryParams: any[] = [];
-    let paramIndex = 1;
-
-    // Filtro per sorgenti multiple
-    if (sources.length > 0) {
-      const placeholders = sources.map(() => `$${paramIndex++}`).join(',');
-      whereConditions.push(`source IN (${placeholders})`);
-      queryParams.push(...sources);
-    }
-
-    // Filtro per campagne multiple
-    if (campaigns.length > 0) {
-      const placeholders = campaigns.map(() => `$${paramIndex++}`).join(',');
-      whereConditions.push(`campaign IN (${placeholders})`);
-      queryParams.push(...campaigns);
-    }
-
-    // Filtro per data from
-    if (dateFrom) {
-      whereConditions.push(`created_at >= $${paramIndex}`);
-      queryParams.push(new Date(dateFrom).toISOString());
-      paramIndex++;
-    }
-
-    // Filtro per data to
-    if (dateTo) {
-      whereConditions.push(`created_at <= $${paramIndex}`);
-      queryParams.push(new Date(dateTo).toISOString());
-      paramIndex++;
-    }
-
-    const whereClause = whereConditions.length > 0 ? 
-      `WHERE ${whereConditions.join(' AND ')}` : '';
-
-    // Selezione campi
-    let selectedFields = '*';
-    if (includeFields !== 'all' && Array.isArray(includeFields)) {
-      selectedFields = includeFields.join(', ');
-    }
-
-    const exportQuery = `
-      SELECT ${selectedFields}
-      FROM marketing_leads 
-      ${whereClause}
-      ORDER BY created_at DESC
-    `;
-
-    console.log("📝 [External API Private] Query export:", exportQuery);
-    console.log("🔢 [External API Private] Parametri:", queryParams);
-
-    const result = await db.execute(sql.raw(exportQuery, queryParams));
-
-    if (format === 'csv') {
-      if (result.rows.length === 0) {
-        return res.status(404).json({
-          success: false,
-          error: "Nessun lead trovato con i filtri specificati"
-        });
-      }
-
-      const csvHeaders = Object.keys(result.rows[0]).join(',');
-      const csvRows = result.rows.map(row => 
-        Object.values(row).map(value => 
-          typeof value === 'object' ? JSON.stringify(value) : `"${value}"`
-        ).join(',')
-      );
-      const csvContent = [csvHeaders, ...csvRows].join('\n');
-
-      res.setHeader('Content-Type', 'text/csv');
-      res.setHeader('Content-Disposition', `attachment; filename="bulk-export-${Date.now()}.csv"`);
-      return res.send(csvContent);
-    }
-
-    console.log(`✅ [External API Private] Export completato: ${result.rows.length} lead`);
-    res.json({
-      success: true,
-      data: result.rows,
-      count: result.rows.length,
-      filters: {
-        sources,
-        campaigns,
-        dateFrom,
-        dateTo
-      },
-      meta: {
-        timestamp: new Date().toISOString(),
-        format: format,
-        exportType: 'bulk'
-      }
-    });
-
-  } catch (error) {
-    console.error("❌ [External API Private] Errore export bulk:", error);
-    res.status(500).json({
-      success: false,
-      error: "Errore nell'export bulk",
-      message: error.message
-    });
-  }
-});
-
-export { router };
 export default router;

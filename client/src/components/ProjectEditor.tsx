@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, lazy, Suspense } from 'react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
@@ -7,10 +7,27 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Badge } from './ui/badge';
 import { Switch } from './ui/switch';
-import { CMSEditor } from './CMSEditor';
+import { Skeleton } from './ui/skeleton';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { Save, Send, X, Plus, Upload, Calendar, Briefcase, Code, TrendingUp, Lightbulb, Quote, FileText } from 'lucide-react';
 import { Card, CardContent } from './ui/card';
+
+const CMSEditor = lazy(() => import('./CMSEditor').then(module => ({ default: module.CMSEditor })));
+
+function CMSEditorSkeleton() {
+  return (
+    <div className="bg-white prose prose-lg max-w-none border rounded-md p-4 min-h-[600px] space-y-4">
+      <Skeleton className="h-8 w-3/4" />
+      <Skeleton className="h-4 w-full" />
+      <Skeleton className="h-4 w-full" />
+      <Skeleton className="h-4 w-5/6" />
+      <Skeleton className="h-48 w-full mt-6" />
+      <Skeleton className="h-4 w-full" />
+      <Skeleton className="h-4 w-full" />
+      <Skeleton className="h-4 w-4/5" />
+    </div>
+  );
+}
 
 interface ProjectEditorProps { 
   initialProject?: any; 
@@ -767,11 +784,13 @@ export function ProjectEditor({ initialProject, onSave, onPublish, onClose }: Pr
           </Popover>
         </div>
         
-        <CMSEditor
-          key={editorKey}
-          initialContent={fullDescription}
-          onSave={handleContentSave}
-        />
+        <Suspense fallback={<CMSEditorSkeleton />}>
+          <CMSEditor
+            key={editorKey}
+            initialContent={fullDescription}
+            onSave={handleContentSave}
+          />
+        </Suspense>
       </div>
     </div>
   );

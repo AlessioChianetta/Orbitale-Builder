@@ -16,6 +16,9 @@ import { Request, Response } from "express";
 import { SEOManager } from "./utils/seo";
 import marketingLeadsRouter from "./marketingLeads";
 import marketingLeadsApiRouter from "./marketingLeadsApi";
+import analyticsRouter from "./analytics";
+import publicApiRouter from "./publicApi";
+import leadsApiRouter from "./leadsApi";
 
 // Configure multer for file uploads
 const upload = multer({
@@ -43,6 +46,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Marketing Leads Routes - Registra prima le route specifiche
   app.use("/api/marketing-leads", marketingLeadsRouter);
   app.use("/api", marketingLeadsApiRouter);
+
+  // Unified Leads API Routes (requires API key authentication)
+  app.use("/api", leadsApiRouter);
+
+  // Analytics Routes (with tenant identification for public tracking)
+  app.use("/api/analytics", identifyTenant, analyticsRouter);
+
+  // Public API Routes (requires API key authentication)
+  app.use("/api/public", publicApiRouter);
 
   // Google Sheets Routes - Registra il router completo
   const googleSheetsRouter = await import('./googleSheets');
@@ -74,7 +86,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const client = await storage.createClient({
         name,
         description: description || null,
-        ownerId: parseInt(req.user.id)
+        ownerId: req.user.id
       });
 
       res.json({ client });
@@ -397,9 +409,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const settingsData = insertGlobalSeoSettingsSchema.parse(bodyWithoutTenant);
       const settings = await storage.upsertGlobalSeoSettings({ 
         ...settingsData, 
-        updatedBy: req.user!.id, 
-        tenantId: req.user!.tenantId // Usa il tenantId dell'utente autenticato
-      });
+        updatedBy: req.user!.id
+      }, req.tenant!.id);
       res.json(settings);
     } catch (error) {
       console.error('Error creating/updating global SEO settings:', error);
@@ -458,6 +469,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         defaultMetaTitle: settings?.defaultMetaTitle || null,
         defaultMetaDescription: settings?.defaultMetaDescription || null,
         defaultOgImage: settings?.defaultOgImage || null,
+        faviconUrl: settings?.faviconUrl || null,
+        favicon16Url: settings?.favicon16Url || null,
+        favicon32Url: settings?.favicon32Url || null,
+        appleTouchIconUrl: settings?.appleTouchIconUrl || null,
+        androidChrome192Url: settings?.androidChrome192Url || null,
+        androidChrome512Url: settings?.androidChrome512Url || null,
         twitterHandle: settings?.twitterHandle || null,
         facebookAppId: settings?.facebookAppId || null,
         facebookPixelId: settings?.facebookPixelId || null,
@@ -579,9 +596,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const tenantId = authReq.user?.tenantId || req.tenant!.id;
       const slug = req.params.slug;
 
+      console.log(`🔍 [UNIFIED CONTENT] Looking for slug: "${slug}" in tenant: ${tenantId}`);
+
       // 1. Try to find in pages
       const page = await storage.getPageBySlug(slug, tenantId);
       if (page && page.tenantId === tenantId) {
+        console.log(`✅ [UNIFIED CONTENT] Found as page: ${page.title}`);
         return res.json({
           type: 'page',
           content: page
@@ -591,6 +611,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // 2. Try to find in landing pages
       const landingPage = await storage.getLandingPageBySlug(slug, tenantId);
       if (landingPage && landingPage.tenantId === tenantId && landingPage.isActive) {
+        console.log(`✅ [UNIFIED CONTENT] Found as landing page: ${landingPage.title}`);
         return res.json({
           type: 'landing-page',
           content: landingPage
@@ -599,7 +620,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // 3. Try to find in builder pages
       const builderPage = await storage.getBuilderPageBySlug(slug, tenantId);
+      console.log(`🔍 [UNIFIED CONTENT] Builder page search result:`, builderPage ? {
+        id: builderPage.id,
+        title: builderPage.title,
+        slug: builderPage.slug,
+        tenantId: builderPage.tenantId,
+        isActive: builderPage.isActive
+      } : 'not found');
+      
       if (builderPage && builderPage.tenantId === tenantId && builderPage.isActive) {
+        console.log(`✅ [UNIFIED CONTENT] Found as builder page: ${builderPage.title}`);
         return res.json({
           type: 'builder-page',
           content: builderPage
@@ -609,6 +639,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // 4. Try to find in projects
       const project = await storage.getProjectBySlug(slug, tenantId);
       if (project && project.tenantId === tenantId) {
+        console.log(`✅ [UNIFIED CONTENT] Found as project: ${project.title}`);
         return res.json({
           type: 'project',
           content: project
@@ -616,9 +647,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // If nothing found, return 404
+      console.log(`❌ [UNIFIED CONTENT] No content found for slug: "${slug}" in tenant: ${tenantId}`);
       return res.status(404).json({ message: "Content not found" });
     } catch (error) {
-      console.error("Error fetching content:", error);
+      console.error("❌ [UNIFIED CONTENT] Error fetching content:", error);
       res.status(500).json({ message: "Failed to fetch content" });
     }
   });
@@ -969,10 +1001,65 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/leads", async (req: TenantRequest, res: Response) => {
     try {
       const leadData = insertLeadSchema.parse(req.body);
-      const lead = await storage.createLead({ ...leadData, tenantId: req.tenant!.id });
+      const lead = await storage.createLead({ ...leadData, tenantId: req.tenant!.id } as any);
 
       // Track lead submission
       await storage.trackEvent("lead_submit", leadData, req.tenant!.id, undefined, undefined, req);
+
+      // 🤖 INVIA NOTIFICA TELEGRAM PER NUOVO LEAD CRM
+      try {
+        console.log('🤖 [Telegram CRM] Invio notifica nuovo lead CRM...');
+        
+        // Recupera configurazione Telegram dell'owner del tenant
+        const owner = await db.query.users.findFirst({
+          where: and(
+            eq(users.tenantId, req.tenant!.id),
+            eq(users.role, 'admin')
+          ),
+          columns: {
+            telegramBotToken: true,
+            telegramChatId: true,
+            username: true
+          }
+        });
+
+        if (!owner?.telegramBotToken || !owner?.telegramChatId) {
+          console.log('⚠️ [Telegram CRM] Configurazione Telegram non trovata per il tenant');
+        } else {
+          const telegramMessage = `🚨 NUOVO LEAD CRM!\n\n` +
+            `👤 Nome: ${lead.name}\n` +
+            `📧 Email: ${lead.email || 'N/A'}\n` +
+            `📱 Telefono: ${lead.phone || 'N/A'}\n` +
+            `🏢 Azienda: ${lead.company || 'N/A'}\n` +
+            `📍 Fonte: ${lead.source || 'N/A'}\n` +
+            `💬 Messaggio: ${lead.message || 'N/A'}\n` +
+            `📊 Status: ${lead.status || 'new'}\n` +
+            `🕐 Data: ${new Date().toLocaleString('it-IT')}`;
+
+          const telegramUrl = `https://api.telegram.org/bot${owner.telegramBotToken}/sendMessage`;
+          
+          const telegramResponse = await fetch(telegramUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              chat_id: owner.telegramChatId,
+              text: telegramMessage,
+              parse_mode: 'HTML'
+            })
+          });
+
+          if (telegramResponse.ok) {
+            console.log('✅ [Telegram CRM] Notifica nuovo lead inviata con successo!');
+          } else {
+            const errorData = await telegramResponse.text();
+            console.error('❌ [Telegram CRM] Errore invio notifica:', errorData);
+          }
+        }
+      } catch (telegramError) {
+        console.error('❌ [Telegram CRM] Errore durante invio notifica Telegram:', telegramError);
+      }
 
       res.status(201).json(lead);
     } catch (error) {
@@ -1052,6 +1139,64 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(candidate);
     } catch (error) {
       res.status(400).json({ message: "Failed to update candidate" });
+    }
+  });
+
+  // API Keys Routes
+  app.get("/api/api-keys", authenticateToken, requireRole("admin"), async (req: AuthRequest, res: Response) => {
+    try {
+      const apiKeys = await storage.getApiKeys(req.tenant!.id);
+      res.json({ apiKeys });
+    } catch (error) {
+      console.error("Error fetching API keys:", error);
+      res.status(500).json({ message: "Failed to fetch API keys" });
+    }
+  });
+
+  app.post("/api/api-keys", authenticateToken, requireRole("admin"), async (req: AuthRequest, res: Response) => {
+    try {
+      const { name, scopes, environment } = req.body;
+
+      if (!name || !scopes || !Array.isArray(scopes)) {
+        return res.status(400).json({ message: "Name and scopes array are required" });
+      }
+
+      // Genera la chiave API
+      const { generateApiKey } = await import('./utils/apiKey');
+      const key = generateApiKey({ environment: environment || 'live' });
+
+      const apiKey = await storage.createApiKey({
+        tenantId: req.tenant!.id,
+        key,
+        name,
+        scopes,
+        isActive: true
+      });
+
+      console.log(`✅ [API Keys] New API key created: ${name} for tenant ${req.tenant!.name}`);
+
+      res.status(201).json(apiKey);
+    } catch (error) {
+      console.error("Error creating API key:", error);
+      res.status(400).json({ message: "Failed to create API key" });
+    }
+  });
+
+  app.delete("/api/api-keys/:id", authenticateToken, requireRole("admin"), async (req: AuthRequest, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      const success = await storage.revokeApiKey(id, req.tenant!.id);
+
+      if (!success) {
+        return res.status(404).json({ message: "API key not found" });
+      }
+
+      console.log(`✅ [API Keys] API key revoked: ID ${id} for tenant ${req.tenant!.name}`);
+
+      res.json({ message: "API key revoked successfully" });
+    } catch (error) {
+      console.error("Error revoking API key:", error);
+      res.status(500).json({ message: "Failed to revoke API key" });
     }
   });
 
@@ -1208,10 +1353,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       });
 
-      // NON includere navbar items per evitare route di altri tenant
-      // Mostra SOLO le route effettivamente create nel database del tenant
+      // Add hardcoded routes that are always available
+      const hardcodedRoutes = [
+        { route: '/home', name: 'Homepage', type: 'hardcoded' },
+        { route: '/orbitale', name: 'Landing Page Orbitale', type: 'hardcoded' },
+        { route: '/thank-you', name: 'Thank You Page', type: 'hardcoded' },
+        { route: '/candidatura', name: 'Form Candidatura', type: 'hardcoded' },
+        { route: '/patrimonio', name: 'Patrimonio Page', type: 'hardcoded' },
+        { route: '/relume', name: 'Relume Page', type: 'hardcoded' },
+        { route: '/components', name: 'Components Showcase', type: 'hardcoded' },
+        { route: '/blog', name: 'Blog', type: 'hardcoded' }
+      ];
+
+      // Add hardcoded routes, avoiding duplicates
+      hardcodedRoutes.forEach(hardcodedRoute => {
+        const exists = routes.some(r => r.route === hardcodedRoute.route);
+        if (!exists) {
+          routes.push(hardcodedRoute);
+        }
+      });
       
-      console.log(`✅ [ROUTES] Found ${routes.length} routes for tenant ${tenantId}`);
+      console.log(`✅ [ROUTES] Found ${routes.length} routes for tenant ${tenantId} (including hardcoded routes)`);
       console.log(`📋 [ROUTES] Routes:`, routes.map(r => r.route));
 
       res.json(routes);
@@ -1848,7 +2010,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ...landingPageData,
         authorId: req.user!.id,
         tenantId: req.tenant!.id
-      });
+      } as any);
       res.status(201).json(landingPage);
     } catch (error) {
       console.error('Landing page creation error:', error);
@@ -1938,6 +2100,67 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(204).send();
     } catch (error) {
       res.status(500).json({ message: "Failed to track conversion" });
+    }
+  });
+
+  // Get landing pages with aggregated stats
+  app.get("/api/landing-pages/stats", authenticateToken, requireRole("admin"), async (req: AuthRequest, res: Response) => {
+    try {
+      const tenantId = req.tenant!.id;
+      
+      // Get all landing pages for this tenant
+      const landingPagesResult = await storage.getLandingPages(tenantId, 1000, 0, false);
+      
+      // For each landing page, aggregate analytics data
+      const landingPagesWithStats = await Promise.all(
+        landingPagesResult.landingPages.map(async (page) => {
+          // Count page views from analytics table
+          const viewsResult = await db.execute(sql`
+            SELECT COUNT(*) as count
+            FROM analytics
+            WHERE tenant_id = ${tenantId}
+              AND page_slug = ${page.slug}
+              AND event = 'page_view'
+          `);
+          const analyticsViews = parseInt(String(viewsResult.rows[0]?.count || '0'));
+          
+          // Count conversions from analytics table
+          const conversionsResult = await db.execute(sql`
+            SELECT COUNT(*) as count
+            FROM analytics
+            WHERE tenant_id = ${tenantId}
+              AND (
+                page_slug LIKE ${'thank-you-' + page.slug + '%'}
+                OR (data->>'landingPageSlug')::text = ${page.slug}
+                OR (data->>'campaign')::text = ${page.slug}
+              )
+              AND event = 'conversion'
+          `);
+          const analyticsConversions = parseInt(String(conversionsResult.rows[0]?.count || '0'));
+          
+          // Combine with existing counters (use max of both)
+          const totalViews = Math.max(page.views || 0, analyticsViews);
+          const totalConversions = Math.max(page.conversions || 0, analyticsConversions);
+          const conversionRate = totalViews > 0 ? ((totalConversions / totalViews) * 100).toFixed(2) : '0.00';
+          
+          return {
+            id: page.id,
+            title: page.title,
+            slug: page.slug,
+            isActive: page.isActive,
+            views: totalViews,
+            conversions: totalConversions,
+            conversionRate: parseFloat(conversionRate),
+            updatedAt: page.updatedAt,
+            createdAt: page.createdAt
+          };
+        })
+      );
+      
+      res.json({ landingPages: landingPagesWithStats });
+    } catch (error) {
+      console.error('Error fetching landing pages stats:', error);
+      res.status(500).json({ message: "Failed to fetch landing pages statistics" });
     }
   });
 

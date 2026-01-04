@@ -2,7 +2,7 @@ import { db } from "./db";
 import {
   tenants, users, pages, blogPosts, leads, candidates, media, analytics,
   categories, tags, blogPostTags, services, landingPages, builderPages, projects, globalSeoSettings,
-  settings, routeAnalytics, clients, googleSheetsCampaigns, marketingLeads,
+  settings, routeAnalytics, clients, googleSheetsCampaigns, marketingLeads, apiKeys,
   type InsertTenant, type Tenant, type InsertUser, type User, type InsertPage, type Page,
   type InsertBlogPost, type BlogPost, type BlogPostWithRelations,
   type InsertLead, type Lead, type InsertCandidate, type Candidate,
@@ -12,7 +12,8 @@ import {
   type InsertGlobalSeoSettings, type GlobalSeoSettings,
   type InsertRouteAnalytics, type RouteAnalytics,
   type InsertClient, type Client,
-  type InsertGoogleSheetsCampaign, type GoogleSheetsCampaign
+  type InsertGoogleSheetsCampaign, type GoogleSheetsCampaign,
+  type InsertApiKey, type ApiKey
 } from "@shared/schema";
 import { eq, desc, asc, like, and, sql, count } from "drizzle-orm";
 import bcrypt from "bcryptjs";
@@ -404,6 +405,224 @@ export class Storage {
     return lead || null;
   }
 
+  // Marketing Leads operations
+  async getMarketingLeads(tenantId: number, limit = 50, offset = 0): Promise<{ leads: any[], total: number }> {
+    const [leadsResult, totalResult] = await Promise.all([
+      db.select().from(marketingLeads)
+        .where(eq(marketingLeads.tenantId, tenantId))
+        .orderBy(desc(marketingLeads.createdAt))
+        .limit(limit)
+        .offset(offset),
+      db.select({ count: count() }).from(marketingLeads).where(eq(marketingLeads.tenantId, tenantId))
+    ]);
+
+    return {
+      leads: leadsResult,
+      total: totalResult[0].count
+    };
+  }
+
+  // Public API - Filtered CRM leads with source filter in SQL
+  async getFilteredCrmLeads(tenantId: number, limit = 50, offset = 0, source?: string, status?: string): Promise<{ leads: Lead[], total: number }> {
+    const conditions = [];
+    conditions.push(eq(leads.tenantId, tenantId));
+    if (status) conditions.push(eq(leads.status, status));
+    if (source) conditions.push(like(leads.source, `%${source}%`));
+
+    const [leadsResult, totalResult] = await Promise.all([
+      db.select().from(leads)
+        .where(conditions.length > 0 ? and(...conditions) : undefined)
+        .orderBy(desc(leads.createdAt))
+        .limit(limit)
+        .offset(offset),
+      db.select({ count: count() }).from(leads).where(conditions.length > 0 ? and(...conditions) : undefined)
+    ]);
+
+    return {
+      leads: leadsResult,
+      total: totalResult[0].count
+    };
+  }
+
+  // Public API - Filtered marketing leads with source filter in SQL
+  async getFilteredMarketingLeads(tenantId: number, limit = 50, offset = 0, source?: string): Promise<{ leads: any[], total: number }> {
+    const conditions = [];
+    conditions.push(eq(marketingLeads.tenantId, tenantId));
+    if (source) conditions.push(like(marketingLeads.source, `%${source}%`));
+
+    const [leadsResult, totalResult] = await Promise.all([
+      db.select().from(marketingLeads)
+        .where(conditions.length > 0 ? and(...conditions) : undefined)
+        .orderBy(desc(marketingLeads.createdAt))
+        .limit(limit)
+        .offset(offset),
+      db.select({ count: count() }).from(marketingLeads).where(conditions.length > 0 ? and(...conditions) : undefined)
+    ]);
+
+    return {
+      leads: leadsResult,
+      total: totalResult[0].count
+    };
+  }
+
+  // Public API - Combined leads with UNION query
+  async getCombinedLeads(tenantId: number, limit = 50, offset = 0, source?: string, status?: string): Promise<{ leads: any[], total: number }> {
+    // Build WHERE conditions for CRM leads
+    const crmConditions = [sql`tenant_id = ${tenantId}`];
+    if (status) crmConditions.push(sql`status = ${status}`);
+    if (source) crmConditions.push(sql`source ILIKE ${`%${source}%`}`);
+    
+    // Build WHERE conditions for marketing leads
+    const marketingConditions = [sql`tenant_id = ${tenantId}`];
+    if (source) marketingConditions.push(sql`source ILIKE ${`%${source}%`}`);
+
+    // Build the WHERE clause for CRM leads
+    const crmWhere = crmConditions.length > 0 ? sql.join(crmConditions, sql` AND `) : sql`TRUE`;
+    
+    // Build the WHERE clause for marketing leads
+    const marketingWhere = marketingConditions.length > 0 ? sql.join(marketingConditions, sql` AND `) : sql`TRUE`;
+
+    // Use parameterized SQL for UNION query
+    const unionQuery = sql`
+      (
+        SELECT 
+          id::text,
+          name,
+          email,
+          phone,
+          company,
+          message,
+          source,
+          status,
+          notes,
+          created_at,
+          updated_at,
+          'crm' as lead_type,
+          NULL as business_name,
+          NULL as first_name,
+          NULL as last_name,
+          NULL as campaign
+        FROM leads
+        WHERE ${crmWhere}
+      )
+      UNION ALL
+      (
+        SELECT 
+          id::text,
+          COALESCE(first_name || ' ' || last_name, business_name) as name,
+          email,
+          phone,
+          NULL as company,
+          NULL as message,
+          source,
+          status,
+          NULL as notes,
+          created_at,
+          updated_at as updated_at,
+          'marketing' as lead_type,
+          business_name,
+          first_name,
+          last_name,
+          campaign
+        FROM marketing_leads
+        WHERE ${marketingWhere}
+      )
+      ORDER BY created_at DESC
+      LIMIT ${limit}
+      OFFSET ${offset}
+    `;
+
+    // Count total (without limit/offset)
+    const countQuery = sql`
+      SELECT COUNT(*) as count FROM (
+        SELECT id FROM leads WHERE ${crmWhere}
+        UNION ALL
+        SELECT id FROM marketing_leads WHERE ${marketingWhere}
+      ) as combined
+    `;
+
+    const [leadsResult, totalResult] = await Promise.all([
+      db.execute(unionQuery),
+      db.execute(countQuery)
+    ]);
+
+    return {
+      leads: leadsResult.rows as any[],
+      total: parseInt((totalResult.rows[0] as any).count)
+    };
+  }
+
+  // Public API - CRM leads aggregate statistics
+  async getCrmLeadsStats(tenantId: number): Promise<{ total: number, byStatus: Record<string, number> }> {
+    // Get total count
+    const [totalResult] = await db.select({ count: count() })
+      .from(leads)
+      .where(eq(leads.tenantId, tenantId));
+
+    // Get counts by status using GROUP BY
+    const statusCounts = await db.select({
+      status: leads.status,
+      count: count()
+    })
+      .from(leads)
+      .where(eq(leads.tenantId, tenantId))
+      .groupBy(leads.status);
+
+    // Convert to object
+    const byStatus: Record<string, number> = {};
+    statusCounts.forEach(row => {
+      byStatus[row.status || 'unknown'] = row.count;
+    });
+
+    return {
+      total: totalResult.count,
+      byStatus
+    };
+  }
+
+  // Public API - Marketing leads aggregate statistics
+  async getMarketingLeadsStats(tenantId: number): Promise<{ total: number, byCampaign: Record<string, number>, bySource: Record<string, number> }> {
+    // Get total count
+    const [totalResult] = await db.select({ count: count() })
+      .from(marketingLeads)
+      .where(eq(marketingLeads.tenantId, tenantId));
+
+    // Get counts by campaign using GROUP BY
+    const campaignCounts = await db.select({
+      campaign: marketingLeads.campaign,
+      count: count()
+    })
+      .from(marketingLeads)
+      .where(eq(marketingLeads.tenantId, tenantId))
+      .groupBy(marketingLeads.campaign);
+
+    // Get counts by source using GROUP BY
+    const sourceCounts = await db.select({
+      source: marketingLeads.source,
+      count: count()
+    })
+      .from(marketingLeads)
+      .where(eq(marketingLeads.tenantId, tenantId))
+      .groupBy(marketingLeads.source);
+
+    // Convert to objects
+    const byCampaign: Record<string, number> = {};
+    campaignCounts.forEach(row => {
+      byCampaign[row.campaign || 'unknown'] = row.count;
+    });
+
+    const bySource: Record<string, number> = {};
+    sourceCounts.forEach(row => {
+      bySource[row.source || 'unknown'] = row.count;
+    });
+
+    return {
+      total: totalResult.count,
+      byCampaign,
+      bySource
+    };
+  }
+
   // Candidate operations
   async createCandidate(candidateData: InsertCandidate): Promise<Candidate> {
     const [candidate] = await db.insert(candidates).values(candidateData as any).returning();
@@ -786,7 +1005,20 @@ export class Storage {
   }
 
   async getBuilderPageBySlug(slug: string, tenantId: number): Promise<BuilderPage | null> {
+    console.log(`🔍 [STORAGE] getBuilderPageBySlug: slug="${slug}", tenantId=${tenantId}`);
     const [page] = await db.select().from(builderPages).where(and(eq(builderPages.slug, slug), eq(builderPages.tenantId, tenantId)));
+    
+    if (page) {
+      console.log(`✅ [STORAGE] Builder page found: ${page.title} (id: ${page.id}, isActive: ${page.isActive})`);
+    } else {
+      console.log(`❌ [STORAGE] Builder page not found for slug: "${slug}" in tenant: ${tenantId}`);
+      // Debug: mostra tutte le builder pages disponibili
+      const allPages = await db.select({ id: builderPages.id, title: builderPages.title, slug: builderPages.slug, tenantId: builderPages.tenantId })
+        .from(builderPages)
+        .where(eq(builderPages.tenantId, tenantId));
+      console.log(`📋 [STORAGE] Available builder pages in tenant ${tenantId}:`, allPages);
+    }
+    
     return page || null;
   }
 
@@ -1298,6 +1530,64 @@ export class Storage {
     const result = await db.delete(clients)
       .where(eq(clients.id, id));
     return (result.rowCount ?? 0) > 0;
+  }
+
+  // API Key Methods
+  async createApiKey(apiKeyData: InsertApiKey): Promise<ApiKey> {
+    const [apiKey] = await db.insert(apiKeys).values(apiKeyData).returning();
+    return apiKey;
+  }
+
+  async getApiKeys(tenantId: number): Promise<ApiKey[]> {
+    const { maskApiKey } = await import('./utils/apiKey');
+    const keys = await db.select().from(apiKeys)
+      .where(eq(apiKeys.tenantId, tenantId))
+      .orderBy(desc(apiKeys.createdAt));
+    
+    return keys.map(apiKey => ({
+      ...apiKey,
+      key: maskApiKey(apiKey.key)
+    }));
+  }
+
+  async getApiKeyByKey(key: string): Promise<ApiKey | null> {
+    const [apiKey] = await db.select().from(apiKeys)
+      .where(eq(apiKeys.key, key));
+    return apiKey || null;
+  }
+
+  async getApiKeyById(id: number, tenantId: number): Promise<ApiKey | null> {
+    const [apiKey] = await db.select().from(apiKeys)
+      .where(and(eq(apiKeys.id, id), eq(apiKeys.tenantId, tenantId)));
+    return apiKey || null;
+  }
+
+  async updateApiKey(id: number, tenantId: number, updates: Partial<InsertApiKey>): Promise<ApiKey | null> {
+    const [apiKey] = await db.update(apiKeys)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(and(eq(apiKeys.id, id), eq(apiKeys.tenantId, tenantId)))
+      .returning();
+    return apiKey || null;
+  }
+
+  async revokeApiKey(id: number, tenantId: number): Promise<ApiKey | null> {
+    const [apiKey] = await db.update(apiKeys)
+      .set({ isActive: false, updatedAt: new Date() })
+      .where(and(eq(apiKeys.id, id), eq(apiKeys.tenantId, tenantId)))
+      .returning();
+    return apiKey || null;
+  }
+
+  async deleteApiKey(id: number, tenantId: number): Promise<boolean> {
+    const result = await db.delete(apiKeys)
+      .where(and(eq(apiKeys.id, id), eq(apiKeys.tenantId, tenantId)));
+    return (result.rowCount ?? 0) > 0;
+  }
+
+  async updateApiKeyLastUsed(id: number): Promise<void> {
+    await db.update(apiKeys)
+      .set({ lastUsedAt: new Date() })
+      .where(eq(apiKeys.id, id));
   }
 }
 

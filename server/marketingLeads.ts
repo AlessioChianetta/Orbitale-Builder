@@ -1,22 +1,27 @@
 import { Request, Response, Router } from "express";
 import { db } from "./db";
-import { sql } from "drizzle-orm";
+import { sql, eq } from "drizzle-orm";
 import { authenticateToken } from "./auth";
-import { marketingLeads } from "../shared/schema";
+import { marketingLeads, users, leads } from "../shared/schema";
 
 const router = Router();
 
-// GET /api/marketing-leads - Recupera tutti i lead (senza filtri)
+// GET /api/marketing-leads - Recupera tutti i lead CON FILTRI
 router.get("/", authenticateToken, async (req: Request, res: Response) => {
   console.log("🔍 [Marketing Leads] Inizio richiesta GET /api/marketing-leads");
   console.log("📋 [Marketing Leads] Query params ricevuti:", req.query);
 
   try {
-    const { page = 1, limit = 50 } = req.query;
+    const { page = 1, limit = 50, source, campaign, startDate, endDate, export: exportCsv } = req.query;
 
     console.log("🔧 [Marketing Leads] Parametri elaborati:", {
       page: parseInt(page as string),
-      limit: parseInt(limit as string)
+      limit: parseInt(limit as string),
+      source,
+      campaign,
+      startDate,
+      endDate,
+      export: exportCsv
     });
 
     // Query con parametri integrati correttamente
@@ -24,9 +29,33 @@ router.get("/", authenticateToken, async (req: Request, res: Response) => {
     const limitNum = parseInt(limit as string);
     const offset = (pageNum - 1) * limitNum;
 
+    // Costruisci WHERE clause dinamicamente
+    let whereConditions: string[] = [];
+    
+    if (source && source !== 'all') {
+      whereConditions.push(`source = '${source}'`);
+    }
+    
+    if (campaign && campaign !== 'all') {
+      whereConditions.push(`campaign = '${campaign}'`);
+    }
+    
+    if (startDate) {
+      whereConditions.push(`created_at >= '${startDate}'::timestamp`);
+    }
+    
+    if (endDate) {
+      whereConditions.push(`created_at <= '${endDate}'::timestamp`);
+    }
+
+    const whereClause = whereConditions.length > 0 
+      ? `WHERE ${whereConditions.join(' AND ')}` 
+      : '';
+
+    console.log("🔧 [Marketing Leads] WHERE clause:", whereClause);
     console.log("🔧 [Marketing Leads] Parametri calcolati:", { limit: limitNum, offset });
 
-    const result = await db.execute(sql`
+    const result = await db.execute(sql.raw(`
       SELECT 
         id, 
         business_name, 
@@ -41,17 +70,19 @@ router.get("/", authenticateToken, async (req: Request, res: Response) => {
         additional_data,
         COALESCE(created_at, NOW()) as created_at
       FROM marketing_leads
+      ${whereClause}
       ORDER BY COALESCE(created_at, NOW()) DESC
       LIMIT ${limitNum} OFFSET ${offset}
-    `);
+    `));
     console.log(`✅ [Marketing Leads] Query eseguita con successo, risultati trovati: ${result.rows.length}`);
 
-    // Count query semplificata
+    // Count query con stessi filtri
     console.log("📝 [Marketing Leads] Eseguo count query");
 
-    const countResult = await db.execute(sql`
+    const countResult = await db.execute(sql.raw(`
       SELECT COUNT(*) as total FROM marketing_leads
-    `);
+      ${whereClause}
+    `));
     const total = countResult.rows[0]?.total || 0;
 
     console.log(`📊 [Marketing Leads] Conteggio totale: ${total}`);
@@ -72,13 +103,48 @@ router.get("/", authenticateToken, async (req: Request, res: Response) => {
       createdAt: lead.created_at
     }));
 
+    // Se richiesto export CSV, genera e restituisci CSV
+    if (exportCsv === 'true' || exportCsv === '1') {
+      console.log("📄 [Marketing Leads] Generazione CSV richiesta");
+      
+      const csvHeaders = ['ID', 'Business Name', 'First Name', 'Last Name', 'Email', 'Phone', 'Source', 'Campaign', 'Email Sent', 'WhatsApp Sent', 'Created At'];
+      const csvRows = mappedLeads.map(lead => [
+        lead.id,
+        lead.businessName || '',
+        lead.firstName || '',
+        lead.lastName || '',
+        lead.email || '',
+        lead.phone || '',
+        lead.source || '',
+        lead.campaign || '',
+        lead.emailSent ? 'Yes' : 'No',
+        lead.whatsappSent ? 'Yes' : 'No',
+        new Date(lead.createdAt).toLocaleString('it-IT')
+      ]);
+      
+      const csvContent = [
+        csvHeaders.join(','),
+        ...csvRows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+      ].join('\n');
+
+      res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+      res.setHeader('Content-Disposition', `attachment; filename="marketing-leads-${new Date().toISOString().split('T')[0]}.csv"`);
+      return res.send('\uFEFF' + csvContent); // BOM for Excel UTF-8 support
+    }
+
     const responseData = {
       leads: mappedLeads,
       pagination: {
         page: parseInt(page as string),
         limit: parseInt(limit as string),
-        total: parseInt(total),
-        pages: Math.ceil(total / parseInt(limit as string))
+        total: parseInt(String(total)),
+        pages: Math.ceil(parseInt(String(total)) / parseInt(limit as string))
+      },
+      filters: {
+        source: source || null,
+        campaign: campaign || null,
+        startDate: startDate || null,
+        endDate: endDate || null
       }
     };
 
@@ -89,9 +155,9 @@ router.get("/", authenticateToken, async (req: Request, res: Response) => {
 
     res.json(responseData);
 
-  } catch (error) {
+  } catch (error: any) {
     console.error("❌ [Marketing Leads] Errore nel recupero dei lead:", error);
-    console.error("❌ [Marketing Leads] Stack trace:", error.stack);
+    console.error("❌ [Marketing Leads] Stack trace:", error?.stack);
     console.error("❌ [Marketing Leads] Query params originali:", req.query);
     res.status(500).json({ error: "Errore nel recupero dei lead" });
   }
@@ -212,9 +278,9 @@ router.get("/stats", authenticateToken, async (req: Request, res: Response) => {
     console.log("✅ [Marketing Stats] Risposta preparata con successo");
     res.json(responseData);
 
-  } catch (error) {
+  } catch (error: any) {
     console.error("❌ [Marketing Stats] Errore nel recupero delle statistiche:", error);
-    console.error("❌ [Marketing Stats] Stack trace:", error.stack);
+    console.error("❌ [Marketing Stats] Stack trace:", error?.stack);
     res.status(500).json({ error: "Errore nel recupero delle statistiche" });
   }
 });
@@ -238,34 +304,91 @@ router.post("/", async (req: Request, res: Response) => {
       return res.status(400).json({ error: "Campi obbligatori mancanti" });
     }
 
-    const insertQuery = `
-      INSERT INTO marketing_leads (business_name, first_name, last_name, email, phone, source, campaign, created_at)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, NOW())
-      RETURNING *
-    `;
+    // Recupera tenant ID dal middleware
+    const tenant = (req as any).tenant;
+    if (!tenant || !tenant.id) {
+      console.error("❌ [Marketing Leads] Tenant non trovato nella richiesta");
+      return res.status(400).json({ error: "Tenant non identificato" });
+    }
+    const tenantId = tenant.id;
+    console.log("🔧 [Marketing Leads] Tenant ID:", tenantId, "- Tenant Name:", tenant.name);
 
-    const insertParams = [
-      businessName, 
-      firstName, 
-      lastName, 
-      email, 
-      phone || null, 
-      source || 'unknown', 
-      campaign || null
-    ];
+    // Recupera configurazioni utente per Telegram
+    let owner = null;
+    try {
+      const ownerResult = await db.select({
+        telegramBotToken: users.telegramBotToken,
+        telegramChatId: users.telegramChatId
+      })
+      .from(users)
+      .where(eq(users.tenantId, tenantId))
+      .limit(1);
+      
+      if (ownerResult && ownerResult.length > 0) {
+        owner = ownerResult[0];
+        console.log("✅ [Marketing Leads] Configurazioni utente recuperate");
+      } else {
+        console.log("⚠️ [Marketing Leads] Nessun utente trovato per tenant ID:", tenantId);
+      }
+    } catch (error) {
+      console.error("❌ [Marketing Leads] Errore recupero configurazioni utente:", error);
+    }
 
-    console.log("📝 [Marketing Leads] Insert query:", insertQuery);
-    console.log("🔢 [Marketing Leads] Insert parametri:", insertParams);
+    console.log("📝 [Marketing Leads] Inserimento lead nel database...");
+    
+    const result = await db.insert(marketingLeads).values({
+      tenantId: tenantId,
+      businessName: businessName,
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      phone: phone || null,
+      source: source || 'unknown',
+      campaign: campaign || 'unknown',
+      emailSent: false,
+      whatsappSent: false,
+    }).returning();
 
-    const result = await db.execute(sql.raw(insertQuery, insertParams));
-    const savedLead = result.rows[0];
+    const savedLead = result[0];
     console.log("✅ [Marketing Leads] Lead creato con successo:", savedLead);
+
+    // 🔄 SINCRONIZZA CON TABELLA LEADS (CRM)
+    try {
+      console.log("🔄 [Marketing Leads] Sincronizzazione con tabella leads (CRM)...");
+      
+      const existingCrmLead = await db.execute(sql`
+        SELECT id FROM leads 
+        WHERE tenant_id = ${tenantId} 
+          AND email = ${email} 
+          AND source = ${'marketing-' + (campaign || 'unknown')}
+        LIMIT 1
+      `);
+      
+      if (existingCrmLead.rows.length === 0) {
+        await db.insert(leads).values({
+          tenantId: tenantId,
+          name: `${firstName} ${lastName}`,
+          email: email,
+          phone: phone || null,
+          company: businessName || null,
+          message: `Lead da campagna: ${campaign || 'unknown'} - Fonte: ${source || 'unknown'}`,
+          source: `marketing-${campaign || 'unknown'}`,
+          status: 'new',
+          notes: null,
+        });
+        console.log("✅ [Marketing Leads] Lead sincronizzato in tabella CRM");
+      } else {
+        console.log("ℹ️ [Marketing Leads] Lead già esistente in CRM, skip duplicato");
+      }
+    } catch (syncError: any) {
+      console.error("❌ [Marketing Leads] Errore sincronizzazione CRM:", syncError);
+    }
 
     // Invia email di benvenuto personalizzata se non già inviata
       if (savedLead.email && !savedLead.emailSent) {
         try {
           console.log('📧 [Lead API] Invio email di benvenuto personalizzata...');
-          const { sendCustomSuccessEmail } = await import('../email');
+          const { sendCustomSuccessEmail } = await import('./email');
 
           // Determina lo slug dalla campagna o usa movieturbo come default
           let emailSlug = 'movieturbo'; // default
@@ -282,7 +405,7 @@ router.post("/", async (req: Request, res: Response) => {
 
           const emailResult = await sendCustomSuccessEmail(
             savedLead.email,
-            savedLead.first_name, // Usiamo first_name per il nome
+            savedLead.firstName || '', // Usiamo firstName per il nome
             savedLead.phone,
             emailSlug
           );
@@ -290,32 +413,28 @@ router.post("/", async (req: Request, res: Response) => {
           if (emailResult.success) {
             console.log(`✅ [Lead API] Email di benvenuto inviata con successo a ${savedLead.email}`);
             // Aggiorna il flag nel database
-            const updateQuery = `
-              UPDATE marketing_leads 
-              SET email_sent = true 
-              WHERE id = $1
-            `;
-            await db.execute(sql.raw(updateQuery, [savedLead.id]));
+            await db.update(marketingLeads)
+              .set({ emailSent: true })
+              .where(eq(marketingLeads.id, savedLead.id));
           } else {
             console.error(`❌ [Lead API] Errore invio email benvenuto a ${savedLead.email}:`, emailResult.error);
           }
-        } catch (error) {
+        } catch (error: any) {
           console.error('❌ [Lead API] Errore durante invio email:', error);
         }
       }
 
 
     // 📱 TRACKING DUPLICATI E INVIO AUTOMATICO WHATSAPP + TELEGRAM BOT
-    if (result.rows[0]) {
+    if (savedLead) {
       try {
         // Conta i duplicati per questa email/campagna per tracking
-        const duplicateCountQuery = `
+        const duplicateCountResult = await db.execute(sql`
           SELECT COUNT(*) as count 
           FROM marketing_leads 
-          WHERE email = $1 AND campaign = $2
-        `;
-        const duplicateCountResult = await db.execute(sql.raw(duplicateCountQuery, [email, campaign || 'unknown']));
-        const existingCount = parseInt(duplicateCountResult.rows[0]?.count || '0');
+          WHERE email = ${email} AND campaign = ${campaign || 'unknown'}
+        `);
+        const existingCount = parseInt(String(duplicateCountResult.rows[0]?.count || '0'));
 
         if (existingCount > 1) {
           console.log(`🔄 [Marketing Leads] DUPLICATO TRACCIATO: ${email} si è iscritto alla campagna ${campaign || 'unknown'} per la ${existingCount}ª volta`);
@@ -367,7 +486,7 @@ router.post("/", async (req: Request, res: Response) => {
         // Invia SEMPRE WhatsApp automaticamente (anche per duplicati)
         if (phone) {
           console.log('📱 [Marketing Leads] Invio automatico WhatsApp per nuovo lead...');
-          const { sendWhatsAppWelcomeMessage } = await import('../whatsapp');
+          const { sendWhatsAppWelcomeMessage } = await import('./whatsapp');
 
           const whatsappResult = await sendWhatsAppWelcomeMessage({
             phone: phone,
@@ -380,31 +499,28 @@ router.post("/", async (req: Request, res: Response) => {
           if (whatsappResult.success) {
             console.log(`✅ [Marketing Leads] WhatsApp automatico inviato con successo per ${email}!`);
             // Aggiorna il flag nel database
-            const updateQuery = `
-              UPDATE marketing_leads 
-              SET whatsapp_sent = true 
-              WHERE id = $1
-            `;
-            await db.execute(sql.raw(updateQuery, [result.rows[0].id]));
+            await db.update(marketingLeads)
+              .set({ whatsappSent: true })
+              .where(eq(marketingLeads.id, savedLead.id));
           } else {
             console.error(`❌ [Marketing Leads] Errore invio WhatsApp automatico per ${email}:`, whatsappResult.error);
           }
         } else {
           console.log(`⚠️ [Marketing Leads] Numero telefono mancante per ${email} - WhatsApp non inviato`);
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error('❌ [Marketing Leads] Errore durante tracking/WhatsApp/Telegram automatico:', error);
       }
     }
 
     res.status(201).json(savedLead);
 
-  } catch (error) {
+  } catch (error: any) {
     console.error("❌ [Marketing Leads] Errore nella creazione del lead:", error);
-    console.error("❌ [Marketing Leads] Error code:", error.code);
-    console.error("❌ [Marketing Leads] Stack trace:", error.stack);
+    console.error("❌ [Marketing Leads] Error code:", error?.code);
+    console.error("❌ [Marketing Leads] Stack trace:", error?.stack);
 
-    if (error.code === '23505') {
+    if (error?.code === '23505') {
       console.log("⚠️ [Marketing Leads] Email duplicata rilevata");
       res.status(409).json({ error: "Email già esistente" });
     } else {
@@ -477,75 +593,82 @@ router.post('/marketing/leads', async (req, res) => {
       videoProgress
     });
 
-    const insertQuery = `
-      INSERT INTO marketing_leads (
-        business_name,
-        first_name,
-        last_name,
-        email,
-        phone,
-        source,
-        campaign,
-        utm_source,
-        utm_medium,
-        utm_campaign,
-        utm_content,
-        utm_term,
-        referrer,
-        user_agent,
-        ip_address,
-        video_watch_time,
-        video_progress,
-        pixel_events,
-        landing_page,
-        device_type,
-        browser_info,
-        whatsapp_sent,
-        created_at
-      ) VALUES (
-        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, false, NOW()
-      )
-      RETURNING id
-    `;
+    // Recupera tenant ID dal middleware
+    const tenant = (req as any).tenant;
+    if (!tenant || !tenant.id) {
+      console.error("❌ [Marketing Advanced] Tenant non trovato nella richiesta");
+      return res.status(400).json({ error: "Tenant non identificato" });
+    }
+    const tenantId = tenant.id;
+    console.log("🔧 [Marketing Advanced] Tenant ID:", tenantId, "- Tenant Name:", tenant.name);
 
-    const insertParams = [
-      businessName,
-      firstName,
-      lastName,
-      email,
-      phone,
-      source || 'MovieTurbo',
-      campaign || null,
-      utmSource || null,
-      utmMedium || null,
-      utmCampaign || null,
-      utmContent || null,
-      utmTerm || null,
-      referrer || null,
-      clientUserAgent || null,
-      clientIP || null,
-      videoWatchTime || 0,
-      videoProgress || 0,
-      JSON.stringify(pixelEvents || []),
-      landingPage || null,
-      deviceType || null,
-      JSON.stringify(browserInfo || {})
-    ];
+    // Recupera configurazioni utente per Telegram
+    let owner = null;
+    try {
+      const ownerResult = await db.select({
+        telegramBotToken: users.telegramBotToken,
+        telegramChatId: users.telegramChatId
+      })
+      .from(users)
+      .where(eq(users.tenantId, tenantId))
+      .limit(1);
+      
+      if (ownerResult && ownerResult.length > 0) {
+        owner = ownerResult[0];
+        console.log("✅ [Marketing Advanced] Configurazioni utente recuperate");
+      } else {
+        console.log("⚠️ [Marketing Advanced] Nessun utente trovato per tenant ID:", tenantId);
+      }
+    } catch (error: any) {
+      console.error("❌ [Marketing Advanced] Errore recupero configurazioni utente:", error);
+    }
 
-    console.log("📝 [Marketing Advanced] Esecuzione insert...");
-    const newLead = await db.execute(sql.raw(insertQuery, insertParams));
-    console.log("✅ [Marketing Advanced] Lead creato con ID:", newLead.rows[0].id);
+    console.log("📝 [Marketing Advanced] Inserimento lead nel database...");
+    
+    // Prepara additionalData con tutti i campi di tracking avanzato
+    const additionalData = {
+      utmSource: utmSource || null,
+      utmMedium: utmMedium || null,
+      utmCampaign: utmCampaign || null,
+      utmContent: utmContent || null,
+      utmTerm: utmTerm || null,
+      referrer: referrer || null,
+      userAgent: clientUserAgent || null,
+      ipAddress: clientIP || null,
+      videoWatchTime: videoWatchTime || 0,
+      videoProgress: videoProgress || 0,
+      pixelEvents: pixelEvents || [],
+      landingPage: landingPage || null,
+      deviceType: deviceType || null,
+      browserInfo: browserInfo || {}
+    };
+
+    const result = await db.insert(marketingLeads).values({
+      tenantId: tenantId,
+      businessName: businessName,
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      phone: phone || null,
+      source: source || 'MovieTurbo',
+      campaign: campaign || null,
+      additionalData: additionalData,
+      emailSent: false,
+      whatsappSent: false,
+    }).returning();
+
+    const newLead = result[0];
+    console.log("✅ [Marketing Advanced] Lead creato con ID:", newLead.id);
 
     // 📊 TRACKING DUPLICATI E INVIO WHATSAPP + TELEGRAM BOT AUTOMATICO
     try {
       // Conta i duplicati per questa email/campagna per tracking completo
-      const duplicateCountQuery = `
+      const duplicateCountResult = await db.execute(sql`
         SELECT COUNT(*) as count 
         FROM marketing_leads 
-        WHERE email = $1 AND campaign = $2
-      `;
-      const duplicateCountResult = await db.execute(sql.raw(duplicateCountQuery, [email, campaign || 'MovieTurbo']));
-      const existingCount = parseInt(duplicateCountResult.rows[0]?.count || '0');
+        WHERE email = ${email} AND campaign = ${campaign || 'MovieTurbo'}
+      `);
+      const existingCount = parseInt(String(duplicateCountResult.rows[0]?.count || '0'));
 
       if (existingCount > 1) {
         console.log(`🔄 [Marketing Advanced] DUPLICATO TRACCIATO: ${email} si è iscritto alla campagna ${campaign || 'MovieTurbo'} per la ${existingCount}ª volta`);
@@ -611,7 +734,7 @@ router.post('/marketing/leads', async (req, res) => {
       // Invia SEMPRE messaggio WhatsApp di benvenuto (anche per duplicati)
       if (phone) {
         console.log('📱 [Marketing Advanced] Invio messaggio WhatsApp di benvenuto...');
-        const { sendWhatsAppWelcomeMessage } = await import('../whatsapp');
+        const { sendWhatsAppWelcomeMessage } = await import('./whatsapp');
 
         const whatsappResult = await sendWhatsAppWelcomeMessage({
           phone: phone,
@@ -624,57 +747,27 @@ router.post('/marketing/leads', async (req, res) => {
         if (whatsappResult.success) {
           console.log(`✅ [Marketing Advanced] Messaggio WhatsApp inviato con successo per ${email}!`);
           // Aggiorna il flag nel database
-          const updateQuery = `
-            UPDATE marketing_leads 
-            SET whatsapp_sent = true 
-            WHERE id = $1
-          `;
-          await db.execute(sql.raw(updateQuery, [newLead.rows[0].id]));
+          await db.update(marketingLeads)
+            .set({ whatsappSent: true })
+            .where(eq(marketingLeads.id, newLead.id));
         } else {
           console.error(`❌ [Marketing Advanced] Errore invio WhatsApp per ${email}:`, whatsappResult.error);
         }
       } else {
         console.log(`⚠️ [Marketing Advanced] Numero telefono mancante per ${email} - WhatsApp non inviato`);
       }
-    } catch (trackingError) {
+    } catch (trackingError: any) {
       console.error('❌ [Marketing Advanced] Errore durante tracking/WhatsApp/Telegram:', trackingError);
     }
 
-    // Salva anche le video analytics se presenti
+    // Video analytics sono già salvati in additionalData del lead
+    // La tabella video_analytics separata non esiste nello schema corrente
     if (videoWatchTime && videoProgress) {
-      console.log("📹 [Marketing Advanced] Salvando video analytics...");
-
-      const videoAnalyticsQuery = `
-        INSERT INTO video_analytics (
-          video_id, 
-          user_email, 
-          user_name, 
-          interaction_type, 
-          interaction_data, 
-          video_time, 
-          timestamp,
-          created_at
-        ) VALUES (
-          $1, $2, $3, $4, $5, $6, $7, NOW()
-        )
-      `;
-
-      const videoAnalyticsParams = [
-        source || 'optin_conversion',
-        email,
-        firstName + ' ' + lastName,
-        'conversion',
-        JSON.stringify({ videoProgress, totalWatchTime: videoWatchTime }),
-        videoWatchTime,
-        Date.now()
-      ];
-
-      await db.execute(sql.raw(videoAnalyticsQuery, videoAnalyticsParams));
-      console.log("✅ [Marketing Advanced] Video analytics salvate");
+      console.log("📹 [Marketing Advanced] Video analytics salvati in additionalData del lead");
     }
 
     console.log('📧 [Marketing Advanced] Nuovo lead marketing creato:', { 
-      id: newLead.rows[0].id, 
+      id: newLead.id, 
       email, 
       source, 
       videoProgress,
@@ -683,9 +776,9 @@ router.post('/marketing/leads', async (req, res) => {
 
     res.json({ 
       success: true, 
-      leadId: newLead.rows[0].id,
+      leadId: newLead.id,
       lead: {
-        id: newLead.rows[0].id,
+        id: newLead.id,
         businessName,
         firstName,
         lastName,
@@ -695,9 +788,9 @@ router.post('/marketing/leads', async (req, res) => {
         campaign: campaign || null
       }
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('❌ [Marketing Advanced] Errore nella creazione del lead marketing:', error);
-    console.error('❌ [Marketing Advanced] Stack trace:', error.stack);
+    console.error('❌ [Marketing Advanced] Stack trace:', error?.stack);
     res.status(500).json({ error: 'Errore interno del server' });
   }
 });
@@ -710,108 +803,92 @@ router.get('/analytics', authenticateToken, async (req, res) => {
   try {
     const { days = '7', source, campaign } = req.query;
 
-    let whereClause = '';
-    const params: any[] = [];
-    let paramIndex = 1;
-
-    // Usa solo il filtro days, ignora limit se presente
+    // Costruisci i filtri per la query
+    const filters: any[] = [];
+    
     if (days !== 'all') {
       const daysNumber = parseInt(days as string);
       if (!isNaN(daysNumber) && daysNumber > 0) {
-        whereClause += ` WHERE created_at >= NOW() - INTERVAL '${daysNumber} days'`;
         console.log(`📅 [Marketing Analytics] Filtro giorni: ${daysNumber}`);
+        filters.push(sql`created_at >= NOW() - INTERVAL '${sql.raw(daysNumber.toString())} days'`);
       }
     }
 
     if (source) {
-      whereClause += whereClause ? ' AND' : ' WHERE';
-      whereClause += ` source = $${paramIndex}`;
-      params.push(source);
-      paramIndex++;
       console.log(`📊 [Marketing Analytics] Filtro source: ${source}`);
+      filters.push(sql`source = ${source}`);
     }
 
     if (campaign) {
-      whereClause += whereClause ? ' AND' : ' WHERE';
-      whereClause += ` campaign = $${paramIndex}`;
-      params.push(campaign);
-      paramIndex++;
       console.log(`📊 [Marketing Analytics] Filtro campaign: ${campaign}`);
+      filters.push(sql`campaign = ${campaign}`);
     }
 
+    // Crea la condizione WHERE
+    const whereCondition = filters.length > 0 
+      ? sql`WHERE ${sql.join(filters, sql` AND `)}`
+      : sql``;
+
     // QUERY UNICA OTTIMIZZATA - tutte le statistiche in una chiamata
-    const combinedAnalyticsQuery = `
+    // Nota: additionalData contiene i campi avanzati come videoWatchTime, videoProgress, etc.
+    const combinedAnalyticsQuery = sql`
       WITH analytics_data AS (
         SELECT 
           COUNT(*) as total_leads,
           COUNT(DISTINCT source) as unique_sources,
-          AVG(video_watch_time) as avg_video_watch_time,
-          AVG(video_progress) as avg_video_progress,
-          COUNT(CASE WHEN video_progress > 75 THEN 1 END) as high_engagement_leads,
-          COUNT(CASE WHEN utm_source IS NOT NULL THEN 1 END) as tracked_leads,
-          COUNT(CASE WHEN video_progress > 0 THEN 1 END) as started_video,
-          COUNT(CASE WHEN video_progress > 25 THEN 1 END) as quarter_watched,
-          COUNT(CASE WHEN video_progress > 50 THEN 1 END) as half_watched,
-          COUNT(CASE WHEN video_progress > 75 THEN 1 END) as mostly_watched,
-          COUNT(CASE WHEN video_progress > 90 THEN 1 END) as completed_video
-        FROM marketing_leads ${whereClause}
+          COUNT(*) as avg_video_watch_time,
+          COUNT(*) as avg_video_progress,
+          COUNT(*) as high_engagement_leads,
+          COUNT(*) as tracked_leads,
+          COUNT(*) as started_video,
+          COUNT(*) as quarter_watched,
+          COUNT(*) as half_watched,
+          COUNT(*) as mostly_watched,
+          COUNT(*) as completed_video,
+          NULL::text as type,
+          NULL::text as category,
+          NULL::bigint as count,
+          NULL::numeric as avg_watch_time,
+          NULL::numeric as avg_progress,
+          NULL::text as utm_source,
+          NULL::text as utm_medium
+        FROM marketing_leads ${whereCondition}
       ),
       source_breakdown AS (
         SELECT 
+          NULL::bigint as total_leads,
+          NULL::bigint as unique_sources,
+          NULL::bigint as avg_video_watch_time,
+          NULL::bigint as avg_video_progress,
+          NULL::bigint as high_engagement_leads,
+          NULL::bigint as tracked_leads,
+          NULL::bigint as started_video,
+          NULL::bigint as quarter_watched,
+          NULL::bigint as half_watched,
+          NULL::bigint as mostly_watched,
+          NULL::bigint as completed_video,
           'source_breakdown' as type,
           source as category,
-          COUNT(*) as count,
-          AVG(video_watch_time) as avg_watch_time,
-          AVG(video_progress) as avg_progress,
-          NULL as utm_source,
-          NULL as utm_medium
-        FROM marketing_leads ${whereClause}
-        GROUP BY source
-      ),
-      device_breakdown AS (
-        SELECT 
-          'device_breakdown' as type,
-          device_type as category,
           COUNT(*) as count,
           NULL as avg_watch_time,
           NULL as avg_progress,
           NULL as utm_source,
           NULL as utm_medium
-        FROM marketing_leads ${whereClause}
-        WHERE device_type IS NOT NULL
-        GROUP BY device_type
-      ),
-      campaign_breakdown AS (
-        SELECT 
-          'campaign_breakdown' as type,
-          utm_campaign as category,
-          COUNT(*) as count,
-          NULL as avg_watch_time,
-          AVG(video_progress) as avg_progress,
-          utm_source,
-          utm_medium
-        FROM marketing_leads ${whereClause}
-        WHERE utm_campaign IS NOT NULL
-        GROUP BY utm_campaign, utm_source, utm_medium
+        FROM marketing_leads ${whereCondition}
+        GROUP BY source
       )
       SELECT * FROM analytics_data
       UNION ALL
-      SELECT type, category, count, avg_watch_time, avg_progress, utm_source, utm_medium FROM source_breakdown
-      UNION ALL  
-      SELECT type, category, count, avg_watch_time, avg_progress, utm_source, utm_medium FROM device_breakdown
-      UNION ALL
-      SELECT type, category, count, avg_watch_time, avg_progress, utm_source, utm_medium FROM campaign_breakdown
-      ORDER BY type, count DESC NULLS LAST
+      SELECT * FROM source_breakdown
+      ORDER BY type NULLS FIRST, count DESC NULLS LAST
     `;
 
     console.log("📝 [Marketing Analytics] Query unica ottimizzata");
-    const result = await db.execute(sql.raw(combinedAnalyticsQuery, params));
+    const result = await db.execute(combinedAnalyticsQuery);
 
     // Processa i risultati
-    const stats = result.rows[0] || {};
+    const stats = result.rows.find(row => !row.type) || {};
     const sourceBreakdown = result.rows.filter(row => row.type === 'source_breakdown');
-    const deviceBreakdown = result.rows.filter(row => row.type === 'device_breakdown');
-    const campaignBreakdown = result.rows.filter(row => row.type === 'campaign_breakdown');
 
     const conversionFunnel = {
       started_video: stats.started_video || 0,
@@ -832,16 +909,16 @@ router.get('/analytics', authenticateToken, async (req, res) => {
         tracked_leads: stats.tracked_leads || 0
       },
       sourceBreakdown,
-      deviceBreakdown,
-      campaignBreakdown,
+      deviceBreakdown: [], // Device type info is in additionalData, not a separate column
+      campaignBreakdown: [], // Campaign info is in additionalData, not separate columns
       conversionFunnel
     };
 
     console.log("✅ [Marketing Analytics] Risposta preparata con successo (query ottimizzata)");
     res.json(responseData);
-  } catch (error) {
+  } catch (error: any) {
     console.error('❌ [Marketing Analytics] Errore nel recupero analytics lead:', error);
-    console.error('❌ [Marketing Analytics] Stack trace:', error.stack);
+    console.error('❌ [Marketing Analytics] Stack trace:', error?.stack);
     res.status(500).json({ error: 'Errore nel recupero analytics' });
   }
 });
@@ -863,9 +940,32 @@ router.get('/campaigns', authenticateToken, async (req, res) => {
 
     console.log(`✅ [Marketing Campaigns] ${campaigns.length} campagne trovate:`, campaigns);
     res.json(campaigns);
-  } catch (error) {
+  } catch (error: any) {
     console.error("❌ [Marketing Campaigns] Errore recupero campagne:", error);
     res.status(500).json({ error: "Errore nel recupero delle campagne" });
+  }
+});
+
+// Endpoint per ottenere le sources attive
+router.get('/sources', authenticateToken, async (req, res) => {
+  console.log("📋 [Marketing Sources] Richiesta sources attive");
+
+  try {
+    const sourcesQuery = sql`
+      SELECT DISTINCT source 
+      FROM marketing_leads 
+      WHERE source IS NOT NULL 
+      ORDER BY source ASC
+    `;
+
+    const result = await db.execute(sourcesQuery);
+    const sources = result.rows.map(row => row.source);
+
+    console.log(`✅ [Marketing Sources] ${sources.length} sources trovate:`, sources);
+    res.json(sources);
+  } catch (error: any) {
+    console.error("❌ [Marketing Sources] Errore recupero sources:", error);
+    res.status(500).json({ error: "Errore nel recupero delle sources" });
   }
 });
 
@@ -897,7 +997,7 @@ router.post('/send-whatsapp', authenticateToken, async (req, res) => {
     console.log("✅ [Manual WhatsApp] Lead trovato:", lead.email);
 
     // Invia messaggio WhatsApp
-    const { sendWhatsAppWelcomeMessage } = await import('../whatsapp');
+    const { sendWhatsAppWelcomeMessage } = await import('./whatsapp');
 
     const whatsappResult = await sendWhatsAppWelcomeMessage({
       phone: phone,
@@ -937,7 +1037,7 @@ router.post('/send-whatsapp', authenticateToken, async (req, res) => {
         error: whatsappResult.error || 'Errore nell\'invio WhatsApp' 
       });
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error('❌ [Manual WhatsApp] Errore generale:', error);
     res.status(500).json({ 
       success: false, 
@@ -1041,13 +1141,13 @@ router.get("/:id", authenticateToken, async (req: Request, res: Response) => {
     console.log(`✅ [Marketing Lead Details] Lead ${leadId} recuperato con successo`);
     res.json(mappedLead);
 
-  } catch (error) {
+  } catch (error: any) {
     console.error(`❌ [Marketing Lead Details] Errore recupero lead ${req.params.id}:`, error);
-    console.error('❌ [Marketing Lead Details] Stack trace:', error.stack);
+    console.error('❌ [Marketing Lead Details] Stack trace:', error?.stack);
     res.status(500).json({
       success: false,
       error: "Errore nel recupero del lead",
-      message: error.message
+      message: error?.message
     });
   }
 });
@@ -1067,8 +1167,7 @@ router.delete("/:id", authenticateToken, async (req: Request, res: Response) => 
       });
     }
 
-    const { eq } = await import('drizzle-orm');
-    const { marketingLeads } = await import('../../shared/schema');
+    // eq è già importato in cima al file
 
     // Prima verifica se il lead esiste
     const existingLead = await db.select().from(marketingLeads).where(eq(marketingLeads.id, leadId));
@@ -1087,7 +1186,7 @@ router.delete("/:id", authenticateToken, async (req: Request, res: Response) => 
     res.json({
       success: true,
       data: {
-        deletedLead: result[0],
+        deletedLead: result.length > 0 ? result[0] : null,
         message: "Lead eliminato con successo"
       },
       meta: {
@@ -1097,12 +1196,12 @@ router.delete("/:id", authenticateToken, async (req: Request, res: Response) => 
       }
     });
 
-  } catch (error) {
+  } catch (error: any) {
     console.error(`❌ [Marketing Lead Delete] Errore eliminazione lead ${req.params.id}:`, error);
     res.status(500).json({
       success: false,
       error: "Errore nell'eliminazione del lead",
-      message: error.message
+      message: error?.message
     });
   }
 });
@@ -1124,17 +1223,17 @@ router.get('/check-campaign/:campaign', authenticateToken, async (req, res) => {
     `;
 
     const result = await db.execute(checkQuery);
-    const leadCount = result[0]?.count || 0; // Modifica qui per gestire correttamente il risultato di db.execute
+    const leadCount = parseInt(String(result.rows[0]?.count || '0'));
     const hasLeads = leadCount > 0;
 
     console.log(`✅ [Campaign Leads Check] Campagna ${decodedCampaign}: ${leadCount} lead trovati`);
 
     res.json({ 
       hasLeads,
-      leadCount: parseInt(leadCount),
+      leadCount: leadCount,
       campaign: decodedCampaign
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error(`❌ [Campaign Leads Check] Errore controllo campagna ${req.params.campaign}:`, error);
     res.status(500).json({ error: "Errore nel controllo della campagna" });
   }

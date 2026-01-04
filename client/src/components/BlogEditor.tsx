@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, lazy, Suspense } from 'react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
@@ -8,13 +8,30 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Badge } from './ui/badge';
 import { Switch } from './ui/switch';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
-import { CMSEditor } from './CMSEditor';
+import { Skeleton } from './ui/skeleton';
 import { Save, Send, Tag, X, Plus, FileText, Clock, AlertCircle, Upload } from 'lucide-react';
 import { Card, CardContent } from './ui/card';
 
+const CMSEditor = lazy(() => import('./CMSEditor').then(module => ({ default: module.CMSEditor })));
+
+function CMSEditorSkeleton() {
+  return (
+    <div className="bg-white prose prose-lg max-w-none border rounded-md p-4 min-h-[600px] space-y-4">
+      <Skeleton className="h-8 w-3/4" />
+      <Skeleton className="h-4 w-full" />
+      <Skeleton className="h-4 w-full" />
+      <Skeleton className="h-4 w-5/6" />
+      <Skeleton className="h-48 w-full mt-6" />
+      <Skeleton className="h-4 w-full" />
+      <Skeleton className="h-4 w-full" />
+      <Skeleton className="h-4 w-4/5" />
+    </div>
+  );
+}
+
 const postTemplates = [
-    { name: "Guida Definitiva", data: { blocks: [ { type: "header", data: { text: "Il Titolo della Tua Guida Completa (H2)", level: 2 } }, { type: "paragraph", data: { text: "Inizia con un'introduzione che catturi l'attenzione del lettore, spiegando chiaramente cosa imparerà e perché è importante. Usa dati, fai una domanda o presenta un problema comune." } }, { type: "image", data: { url: "https://via.placeholder.com/800x400.png?text=Immagine+Introduttiva", caption: "Una didascalia per l'immagine introduttiva." } }, { type: "header", data: { text: "Capitolo 1: Le Basi Fondamentali", level: 3 } }, { type: "paragraph", data: { text: "In questa sezione, copri i concetti di base. Assicurati che anche un principiante possa capire. Usa un linguaggio semplice e diretto." } }, { type: "list", data: { style: "ordered", items: ["Primo punto fondamentale.", "Secondo punto da non dimenticare.", "Terzo concetto chiave."] } }, { type: "header", data: { text: "Capitolo 2: Tecniche Avanzate", level: 3 } }, { type: "paragraph", data: { text: "Ora che le basi sono state gettate, puoi esplorare argomenti più complessi. Fornisci esempi pratici e dettagli tecnici." } }, { type: "quote", data: { text: "Una citazione rilevante può aggiungere autorità al tuo articolo.", caption: "Nome Esperto" } }, { type: "header", data: { text: "Conclusione e Prossimi Passi", level: 2 } }, { type: "paragraph", data: { text: "Riassumi i punti più importanti della guida e offri al lettore una chiara 'call to action'. Cosa dovrebbe fare ora? Potrebbe essere iscriversi alla newsletter, contattarti o leggere un altro articolo correlato." } }, ] } },
-    { name: "Recensione Prodotto", data: { blocks: [ { type: "header", data: { text: "Recensione Completa di [Nome Prodotto]", level: 2 } }, { type: "paragraph", data: { text: "In questo articolo analizzeremo in dettaglio [Nome Prodotto]. Vedremo le sue caratteristiche principali, i pro, i contro e per chi è più indicato. Alla fine, saprai se è la scelta giusta per te." } }, { type: "header", data: { text: "Cos'è [Nome Prodotto]?", level: 3 } }, { type: "paragraph", data: { text: "Una breve panoramica del prodotto, a cosa serve e quale problema risolve." } }, { type: "image", data: { url: "https://via.placeholder.com/800x400.png?text=Foto+del+Prodotto", caption: "Il prodotto in azione o la sua confezione." } }, { type: "header", data: { text: "Caratteristiche Principali", level: 3 } }, { type: "list", data: { style: "unordered", items: ["Caratteristica 1: Descrizione e beneficio.", "Caratteristica 2: Descrizione e beneficio.", "Caratteristica 3: Descrizione e beneficio."] } }, { type: "header", data: { text: "Prezzo", level: 3 } }, { type: "paragraph", data: { text: "Analisi dei costi e dei vari piani disponibili. C'è un buon rapporto qualità/prezzo?" } }, { type: "header", data: { text: "Verdetto Finale: Lo Consigliamo?", level: 2 } }, { type: "paragraph", data: { text: "Tira le somme. A chi consiglieresti questo prodotto e perché? Ci sono alternative migliori? Concludi con un punteggio finale o una chiara raccomandazione." } }, ] } }
+    { name: "Guida Definitiva", data: { blocks: [ { type: "header", data: { text: "Il Titolo della Tua Guida Completa (H2)", level: 2 } }, { type: "paragraph", data: { text: "Inizia con un'introduzione che catturi l'attenzione del lettore, spiegando chiaramente cosa imparerà e perché è importante. Usa dati, fai una domanda o presenta un problema comune." } }, { type: "image", data: { url: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='400'%3E%3Crect fill='%23e2e8f0' width='800' height='400'/%3E%3Ctext x='50%25' y='50%25' font-size='20' fill='%2364748b' text-anchor='middle' dy='.3em'%3EImmagine Introduttiva%3C/text%3E%3C/svg%3E", caption: "Una didascalia per l'immagine introduttiva." } }, { type: "header", data: { text: "Capitolo 1: Le Basi Fondamentali", level: 3 } }, { type: "paragraph", data: { text: "In questa sezione, copri i concetti di base. Assicurati che anche un principiante possa capire. Usa un linguaggio semplice e diretto." } }, { type: "list", data: { style: "ordered", items: ["Primo punto fondamentale.", "Secondo punto da non dimenticare.", "Terzo concetto chiave."] } }, { type: "header", data: { text: "Capitolo 2: Tecniche Avanzate", level: 3 } }, { type: "paragraph", data: { text: "Ora che le basi sono state gettate, puoi esplorare argomenti più complessi. Fornisci esempi pratici e dettagli tecnici." } }, { type: "quote", data: { text: "Una citazione rilevante può aggiungere autorità al tuo articolo.", caption: "Nome Esperto" } }, { type: "header", data: { text: "Conclusione e Prossimi Passi", level: 2 } }, { type: "paragraph", data: { text: "Riassumi i punti più importanti della guida e offri al lettore una chiara 'call to action'. Cosa dovrebbe fare ora? Potrebbe essere iscriversi alla newsletter, contattarti o leggere un altro articolo correlato." } }, ] } },
+    { name: "Recensione Prodotto", data: { blocks: [ { type: "header", data: { text: "Recensione Completa di [Nome Prodotto]", level: 2 } }, { type: "paragraph", data: { text: "In questo articolo analizzeremo in dettaglio [Nome Prodotto]. Vedremo le sue caratteristiche principali, i pro, i contro e per chi è più indicato. Alla fine, saprai se è la scelta giusta per te." } }, { type: "header", data: { text: "Cos'è [Nome Prodotto]?", level: 3 } }, { type: "paragraph", data: { text: "Una breve panoramica del prodotto, a cosa serve e quale problema risolve." } }, { type: "image", data: { url: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='400'%3E%3Crect fill='%23e2e8f0' width='800' height='400'/%3E%3Ctext x='50%25' y='50%25' font-size='20' fill='%2364748b' text-anchor='middle' dy='.3em'%3EFoto del Prodotto%3C/text%3E%3C/svg%3E", caption: "Il prodotto in azione o la sua confezione." } }, { type: "header", data: { text: "Caratteristiche Principali", level: 3 } }, { type: "list", data: { style: "unordered", items: ["Caratteristica 1: Descrizione e beneficio.", "Caratteristica 2: Descrizione e beneficio.", "Caratteristica 3: Descrizione e beneficio."] } }, { type: "header", data: { text: "Prezzo", level: 3 } }, { type: "paragraph", data: { text: "Analisi dei costi e dei vari piani disponibili. C'è un buon rapporto qualità/prezzo?" } }, { type: "header", data: { text: "Verdetto Finale: Lo Consigliamo?", level: 2 } }, { type: "paragraph", data: { text: "Tira le somme. A chi consiglieresti questo prodotto e perché? Ci sono alternative migliori? Concludi con un punteggio finale o una chiara raccomandazione." } }, ] } }
 ];
 
 interface BlogEditorProps { initialPost?: any; onSave: (postData: any) => void; onPublish: (postData: any) => void; onClose: () => void; }
@@ -129,7 +146,9 @@ export function BlogEditor({ initialPost, onSave, onPublish, onClose }: BlogEdit
               <Card className="mb-6"><CardContent className="p-4 flex items-center gap-4"><FileText className="h-6 w-6 text-muted-foreground"/><p className="flex-grow font-medium">Parti da un foglio bianco o scegli un template:</p><Popover><PopoverTrigger asChild><Button>Scegli Template</Button></PopoverTrigger><PopoverContent className="w-60"><div className="space-y-2">{postTemplates.map(template => (<Button key={template.name} variant="ghost" className="w-full justify-start" onClick={() => applyTemplate(template.data)}>{template.name}</Button>))}</div></PopoverContent></Popover></CardContent></Card>
           )}
           <Input placeholder="Titolo del tuo articolo..." className={`text-4xl font-bold h-auto border-none shadow-none focus-visible:ring-0 !p-0 bg-transparent mb-6 ${!isTitleValid && 'placeholder:text-red-400'}`} value={formData.title} onChange={(e) => { handleInputChange('title', e.target.value); handleSlugChange(e.target.value); }} />
-          <CMSEditor key={editorKey} data={content} onSave={handleContentSave} />
+          <Suspense fallback={<CMSEditorSkeleton />}>
+            <CMSEditor key={editorKey} data={content} onSave={handleContentSave} />
+          </Suspense>
         </div>
       </div>
       <aside className="w-96 bg-background border-l flex flex-col">

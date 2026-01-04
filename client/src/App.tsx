@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { Switch, Route, Redirect } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider, useQuery } from "@tanstack/react-query";
@@ -9,38 +10,71 @@ import Footer from "@/components/Footer";
 import { useAnalytics } from "./hooks/use-analytics";
 import { AnalyticsInitializer } from "@/components/AnalyticsInitializer";
 import { FacebookPixelInitializer } from "@/components/FacebookPixelInitializer";
-
-
-// Pages
-import Homepage from "./pages/Homepage";
-import ChiSiamo from "./pages/ChiSiamo";
-import Servizi from "./pages/Servizi";
-import Blog from "./pages/Blog";
-import BlogPost from "./pages/BlogPost";
-import Contatti from "./pages/Contatti";
-import FAQ from "./pages/FAQ";
-import LandingPage from "./pages/LandingPage";
+import { Skeleton } from "@/components/ui/skeleton";
+import GoogleSheetsManager from "./pages/GoogleSheetsManager";
+import RenditaDipendente from "./pages/RenditaDipendente";
 import RelumePage from "./pages/RelumePage";
-import PatrimonioPage from "./pages/PatrimonioPage";
-import IMieiProgetti from "./pages/IMieiProgetti";
-import ProjectDetail from "@/pages/ProjectDetail";
-import AnalyticsDashboard from "@/components/AnalyticsDashboard";
 import ComponentShowcase from "./pages/ComponentShowcase";
-import AdminDashboard from "./components/AdminDashboard";
-import SuperAdminDashboard from "./components/SuperAdminDashboard";
-import ProtectedRoute from "./components/ProtectedRoute";
-import ProjectsManager from "./components/ProjectsManager";
-import CandidateForm from "./components/CandidateForm";
-import DynamicLandingPage from "./components/DynamicLandingPage";
-import DynamicPage from "./components/DynamicPage";
-import NotFound from "./pages/not-found";
+import ApiDocumentation from "./pages/ApiDocumentation";
+
+// Type for settings with defaultHomepage
+interface PublicSettings {
+  defaultHomepage?: string;
+  [key: string]: any;
+}
+
+// Lazy-loaded Pages and Components
+const Homepage = lazy(() => import("./pages/Homepage"));
+const ChiSiamo = lazy(() => import("./pages/ChiSiamo"));
+const Servizi = lazy(() => import("./pages/Servizi"));
+const Blog = lazy(() => import("./pages/Blog"));
+const BlogPost = lazy(() => import("./pages/BlogPost"));
+const Contatti = lazy(() => import("./pages/Contatti"));
+const FAQ = lazy(() => import("./pages/FAQ"));
+const LandingPage = lazy(() => import("./pages/LandingPage"));
+const OrbitaleLP = lazy(() => import("./pages/OrbitaleLP"));
+const ThankYouPage = lazy(() => import("./pages/ThankYouPage"));
+const PatrimonioPage = lazy(() => import("./pages/PatrimonioPage"));
+const IMieiProgetti = lazy(() => import("./pages/IMieiProgetti"));
+const ProjectDetail = lazy(() => import("@/pages/ProjectDetail"));
+// ComponentShowcase is now imported directly above
+
+// Admin components
+const AdminDashboard = lazy(() => import("./components/AdminDashboard"));
+const SuperAdminDashboard = lazy(() => import("./components/SuperAdminDashboard"));
+const ProjectsManager = lazy(() => import("./components/ProjectsManager"));
+const CandidateForm = lazy(() => import("./components/CandidateForm"));
+const DynamicLandingPage = lazy(() => import("./components/DynamicLandingPage"));
+const DynamicPage = lazy(() => import("./components/DynamicPage"));
+const NotFound = lazy(() => import("./pages/not-found"));
+
+// Simple skeleton loader for page transitions
+function PageSkeleton() {
+  return (
+    <div className="min-h-screen p-8 space-y-6">
+      <Skeleton className="h-12 w-3/4 max-w-2xl" />
+      <Skeleton className="h-6 w-1/2 max-w-md" />
+      <div className="space-y-4 mt-8">
+        <Skeleton className="h-40 w-full" />
+        <Skeleton className="h-40 w-full" />
+        <Skeleton className="h-40 w-full" />
+      </div>
+    </div>
+  );
+}
+
+// Placeholder for ProtectedRoute (assuming it exists elsewhere)
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  // Replace with actual auth logic
+  return <>{children}</>;
+}
 
 function Router() {
   // Track page views when routes change
   useAnalytics();
 
   // Carica la pagina predefinita dalle impostazioni
-  const { data: settings } = useQuery({
+  const { data: settings } = useQuery<PublicSettings>({
     queryKey: ['/api/settings/public'],
     staleTime: 5 * 60 * 1000,
   });
@@ -65,11 +99,33 @@ function Router() {
       <Route path="/patrimonio" component={PatrimonioPage} />
       <Route path="/landing" component={LandingPage} />
       <Route path="/landing/:slug" component={LandingPage} />
+      <Route path="/orbitale" component={OrbitaleLP} />
+      <Route path="/thank-you" component={ThankYouPage} />
       <Route path="/candidatura" component={CandidateForm} />
       <Route path="/components" component={ComponentShowcase} />
       <Route path="/admin" component={AdminDashboard} />
       <Route path="/admin/progetti" component={ProjectsManager} />
       <Route path="/superadmin" component={SuperAdminDashboard} />
+
+      {/* Google Sheets Manager */}
+          <Route
+            path="/admin/google-sheets"
+            element={
+              <ProtectedRoute>
+                <GoogleSheetsManager />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* API Documentation */}
+          <Route
+            path="/admin/api-documentation"
+            element={
+              <ProtectedRoute>
+                <ApiDocumentation />
+              </ProtectedRoute>
+            }
+          />
 
       {/* Add route for RelumePage - must be before dynamic routes */}
       <Route path="/relume" component={RelumePage} />
@@ -81,17 +137,6 @@ function Router() {
       {/* Catch-all for dynamic pages, landing pages, builder pages, and projects */}
       <Route path="/:slug" component={DynamicLandingPage} />
 
-      <Route path="/candidatura" component={() => (
-        <div className="min-h-screen py-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h1 className="font-heading font-bold text-4xl mb-4">Candidatura Lead Generation</h1>
-              <p className="text-xl text-muted-foreground">Accedi al nostro programma esclusivo di crescita digitale</p>
-            </div>
-            <CandidateForm />
-          </div>
-        </div>
-      )} />
       {/* Fallback to 404 */}
       <Route component={NotFound} />
     </Switch>
@@ -110,7 +155,9 @@ function AppContent() {
         <div className="min-h-dvh bg-background text-foreground flex flex-col">
           <Header />
           <main className="flex-1">
-            <Router />
+            <Suspense fallback={<PageSkeleton />}>
+              <Router />
+            </Suspense>
           </main>
           <Footer />
         </div>

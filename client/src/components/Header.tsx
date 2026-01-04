@@ -145,7 +145,26 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2" data-testid="link-home">
             {tenantInfo?.logo && (
-              <img src={tenantInfo.logo} alt={tenantInfo.name} className="h-8 w-auto" />
+              <picture>
+                <source 
+                  type="image/avif" 
+                  srcSet="/images/logo-optimized.avif 1x, /images/logo-optimized@2x.avif 2x" 
+                />
+                <source 
+                  type="image/webp" 
+                  srcSet="/images/logo-optimized.webp 1x, /images/logo-optimized@2x.webp 2x" 
+                />
+                <img 
+                  src={tenantInfo.logo}
+                  alt={tenantInfo.name}
+                  className="h-8 w-auto"
+                  width="48"
+                  height="48"
+                  loading="eager"
+                  decoding="async"
+                  fetchPriority="high"
+                />
+              </picture>
             )}
             <span className="font-heading font-bold text-xl text-foreground">
               {tenantInfo?.name || 'Sito'}

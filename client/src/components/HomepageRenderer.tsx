@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -62,12 +61,12 @@ export function HomepageRenderer({ homepage, applyElementStyle }: HomepageRender
   const getSectionValue = (sectionId: string, elementKey: string, fallback = "") => {
     return sections?.[sectionId]?.elements?.[elementKey]?.value || fallback;
   };
-  
+
   // Funzione per ottenere elemento completo
   const getElement = (sectionId: string, elementKey: string) => {
     return sections?.[sectionId]?.elements?.[elementKey];
   };
-  
+
   // Funzione per applicare stili con fallback
   const getElementStyle = (sectionId: string, elementKey: string) => {
     const element = getElement(sectionId, elementKey);
@@ -76,13 +75,13 @@ export function HomepageRenderer({ homepage, applyElementStyle }: HomepageRender
     }
     return {};
   };
-  
+
   // Funzione per ottenere testo del bottone
   const getButtonText = (sectionId: string, elementKey: string, fallback = "") => {
     const element = getElement(sectionId, elementKey);
     return element?.text || element?.value || fallback;
   };
-  
+
   // Funzione per ottenere link del bottone
   const getButtonLink = (sectionId: string, elementKey: string, fallback = "#") => {
     const element = getElement(sectionId, elementKey);
@@ -147,9 +146,11 @@ export function HomepageRenderer({ homepage, applyElementStyle }: HomepageRender
                   <div className="aspect-video bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center relative">
                     <div className="absolute inset-0 bg-slate-800"></div>
                     <img 
-                      src={getSectionValue('hero', 'videoImage', 'https://via.placeholder.com/1280x720/1e293b/ffffff?text=Guarda+il+Video+Sales+Letter')} 
+                      src={getSectionValue('hero', 'videoImage', "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1280' height='720'%3E%3Crect fill='%231e293b' width='1280' height='720'/%3E%3Ctext x='50%25' y='50%25' font-size='20' fill='%23ffffff' text-anchor='middle' dy='.3em'%3EGuarda il Video Sales Letter%3C/text%3E%3C/svg%3E")} 
                       alt={getSectionValue('hero', 'videoImage')?.alt || "Video Sales Letter"} 
                       className="w-full h-full object-cover opacity-80 relative z-10"
+                      width="1280"
+                      height="720"
                       loading="eager"
                       decoding="async"
                     />
@@ -184,7 +185,7 @@ export function HomepageRenderer({ homepage, applyElementStyle }: HomepageRender
         </section>
       )}
 
-      
+
 
       {/* Problem Section */}
       {sections.problem?.enabled && (

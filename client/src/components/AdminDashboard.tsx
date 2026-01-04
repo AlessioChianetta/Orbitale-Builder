@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -60,7 +60,9 @@ import {
   LogOut,
   Palette,
   Lightbulb,
-  Menu
+  Menu,
+  UserPlus,
+  Key
 } from "lucide-react";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -75,17 +77,71 @@ import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { apiRequest, getAuthToken, setAuthToken, clearAuthToken } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { SettingsEditor } from './SettingsEditor';
-import { BlogEditor } from "./BlogEditor";
-import { AnalyticsDashboard } from "./AnalyticsDashboard";
+import { Skeleton } from "@/components/ui/skeleton";
 import ProjectsManager from "./ProjectsManager";
 import SEOSettings from "./SEOSettings";
 import CandidateFormSettings from "./CandidateFormSettings";
 import NavbarSettings from "./NavbarSettings";
 import TenantSettings from "./TenantSettings";
 import { PreviewFrame } from "./PreviewFrame";
-import GoogleSheetsManager from "../pages/GoogleSheetsManager"; // Importa il nuovo componente
+import GoogleSheetsManager from "../pages/GoogleSheetsManager";
 import { SEOHead } from "./SEOHead";
 import FooterSettings from "./FooterSettings";
+import MarketingLeadsManager from "./MarketingLeadsManager";
+import LandingPagesManager from "./LandingPagesManager";
+import ApiKeysManager from "./ApiKeysManager";
+import ApiDocumentation from "../pages/ApiDocumentation";
+
+const BlogEditor = lazy(() => import("./BlogEditor").then(module => ({ default: module.BlogEditor })));
+const AnalyticsDashboard = lazy(() => import("./AnalyticsDashboard").then(module => ({ default: module.AnalyticsDashboard })));
+
+function BlogEditorSkeleton() {
+  return (
+    <div className="flex h-full bg-muted/30">
+      <div className="flex-1 p-8 overflow-y-auto">
+        <div className="max-w-4xl mx-auto space-y-6">
+          <Skeleton className="h-16 w-full" />
+          <Skeleton className="h-96 w-full" />
+        </div>
+      </div>
+      <aside className="w-96 bg-background border-l p-6 space-y-4">
+        <Skeleton className="h-12 w-full" />
+        <Skeleton className="h-32 w-full" />
+        <Skeleton className="h-48 w-full" />
+      </aside>
+    </div>
+  );
+}
+
+function AnalyticsDashboardSkeleton() {
+  return (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <div className="space-y-2">
+          <Skeleton className="h-8 w-64" />
+          <Skeleton className="h-4 w-96" />
+        </div>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {[1, 2, 3, 4].map(i => (
+          <Card key={i}>
+            <CardContent className="pt-6">
+              <Skeleton className="h-20 w-full" />
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+      <Card>
+        <CardHeader>
+          <Skeleton className="h-6 w-48" />
+        </CardHeader>
+        <CardContent>
+          <Skeleton className="h-64 w-full" />
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
 
 // Componente di login
 function LoginForm({ onLoginSuccess }: { onLoginSuccess: () => void }) {
@@ -856,12 +912,14 @@ export default function AdminDashboard() {
   if (isEditingPost) {
     return (
       <div className="h-screen">
-        <BlogEditor
-          initialPost={postToEdit}
-          onSave={(data) => savePostMutation.mutate(data)}
-          onPublish={(data) => savePostMutation.mutate({ ...data, status: 'published' })}
-          onClose={handleCloseEditor}
-        />
+        <Suspense fallback={<BlogEditorSkeleton />}>
+          <BlogEditor
+            initialPost={postToEdit}
+            onSave={(data) => savePostMutation.mutate(data)}
+            onPublish={(data) => savePostMutation.mutate({ ...data, status: 'published' })}
+            onClose={handleCloseEditor}
+          />
+        </Suspense>
       </div>
     );
   }
@@ -1002,12 +1060,6 @@ export default function AdminDashboard() {
       isActive: activeTab === "projects"
     },
     {
-      key: "landing-pages",
-      title: "Landing",
-      icon: Rocket,
-      isActive: activeTab === "landing-pages"
-    },
-    {
       key: "page-builder",
       title: "Page Builder",
       icon: Palette,
@@ -1056,6 +1108,18 @@ export default function AdminDashboard() {
       isActive: activeTab === "leads"
     },
     {
+      key: "marketing-leads",
+      title: "Marketing Leads",
+      icon: UserPlus,
+      isActive: activeTab === "marketing-leads"
+    },
+    {
+      key: "landing-pages",
+      title: "Landing Pages",
+      icon: Rocket,
+      isActive: activeTab === "landing-pages"
+    },
+    {
       key: "candidate-form",
       title: "Form Candidatura",
       icon: FileText,
@@ -1066,6 +1130,18 @@ export default function AdminDashboard() {
       title: "Google Sheets",
       icon: FileText,
       isActive: activeTab === "google-sheets"
+    },
+    {
+      key: "api-keys",
+      title: "API Keys",
+      icon: Key,
+      isActive: activeTab === "api-keys"
+    },
+    {
+      key: "api-docs",
+      title: "API Documentation",
+      icon: FileText,
+      isActive: activeTab === "api-docs"
     }
   ];
 
@@ -2122,7 +2198,11 @@ export default function AdminDashboard() {
             )}
 
             {/* Analytics Tab */}
-            {activeTab === "analytics" && <AnalyticsDashboard />}
+            {activeTab === "analytics" && (
+              <Suspense fallback={<AnalyticsDashboardSkeleton />}>
+                <AnalyticsDashboard />
+              </Suspense>
+            )}
 
             {/* SEO Tab */}
             {activeTab === "seo" && (
@@ -2149,10 +2229,34 @@ export default function AdminDashboard() {
               <CandidateFormSettings />
             )}
 
+            {/* Marketing Leads Tab */}
+            {activeTab === "marketing-leads" && (
+              <MarketingLeadsManager />
+            )}
+
+            {/* Landing Pages Tab */}
+            {activeTab === "landing-pages" && (
+              <LandingPagesManager />
+            )}
+
             {/* Google Sheets Tab */}
             {activeTab === "google-sheets" && (
               <div className="space-y-6">
                 <GoogleSheetsManager />
+              </div>
+            )}
+
+            {/* API Keys Tab */}
+            {activeTab === "api-keys" && (
+              <div className="space-y-6">
+                <ApiKeysManager />
+              </div>
+            )}
+
+            {/* API Documentation Tab */}
+            {activeTab === "api-docs" && (
+              <div className="space-y-6">
+                <ApiDocumentation />
               </div>
             )}
 

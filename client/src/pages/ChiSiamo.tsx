@@ -12,7 +12,7 @@ const teamMembers = [
     fullName: "Alessio Rossi",
     title: "Founder & Lead Strategist",
     bio: "Unisce la logica ingegneristica del codice con i principi scientifici del marketing a risposta diretta.",
-    profileImage: "https://via.placeholder.com/500x500/3b82f6/ffffff?text=AR",
+    profileImage: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500'%3E%3Crect fill='%233b82f6' width='500' height='500'/%3E%3Ctext x='50%25' y='50%25' font-size='120' fill='%23ffffff' text-anchor='middle' dy='.3em'%3EAR%3C/text%3E%3C/svg%3E",
     username: "alessio",
     role: "CEO",
     specialties: ["Marketing Strategy", "Business Growth", "Data Analytics"]
@@ -22,7 +22,7 @@ const teamMembers = [
     fullName: "Laura Bianchi",
     title: "Head of Operations",
     bio: "Organizza e ottimizza i processi per garantire che ogni progetto venga consegnato con la massima qualità.",
-    profileImage: "https://via.placeholder.com/500x500/10b981/ffffff?text=LB",
+    profileImage: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500'%3E%3Crect fill='%2310b981' width='500' height='500'/%3E%3Ctext x='50%25' y='50%25' font-size='120' fill='%23ffffff' text-anchor='middle' dy='.3em'%3ELB%3C/text%3E%3C/svg%3E",
     username: "laura",
     role: "COO",
     specialties: ["Project Management", "Team Leadership", "Process Optimization"]
@@ -32,7 +32,7 @@ const teamMembers = [
     fullName: "Marco Verdi",
     title: "Lead Developer",
     bio: "Trasforma le strategie in piattaforme web performanti, scalabili e facili da gestire per i nostri clienti.",
-    profileImage: "https://via.placeholder.com/500x500/8b5cf6/ffffff?text=MV",
+    profileImage: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500'%3E%3Crect fill='%238b5cf6' width='500' height='500'/%3E%3Ctext x='50%25' y='50%25' font-size='120' fill='%23ffffff' text-anchor='middle' dy='.3em'%3EMV%3C/text%3E%3C/svg%3E",
     username: "marco",
     role: "CTO",
     specialties: ["Full-Stack Development", "System Architecture", "DevOps"]
@@ -42,7 +42,7 @@ const teamMembers = [
     fullName: "Sofia Neri",
     title: "Senior Copywriter",
     bio: "Specializzata nella scrittura di testi persuasivi che convertono i visitatori in clienti fedeli.",
-    profileImage: "https://via.placeholder.com/500x500/f59e0b/ffffff?text=SN",
+    profileImage: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500'%3E%3Crect fill='%23f59e0b' width='500' height='500'/%3E%3Ctext x='50%25' y='50%25' font-size='120' fill='%23ffffff' text-anchor='middle' dy='.3em'%3ESN%3C/text%3E%3C/svg%3E",
     username: "sofia",
     role: "Creative Director",
     specialties: ["Copywriting", "Content Strategy", "Brand Messaging"]
@@ -289,6 +289,10 @@ export default function ChiSiamo() {
                           src={member.profileImage}
                           alt={member.fullName}
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                          width="500"
+                          height="500"
+                          loading="lazy"
+                          decoding="async"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       </div>

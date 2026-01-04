@@ -365,6 +365,10 @@ export function PageRenderer({ page, templateType }: PageRendererProps) {
                     src={member.profileImage}
                     alt={member.fullName}
                     className="w-24 h-24 rounded-full mx-auto mb-4"
+                    width="96"
+                    height="96"
+                    loading="lazy"
+                    decoding="async"
                   />
                   <h3 className="font-bold text-lg">{member.fullName}</h3>
                   <p className="text-primary font-medium">{member.title}</p>

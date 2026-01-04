@@ -48,6 +48,10 @@ export default function BlogCard({
               context: 'thumbnail'
             })}
             className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+            width="400"
+            height="192"
+            loading="lazy"
+            decoding="async"
             data-testid="img-blog"
           />
         ) : (

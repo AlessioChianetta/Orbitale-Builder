@@ -27,11 +27,11 @@ const stats = [
 ];
 
 const clientLogos = [
-    { name: "Client A", logo: "https://via.placeholder.com/160x60/e2e8f0/64748b?text=CLIENT+A" },
-    { name: "Client B", logo: "https://via.placeholder.com/160x60/e2e8f0/64748b?text=CLIENT+B" },
-    { name: "Client C", logo: "https://via.placeholder.com/160x60/e2e8f0/64748b?text=CLIENT+C" },
-    { name: "Client D", logo: "https://via.placeholder.com/160x60/e2e8f0/64748b?text=CLIENT+D" },
-    { name: "Client E", logo: "https://via.placeholder.com/160x60/e2e8f0/64748b?text=CLIENT+E" },
+    { name: "Client A", logo: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='60'%3E%3Crect fill='%23e2e8f0' width='160' height='60'/%3E%3Ctext x='50%25' y='50%25' font-size='12' fill='%2364748b' text-anchor='middle' dy='.3em'%3ECLIENT A%3C/text%3E%3C/svg%3E" },
+    { name: "Client B", logo: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='60'%3E%3Crect fill='%23e2e8f0' width='160' height='60'/%3E%3Ctext x='50%25' y='50%25' font-size='12' fill='%2364748b' text-anchor='middle' dy='.3em'%3ECLIENT B%3C/text%3E%3C/svg%3E" },
+    { name: "Client C", logo: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='60'%3E%3Crect fill='%23e2e8f0' width='160' height='60'/%3E%3Ctext x='50%25' y='50%25' font-size='12' fill='%2364748b' text-anchor='middle' dy='.3em'%3ECLIENT C%3C/text%3E%3C/svg%3E" },
+    { name: "Client D", logo: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='60'%3E%3Crect fill='%23e2e8f0' width='160' height='60'/%3E%3Ctext x='50%25' y='50%25' font-size='12' fill='%2364748b' text-anchor='middle' dy='.3em'%3ECLIENT D%3C/text%3E%3C/svg%3E" },
+    { name: "Client E", logo: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='60'%3E%3Crect fill='%23e2e8f0' width='160' height='60'/%3E%3Ctext x='50%25' y='50%25' font-size='12' fill='%2364748b' text-anchor='middle' dy='.3em'%3ECLIENT E%3C/text%3E%3C/svg%3E" },
 ];
 
 // Componente ottimizzato per mobile con loading states e precaricamento
@@ -57,18 +57,8 @@ export default function Homepage() {
   // SEO Performance monitoring
   useSEOPerformance('homepage');
 
-  // Precarica le immagini critiche
-  React.useEffect(() => {
-    const preloadImages = [
-      "https://via.placeholder.com/1280x720/1e293b/ffffff?text=Guarda+il+Video+Sales+Letter",
-      ...clientLogos.map(logo => logo.logo)
-    ];
-
-    preloadImages.forEach(src => {
-      const img = new Image();
-      img.src = src;
-    });
-  }, []);
+  // Hero video placeholder - no need to preload SVG data URIs
+  const heroVideoPlaceholder = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1280' height='720'%3E%3Crect fill='%231e293b' width='1280' height='720'/%3E%3Ctext x='50%25' y='50%25' font-size='20' fill='%23ffffff' text-anchor='middle' dy='.3em'%3EGuarda il Video Sales Letter%3C/text%3E%3C/svg%3E";
 
   return (
     <>
@@ -108,7 +98,7 @@ export default function Homepage() {
                   {/* Placeholder background sempre visibile */}
                   <div className="absolute inset-0 bg-slate-800"></div>
                   <img 
-                    src="https://via.placeholder.com/1280x720/1e293b/ffffff?text=Guarda+il+Video+Sales+Letter" 
+                    src={heroVideoPlaceholder}
                     alt={generateOptimizedAltText({
                       title: "Video Sales Letter",
                       description: "Scopri il sistema di marketing a risposta diretta per imprenditori e aziende ambiziose",
@@ -116,6 +106,8 @@ export default function Homepage() {
                       keywords: ['marketing', 'sistema', 'imprenditori', 'crescita aziendale']
                     })} 
                     className="w-full h-full object-cover opacity-80 relative z-10"
+                    width="1280"
+                    height="720"
                     loading="eager"
                     decoding="async"
                     style={{ contentVisibility: 'visible' }}
@@ -188,6 +180,8 @@ export default function Homepage() {
                               src={logo.logo}
                               alt={logo.name}
                               className="h-12 sm:h-16 lg:h-20 w-auto object-contain filter grayscale group-hover:grayscale-0 transition-all duration-500 opacity-70 group-hover:opacity-100"
+                              width="160"
+                              height="60"
                               loading="lazy"
                               decoding="async"
                             />
@@ -209,6 +203,8 @@ export default function Homepage() {
                               src={logo.logo}
                               alt={logo.name}
                               className="h-12 sm:h-16 lg:h-20 w-auto object-contain filter grayscale group-hover:grayscale-0 transition-all duration-500 opacity-70 group-hover:opacity-100"
+                              width="160"
+                              height="60"
                               loading="lazy"
                               decoding="async"
                             />
@@ -229,6 +225,8 @@ export default function Homepage() {
                               src={logo.logo}
                               alt={logo.name}
                               className="h-12 sm:h-16 lg:h-20 w-auto object-contain filter grayscale group-hover:grayscale-0 transition-all duration-500 opacity-70 group-hover:opacity-100"
+                              width="160"
+                              height="60"
                               loading="lazy"
                               decoding="async"
                             />
