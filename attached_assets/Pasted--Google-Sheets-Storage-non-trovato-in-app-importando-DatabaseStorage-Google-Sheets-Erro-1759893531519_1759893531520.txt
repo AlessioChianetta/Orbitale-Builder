@@ -1,0 +1,33 @@
+📊 [Google Sheets] Storage non trovato in app, importando DatabaseStorage...
+❌ [Google Sheets] Errore salvataggio configurazione: error: null value in column "tenant_id" of relation "google_sheets_campaigns" violates not-null constraint
+at /home/runner/workspace/node_modules/pg-pool/index.js:45:11
+at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+at async <anonymous> (/home/runner/workspace/node_modules/src/node-postgres/session.ts:104:19)
+at async Storage.createGoogleSheetsConfig (/home/runner/workspace/server/storage.ts:1240:22)
+at async <anonymous> (/home/runner/workspace/server/googleSheets.ts:349:21) {
+length: 367,
+severity: 'ERROR',
+code: '23502',
+detail: 'Failing row contains (2, null, null, null, A:Z, t, null, manual, null, null, 1, f, movieturbo, 10, 10, 2025-10-08 03:17:19.612462, 2025-10-08 03:17:19.612462).',
+hint: undefined,
+position: undefined,
+internalPosition: undefined,
+internalQuery: undefined,
+where: undefined,
+schema: 'public',
+table: 'google_sheets_campaigns',
+column: 'tenant_id',
+dataType: undefined,
+constraint: undefined,
+file: 'execMain.c',
+line: '1981',
+routine: 'ExecConstraints'
+}
+3:17:19 AM [express] POST /api/google-sheets/conwith GA ID: G-30C117R8LF
+4dbdbc8d-ec64-4078-88f9-2c2409629eb8-00-1qywntodh6dpi.spock.replit.dev/api/google-sheets/configurations:1 Failed to load resource: the server responded with a status of 500 (Internal Server Error)Comprendi l'errore
+Console.js:61 Errore creazione nuova campagna: Error: Errore nel salvataggio
+at addConfiguration (GoogleSheetsManager.tsx:292:15)
+Mt.forEach.n.<computed> @ Console.js:61Comprendi l'errore
+4dbdbc8d-ec64-4078-88f9-2c2409629eb8-00-1qywntodh6dpi.spock.replit.dev/api/google-sheets/configurations:1 Failed to load resource: the server responded with a status of 500 (Internal Server Error)Comprendi l'errore
+Console.js:61 Errore creazione nuova campagna: Error: Errore nel salvataggio
+at addConfiguration (GoogleSheetsManager.tsx:292:15)

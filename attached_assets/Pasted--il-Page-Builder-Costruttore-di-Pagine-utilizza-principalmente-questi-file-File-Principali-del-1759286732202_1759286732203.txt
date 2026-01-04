@@ -1,0 +1,160 @@
+ il Page Builder (Costruttore di Pagine) utilizza principalmente questi file:
+
+File Principali del Page Builder
+1. Component Core
+client/src/components/DragDropPageBuilder.tsx - Il componente principale con drag & drop
+client/src/components/BuilderPageRenderer.tsx - Renderer per visualizzare le pagine create
+2. Database & API
+shared/schema.ts - Schema della tabella builderPages (linea 580-600 circa)
+server/routes.ts - API endpoints per CRUD delle builder pages
+server/storage.ts - Funzioni database per builder pages
+3. UI nel Dashboard Admin
+client/src/components/AdminDashboard.tsx - Tab "Page Builder" nell'admin
+4. Tipi e Configurazioni
+Il Page Builder usa queste configurazioni principali:
+
+Struttura Componenti:
+
+interface ComponentData {
+  id: string;
+  type: string; // es: 'hero', 'features', 'text', etc.
+  props: Record<string, any>;
+  children?: ComponentData[];
+}
+Libreria Componenti Disponibili:
+
+Layout: section, column, container
+Testo: heading, text
+Media: image, video
+Interattivi: button, form, map
+Contenuto: features, testimonials, checklist
+Avanzati: value-stack, method-phases, problems-list, etc.
+Blocchi Predefiniti:
+
+Homepage (6 blocchi)
+Chi Siamo (5 blocchi)
+Servizi (3 blocchi)
+Progetti, Blog, Contatti, FAQ
+5. Renderer Specifici
+Il BuilderPageRenderer.tsx include renderer per oltre 50 tipi di componenti diversi, dai più semplici (testo, immagini) ai più complessi (grid progetti da DB, testimonials, etc.).
+
+6. Integrazione Database
+Alcuni componenti si integrano direttamente con il database:
+
+projects-grid - Query API progetti
+blog-posts-grid - Query API blog posts
+services-cards - Query API servizi
+Il sistema è molto modulare e permette di creare pagine complete trascinando componenti dalla libreria nel canvas principale.
+
+
+Basandomi sull'analisi del codice del Page Builder (DragDropPageBuilder.tsx), la sezione "Modifica Componente" viene gestita tramite una barra laterale destra che appare quando l'utente seleziona un componente.
+
+Come Funziona la Gestione
+1. Selezione del Componente
+Quando un utente clicca su un componente nel canvas:
+
+BuilderPageRenderer chiama onComponentClick(componentId)
+Il componente viene salvato in selectedComponent state
+Si apre automaticamente la barra laterale destra
+2. Barra Laterale Destra
+{selectedComponent && (
+  <div className="w-80 border-l p-4 overflow-y-auto bg-muted/30">
+    <div className="flex items-center justify-between mb-4">
+      <h3 className="font-semibold">Modifica Componente</h3>
+      <Button size="sm" variant="ghost" onClick={() => setSelectedComponent(null)}>
+        <X className="h-4 w-4" />
+      </Button>
+    </div>
+    
+    <ComponentPropertiesEditor
+      component={selectedComponent}
+      onUpdate={(newProps) => handleUpdateComponentProps(selectedComponent.id, newProps)}
+    />
+    
+    <RenderComponentEditor
+      component={selectedComponent}
+      onUpdateComponent={handleUpdateComponentProps}
+    />
+  </div>
+)}
+3. Editor Universale (ComponentPropertiesEditor)
+Questo componente genera automaticamente i campi di modifica basandosi sulla configurazione COMPONENT_EDITOR_CONFIG:
+
+Contenuto: Testi, immagini, link, array
+Stile: Colori, dimensioni, allineamenti
+Spaziatura: Padding, margini
+4. Editor Specifici (RenderComponentEditor)
+Per componenti complessi come pricing-plans, value-stack, ecc., vengono renderizzati editor personalizzati con:
+
+Gestione di array complessi
+Interfacce specifiche per ogni tipo
+Validazione custom
+5. Aggiornamento Real-time
+Ogni modifica chiama handleUpdateComponentProps che:
+
+Aggiorna lo state dei componenti
+Aggiorna il componente selezionato se corrisponde
+Riflette immediatamente le modifiche nell'anteprima
+6. Configurazione COMPONENT_EDITOR_CONFIG
+const COMPONENT_EDITOR_CONFIG: Record<string, any> = {
+  heading: {
+    content: [
+      { key: 'text', type: 'textarea', label: 'Testo Intestazione' }
+    ],
+    style: [
+      { key: 'size', type: 'select', label: 'Dimensione', options: [...] }
+    ],
+    spacing: [
+      { key: 'paddingY', type: 'slider', label: 'Padding Verticale' }
+    ]
+  }
+  // ... altre configurazioni
+}
+
+
+Analizzando il codice del Page Builder, il componente Hero Patrimonio utilizza la configurazione COMPONENT_EDITOR_CONFIG per generare automaticamente l'interfaccia di modifica.
+
+Come Funziona l'Editor per Hero Patrimonio
+Nel file DragDropPageBuilder.tsx, alla linea che menzioni, viene utilizzato il componente RenderComponentEditor che si basa sulla configurazione definita in COMPONENT_EDITOR_CONFIG:
+
+'hero-patrimonio': {
+    content: [
+        { key: 'badge', type: 'text', label: 'Badge' },
+        { key: 'title', type: 'text', label: 'Titolo Principale' },
+        { key: 'highlightedTitle', type: 'text', label: 'Titolo Evidenziato' },
+        { key: 'subtitle', type: 'textarea', label: 'Sottotitolo' },
+        { key: 'ctaText', type: 'text', label: 'Testo CTA' },
+        { key: 'ctaLink', type: 'text', label: 'Link CTA' },
+        { key: 'disclaimer', type: 'textarea', label: 'Disclaimer (HTML ammesso)' }
+    ],
+    style: [
+        { key: 'backgroundColor', type: 'color', label: 'Colore/Gradiente Sfondo' },
+        { key: 'textAlign', type: 'select', label: 'Allineamento Testo', options: [...] },
+        { key: 'titleSize', type: 'select', label: 'Dimensione Titolo', options: [...] },
+        // ... altri campi di stile
+    ],
+    spacing: [
+        { key: 'paddingY', type: 'slider', label: 'Padding Verticale', min: 0, max: 200, step: 4 },
+        { key: 'ctaSpacing', type: 'slider', label: 'Spaziatura CTA', min: 0, max: 100, step: 4 },
+        { key: 'disclaimerSpacing', type: 'slider', label: 'Spaziatura Disclaimer', min: 0, max: 50, step: 2 }
+    ]
+}
+Sistema di Rendering Automatico
+L'editor utilizza la funzione renderField() che genera automaticamente i controlli UI appropriati in base al tipo di campo:
+
+text → Input component
+textarea → Textarea component
+color → Input con color picker
+select → Select dropdown
+slider → Slider component
+boolean → Switch component
+Organizzazione in Sezioni
+I campi sono organizzati in tre sezioni collapsibili:
+
+Contenuto - Testi, link, contenuti editabili
+Stile - Colori, dimensioni, allineamenti
+Spaziatura - Padding, margini, spaziature
+Questo sistema permette di aggiungere facilmente nuovi campi modificabili semplicemente estendendo la configurazione COMPONENT_EDITOR_CONFIG senza dover scrivere codice UI specifico per ogni componente.
+
+
+

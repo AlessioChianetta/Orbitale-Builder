@@ -1,0 +1,111 @@
+ [FB PIXEL INIT] SEO Settings loaded: undefined
+index-cQeafmAg.js:623 🔍 [FB PIXEL INIT] Facebook Pixel ID: undefined
+index-cQeafmAg.js:623 ❌ [FB PIXEL INIT] No Facebook Pixel ID found in settings
+index-cQeafmAg.js:623 🔍 [FB PIXEL INIT] SEO Settings loaded: {googleAnalyticsId: null, googleTagManagerId: null, googleSearchConsoleCode: null, siteName: null, siteDescription: null, …}
+index-cQeafmAg.js:623 🔍 [FB PIXEL INIT] Facebook Pixel ID: 3139741182854427
+index-cQeafmAg.js:623 ✅ [FB PIXEL INIT] Initializing Facebook Pixel with ID: 3139741182854427
+index-cQeafmAg.js:621 📊 Initializing Facebook Pixel with ID: 3139741182854427
+index-cQeafmAg.js:621 🔍 Facebook Pixel script loaded, initializing...
+index-cQeafmAg.js:621 ✅ Facebook Pixel initialized with ID: 3139741182854427
+index-cQeafmAg.js:780  GET https://alessiochianetta.it/api/landing-pages/slug/home 404 (Not Found)
+queryFn @ index-cQeafmAg.js:780
+a @ index-cQeafmAg.js:48
+b @ index-cQeafmAg.js:48
+start @ index-cQeafmAg.js:48
+fetch @ index-cQeafmAg.js:48
+bu @ index-cQeafmAg.js:48
+onSubscribe @ index-cQeafmAg.js:48
+subscribe @ index-cQeafmAg.js:48
+(anonymous) @ index-cQeafmAg.js:48
+JI @ index-cQeafmAg.js:38
+Og @ index-cQeafmAg.js:40
+Rc @ index-cQeafmAg.js:40
+HS @ index-cQeafmAg.js:40
+Mo @ index-cQeafmAg.js:38
+pF @ index-cQeafmAg.js:40
+Yo @ index-cQeafmAg.js:40
+AA @ index-cQeafmAg.js:40
+C @ index-cQeafmAg.js:25
+A @ index-cQeafmAg.js:25Understand this error
+index-cQeafmAg.js:780  GET https://alessiochianetta.it/api/pages/home 404 (Not Found)
+queryFn @ index-cQeafmAg.js:780
+a @ index-cQeafmAg.js:48
+b @ index-cQeafmAg.js:48
+start @ index-cQeafmAg.js:48
+fetch @ index-cQeafmAg.js:48
+bu @ index-cQeafmAg.js:48
+onSubscribe @ index-cQeafmAg.js:48
+subscribe @ index-cQeafmAg.js:48
+(anonymous) @ index-cQeafmAg.js:48
+JI @ index-cQeafmAg.js:38
+Og @ index-cQeafmAg.js:40
+Rc @ index-cQeafmAg.js:40
+HS @ index-cQeafmAg.js:40
+Mo @ index-cQeafmAg.js:38
+pF @ index-cQeafmAg.js:40
+Yo @ index-cQeafmAg.js:40
+AA @ index-cQeafmAg.js:40
+C @ index-cQeafmAg.js:25
+A @ index-cQeafmAg.js:25Understand this error
+index-cQeafmAg.js:780  GET https://alessiochianetta.it/api/projects/slug/home 404 (Not Found)
+queryFn @ index-cQeafmAg.js:780
+a @ index-cQeafmAg.js:48
+b @ index-cQeafmAg.js:48
+start @ index-cQeafmAg.js:48
+fetch @ index-cQeafmAg.js:48
+bu @ index-cQeafmAg.js:48
+onSubscribe @ index-cQeafmAg.js:48
+subscribe @ index-cQeafmAg.js:48
+(anonymous) @ index-cQeafmAg.js:48
+JI @ index-cQeafmAg.js:38
+Og @ index-cQeafmAg.js:40
+Rc @ index-cQeafmAg.js:40
+HS @ index-cQeafmAg.js:40
+Mo @ index-cQeafmAg.js:38
+pF @ index-cQeafmAg.js:40
+Yo @ index-cQeafmAg.js:40
+AA @ index-cQeafmAg.js:40
+C @ index-cQeafmAg.js:25
+A @ index-cQeafmAg.js:25Understand this error
+index-cQeafmAg.js:627 🔍 SEO META DATA per questa pagina:
+index-cQeafmAg.js:627 📄 Title Meta SEO: prova homepage titolo ale
+index-cQeafmAg.js:627 📝 Meta Description SEO: prova homepage descrizione ale
+index-cQeafmAg.js:627 🌐 URL Canonico: /home
+index-cQeafmAg.js:627 🖼️ Immagine OG: https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png
+index-cQeafmAg.js:627 
+index-cQeafmAg.js:627 🎯 ANALISI PRIORITÀ SEO:
+index-cQeafmAg.js:627 📄 TITLE: ✅ Specifico della pagina (PRIORITÀ MASSIMA) → "prova homepage titolo ale"
+index-cQeafmAg.js:627 📝 DESCRIPTION: ✅ Specifica della pagina (PRIORITÀ MASSIMA) → "prova homepage descrizione ale"
+index-cQeafmAg.js:627 🖼️ IMMAGINE OG: ✅ Specifica della pagina (PRIORITÀ MASSIMA) → "https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png"
+index-cQeafmAg.js:627 🌐 URL CANONICO: ⚠️ URL relativo (manca dominio globale) → "/home"
+index-cQeafmAg.js:627 
+index-cQeafmAg.js:627 📊 RIEPILOGO SCENARIO:
+index-cQeafmAg.js:627 🎯 SCENARIO: Meta tag specifici configurati → OTTIMIZZAZIONE PERSONALIZZATA ✅
+index-cQeafmAg.js:627 🔍 SEO META DATA per questa pagina:
+index-cQeafmAg.js:627 📄 Title Meta SEO: prova homepage titolo ale
+index-cQeafmAg.js:627 📝 Meta Description SEO: prova homepage descrizione ale
+index-cQeafmAg.js:627 🌐 URL Canonico: /home
+index-cQeafmAg.js:627 🖼️ Immagine OG: https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png
+index-cQeafmAg.js:627 
+index-cQeafmAg.js:627 🎯 ANALISI PRIORITÀ SEO:
+index-cQeafmAg.js:627 📄 TITLE: ✅ Specifico della pagina (PRIORITÀ MASSIMA) → "prova homepage titolo ale"
+index-cQeafmAg.js:627 📝 DESCRIPTION: ✅ Specifica della pagina (PRIORITÀ MASSIMA) → "prova homepage descrizione ale"
+index-cQeafmAg.js:627 🖼️ IMMAGINE OG: ✅ Specifica della pagina (PRIORITÀ MASSIMA) → "https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png"
+index-cQeafmAg.js:627 🌐 URL CANONICO: ⚠️ URL relativo (manca dominio globale) → "/home"
+index-cQeafmAg.js:627 
+index-cQeafmAg.js:627 📊 RIEPILOGO SCENARIO:
+index-cQeafmAg.js:627 🎯 SCENARIO: Meta tag specifici configurati → OTTIMIZZAZIONE PERSONALIZZATA ✅
+index-cQeafmAg.js:627 ✅ VERIFICA DOM - Valori effettivamente applicati:
+index-cQeafmAg.js:627 📄 Title nel DOM: prova homepage titolo ale
+index-cQeafmAg.js:627 📝 Description nel DOM: prova homepage descrizione ale
+index-cQeafmAg.js:627 🌐 Canonical nel DOM: /home
+index-cQeafmAg.js:627 🖼️ OG Image nel DOM: https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png
+index-cQeafmAg.js:627 ✅ Title SEO applicato correttamente!
+index-cQeafmAg.js:627 ✅ Description SEO applicata correttamente!
+index-cQeafmAg.js:627 ✅ VERIFICA DOM - Valori effettivamente applicati:
+index-cQeafmAg.js:627 📄 Title nel DOM: prova homepage titolo ale
+index-cQeafmAg.js:627 📝 Description nel DOM: prova homepage descrizione ale
+index-cQeafmAg.js:627 🌐 Canonical nel DOM: /home
+index-cQeafmAg.js:627 🖼️ OG Image nel DOM: https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png
+index-cQeafmAg.js:627 ✅ Title SEO applicato correttamente!
+index-cQeafmAg.js:627 ✅ Description SEO applicata correttamente!

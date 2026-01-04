@@ -1,0 +1,81 @@
+# Overview
+
+This is a professional Italian business website built as a full-stack application with a comprehensive CMS system, dynamic landing page builder, and integrated blog functionality. The application serves as a complete digital marketing platform inspired by HubSpot and Webflow, designed specifically for professional Italian businesses with a focus on lead generation and conversion optimization.
+
+# User Preferences
+
+Preferred communication style: Simple, everyday language.
+
+# System Architecture
+
+## Frontend Architecture
+- **Framework**: React 18 with TypeScript for type safety and modern development practices
+- **Routing**: Wouter for lightweight client-side routing without the complexity of React Router
+- **UI Framework**: Shadcn/UI component library built on Radix UI primitives for accessible, customizable components
+- **Styling**: Tailwind CSS with custom design system following Italian professional business aesthetics
+- **State Management**: TanStack Query (React Query) for server state management and caching
+- **Form Handling**: React Hook Form with Zod validation for type-safe form validation
+- **Build Tool**: Vite for fast development and optimized production builds
+
+## Backend Architecture
+- **Runtime**: Node.js with Express.js framework for RESTful API development
+- **Language**: TypeScript throughout the entire stack for consistency and type safety
+- **Database ORM**: Drizzle ORM for type-safe database operations and migrations
+- **Authentication**: JWT-based authentication with bcrypt for password hashing
+- **File Uploads**: Multer middleware for handling media uploads with file type validation
+- **API Design**: RESTful endpoints with consistent error handling and response formatting
+
+## Data Storage Solutions
+- **Primary Database**: PostgreSQL configured for production use with Neon Database
+- **ORM**: Drizzle ORM with schema-first approach providing full TypeScript integration
+- **Migration System**: Drizzle Kit for database schema versioning and deployment
+- **File Storage**: Local file system with plans for cloud storage integration
+
+## Database Schema Design
+- **Users**: Admin and editor roles with secure authentication
+- **Pages**: Dynamic page management with SEO metadata and publishing workflow
+- **Blog Posts**: Full-featured blog system with categories, tags, and relationships
+- **Landing Pages**: Template-based landing page system with JSON-stored configuration
+- **Leads & Candidates**: Lead generation and candidate management system
+- **Media**: File upload and management system
+- **Analytics**: Event tracking for user behavior and conversion metrics
+
+## Authentication & Authorization
+- **JWT Tokens**: Stateless authentication with 7-day expiration
+- **Role-Based Access**: Admin and editor roles with different permission levels
+- **Middleware Protection**: Route-level authentication for admin endpoints
+- **Password Security**: bcrypt hashing with salt rounds for secure password storage
+
+## External Dependencies
+
+- **@neondatabase/serverless**: PostgreSQL database hosting and serverless connection pooling
+- **@radix-ui/react-***: Comprehensive set of unstyled, accessible UI primitives
+- **@tanstack/react-query**: Server state management, caching, and synchronization
+- **@hookform/resolvers**: Integration between React Hook Form and validation libraries
+- **drizzle-orm**: Type-safe PostgreSQL ORM with schema migrations
+- **drizzle-kit**: Database migration and schema management tooling
+- **bcryptjs**: Password hashing and security utilities
+- **jsonwebtoken**: JWT token generation and verification
+- **multer**: File upload handling middleware
+- **react-quill**: Rich text editor for content management
+- **react-helmet**: HTML head management for SEO optimization
+- **wouter**: Lightweight routing library for React applications
+- **zod**: TypeScript-first schema validation library
+- **lucide-react**: Icon library with consistent design language
+- **tailwindcss**: Utility-first CSS framework
+- **vite**: Build tool and development server
+- **class-variance-authority**: Utility for creating variant-based component APIs
+- **clsx & tailwind-merge**: Class name manipulation utilities
+
+## Content Management System
+- **Rich Text Editor**: React Quill integration for WYSIWYG content editing
+- **Template System**: JSON-based landing page templates with editable sections
+- **SEO Management**: Built-in meta tag management and sitemap generation
+- **Media Management**: File upload system with image optimization capabilities
+- **Publishing Workflow**: Draft, published, and scheduled status management
+
+## Lead Generation Features
+- **Dynamic Forms**: Customizable contact and candidate application forms
+- **Template-Based Landing Pages**: Pre-built templates for quick deployment
+- **Conversion Tracking**: Analytics system for measuring form submissions and user engagement
+- **Admin Dashboard**: Comprehensive management interface for all system components

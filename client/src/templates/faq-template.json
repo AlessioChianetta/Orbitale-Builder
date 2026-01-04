@@ -1,0 +1,236 @@
+
+{
+  "templateId": "faq",
+  "templateName": "FAQ Template",
+  "description": "Template completo per la pagina FAQ con tutti gli elementi editabili",
+  "sections": {
+    "hero": {
+      "sectionId": "hero",
+      "sectionName": "Hero Section",
+      "enabled": true,
+      "elements": {
+        "badge": {
+          "type": "text",
+          "value": "FAQ",
+          "editable": true
+        },
+        "title": {
+          "type": "text",
+          "value": "Domande Frequenti",
+          "editable": true
+        },
+        "subtitle": {
+          "type": "text",
+          "value": "Trova rapidamente le risposte alle domande più comuni sui nostri servizi, prezzi, tempistiche e modalità di lavoro.",
+          "editable": true
+        }
+      }
+    },
+    "searchSection": {
+      "sectionId": "searchSection",
+      "sectionName": "Sezione Ricerca",
+      "enabled": true,
+      "elements": {
+        "searchPlaceholder": {
+          "type": "text",
+          "value": "Cerca nelle FAQ...",
+          "editable": true
+        }
+      }
+    },
+    "categories": {
+      "sectionId": "categories",
+      "sectionName": "Categorie FAQ",
+      "enabled": true,
+      "elements": {
+        "categoriesList": {
+          "type": "array",
+          "value": [
+            { "name": "Tutti", "count": 24 },
+            { "name": "Servizi", "count": 8 },
+            { "name": "Prezzi", "count": 6 },
+            { "name": "Tempi", "count": 4 },
+            { "name": "Supporto", "count": 6 }
+          ],
+          "editable": true
+        }
+      }
+    },
+    "faqList": {
+      "sectionId": "faqList",
+      "sectionName": "Lista FAQ",
+      "enabled": true,
+      "elements": {
+        "questions": {
+          "type": "array",
+          "value": [
+            {
+              "category": "Servizi",
+              "question": "Quali servizi offrite esattamente?",
+              "answer": "Offriamo una gamma completa di servizi digitali: consulenza strategica, sviluppo web e CMS personalizzato, marketing digitale (Google Ads, Social Media, Email Marketing), SEO, e-commerce, applicazioni mobile, sicurezza web e formazione. Ogni servizio può essere personalizzato in base alle specifiche esigenze del tuo business.",
+              "popular": true
+            },
+            {
+              "category": "Tempi",
+              "question": "Quanto tempo serve per vedere i primi risultati?",
+              "answer": "I tempi variano in base al servizio: per le campagne Google Ads vediamo risultati in 2-4 settimane, per il SEO servono tipicamente 3-6 mesi per risultati significativi, mentre per lo sviluppo web i tempi sono 4-8 settimane a seconda della complessità del progetto. Durante la consulenza iniziale ti forniremo un timeline dettagliato.",
+              "popular": true
+            },
+            {
+              "category": "Prezzi",
+              "question": "Quali sono i vostri prezzi?",
+              "answer": "I nostri prezzi partono da €299/mese per la consulenza strategica, €899 per lo sviluppo completo (una tantum + hosting), e €599/mese per il marketing digitale. Offriamo sempre preventivi personalizzati gratuiti perché ogni progetto ha esigenze specifiche. La prima consulenza è sempre gratuita e senza impegno.",
+              "popular": true
+            },
+            {
+              "category": "Servizi",
+              "question": "Offrite garanzie sui risultati?",
+              "answer": "Sì, offriamo garanzie specifiche per ogni servizio. Ad esempio, garantiamo un aumento delle conversioni del 20% entro 60 giorni per i progetti di ottimizzazione CRO, e un ROI minimo di 3:1 per le campagne pubblicitarie dopo il secondo mese. Ogni garanzia viene definita chiaramente nel contratto.",
+              "popular": false
+            },
+            {
+              "category": "Servizi",
+              "question": "Lavorate anche con piccole aziende?",
+              "answer": "Assolutamente! Abbiamo soluzioni per ogni budget e dimensione aziendale, dalle startup alle grandi corporate. Il nostro approccio è sempre personalizzato e scalabile in base alle tue esigenze e possibilità economiche. Offriamo anche piani di pagamento flessibili per le piccole aziende.",
+              "popular": true
+            },
+            {
+              "category": "Supporto",
+              "question": "Che tipo di supporto fornite dopo il lancio?",
+              "answer": "Forniamo supporto continuo attraverso diversi canali: supporto tecnico 24/7 per emergenze, aggiornamenti mensili gratuiti, backup automatici, monitoraggio delle performance, e un account manager dedicato. Offriamo anche pacchetti di manutenzione personalizzati in base alle tue esigenze.",
+              "popular": false
+            },
+            {
+              "category": "Servizi",
+              "question": "Posso gestire il CMS autonomamente?",
+              "answer": "Sì, il nostro CMS è progettato per essere estremamente user-friendly. Anche senza competenze tecniche puoi gestire contenuti, pubblicare articoli, aggiornare pagine e monitorare le performance. Forniamo formazione completa (video tutorial + sessioni live) e supporto continuo per renderti completamente autonomo.",
+              "popular": true
+            },
+            {
+              "category": "Prezzi",
+              "question": "Ci sono costi nascosti?",
+              "answer": "No, la trasparenza è uno dei nostri valori fondamentali. Tutti i costi vengono comunicati chiaramente nel preventivo iniziale. Gli unici costi aggiuntivi possono derivare da richieste di modifiche sostanziali al progetto originale, che vengono sempre discusse e approvate prima dell'implementazione.",
+              "popular": false
+            },
+            {
+              "category": "Tempi",
+              "question": "Posso richiedere modifiche durante lo sviluppo?",
+              "answer": "Sì, il nostro processo prevede revisioni periodiche e la possibilità di modifiche. Includiamo fino a 3 round di revisioni gratuite in ogni progetto. Utilizziamo un approccio agile che ti permette di vedere i progressi e dare feedback durante tutto lo sviluppo, non solo alla fine.",
+              "popular": false
+            },
+            {
+              "category": "Supporto",
+              "question": "Come funziona il processo di onboarding?",
+              "answer": "Il processo inizia con una consulenza gratuita per comprendere le tue esigenze. Poi definiamo insieme strategia e obiettivi, creiamo un project plan dettagliato, assegniamo il team e l'account manager dedicato. Riceverai accesso a una dashboard per monitorare i progressi in tempo reale.",
+              "popular": false
+            },
+            {
+              "category": "Prezzi",
+              "question": "Offrite sconti per contratti annuali?",
+              "answer": "Sì, offriamo sconti significativi per contratti annuali: 15% di sconto per contratti di 12 mesi e 20% per contratti di 24 mesi. Inoltre, per i clienti a lungo termine offriamo servizi aggiuntivi gratuiti come consulenze strategiche mensili e report avanzati.",
+              "popular": false
+            },
+            {
+              "category": "Servizi",
+              "question": "Lavorate con aziende di tutti i settori?",
+              "answer": "Sì, abbiamo esperienza in diversi settori: e-commerce, servizi professionali, manifatturiero, immobiliare, sanitario, educativo e molti altri. Il nostro approccio metodologico si adatta a qualsiasi settore, mentre la strategia viene sempre personalizzata in base al mercato di riferimento.",
+              "popular": false
+            },
+            {
+              "category": "Supporto",
+              "question": "Cosa succede se non sono soddisfatto dei risultati?",
+              "answer": "Offriamo una garanzia 'soddisfatti o rimborsati' di 30 giorni per tutti i nostri servizi. Se non sei soddisfatto dei risultati, analizziamo insieme cosa non ha funzionato e, se necessario, procediamo con il rimborso totale. La tua soddisfazione è la nostra priorità assoluta.",
+              "popular": false
+            },
+            {
+              "category": "Tempi",
+              "question": "Posso accelerare i tempi di sviluppo?",
+              "answer": "Sì, offriamo un servizio 'Fast Track' che riduce i tempi di sviluppo del 40-50% dedicando un team espanso al tuo progetto. Questo servizio ha un costo aggiuntivo del 30% ma garantisce delivery più rapidi mantenendo la stessa qualità.",
+              "popular": false
+            },
+            {
+              "category": "Prezzi",
+              "question": "I prezzi includono l'hosting e il dominio?",
+              "answer": "Per il servizio di sviluppo completo, l'hosting è incluso per il primo anno (valore €588). Il dominio è incluso solo se nuovo, altrimenti ti aiutiamo gratuitamente nel trasferimento. Dopo il primo anno, l'hosting ha un costo di €49/mese che include backup, sicurezza, aggiornamenti e supporto.",
+              "popular": false
+            },
+            {
+              "category": "Supporto",
+              "question": "Fornite formazione al mio team?",
+              "answer": "Sì, offriamo formazione completa e personalizzata per il tuo team. Include sessioni live, video tutorial, documentazione dettagliata e workshop pratici. La formazione base è inclusa in tutti i progetti, mentre per esigenze specifiche offriamo pacchetti formativi avanzati.",
+              "popular": false
+            },
+            {
+              "category": "Servizi",
+              "question": "Gestite anche le campagne pubblicitarie esistenti?",
+              "answer": "Sì, possiamo prendere in gestione le tue campagne esistenti. Iniziamo sempre con un audit completo gratuito per identificare le aree di miglioramento, poi ottimizziamo gradualmente per massimizzare il ROI. Spesso riusciamo a ridurre i costi del 30-50% mantenendo o aumentando le conversioni.",
+              "popular": false
+            },
+            {
+              "category": "Prezzi",
+              "question": "Come funzionano i pagamenti?",
+              "answer": "Accettiamo pagamenti con bonifico bancario, carta di credito e PayPal. Per progetti di sviluppo richiediamo un acconto del 50% all'inizio e il saldo alla consegna. Per i servizi mensili, la fatturazione avviene in anticipo. Offriamo anche piani di pagamento personalizzati per progetti di grande entità.",
+              "popular": false
+            },
+            {
+              "category": "Supporto",
+              "question": "Avete un supporto di emergenza?",
+              "answer": "Sì, offriamo supporto di emergenza 24/7 per i clienti con contratti di manutenzione Premium. Per situazioni critiche (sito down, attacchi hacker, etc.) interveniamo entro 30 minuti. Il servizio di emergenza ha un costo aggiuntivo ma garantisce la continuità del tuo business online.",
+              "popular": false
+            },
+            {
+              "category": "Servizi",
+              "question": "Realizzate anche app mobile?",
+              "answer": "Sì, sviluppiamo app native per iOS e Android, oltre a Progressive Web App (PWA). Il nostro team ha esperienza con React Native, Flutter e sviluppo nativo. Offriamo anche servizi di pubblicazione sui store, manutenzione e aggiornamenti continui.",
+              "popular": false
+            },
+            {
+              "category": "Tempi",
+              "question": "Quanto tempo serve per un restyling completo?",
+              "answer": "Un restyling completo richiede tipicamente 6-12 settimane, a seconda della complessità del sito e delle funzionalità richieste. Il processo include analisi dell'esistente, nuovo design, sviluppo, migrazione contenuti, testing e ottimizzazione. Ti forniamo un timeline dettagliato durante la consulenza iniziale.",
+              "popular": false
+            },
+            {
+              "category": "Supporto",
+              "question": "Posso cambiare piano in corso d'opera?",
+              "answer": "Sì, puoi sempre fare upgrade o downgrade del tuo piano. Per gli upgrade, le nuove funzionalità vengono attivate immediatamente e paghi la differenza pro-rata. Per i downgrade, le modifiche vengono applicate al rinnovo successivo. Ti aiutiamo sempre a scegliere il piano più adatto alle tue esigenze attuali.",
+              "popular": false
+            },
+            {
+              "category": "Prezzi",
+              "question": "Cosa include esattamente il servizio di manutenzione?",
+              "answer": "Il servizio di manutenzione include: backup automatici quotidiani, aggiornamenti di sicurezza, monitoraggio uptime 24/7, ottimizzazione performance, supporto tecnico, report mensili, e fino a 2 ore di modifiche minori. Abbiamo diversi piani di manutenzione per adattarci a ogni esigenza e budget.",
+              "popular": false
+            },
+            {
+              "category": "Servizi",
+              "question": "Offrite consulenze one-shot?",
+              "answer": "Sì, offriamo consulenze singole di 2 ore a €299 per chi ha bisogno di consigli strategici specifici, audit del sito esistente, o validazione di un'idea di business. La consulenza include un report dettagliato con raccomandazioni actionable che puoi implementare autonomamente o con il nostro supporto.",
+              "popular": false
+            }
+          ],
+          "editable": true
+        }
+      }
+    },
+    "supportSection": {
+      "sectionId": "supportSection",
+      "sectionName": "Supporto Aggiuntivo",
+      "enabled": true,
+      "elements": {
+        "title": {
+          "type": "text",
+          "value": "Non Hai Trovato la Risposta?",
+          "editable": true
+        },
+        "subtitle": {
+          "type": "text",
+          "value": "Il nostro team è sempre disponibile per rispondere alle tue domande specifiche.",
+          "editable": true
+        }
+      }
+    }
+  },
+  "metaTitle": "FAQ - Domande Frequenti sui Nostri Servizi",
+  "metaDescription": "Trova le risposte alle domande più frequenti sui nostri servizi di marketing digitale, prezzi, tempi di consegna e supporto clienti."
+}

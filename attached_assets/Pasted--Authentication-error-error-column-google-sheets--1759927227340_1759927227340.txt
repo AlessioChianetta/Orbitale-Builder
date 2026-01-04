@@ -1,0 +1,52 @@
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Authentication error: error: column "google_sheets_api_key" does not exist
+    at /home/runner/workspace/node_modules/pg-pool/index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async <anonymous> (/home/runner/workspace/node_modules/src/node-postgres/session.ts:104:19)
+    at async Storage.getUserById (/home/runner/workspace/server/storage.ts:102:20)
+    at async authenticateToken (/home/runner/workspace/server/auth.ts:51:18) {
+  length: 121,
+  severity: 'ERROR',
+  code: '42703',
+  detail: undefined,
+  hint: undefined,
+  position: '68',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '3716',
+  routine: 'errorMissingColumn'
+}
+12:41:25 PM [express] GET /api/google-sheets/sync-results 500 in 101ms :: {"message":"Authentication …
+Authentication error: error: column "google_sheets_api_key" does not exist
+    at /home/runner/workspace/node_modules/pg-pool/index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async <anonymous> (/home/runner/workspace/node_modules/src/node-postgres/session.ts:104:19)
+    at async Storage.getUserById (/home/runner/workspace/server/storage.ts:102:20)
+    at async authenticateToken (/home/runner/workspace/server/auth.ts:51:18) {
+  length: 121,
+  severity: 'ERROR',
+  code: '42703',
+  detail: undefined,
+  hint: undefined,
+  position: '68',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '3716',
+  routine: 'errorMissingColumn'
+}
+12:41:25 PM [express] GET /api/google-sheets/status 500 in 102ms :: {"message":"Authentication error"}
+━━━━━━━━━━━━━━━━━━

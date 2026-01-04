@@ -1,0 +1,398 @@
+🔍 [FB PIXEL INIT] SEO Settings loaded: undefined
+index-B5BW28OX.js:621 🔍 [FB PIXEL INIT] Facebook Pixel ID: undefined
+index-B5BW28OX.js:621 ❌ [FB PIXEL INIT] No Facebook Pixel ID found in settings
+index-B5BW28OX.js:754  GET https://fabiobianchini.it/api/pages/servizi 404 (Not Found)
+queryFn @ index-B5BW28OX.js:754
+a @ index-B5BW28OX.js:48
+b @ index-B5BW28OX.js:48
+start @ index-B5BW28OX.js:48
+fetch @ index-B5BW28OX.js:48
+xu @ index-B5BW28OX.js:48
+onSubscribe @ index-B5BW28OX.js:48
+subscribe @ index-B5BW28OX.js:48
+(anonymous) @ index-B5BW28OX.js:48
+GI @ index-B5BW28OX.js:38
+Rg @ index-B5BW28OX.js:40
+Ec @ index-B5BW28OX.js:40
+FS @ index-B5BW28OX.js:40
+To @ index-B5BW28OX.js:38
+l$ @ index-B5BW28OX.js:40
+Ho @ index-B5BW28OX.js:40
+CA @ index-B5BW28OX.js:40
+C @ index-B5BW28OX.js:25
+M @ index-B5BW28OX.js:25Understand this error
+index-B5BW28OX.js:621 🔍 [FB PIXEL INIT] SEO Settings loaded: {googleAnalyticsId: null, googleTagManagerId: null, googleSearchConsoleCode: null, siteName: null, siteDescription: null, …}
+index-B5BW28OX.js:621 🔍 [FB PIXEL INIT] Facebook Pixel ID: null
+index-B5BW28OX.js:621 ❌ [FB PIXEL INIT] No Facebook Pixel ID found in settings
+index-B5BW28OX.js:754  GET https://fabiobianchini.it/api/landing-pages/slug/servizi 404 (Not Found)
+queryFn @ index-B5BW28OX.js:754
+a @ index-B5BW28OX.js:48
+b @ index-B5BW28OX.js:48
+start @ index-B5BW28OX.js:48
+fetch @ index-B5BW28OX.js:48
+xu @ index-B5BW28OX.js:48
+setOptions @ index-B5BW28OX.js:48
+(anonymous) @ index-B5BW28OX.js:48
+Rg @ index-B5BW28OX.js:40
+Ec @ index-B5BW28OX.js:40
+l$ @ index-B5BW28OX.js:40
+Ho @ index-B5BW28OX.js:40
+FS @ index-B5BW28OX.js:40
+To @ index-B5BW28OX.js:38
+(anonymous) @ index-B5BW28OX.js:40
+setTimeout
+s @ index-B5BW28OX.js:48
+o @ index-B5BW28OX.js:48
+batch @ index-B5BW28OX.js:48
+Bs @ index-B5BW28OX.js:48
+setData @ index-B5BW28OX.js:48
+onSuccess @ index-B5BW28OX.js:48
+h @ index-B5BW28OX.js:48
+Promise.then
+b @ index-B5BW28OX.js:48
+start @ index-B5BW28OX.js:48
+fetch @ index-B5BW28OX.js:48
+xu @ index-B5BW28OX.js:48
+onSubscribe @ index-B5BW28OX.js:48
+subscribe @ index-B5BW28OX.js:48
+(anonymous) @ index-B5BW28OX.js:48
+GI @ index-B5BW28OX.js:38
+Rg @ index-B5BW28OX.js:40
+Ec @ index-B5BW28OX.js:40
+FS @ index-B5BW28OX.js:40
+To @ index-B5BW28OX.js:38
+l$ @ index-B5BW28OX.js:40
+Ho @ index-B5BW28OX.js:40
+CA @ index-B5BW28OX.js:40
+C @ index-B5BW28OX.js:25
+M @ index-B5BW28OX.js:25Understand this error
+index-B5BW28OX.js:657  GET https://fabiobianchini.it/api/services 401 (Unauthorized)
+queryFn @ index-B5BW28OX.js:657
+a @ index-B5BW28OX.js:48
+b @ index-B5BW28OX.js:48
+start @ index-B5BW28OX.js:48
+fetch @ index-B5BW28OX.js:48
+xu @ index-B5BW28OX.js:48
+onSubscribe @ index-B5BW28OX.js:48
+subscribe @ index-B5BW28OX.js:48
+(anonymous) @ index-B5BW28OX.js:48
+GI @ index-B5BW28OX.js:38
+Rg @ index-B5BW28OX.js:40
+Ec @ index-B5BW28OX.js:40
+l$ @ index-B5BW28OX.js:40
+Ho @ index-B5BW28OX.js:40
+FS @ index-B5BW28OX.js:40
+To @ index-B5BW28OX.js:38
+(anonymous) @ index-B5BW28OX.js:40
+setTimeout
+s @ index-B5BW28OX.js:48
+o @ index-B5BW28OX.js:48
+batch @ index-B5BW28OX.js:48
+Bs @ index-B5BW28OX.js:48
+setData @ index-B5BW28OX.js:48
+onSuccess @ index-B5BW28OX.js:48
+h @ index-B5BW28OX.js:48
+Promise.then
+b @ index-B5BW28OX.js:48
+start @ index-B5BW28OX.js:48
+fetch @ index-B5BW28OX.js:48
+xu @ index-B5BW28OX.js:48
+setOptions @ index-B5BW28OX.js:48
+(anonymous) @ index-B5BW28OX.js:48
+Rg @ index-B5BW28OX.js:40
+Ec @ index-B5BW28OX.js:40
+l$ @ index-B5BW28OX.js:40
+Ho @ index-B5BW28OX.js:40
+FS @ index-B5BW28OX.js:40
+To @ index-B5BW28OX.js:38
+(anonymous) @ index-B5BW28OX.js:40
+setTimeout
+s @ index-B5BW28OX.js:48
+o @ index-B5BW28OX.js:48
+batch @ index-B5BW28OX.js:48
+Bs @ index-B5BW28OX.js:48
+setData @ index-B5BW28OX.js:48
+onSuccess @ index-B5BW28OX.js:48
+h @ index-B5BW28OX.js:48
+Promise.then
+b @ index-B5BW28OX.js:48
+start @ index-B5BW28OX.js:48
+fetch @ index-B5BW28OX.js:48
+xu @ index-B5BW28OX.js:48
+setOptions @ index-B5BW28OX.js:48
+(anonymous) @ index-B5BW28OX.js:48
+Rg @ index-B5BW28OX.js:40
+Ec @ index-B5BW28OX.js:40
+l$ @ index-B5BW28OX.js:40
+Ho @ index-B5BW28OX.js:40
+FS @ index-B5BW28OX.js:40
+To @ index-B5BW28OX.js:38
+(anonymous) @ index-B5BW28OX.js:40
+setTimeout
+s @ index-B5BW28OX.js:48
+o @ index-B5BW28OX.js:48
+batch @ index-B5BW28OX.js:48
+Bs @ index-B5BW28OX.js:48
+setData @ index-B5BW28OX.js:48
+onSuccess @ index-B5BW28OX.js:48
+h @ index-B5BW28OX.js:48
+Promise.then
+b @ index-B5BW28OX.js:48
+start @ index-B5BW28OX.js:48
+fetch @ index-B5BW28OX.js:48
+xu @ index-B5BW28OX.js:48
+onSubscribe @ index-B5BW28OX.js:48
+subscribe @ index-B5BW28OX.js:48
+(anonymous) @ index-B5BW28OX.js:48
+GI @ index-B5BW28OX.js:38
+Rg @ index-B5BW28OX.js:40
+Ec @ index-B5BW28OX.js:40
+FS @ index-B5BW28OX.js:40
+To @ index-B5BW28OX.js:38
+l$ @ index-B5BW28OX.js:40
+Ho @ index-B5BW28OX.js:40
+CA @ index-B5BW28OX.js:40
+C @ index-B5BW28OX.js:25
+M @ index-B5BW28OX.js:25Understand this error
+index-B5BW28OX.js:40 TypeError: t.filter is not a function
+    at fse (index-B5BW28OX.js:657:105554)
+    at Dj (index-B5BW28OX.js:38:17018)
+    at vy (index-B5BW28OX.js:40:3139)
+    at AA (index-B5BW28OX.js:40:44833)
+    at EA (index-B5BW28OX.js:40:39790)
+    at a$ (index-B5BW28OX.js:40:39718)
+    at Ef (index-B5BW28OX.js:40:39570)
+    at Py (index-B5BW28OX.js:40:35934)
+    at FS (index-B5BW28OX.js:40:36738)
+    at To (index-B5BW28OX.js:38:3279)
+xy @ index-B5BW28OX.js:40
+n.callback @ index-B5BW28OX.js:40
+jS @ index-B5BW28OX.js:38
+zS @ index-B5BW28OX.js:40
+kA @ index-B5BW28OX.js:40
+i$ @ index-B5BW28OX.js:40
+l$ @ index-B5BW28OX.js:40
+Ho @ index-B5BW28OX.js:40
+FS @ index-B5BW28OX.js:40
+To @ index-B5BW28OX.js:38
+(anonymous) @ index-B5BW28OX.js:40
+setTimeout
+s @ index-B5BW28OX.js:48
+o @ index-B5BW28OX.js:48
+batch @ index-B5BW28OX.js:48
+Bs @ index-B5BW28OX.js:48
+setData @ index-B5BW28OX.js:48
+onSuccess @ index-B5BW28OX.js:48
+h @ index-B5BW28OX.js:48
+Promise.then
+b @ index-B5BW28OX.js:48
+start @ index-B5BW28OX.js:48
+fetch @ index-B5BW28OX.js:48
+xu @ index-B5BW28OX.js:48
+onSubscribe @ index-B5BW28OX.js:48
+subscribe @ index-B5BW28OX.js:48
+(anonymous) @ index-B5BW28OX.js:48
+GI @ index-B5BW28OX.js:38
+Rg @ index-B5BW28OX.js:40
+Ec @ index-B5BW28OX.js:40
+l$ @ index-B5BW28OX.js:40
+Ho @ index-B5BW28OX.js:40
+FS @ index-B5BW28OX.js:40
+To @ index-B5BW28OX.js:38
+(anonymous) @ index-B5BW28OX.js:40
+setTimeout
+s @ index-B5BW28OX.js:48
+o @ index-B5BW28OX.js:48
+batch @ index-B5BW28OX.js:48
+Bs @ index-B5BW28OX.js:48
+setData @ index-B5BW28OX.js:48
+onSuccess @ index-B5BW28OX.js:48
+h @ index-B5BW28OX.js:48
+Promise.then
+b @ index-B5BW28OX.js:48
+start @ index-B5BW28OX.js:48
+fetch @ index-B5BW28OX.js:48
+xu @ index-B5BW28OX.js:48
+setOptions @ index-B5BW28OX.js:48
+(anonymous) @ index-B5BW28OX.js:48
+Rg @ index-B5BW28OX.js:40
+Ec @ index-B5BW28OX.js:40
+l$ @ index-B5BW28OX.js:40
+Ho @ index-B5BW28OX.js:40
+FS @ index-B5BW28OX.js:40
+To @ index-B5BW28OX.js:38
+(anonymous) @ index-B5BW28OX.js:40
+setTimeout
+s @ index-B5BW28OX.js:48
+o @ index-B5BW28OX.js:48
+batch @ index-B5BW28OX.js:48
+Bs @ index-B5BW28OX.js:48
+setData @ index-B5BW28OX.js:48
+onSuccess @ index-B5BW28OX.js:48
+h @ index-B5BW28OX.js:48
+Promise.then
+b @ index-B5BW28OX.js:48
+start @ index-B5BW28OX.js:48
+fetch @ index-B5BW28OX.js:48
+xu @ index-B5BW28OX.js:48
+setOptions @ index-B5BW28OX.js:48
+(anonymous) @ index-B5BW28OX.js:48
+Rg @ index-B5BW28OX.js:40
+Ec @ index-B5BW28OX.js:40
+l$ @ index-B5BW28OX.js:40
+Ho @ index-B5BW28OX.js:40
+FS @ index-B5BW28OX.js:40
+To @ index-B5BW28OX.js:38
+(anonymous) @ index-B5BW28OX.js:40
+setTimeout
+s @ index-B5BW28OX.js:48
+o @ index-B5BW28OX.js:48
+batch @ index-B5BW28OX.js:48
+Bs @ index-B5BW28OX.js:48
+setData @ index-B5BW28OX.js:48
+onSuccess @ index-B5BW28OX.js:48
+h @ index-B5BW28OX.js:48
+Promise.then
+b @ index-B5BW28OX.js:48
+start @ index-B5BW28OX.js:48
+fetch @ index-B5BW28OX.js:48
+xu @ index-B5BW28OX.js:48
+onSubscribe @ index-B5BW28OX.js:48
+subscribe @ index-B5BW28OX.js:48
+(anonymous) @ index-B5BW28OX.js:48
+GI @ index-B5BW28OX.js:38
+Rg @ index-B5BW28OX.js:40
+Ec @ index-B5BW28OX.js:40
+FS @ index-B5BW28OX.js:40
+To @ index-B5BW28OX.js:38
+l$ @ index-B5BW28OX.js:40
+Ho @ index-B5BW28OX.js:40
+CA @ index-B5BW28OX.js:40
+C @ index-B5BW28OX.js:25
+M @ index-B5BW28OX.js:25Understand this error
+index-B5BW28OX.js:657 Uncaught TypeError: t.filter is not a function
+    at fse (index-B5BW28OX.js:657:105554)
+    at Dj (index-B5BW28OX.js:38:17018)
+    at vy (index-B5BW28OX.js:40:3139)
+    at AA (index-B5BW28OX.js:40:44833)
+    at EA (index-B5BW28OX.js:40:39790)
+    at a$ (index-B5BW28OX.js:40:39718)
+    at Ef (index-B5BW28OX.js:40:39570)
+    at Py (index-B5BW28OX.js:40:35934)
+    at FS (index-B5BW28OX.js:40:36738)
+    at To (index-B5BW28OX.js:38:3279)
+fse @ index-B5BW28OX.js:657
+Dj @ index-B5BW28OX.js:38
+vy @ index-B5BW28OX.js:40
+AA @ index-B5BW28OX.js:40
+EA @ index-B5BW28OX.js:40
+a$ @ index-B5BW28OX.js:40
+Ef @ index-B5BW28OX.js:40
+Py @ index-B5BW28OX.js:40
+FS @ index-B5BW28OX.js:40
+To @ index-B5BW28OX.js:38
+(anonymous) @ index-B5BW28OX.js:40
+setTimeout
+s @ index-B5BW28OX.js:48
+o @ index-B5BW28OX.js:48
+batch @ index-B5BW28OX.js:48
+Bs @ index-B5BW28OX.js:48
+setData @ index-B5BW28OX.js:48
+onSuccess @ index-B5BW28OX.js:48
+h @ index-B5BW28OX.js:48
+Promise.then
+b @ index-B5BW28OX.js:48
+start @ index-B5BW28OX.js:48
+fetch @ index-B5BW28OX.js:48
+xu @ index-B5BW28OX.js:48
+onSubscribe @ index-B5BW28OX.js:48
+subscribe @ index-B5BW28OX.js:48
+(anonymous) @ index-B5BW28OX.js:48
+GI @ index-B5BW28OX.js:38
+Rg @ index-B5BW28OX.js:40
+Ec @ index-B5BW28OX.js:40
+l$ @ index-B5BW28OX.js:40
+Ho @ index-B5BW28OX.js:40
+FS @ index-B5BW28OX.js:40
+To @ index-B5BW28OX.js:38
+(anonymous) @ index-B5BW28OX.js:40
+setTimeout
+s @ index-B5BW28OX.js:48
+o @ index-B5BW28OX.js:48
+batch @ index-B5BW28OX.js:48
+Bs @ index-B5BW28OX.js:48
+setData @ index-B5BW28OX.js:48
+onSuccess @ index-B5BW28OX.js:48
+h @ index-B5BW28OX.js:48
+Promise.then
+b @ index-B5BW28OX.js:48
+start @ index-B5BW28OX.js:48
+fetch @ index-B5BW28OX.js:48
+xu @ index-B5BW28OX.js:48
+setOptions @ index-B5BW28OX.js:48
+(anonymous) @ index-B5BW28OX.js:48
+Rg @ index-B5BW28OX.js:40
+Ec @ index-B5BW28OX.js:40
+l$ @ index-B5BW28OX.js:40
+Ho @ index-B5BW28OX.js:40
+FS @ index-B5BW28OX.js:40
+To @ index-B5BW28OX.js:38
+(anonymous) @ index-B5BW28OX.js:40
+setTimeout
+s @ index-B5BW28OX.js:48
+o @ index-B5BW28OX.js:48
+batch @ index-B5BW28OX.js:48
+Bs @ index-B5BW28OX.js:48
+setData @ index-B5BW28OX.js:48
+onSuccess @ index-B5BW28OX.js:48
+h @ index-B5BW28OX.js:48
+Promise.then
+b @ index-B5BW28OX.js:48
+start @ index-B5BW28OX.js:48
+fetch @ index-B5BW28OX.js:48
+xu @ index-B5BW28OX.js:48
+setOptions @ index-B5BW28OX.js:48
+(anonymous) @ index-B5BW28OX.js:48
+Rg @ index-B5BW28OX.js:40
+Ec @ index-B5BW28OX.js:40
+l$ @ index-B5BW28OX.js:40
+Ho @ index-B5BW28OX.js:40
+FS @ index-B5BW28OX.js:40
+To @ index-B5BW28OX.js:38
+(anonymous) @ index-B5BW28OX.js:40
+setTimeout
+s @ index-B5BW28OX.js:48
+o @ index-B5BW28OX.js:48
+batch @ index-B5BW28OX.js:48
+Bs @ index-B5BW28OX.js:48
+setData @ index-B5BW28OX.js:48
+onSuccess @ index-B5BW28OX.js:48
+h @ index-B5BW28OX.js:48
+Promise.then
+b @ index-B5BW28OX.js:48
+start @ index-B5BW28OX.js:48
+fetch @ index-B5BW28OX.js:48
+xu @ index-B5BW28OX.js:48
+onSubscribe @ index-B5BW28OX.js:48
+subscribe @ index-B5BW28OX.js:48
+(anonymous) @ index-B5BW28OX.js:48
+GI @ index-B5BW28OX.js:38
+Rg @ index-B5BW28OX.js:40
+Ec @ index-B5BW28OX.js:40
+FS @ index-B5BW28OX.js:40
+To @ index-B5BW28OX.js:38
+l$ @ index-B5BW28OX.js:40
+Ho @ index-B5BW28OX.js:40
+CA @ index-B5BW28OX.js:40
+C @ index-B5BW28OX.js:25
+M @ index-B5BW28OX.js:25Understand this error
+faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://fabiobianchini.it&size=…:1  GET https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://fabiobianchini.it&size=32 404 (Not Found)Understand this error
+faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://fabiobianchini.it/&size…:1  GET https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://fabiobianchini.it/&size=32 404 (Not Found)
+Image
+oY @ framework-404375773d3907bb.js:1
+e @ framework-404375773d3907bb.js:1
+(anonymous) @ framework-404375773d3907bb.js:1
+uO @ framework-404375773d3907bb.js:1
+uS @ framework-404375773d3907bb.js:1
+C @ framework-404375773d3907bb.js:1
+z @ framework-404375773d3907bb.js:1Understand this error

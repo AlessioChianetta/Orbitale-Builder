@@ -1,0 +1,283 @@
+🔍 [FB PIXEL INIT] SEO Settings loaded: undefined
+index-DLWeHtKh.js:621 🔍 [FB PIXEL INIT] Facebook Pixel ID: undefined
+index-DLWeHtKh.js:621 ❌ [FB PIXEL INIT] No Facebook Pixel ID found in settings
+index-DLWeHtKh.js:621 🔍 [FB PIXEL INIT] SEO Settings loaded: {googleAnalyticsId: null, googleTagManagerId: null, googleSearchConsoleCode: null, siteName: null, siteDescription: null, …}
+index-DLWeHtKh.js:621 🔍 [FB PIXEL INIT] Facebook Pixel ID: null
+index-DLWeHtKh.js:621 ❌ [FB PIXEL INIT] No Facebook Pixel ID found in settings
+index-DLWeHtKh.js:754  GET https://fabiobianchini.it/api/pages/servizi 404 (Not Found)
+queryFn @ index-DLWeHtKh.js:754
+a @ index-DLWeHtKh.js:48
+v @ index-DLWeHtKh.js:48
+start @ index-DLWeHtKh.js:48
+fetch @ index-DLWeHtKh.js:48
+xu @ index-DLWeHtKh.js:48
+onSubscribe @ index-DLWeHtKh.js:48
+subscribe @ index-DLWeHtKh.js:48
+(anonymous) @ index-DLWeHtKh.js:48
+GI @ index-DLWeHtKh.js:38
+Rg @ index-DLWeHtKh.js:40
+Ec @ index-DLWeHtKh.js:40
+FS @ index-DLWeHtKh.js:40
+To @ index-DLWeHtKh.js:38
+l$ @ index-DLWeHtKh.js:40
+Ho @ index-DLWeHtKh.js:40
+CA @ index-DLWeHtKh.js:40
+C @ index-DLWeHtKh.js:25
+M @ index-DLWeHtKh.js:25Understand this error
+index-DLWeHtKh.js:754  GET https://fabiobianchini.it/api/landing-pages/slug/servizi 404 (Not Found)
+queryFn @ index-DLWeHtKh.js:754
+a @ index-DLWeHtKh.js:48
+v @ index-DLWeHtKh.js:48
+start @ index-DLWeHtKh.js:48
+fetch @ index-DLWeHtKh.js:48
+xu @ index-DLWeHtKh.js:48
+setOptions @ index-DLWeHtKh.js:48
+(anonymous) @ index-DLWeHtKh.js:48
+Rg @ index-DLWeHtKh.js:40
+Ec @ index-DLWeHtKh.js:40
+l$ @ index-DLWeHtKh.js:40
+Ho @ index-DLWeHtKh.js:40
+FS @ index-DLWeHtKh.js:40
+To @ index-DLWeHtKh.js:38
+(anonymous) @ index-DLWeHtKh.js:40
+setTimeout
+s @ index-DLWeHtKh.js:48
+o @ index-DLWeHtKh.js:48
+batch @ index-DLWeHtKh.js:48
+Bs @ index-DLWeHtKh.js:48
+setData @ index-DLWeHtKh.js:48
+onSuccess @ index-DLWeHtKh.js:48
+h @ index-DLWeHtKh.js:48
+Promise.then
+v @ index-DLWeHtKh.js:48
+start @ index-DLWeHtKh.js:48
+fetch @ index-DLWeHtKh.js:48
+xu @ index-DLWeHtKh.js:48
+onSubscribe @ index-DLWeHtKh.js:48
+subscribe @ index-DLWeHtKh.js:48
+(anonymous) @ index-DLWeHtKh.js:48
+GI @ index-DLWeHtKh.js:38
+Rg @ index-DLWeHtKh.js:40
+Ec @ index-DLWeHtKh.js:40
+FS @ index-DLWeHtKh.js:40
+To @ index-DLWeHtKh.js:38
+l$ @ index-DLWeHtKh.js:40
+Ho @ index-DLWeHtKh.js:40
+CA @ index-DLWeHtKh.js:40
+C @ index-DLWeHtKh.js:25
+M @ index-DLWeHtKh.js:25Understand this error
+index-DLWeHtKh.js:657  GET https://fabiobianchini.it/api/services 401 (Unauthorized)
+queryFn @ index-DLWeHtKh.js:657
+a @ index-DLWeHtKh.js:48
+v @ index-DLWeHtKh.js:48
+start @ index-DLWeHtKh.js:48
+fetch @ index-DLWeHtKh.js:48
+xu @ index-DLWeHtKh.js:48
+onSubscribe @ index-DLWeHtKh.js:48
+subscribe @ index-DLWeHtKh.js:48
+(anonymous) @ index-DLWeHtKh.js:48
+GI @ index-DLWeHtKh.js:38
+Rg @ index-DLWeHtKh.js:40
+Ec @ index-DLWeHtKh.js:40
+l$ @ index-DLWeHtKh.js:40
+Ho @ index-DLWeHtKh.js:40
+FS @ index-DLWeHtKh.js:40
+To @ index-DLWeHtKh.js:38
+(anonymous) @ index-DLWeHtKh.js:40
+setTimeout
+s @ index-DLWeHtKh.js:48
+o @ index-DLWeHtKh.js:48
+batch @ index-DLWeHtKh.js:48
+Bs @ index-DLWeHtKh.js:48
+setData @ index-DLWeHtKh.js:48
+onSuccess @ index-DLWeHtKh.js:48
+h @ index-DLWeHtKh.js:48
+Promise.then
+v @ index-DLWeHtKh.js:48
+start @ index-DLWeHtKh.js:48
+fetch @ index-DLWeHtKh.js:48
+xu @ index-DLWeHtKh.js:48
+setOptions @ index-DLWeHtKh.js:48
+(anonymous) @ index-DLWeHtKh.js:48
+Rg @ index-DLWeHtKh.js:40
+Ec @ index-DLWeHtKh.js:40
+l$ @ index-DLWeHtKh.js:40
+Ho @ index-DLWeHtKh.js:40
+FS @ index-DLWeHtKh.js:40
+To @ index-DLWeHtKh.js:38
+(anonymous) @ index-DLWeHtKh.js:40
+setTimeout
+s @ index-DLWeHtKh.js:48
+o @ index-DLWeHtKh.js:48
+batch @ index-DLWeHtKh.js:48
+Bs @ index-DLWeHtKh.js:48
+setData @ index-DLWeHtKh.js:48
+onSuccess @ index-DLWeHtKh.js:48
+h @ index-DLWeHtKh.js:48
+Promise.then
+v @ index-DLWeHtKh.js:48
+start @ index-DLWeHtKh.js:48
+fetch @ index-DLWeHtKh.js:48
+xu @ index-DLWeHtKh.js:48
+setOptions @ index-DLWeHtKh.js:48
+(anonymous) @ index-DLWeHtKh.js:48
+Rg @ index-DLWeHtKh.js:40
+Ec @ index-DLWeHtKh.js:40
+l$ @ index-DLWeHtKh.js:40
+Ho @ index-DLWeHtKh.js:40
+FS @ index-DLWeHtKh.js:40
+To @ index-DLWeHtKh.js:38
+(anonymous) @ index-DLWeHtKh.js:40
+setTimeout
+s @ index-DLWeHtKh.js:48
+o @ index-DLWeHtKh.js:48
+batch @ index-DLWeHtKh.js:48
+Bs @ index-DLWeHtKh.js:48
+setData @ index-DLWeHtKh.js:48
+onSuccess @ index-DLWeHtKh.js:48
+h @ index-DLWeHtKh.js:48
+Promise.then
+v @ index-DLWeHtKh.js:48
+start @ index-DLWeHtKh.js:48
+fetch @ index-DLWeHtKh.js:48
+xu @ index-DLWeHtKh.js:48
+onSubscribe @ index-DLWeHtKh.js:48
+subscribe @ index-DLWeHtKh.js:48
+(anonymous) @ index-DLWeHtKh.js:48
+GI @ index-DLWeHtKh.js:38
+Rg @ index-DLWeHtKh.js:40
+Ec @ index-DLWeHtKh.js:40
+FS @ index-DLWeHtKh.js:40
+To @ index-DLWeHtKh.js:38
+l$ @ index-DLWeHtKh.js:40
+Ho @ index-DLWeHtKh.js:40
+CA @ index-DLWeHtKh.js:40
+C @ index-DLWeHtKh.js:25
+M @ index-DLWeHtKh.js:25Understand this error
+index-DLWeHtKh.js:40 TypeError: t.filter is not a function
+    at fse (index-DLWeHtKh.js:657:105554)
+    at Dj (index-DLWeHtKh.js:38:17018)
+    at vy (index-DLWeHtKh.js:40:3139)
+    at AA (index-DLWeHtKh.js:40:44833)
+    at EA (index-DLWeHtKh.js:40:39790)
+    at a$ (index-DLWeHtKh.js:40:39718)
+    at Ef (index-DLWeHtKh.js:40:39570)
+    at Py (index-DLWeHtKh.js:40:35934)
+    at FS (index-DLWeHtKh.js:40:36738)
+    at To (index-DLWeHtKh.js:38:3279)
+xy @ index-DLWeHtKh.js:40
+n.callback @ index-DLWeHtKh.js:40
+jS @ index-DLWeHtKh.js:38
+zS @ index-DLWeHtKh.js:40
+kA @ index-DLWeHtKh.js:40
+i$ @ index-DLWeHtKh.js:40
+l$ @ index-DLWeHtKh.js:40
+Ho @ index-DLWeHtKh.js:40
+FS @ index-DLWeHtKh.js:40
+To @ index-DLWeHtKh.js:38
+(anonymous) @ index-DLWeHtKh.js:40
+setTimeout
+s @ index-DLWeHtKh.js:48
+o @ index-DLWeHtKh.js:48
+batch @ index-DLWeHtKh.js:48
+Bs @ index-DLWeHtKh.js:48
+setData @ index-DLWeHtKh.js:48
+onSuccess @ index-DLWeHtKh.js:48
+h @ index-DLWeHtKh.js:48
+Promise.then
+v @ index-DLWeHtKh.js:48
+start @ index-DLWeHtKh.js:48
+fetch @ index-DLWeHtKh.js:48
+xu @ index-DLWeHtKh.js:48
+onSubscribe @ index-DLWeHtKh.js:48
+subscribe @ index-DLWeHtKh.js:48
+(anonymous) @ index-DLWeHtKh.js:48
+GI @ index-DLWeHtKh.js:38
+Rg @ index-DLWeHtKh.js:40
+Ec @ index-DLWeHtKh.js:40
+l$ @ index-DLWeHtKh.js:40
+Ho @ index-DLWeHtKh.js:40
+FS @ index-DLWeHtKh.js:40
+To @ index-DLWeHtKh.js:38
+(anonymous) @ index-DLWeHtKh.js:40
+setTimeout
+s @ index-DLWeHtKh.js:48
+o @ index-DLWeHtKh.js:48
+batch @ index-DLWeHtKh.js:48
+Bs @ index-DLWeHtKh.js:48
+setData @ index-DLWeHtKh.js:48
+onSuccess @ index-DLWeHtKh.js:48
+h @ index-DLWeHtKh.js:48
+Promise.then
+v @ index-DLWeHtKh.js:48
+start @ index-DLWeHtKh.js:48
+fetch @ index-DLWeHtKh.js:48
+xu @ index-DLWeHtKh.js:48
+setOptions @ index-DLWeHtKh.js:48
+(anonymous) @ index-DLWeHtKh.js:48
+Rg @ index-DLWeHtKh.js:40
+Ec @ index-DLWeHtKh.js:40
+l$ @ index-DLWeHtKh.js:40
+Ho @ index-DLWeHtKh.js:40
+FS @ index-DLWeHtKh.js:40
+To @ index-DLWeHtKh.js:38
+(anonymous) @ index-DLWeHtKh.js:40
+setTimeout
+s @ index-DLWeHtKh.js:48
+o @ index-DLWeHtKh.js:48
+batch @ index-DLWeHtKh.js:48
+Bs @ index-DLWeHtKh.js:48
+setData @ index-DLWeHtKh.js:48
+onSuccess @ index-DLWeHtKh.js:48
+h @ index-DLWeHtKh.js:48
+Promise.then
+v @ index-DLWeHtKh.js:48
+start @ index-DLWeHtKh.js:48
+fetch @ index-DLWeHtKh.js:48
+xu @ index-DLWeHtKh.js:48
+setOptions @ index-DLWeHtKh.js:48
+(anonymous) @ index-DLWeHtKh.js:48
+Rg @ index-DLWeHtKh.js:40
+Ec @ index-DLWeHtKh.js:40
+l$ @ index-DLWeHtKh.js:40
+Ho @ index-DLWeHtKh.js:40
+FS @ index-DLWeHtKh.js:40
+To @ index-DLWeHtKh.js:38
+(anonymous) @ index-DLWeHtKh.js:40
+setTimeout
+s @ index-DLWeHtKh.js:48
+o @ index-DLWeHtKh.js:48
+batch @ index-DLWeHtKh.js:48
+Bs @ index-DLWeHtKh.js:48
+setData @ index-DLWeHtKh.js:48
+onSuccess @ index-DLWeHtKh.js:48
+h @ index-DLWeHtKh.js:48
+Promise.then
+v @ index-DLWeHtKh.js:48
+start @ index-DLWeHtKh.js:48
+fetch @ index-DLWeHtKh.js:48
+xu @ index-DLWeHtKh.js:48
+onSubscribe @ index-DLWeHtKh.js:48
+subscribe @ index-DLWeHtKh.js:48
+(anonymous) @ index-DLWeHtKh.js:48
+GI @ index-DLWeHtKh.js:38
+Rg @ index-DLWeHtKh.js:40
+Ec @ index-DLWeHtKh.js:40
+FS @ index-DLWeHtKh.js:40
+To @ index-DLWeHtKh.js:38
+l$ @ index-DLWeHtKh.js:40
+Ho @ index-DLWeHtKh.js:40
+CA @ index-DLWeHtKh.js:40
+C @ index-DLWeHtKh.js:25
+M @ index-DLWeHtKh.js:25Understand this error
+index-DLWeHtKh.js:657 Uncaught TypeError: t.filter is not a function
+    at fse (index-DLWeHtKh.js:657:105554)
+    at Dj (index-DLWeHtKh.js:38:17018)
+    at vy (index-DLWeHtKh.js:40:3139)
+    at AA (index-DLWeHtKh.js:40:44833)
+    at EA (index-DLWeHtKh.js:40:39790)
+    at a$ (index-DLWeHtKh.js:40:39718)
+    at Ef (index-DLWeHtKh.js:40:39570)
+    at Py (index-DLWeHtKh.js:40:35934)
+    at FS (index-DLWeHtKh.js:40:36738)
+    at To (index-DLWeHtKh.js:38:3279)

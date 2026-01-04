@@ -1,0 +1,63 @@
+🔧 [ADD EVENT] Starting addFacebookEvent
+Console.js:61 🔧 [ADD EVENT] selectedRoute: 
+{id: 'route-1', route: '/chi-siamo', name: 'Chi Siamo', pageViews: 0, uniqueVisitors: 0, …}
+Console.js:61 🔧 [ADD EVENT] newEventName: Lead
+Console.js:61 🔧 [ADD EVENT] newEventData: 
+Console.js:61 ✅ [ADD EVENT] Parsed eventData: undefined
+Console.js:61 🔧 [ADD EVENT] Updated events array: 
+[{…}]
+Console.js:61 🔧 [ADD EVENT] Full mutation data being sent: {
+  "id": "route-1",
+  "route": "/chi-siamo",
+  "name": "Chi Siamo",
+  "pageViews": 0,
+  "uniqueVisitors": 0,
+  "avgTimeOnPage": 0,
+  "bounceRate": 0,
+  "isActive": true,
+  "facebookPixelEvents": [
+    {
+      "eventName": "Lead",
+      "isActive": true
+    }
+  ]
+}
+Console.js:61 🔧 [ADD EVENT] Mutation status before call: 
+{isLoading: false, isError: true, error: SyntaxError: Failed to execute 'json' on 'Response': Unexpected token '<', "<!DOCTYPE "... is not v…}
+Console.js:61 🔧 [MUTATION] Sending data to backend: {
+  "id": "route-1",
+  "route": "/chi-siamo",
+  "name": "Chi Siamo",
+  "pageViews": 0,
+  "uniqueVisitors": 0,
+  "avgTimeOnPage": 0,
+  "bounceRate": 0,
+  "isActive": true,
+  "facebookPixelEvents": [
+    {
+      "eventName": "Lead",
+      "isActive": true
+    }
+  ]
+}
+Console.js:61 🔧 [MUTATION] Response status: 200
+Console.js:61 🔧 [MUTATION] Response headers: 
+{content-length: '43773', content-type: 'text/html; charset=utf-8', date: 'Tue, 30 Sep 2025 13:16:06 GMT', replit-cluster: 'picard', vary: 'Origin', …}
+Console.js:61 ❌ [MUTATION] Failed to parse success response as JSON: SyntaxError: Failed to execute 'json' on 'Response': Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+    at Object.mutationFn (AnalyticsDashboard.tsx:139:35)
+Mt.forEach.n.<computed>	@	Console.js:61
+mutationFn	@	AnalyticsDashboard.tsx:142
+await in execute		
+addFacebookEvent	@	AnalyticsDashboard.tsx:249
+Console.js:61 ❌ [MUTATION] Request failed: Error: Server returned invalid JSON response
+    at Object.mutationFn (AnalyticsDashboard.tsx:143:17)
+Mt.forEach.n.<computed>	@	Console.js:61
+mutationFn	@	AnalyticsDashboard.tsx:166
+await in execute		
+addFacebookEvent	@	AnalyticsDashboard.tsx:249
+Console.js:61 ❌ [MUTATION] Error updating route analytics: Error: Server returned invalid JSON response
+    at Object.mutationFn (AnalyticsDashboard.tsx:143:17)
+Mt.forEach.n.<computed>	@	Console.js:61
+onError	@	AnalyticsDashboard.tsx:185
+await in execute		
+addFacebookEvent	@	AnalyticsDashboard.tsx:249

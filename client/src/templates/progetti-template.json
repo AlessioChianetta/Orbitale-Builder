@@ -1,0 +1,93 @@
+{
+  "templateId": "progetti",
+  "templateName": "I Miei Progetti Template",
+  "description": "Template completo per la pagina I Miei Progetti con tutti gli elementi editabili",
+  "sections": {
+    "hero": {
+      "sectionId": "hero",
+      "sectionName": "Hero Section",
+      "enabled": true,
+      "elements": {
+        "badge": {
+          "type": "text",
+          "value": "Portfolio Progetti",
+          "editable": true
+        },
+        "titlePart1": {
+          "type": "text",
+          "value": "I Miei",
+          "editable": true
+        },
+        "titlePart2": {
+          "type": "text",
+          "value": "Progetti",
+          "editable": true
+        },
+        "description": {
+          "type": "textarea",
+          "value": "Scopri i progetti e le partnership che hanno trasformato il business dei nostri clienti. Ogni progetto racconta una storia di successo, innovazione e crescita digitale.",
+          "editable": true
+        },
+        "statLabel1": {
+          "type": "text",
+          "value": "Progetti Completati",
+          "editable": true
+        },
+        "statLabel2": {
+          "type": "text",
+          "value": "In Evidenza",
+          "editable": true
+        },
+        "searchPlaceholder": {
+          "type": "text",
+          "value": "Cerca progetti...",
+          "editable": true
+        }
+      }
+    },
+    "projects": {
+      "sectionId": "projects",
+      "sectionName": "Sezione Progetti",
+      "enabled": true,
+      "elements": {
+        "titleAll": {
+          "type": "text",
+          "value": "Tutti i Progetti",
+          "editable": true
+        },
+        "titleFeatured": {
+          "type": "text",
+          "value": "Progetti in Evidenza",
+          "editable": true
+        },
+        "titleDevelopment": {
+          "type": "text",
+          "value": "Progetti di Sviluppo",
+          "editable": true
+        },
+        "titleMarketing": {
+          "type": "text",
+          "value": "Progetti di Marketing",
+          "editable": true
+        },
+        "titleConsulting": {
+          "type": "text",
+          "value": "Progetti di Consulenza",
+          "editable": true
+        },
+        "titleProjects": {
+          "type": "text",
+          "value": "Solo Progetti",
+          "editable": true
+        },
+        "titlePartnerships": {
+          "type": "text",
+          "value": "Partnership",
+          "editable": true
+        }
+      }
+    }
+  },
+  "metaTitle": "I Miei Progetti - Portfolio di Sviluppo Web e Marketing",
+  "metaDescription": "Scopri i progetti che ho realizzato: e-commerce, CMS personalizzati, piattaforme marketing e soluzioni web innovative con risultati misurabili."
+}

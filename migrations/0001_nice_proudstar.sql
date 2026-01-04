@@ -1,0 +1,22 @@
+CREATE TABLE "services" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"title" varchar(255) NOT NULL,
+	"slug" varchar(255) NOT NULL,
+	"description" text NOT NULL,
+	"short_description" varchar(500),
+	"price" varchar(100),
+	"price_description" varchar(100),
+	"icon" varchar(100),
+	"features" jsonb DEFAULT '[]'::jsonb,
+	"benefits" jsonb DEFAULT '[]'::jsonb,
+	"is_popular" boolean DEFAULT false,
+	"is_featured" boolean DEFAULT false,
+	"category" varchar(100) DEFAULT 'main',
+	"landing_page_slug" varchar(255),
+	"cta_text" varchar(100) DEFAULT 'Scopri di più',
+	"order" integer DEFAULT 0,
+	"is_active" boolean DEFAULT true,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "services_slug_unique" UNIQUE("slug")
+);

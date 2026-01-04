@@ -1,0 +1,111 @@
+🔍 [FB PIXEL INIT] SEO Settings loaded: undefined
+index-C3s3iXGC.js:621 🔍 [FB PIXEL INIT] Facebook Pixel ID: undefined
+index-C3s3iXGC.js:621 ❌ [FB PIXEL INIT] No Facebook Pixel ID found in settings
+index-C3s3iXGC.js:770  GET https://alessiochianetta.it/api/landing-pages/slug/home 404 (Not Found)
+queryFn @ index-C3s3iXGC.js:770
+a @ index-C3s3iXGC.js:48
+b @ index-C3s3iXGC.js:48
+start @ index-C3s3iXGC.js:48
+fetch @ index-C3s3iXGC.js:48
+bu @ index-C3s3iXGC.js:48
+onSubscribe @ index-C3s3iXGC.js:48
+subscribe @ index-C3s3iXGC.js:48
+(anonymous) @ index-C3s3iXGC.js:48
+JI @ index-C3s3iXGC.js:38
+Og @ index-C3s3iXGC.js:40
+Rc @ index-C3s3iXGC.js:40
+HS @ index-C3s3iXGC.js:40
+Mo @ index-C3s3iXGC.js:38
+pF @ index-C3s3iXGC.js:40
+Yo @ index-C3s3iXGC.js:40
+AA @ index-C3s3iXGC.js:40
+C @ index-C3s3iXGC.js:25
+A @ index-C3s3iXGC.js:25Understand this error
+index-C3s3iXGC.js:621 🔍 [FB PIXEL INIT] SEO Settings loaded: {googleAnalyticsId: null, googleTagManagerId: null, googleSearchConsoleCode: null, siteName: null, siteDescription: null, …}customHeadCode: "<!-- Meta Pixel Code -->\n<script>\n!function(f,b,e,v,n,t,s)\n{if(f.fbq)return;n=f.fbq=function(){n.callMethod?\nn.callMethod.apply(n,arguments):n.queue.push(arguments)};\nif(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';\nn.queue=[];t=b.createElement(e);t.async=!0;\nt.src=v;s=b.getElementsByTagName(e)[0];\ns.parentNode.insertBefore(t,s)}(window, document,'script',\n'https://connect.facebook.net/en_US/fbevents.js');\nfbq('init', '3139741182854427');\nfbq('track', 'PageView');\n</script>\n<noscript><img height=\"1\" width=\"1\" style=\"display:none\"\nsrc=\"https://www.facebook.com/tr?id=3139741182854427&ev=PageView&noscript=1\"\n/></noscript>\n<!-- End Meta Pixel Code -->"defaultMetaDescription: nulldefaultMetaTitle: nulldefaultOgImage: nullfacebookAppId: nullfacebookPixelId: "3139741182854427"googleAnalyticsId: nullgoogleSearchConsoleCode: nullgoogleTagManagerId: nullsiteDescription: nullsiteName: nullsiteUrl: nulltwitterHandle: null[[Prototype]]: Object
+index-C3s3iXGC.js:621 🔍 [FB PIXEL INIT] Facebook Pixel ID: 3139741182854427
+index-C3s3iXGC.js:621 ✅ [FB PIXEL INIT] Initializing Facebook Pixel with ID: 3139741182854427
+index-C3s3iXGC.js:621 📊 Initializing Facebook Pixel with ID: 3139741182854427
+index-C3s3iXGC.js:621 🔍 Facebook Pixel script loaded, initializing...
+index-C3s3iXGC.js:770  GET https://alessiochianetta.it/api/pages/home 404 (Not Found)
+queryFn @ index-C3s3iXGC.js:770
+a @ index-C3s3iXGC.js:48
+b @ index-C3s3iXGC.js:48
+start @ index-C3s3iXGC.js:48
+fetch @ index-C3s3iXGC.js:48
+bu @ index-C3s3iXGC.js:48
+onSubscribe @ index-C3s3iXGC.js:48
+subscribe @ index-C3s3iXGC.js:48
+(anonymous) @ index-C3s3iXGC.js:48
+JI @ index-C3s3iXGC.js:38
+Og @ index-C3s3iXGC.js:40
+Rc @ index-C3s3iXGC.js:40
+HS @ index-C3s3iXGC.js:40
+Mo @ index-C3s3iXGC.js:38
+pF @ index-C3s3iXGC.js:40
+Yo @ index-C3s3iXGC.js:40
+AA @ index-C3s3iXGC.js:40
+C @ index-C3s3iXGC.js:25
+A @ index-C3s3iXGC.js:25Understand this error
+index-C3s3iXGC.js:621 ✅ Facebook Pixel initialized with ID: 3139741182854427
+index-C3s3iXGC.js:770  GET https://alessiochianetta.it/api/projects/slug/home 404 (Not Found)
+queryFn @ index-C3s3iXGC.js:770
+a @ index-C3s3iXGC.js:48
+b @ index-C3s3iXGC.js:48
+start @ index-C3s3iXGC.js:48
+fetch @ index-C3s3iXGC.js:48
+bu @ index-C3s3iXGC.js:48
+onSubscribe @ index-C3s3iXGC.js:48
+subscribe @ index-C3s3iXGC.js:48
+(anonymous) @ index-C3s3iXGC.js:48
+JI @ index-C3s3iXGC.js:38
+Og @ index-C3s3iXGC.js:40
+Rc @ index-C3s3iXGC.js:40
+HS @ index-C3s3iXGC.js:40
+Mo @ index-C3s3iXGC.js:38
+pF @ index-C3s3iXGC.js:40
+Yo @ index-C3s3iXGC.js:40
+AA @ index-C3s3iXGC.js:40
+C @ index-C3s3iXGC.js:25
+A @ index-C3s3iXGC.js:25Understand this error
+index-C3s3iXGC.js:625 🔍 SEO META DATA per questa pagina:
+index-C3s3iXGC.js:625 📄 Title Meta SEO: prova homepage titolo ale
+index-C3s3iXGC.js:625 📝 Meta Description SEO: prova homepage descrizione ale
+index-C3s3iXGC.js:625 🌐 URL Canonico: /home
+index-C3s3iXGC.js:625 🖼️ Immagine OG: https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png
+index-C3s3iXGC.js:625 
+index-C3s3iXGC.js:625 🎯 ANALISI PRIORITÀ SEO:
+index-C3s3iXGC.js:625 📄 TITLE: ✅ Specifico della pagina (PRIORITÀ MASSIMA) → "prova homepage titolo ale"
+index-C3s3iXGC.js:625 📝 DESCRIPTION: ✅ Specifica della pagina (PRIORITÀ MASSIMA) → "prova homepage descrizione ale"
+index-C3s3iXGC.js:625 🖼️ IMMAGINE OG: ✅ Specifica della pagina (PRIORITÀ MASSIMA) → "https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png"
+index-C3s3iXGC.js:625 🌐 URL CANONICO: ⚠️ URL relativo (manca dominio globale) → "/home"
+index-C3s3iXGC.js:625 
+index-C3s3iXGC.js:625 📊 RIEPILOGO SCENARIO:
+index-C3s3iXGC.js:625 🎯 SCENARIO: Meta tag specifici configurati → OTTIMIZZAZIONE PERSONALIZZATA ✅
+index-C3s3iXGC.js:625 🔍 SEO META DATA per questa pagina:
+index-C3s3iXGC.js:625 📄 Title Meta SEO: prova homepage titolo ale
+index-C3s3iXGC.js:625 📝 Meta Description SEO: prova homepage descrizione ale
+index-C3s3iXGC.js:625 🌐 URL Canonico: /home
+index-C3s3iXGC.js:625 🖼️ Immagine OG: https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png
+index-C3s3iXGC.js:625 
+index-C3s3iXGC.js:625 🎯 ANALISI PRIORITÀ SEO:
+index-C3s3iXGC.js:625 📄 TITLE: ✅ Specifico della pagina (PRIORITÀ MASSIMA) → "prova homepage titolo ale"
+index-C3s3iXGC.js:625 📝 DESCRIPTION: ✅ Specifica della pagina (PRIORITÀ MASSIMA) → "prova homepage descrizione ale"
+index-C3s3iXGC.js:625 🖼️ IMMAGINE OG: ✅ Specifica della pagina (PRIORITÀ MASSIMA) → "https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png"
+index-C3s3iXGC.js:625 🌐 URL CANONICO: ⚠️ URL relativo (manca dominio globale) → "/home"
+index-C3s3iXGC.js:625 
+index-C3s3iXGC.js:625 📊 RIEPILOGO SCENARIO:
+index-C3s3iXGC.js:625 🎯 SCENARIO: Meta tag specifici configurati → OTTIMIZZAZIONE PERSONALIZZATA ✅
+index-C3s3iXGC.js:625 ✅ VERIFICA DOM - Valori effettivamente applicati:
+index-C3s3iXGC.js:625 📄 Title nel DOM: prova homepage titolo ale
+index-C3s3iXGC.js:625 📝 Description nel DOM: prova homepage descrizione ale
+index-C3s3iXGC.js:625 🌐 Canonical nel DOM: /home
+index-C3s3iXGC.js:625 🖼️ OG Image nel DOM: https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png
+index-C3s3iXGC.js:625 ✅ Title SEO applicato correttamente!
+index-C3s3iXGC.js:625 ✅ Description SEO applicata correttamente!
+index-C3s3iXGC.js:625 ✅ VERIFICA DOM - Valori effettivamente applicati:
+index-C3s3iXGC.js:625 📄 Title nel DOM: prova homepage titolo ale
+index-C3s3iXGC.js:625 📝 Description nel DOM: prova homepage descrizione ale
+index-C3s3iXGC.js:625 🌐 Canonical nel DOM: /home
+index-C3s3iXGC.js:625 🖼️ OG Image nel DOM: https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png
+index-C3s3iXGC.js:625 ✅ Title SEO applicato correttamente!
+index-C3s3iXGC.js:625 ✅ Description SEO applicata correttamente!

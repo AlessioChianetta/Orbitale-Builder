@@ -1,0 +1,285 @@
+
+{
+  "templateId": "homepage",
+  "templateName": "Homepage Template",
+  "description": "Template completo per Homepage con ogni elemento editabile",
+  "sections": {
+    "hero": {
+      "sectionId": "hero",
+      "sectionName": "Hero Section",
+      "enabled": true,
+      "elements": {
+        "badge": {
+          "type": "text",
+          "value": "PER IMPRENDITORI E AZIENDE AMBIZIOSE",
+          "editable": true
+        },
+        "mainTitle": {
+          "type": "text",
+          "value": "Smetti di Acquistare Clienti.",
+          "editable": true
+        },
+        "highlightTitle": {
+          "type": "text",
+          "value": "Costruisci un Sistema che li Attrae.",
+          "editable": true
+        },
+        "subtitle": {
+          "type": "text",
+          "value": "Implementiamo sistemi di marketing a risposta diretta per trasformare la tua spesa pubblicitaria in un asset aziendale prevedibile e profittevole.",
+          "editable": true
+        },
+        "ctaButton": {
+          "type": "button",
+          "text": "CANDIDATI ORA PER LA TUA SESSIONE STRATEGICA",
+          "link": "/candidatura",
+          "editable": true
+        },
+        "disclaimer": {
+          "type": "text",
+          "value": "🔥 Posti limitati. Approvazione manuale richiesta.",
+          "editable": true
+        },
+        "videoImage": {
+          "type": "image",
+          "value": "https://via.placeholder.com/1280x720/1e293b/ffffff?text=Guarda+il+Video+Sales+Letter",
+          "alt": "Video Sales Letter - Sistema di marketing a risposta diretta",
+          "editable": true
+        }
+      }
+    },
+    
+    "problem": {
+      "sectionId": "problem",
+      "sectionName": "Problem Section",
+      "enabled": true,
+      "elements": {
+        "badge": {
+          "type": "text",
+          "value": "❌ IL PROBLEMA",
+          "editable": true
+        },
+        "title": {
+          "type": "text",
+          "value": "Il Marketing Digitale Tradizionale è Rotto",
+          "editable": true
+        },
+        "subtitle": {
+          "type": "text",
+          "value": "Le agenzie ti vendono fuffa, i costi pubblicitari aumentano e tu non hai nessun controllo sui risultati. Ti sembra familiare?",
+          "editable": true
+        },
+        "problems": {
+          "type": "array",
+          "value": [
+            {
+              "icon": "XCircle",
+              "title": "Agenzie Inefficaci",
+              "description": "Paghi fee mensili per report incomprensibili e risultati inesistenti.",
+              "color": "red"
+            },
+            {
+              "icon": "AlertTriangle",
+              "title": "Costi Pubblicitari Folli",
+              "description": "Sei in balia degli algoritmi di Facebook e Google, con costi per lead sempre più alti.",
+              "color": "amber"
+            },
+            {
+              "icon": "Target",
+              "title": "Mancanza di un Sistema",
+              "description": "Le tue vendite sono imprevedibili, basate sul caso e non su un processo scientifico.",
+              "color": "slate"
+            }
+          ],
+          "editable": true
+        }
+      }
+    },
+    "solution": {
+      "sectionId": "solution",
+      "sectionName": "Solution Section",
+      "enabled": true,
+      "elements": {
+        "badge": {
+          "type": "text",
+          "value": "✅ LA SOLUZIONE",
+          "editable": true
+        },
+        "title": {
+          "type": "text",
+          "value": "Smettere di Affittare l'Attenzione e Iniziare a Possederla",
+          "editable": true
+        },
+        "description": {
+          "type": "text",
+          "value": "L'unica via d'uscita è costruire un asset di marketing proprietario: un sistema che genera clienti in modo prevedibile e profittevole, che lavora per te 24/7 e il cui valore cresce nel tempo.",
+          "editable": true
+        }
+      }
+    },
+    "obstacle": {
+      "sectionId": "obstacle",
+      "sectionName": "Obstacle Section", 
+      "enabled": true,
+      "elements": {
+        "badge": {
+          "type": "text",
+          "value": "🎯 IL TUO VERO OSTACOLO",
+          "editable": true
+        },
+        "title": {
+          "type": "text",
+          "value": "Intrappolato nella \"Ruota del Criceto\"",
+          "editable": true
+        },
+        "description": {
+          "type": "text",
+          "value": "Passi le giornate a gestire emergenze, rincorrere clienti e sperare che il fatturato copra le spese. Lavori 'nel' tuo business, non 'sul' tuo business.",
+          "editable": true
+        },
+        "error": {
+          "type": "object",
+          "value": {
+            "title": "L'errore:",
+            "description": "Pensare che per crescere basti \"lavorare di più\" o trovare il \"trucco segreto\"."
+          },
+          "editable": true
+        },
+        "solution": {
+          "type": "object",
+          "value": {
+            "title": "La Soluzione:",
+            "description": "Installare un sistema operativo per la crescita che automatizza l'acquisizione clienti e ti libera tempo per le attività strategiche."
+          },
+          "editable": true
+        }
+      }
+    },
+    "testimonials": {
+      "sectionId": "testimonials",
+      "sectionName": "Testimonials Section",
+      "enabled": true,
+      "elements": {
+        "title": {
+          "type": "text",
+          "value": "Non fidarti di noi, fidati dei loro risultati",
+          "editable": true
+        },
+        "subtitle": {
+          "type": "text",
+          "value": "Aziende e professionisti che hanno installato il nostro sistema di crescita.",
+          "editable": true
+        },
+        "testimonials": {
+          "type": "array",
+          "value": [
+            {
+              "name": "Marco Rossi",
+              "role": "CEO, TechStart SRL",
+              "content": "Le strategie che ci hanno fornito hanno portato a un aumento del 340% nelle conversioni in soli 3 mesi. Incredibile.",
+              "rating": 5,
+              "avatar": "MR"
+            },
+            {
+              "name": "Laura Bianchi",
+              "role": "Marketing Director, Fashion Hub",
+              "content": "Finalmente un partner che capisce le nostre esigenze e porta risultati concreti. Il team è professionale e sempre disponibile.",
+              "rating": 5,
+              "avatar": "LB"
+            },
+            {
+              "name": "Andrea Verdi",
+              "role": "Founder, GreenTech Solutions",
+              "content": "Il ROI delle campagne è triplicato in 6 mesi. Consiglio vivamente!",
+              "rating": 5,
+              "avatar": "AV"
+            }
+          ],
+          "editable": true
+        }
+      }
+    },
+    "requirements": {
+      "sectionId": "requirements",
+      "sectionName": "Requirements Section",
+      "enabled": true,
+      "elements": {
+        "badge": {
+          "type": "text",
+          "value": "💯 TRASPARENZA",
+          "editable": true
+        },
+        "title": {
+          "type": "text",
+          "value": "Questo sistema non è per tutti",
+          "editable": true
+        },
+        "subtitle": {
+          "type": "text",
+          "value": "Lavoriamo solo con un numero limitato di clienti per garantire risultati eccezionali.",
+          "editable": true
+        },
+        "whoIsItFor": {
+          "type": "array",
+          "value": [
+            "Imprenditori che vogliono un sistema prevedibile per generare clienti.",
+            "Professionisti che vogliono smettere di competere sul prezzo.",
+            "Aziende stanche delle agenzie tradizionali senza risultati misurabili.",
+            "Chiunque sia pronto a seguire un metodo testato e a impegnarsi per la crescita."
+          ],
+          "editable": true
+        },
+        "whoIsNotFor": {
+          "type": "array",
+          "value": [
+            "Chi cerca formule magiche o risultati immediati senza sforzo.",
+            "Chi non è disposto a investire in una strategia a lungo termine.",
+            "Aziende senza un prodotto/servizio di qualità.",
+            "Chi non è aperto a nuove strategie e preferisce la propria comfort zone."
+          ],
+          "editable": true
+        }
+      }
+    },
+    "finalCta": {
+      "sectionId": "finalCta",
+      "sectionName": "Final CTA Section",
+      "enabled": true,
+      "elements": {
+        "title": {
+          "type": "text",
+          "value": "Pronto a Costruire il Tuo Sistema di Crescita?",
+          "editable": true
+        },
+        "subtitle": {
+          "type": "text",
+          "value": "Il processo è semplice e progettato per capire se siamo un match perfetto per i tuoi obiettivi.",
+          "editable": true
+        },
+        "ctaButton": {
+          "type": "button",
+          "text": "INVIA LA TUA CANDIDATURA ORA",
+          "link": "/candidatura",
+          "editable": true
+        },
+        "disclaimer": {
+          "type": "text",
+          "value": "⚡ Dopo la candidatura, il nostro team analizzerà il tuo profilo. Se idoneo, verrai contattato entro 24 ore.",
+          "editable": true
+        }
+      }
+    }
+  },
+  "globalSettings": {
+    "primaryColor": "#2563eb",
+    "secondaryColor": "#7c3aed", 
+    "accentColor": "#ea580c",
+    "backgroundColor": "#f8fafc",
+    "textColor": "#1e293b"
+  },
+  "metadata": {
+    "metaTitle": "Sistema Marketing a Risposta Diretta - Genera Clienti Automaticamente",
+    "metaDescription": "Smetti di acquistare clienti e costruisci un sistema che li attrae automaticamente. Marketing a risposta diretta per imprenditori e aziende ambiziose.",
+    "ogImage": "/default-og-image.jpg"
+  }
+}

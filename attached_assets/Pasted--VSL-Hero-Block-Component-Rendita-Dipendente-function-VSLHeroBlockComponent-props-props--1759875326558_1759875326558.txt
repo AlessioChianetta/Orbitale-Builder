@@ -1,0 +1,60 @@
+// VSL Hero Block Component (Rendita Dipendente)
+function VSLHeroBlockComponent({ props }: { props: any }) {
+  const getVideoEmbedUrl = (url: string, provider: string) => {
+    if (!url) return '';
+    if (provider === 'youtube') {
+      const videoId = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/)?.[1];
+      return videoId ? `https://www.youtube.com/embed/${videoId}?rel=0&showinfo=0&autoplay=0` : '';
+    }
+    if (provider === 'vimeo') {
+      const videoId = url.match(/(?:player\.)?vimeo\.com\/(?:video\/)?(\d+)/)?.[1];
+      return videoId ? `https://player.vimeo.com/video/${videoId}?badge=0&autopause=0` : '';
+    }
+    if (provider === 'wistia') {
+      const videoId = url.match(/wistia\.com\/medias\/([a-zA-Z0-9]+)/)?.[1] || url.match(/fast\.wistia\.com\/embed\/iframe\/([a-zA-Z0-9]+)/)?.[1] || (/^[a-zA-Z0-9]{10}$/.test(url.trim()) ? url.trim() : null);
+      return videoId ? `https://fast.wistia.com/embed/iframe/${videoId}` : '';
+    }
+    return url;
+  };
+  return (
+    <section 
+      className="relative py-16 px-4"
+      style={{ 
+        background: props.backgroundColor || 'linear-gradient(to bottom, #0f172a, #1e293b, #000000)',
+        paddingTop: `${props.paddingY || 80}px`,
+        paddingBottom: `${props.paddingY || 80}px`,
+      }}
+    >
+      <div className="max-w-6xl mx-auto text-center">
+        <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4" style={{ color: props.textColor || '#ffffff' }}>
+          {props.title || 'Scopri Come Generare'}
+        </h1>
+        <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6 bg-gradient-to-r from-blue-400 to-green-500 bg-clip-text text-transparent">
+          {props.highlightedTitle || '€2.000+ al Mese di Rendita Passiva'}
+        </h2>
+        <p className="text-xl md:text-2xl mb-12" style={{ color: props.textColor || '#ffffff' }}>
+          {props.subtitle || 'Anche se lavori come dipendente e non hai mai investito prima'}
+        </p>
+        {props.videoUrl && (
+          <div className="mb-12 max-w-4xl mx-auto">
+            <div className="aspect-video rounded-xl overflow-hidden shadow-2xl border-2 border-blue-400">
+              <iframe
+                src={getVideoEmbedUrl(props.videoUrl, props.videoProvider || 'wistia')}
+                className="w-full h-full"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                title="VSL Video"
+              />
+            </div>
+          </div>
+        )}
+        {props.ctaText && (
+          <Button size="lg" className="text-lg px-8 py-6" asChild>
+            <a href={props.ctaLink || '#'}>{props.ctaText}</a>
+          </Button>
+        )}
+      </div>
+    </section>
+  );
+}

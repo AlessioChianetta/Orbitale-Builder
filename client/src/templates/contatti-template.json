@@ -1,0 +1,243 @@
+{
+  "metadata": {
+    "title": "Contatti",
+    "slug": "contatti",
+    "metaTitle": "Contatti - Agenzia Digitale Professionale",
+    "metaDescription": "Contatta la nostra agenzia per una consulenza gratuita sui tuoi progetti digitali. Siamo qui per trasformare le tue idee in realtà."
+  },
+  "sections": {
+    "hero": {
+      "sectionName": "Hero - Intestazione",
+      "enabled": true,
+      "elements": {
+        "badge": {
+          "type": "text",
+          "value": "Contattaci",
+          "editable": true
+        },
+        "title": {
+          "type": "text", 
+          "value": "Parliamo del tuo",
+          "editable": true
+        },
+        "highlightTitle": {
+          "type": "text",
+          "value": "Progetto",
+          "editable": true
+        },
+        "subtitle": {
+          "type": "textarea",
+          "value": "Siamo pronti ad ascoltare le tue idee e trasformarle in realtà. Contattaci per una consulenza gratuita.",
+          "editable": true
+        },
+        "description": {
+          "type": "textarea",
+          "value": "Il nostro team di esperti è a tua disposizione per discutere del tuo progetto e offrirti le migliori soluzioni digitali.",
+          "editable": true
+        }
+      }
+    },
+    "contactInfo": {
+      "sectionName": "Informazioni di Contatto",
+      "enabled": true,
+      "elements": {
+        "title": {
+          "type": "text",
+          "value": "Come Raggiungerci",
+          "editable": true
+        },
+        "subtitle": {
+          "type": "textarea", 
+          "value": "Siamo sempre disponibili per rispondere alle tue domande",
+          "editable": true
+        },
+        "contactMethods": {
+          "type": "array",
+          "value": [
+            {
+              "icon": "Mail",
+              "title": "Email",
+              "description": "Scrivici per qualsiasi informazione",
+              "value": "info@tuaagenzia.it",
+              "link": "mailto:info@tuaagenzia.it"
+            },
+            {
+              "icon": "Phone",
+              "title": "Telefono",
+              "description": "Chiamaci per una consulenza immediata",
+              "value": "+39 123 456 7890",
+              "link": "tel:+391234567890"
+            },
+            {
+              "icon": "MapPin",
+              "title": "Ufficio",
+              "description": "Vieni a trovarci nel nostro ufficio",
+              "value": "Via Roma 123, 20100 Milano",
+              "link": "https://maps.google.com/?q=Via+Roma+123+Milano"
+            },
+            {
+              "icon": "Clock",
+              "title": "Orari",
+              "description": "Siamo aperti dal lunedì al venerdì",
+              "value": "9:00 - 18:00",
+              "link": ""
+            }
+          ],
+          "editable": true
+        }
+      }
+    },
+    "contactForm": {
+      "sectionName": "Modulo di Contatto",
+      "enabled": true,
+      "elements": {
+        "title": {
+          "type": "text",
+          "value": "Invia un Messaggio",
+          "editable": true
+        },
+        "subtitle": {
+          "type": "textarea",
+          "value": "Compila il form sottostante e ti ricontatteremo entro 24 ore",
+          "editable": true
+        },
+        "formFields": {
+          "type": "array",
+          "value": [
+            {
+              "name": "name",
+              "label": "Nome e Cognome",
+              "type": "text",
+              "placeholder": "Il tuo nome completo",
+              "required": true
+            },
+            {
+              "name": "email",
+              "label": "Email",
+              "type": "email",
+              "placeholder": "la.tua@email.it",
+              "required": true
+            },
+            {
+              "name": "phone",
+              "label": "Telefono",
+              "type": "tel",
+              "placeholder": "+39 123 456 7890",
+              "required": false
+            },
+            {
+              "name": "company",
+              "label": "Azienda",
+              "type": "text",
+              "placeholder": "Nome della tua azienda",
+              "required": false
+            },
+            {
+              "name": "subject",
+              "label": "Oggetto",
+              "type": "select",
+              "placeholder": "Seleziona l'argomento",
+              "required": true,
+              "options": [
+                "Richiesta informazioni",
+                "Preventivo sito web",
+                "Consulenza SEO",
+                "Marketing digitale",
+                "E-commerce",
+                "Altro"
+              ]
+            },
+            {
+              "name": "message",
+              "label": "Messaggio",
+              "type": "textarea",
+              "placeholder": "Descrivi il tuo progetto o la tua richiesta...",
+              "required": true
+            }
+          ],
+          "editable": true
+        },
+        "submitButton": {
+          "type": "text",
+          "value": "Invia Messaggio",
+          "editable": true
+        },
+        "privacyNote": {
+          "type": "textarea",
+          "value": "I tuoi dati personali saranno trattati nel rispetto della privacy. Non verranno mai condivisi con terze parti.",
+          "editable": true
+        }
+      }
+    },
+    "faq": {
+      "sectionName": "FAQ Contatti",
+      "enabled": true,
+      "elements": {
+        "title": {
+          "type": "text",
+          "value": "Domande Frequenti",
+          "editable": true
+        },
+        "subtitle": {
+          "type": "textarea",
+          "value": "Trova rapidamente le risposte alle domande più comuni",
+          "editable": true
+        },
+        "questions": {
+          "type": "array",
+          "value": [
+            {
+              "question": "Quanto tempo ci vuole per ricevere una risposta?",
+              "answer": "Rispondiamo a tutte le richieste entro 24 ore lavorative. Per richieste urgenti, puoi chiamarci direttamente."
+            },
+            {
+              "question": "Fate consulenze gratuite?",
+              "answer": "Sì, offriamo sempre una prima consulenza gratuita per valutare insieme il tuo progetto e le possibili soluzioni."
+            },
+            {
+              "question": "Lavorate con aziende di ogni dimensione?",
+              "answer": "Certamente! Seguiamo sia piccole attività locali che grandi aziende, adattando le nostre soluzioni alle specifiche esigenze."
+            },
+            {
+              "question": "Quanto costa un progetto?",
+              "answer": "Ogni progetto è unico. Dopo aver compreso le tue esigenze, ti forniremo un preventivo dettagliato e trasparente."
+            }
+          ],
+          "editable": true
+        }
+      }
+    },
+    "cta": {
+      "sectionName": "Call to Action",
+      "enabled": true,
+      "elements": {
+        "title": {
+          "type": "text",
+          "value": "Pronto a Iniziare?",
+          "editable": true
+        },
+        "subtitle": {
+          "type": "textarea",
+          "value": "Non aspettare oltre. Contattaci oggi stesso e iniziamo a lavorare insieme al tuo successo digitale.",
+          "editable": true
+        },
+        "primaryButton": {
+          "type": "object",
+          "value": {
+            "text": "Chiamaci Ora",
+            "link": "tel:+391234567890"
+          },
+          "editable": true
+        },
+        "secondaryButton": {
+          "type": "object",
+          "value": {
+            "text": "Scrivici una Email",
+            "link": "mailto:info@tuaagenzia.it"
+          },
+          "editable": true
+        }
+      }
+    }
+  }
+}

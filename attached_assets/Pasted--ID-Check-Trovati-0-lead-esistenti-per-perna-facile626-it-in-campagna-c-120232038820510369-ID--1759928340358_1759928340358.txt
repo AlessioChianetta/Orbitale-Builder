@@ -1,0 +1,31 @@
+ [ID Check] Trovati 0 lead esistenti per perna@facile626.it in campagna c:120232038820510369
+✅ [ID Check] ID Facebook 754784097181080 NON trovato nei duplicati - Procedo con l'importazione
+✨ [Fresh Start] Processando nuova riga per perna@facile626.it con ID Facebook 754784097181080
+❌ [AutoSync] Errore controllo duplicati: TypeError: this.storage.createMarketingLead is not a function
+    at GoogleSheetsAutoSync.syncNow (/home/runner/workspace/server/googleSheetsSync.ts:568:48)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async <anonymous> (/home/runner/workspace/server/googleSheets.ts:40:7)
+📊 [Lead Tracking] Email iljumbopavia@gmail.com - Campagna c:120232038820510369 - Iscrizioni esistenti: 0
+📊 [Dynamic Fields] Platform index: 11, Full name index: 14
+📝 [Dynamic Fields Strategy 1] Campo rilevato: "che_tipo_di_locale_gestisci?" -> tipo_locale = "ristorante_o_pizzeria_con_servizio_al_tavolo"
+📝 [Dynamic Fields Strategy 1] Campo rilevato: "cosa_ti_piacerebbe_migliorare_nel_tuo_locale?" -> cosa_migliorare = "aumentare_coperti_e_fatturato"
+📋 [Dynamic Fields] Campi estratti totali: 2 {
+  tipo_locale: 'ristorante_o_pizzeria_con_servizio_al_tavolo',
+  cosa_migliorare: 'aumentare_coperti_e_fatturato'
+}
+🔍 [ID Check] Controllo duplicato per ID Facebook: 806168218773379 - Email: iljumbopavia@gmail.com
+🔍 [ID Check] Trovati 0 lead esistenti per iljumbopavia@gmail.com in campagna c:120232038820510369
+✅ [ID Check] ID Facebook 806168218773379 NON trovato nei duplicati - Procedo con l'importazione
+✨ [Fresh Start] Processando nuova riga per iljumbopavia@gmail.com con ID Facebook 806168218773379
+❌ [AutoSync] Errore controllo duplicati: TypeError: this.storage.createMarketingLead is not a function
+    at GoogleSheetsAutoSync.syncNow (/home/runner/workspace/server/googleSheetsSync.ts:568:48)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async <anonymous> (/home/runner/workspace/server/googleSheets.ts:40:7)
+12:59:56 PM [express] POST /api/google-sheets/sync-now 200 in 1251ms :: {"success":true,"message":"Si…
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔍 [TENANT MIDDLEWARE] NEW REQUEST
+🔍 [TENANT MIDDLEWARE] Auth header present: true
+🔍 [TENANT MIDDLEWARE] Token extracted: true
+🔍 [TENANT MIDDLEWARE] Request method: GET
+🔍 [TENANT MIDDLEWARE] Request path: /api/google-sheets/configurations
+🔍 [TENANT MIDDLEWARE] Request host: 4aece927-56bf-47c0-9189-e

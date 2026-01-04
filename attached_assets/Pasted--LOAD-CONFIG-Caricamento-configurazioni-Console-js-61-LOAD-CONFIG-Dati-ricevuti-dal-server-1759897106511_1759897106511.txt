@@ -1,0 +1,46 @@
+ [LOAD CONFIG] Caricamento configurazioni...
+Console.js:61 📦 [LOAD CONFIG] Dati ricevuti dal server: {success: true, configurations: Array(1)}
+Console.js:61 ✅ [LOAD CONFIG] Configurazioni mappate: [{…}]
+Console.js:61 📤 [SAVE CONFIG] Dati inviati: {id: '4', name: 'aaa', campaignName: 'campaign-1', sheetId: ' [LOAD CONFIG] Caricamento configurazioni... Conso…DiscreteEvent @ chunk-WERSD76P.js?v=6984a462:5449', sheetRange: 'Foglio1!A1:Z1000', …}
+injected.js:278  POST https://d2a452f3-548b-421e-9010-6b220452af46-00-2pjljvivtayy6.spock.replit.dev/api/google-sheets/configurations 500 (Internal Server Error)
+window.fetch @ Network.js:219
+apply @ injected.js:278
+saveConfiguration @ GoogleSheetsManager.tsx:154
+onClick @ GoogleSheetsManager.tsx:702
+callCallback2 @ chunk-WERSD76P.js?v=6984a462:3674
+invokeGuardedCallbackDev @ chunk-WERSD76P.js?v=6984a462:3699
+invokeGuardedCallback @ chunk-WERSD76P.js?v=6984a462:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-WERSD76P.js?v=6984a462:3736
+executeDispatch @ chunk-WERSD76P.js?v=6984a462:7014
+processDispatchQueueItemsInOrder @ chunk-WERSD76P.js?v=6984a462:7034
+processDispatchQueue @ chunk-WERSD76P.js?v=6984a462:7043
+dispatchEventsForPlugins @ chunk-WERSD76P.js?v=6984a462:7051
+(anonymous) @ chunk-WERSD76P.js?v=6984a462:7174
+batchedUpdates$1 @ chunk-WERSD76P.js?v=6984a462:18913
+batchedUpdates @ chunk-WERSD76P.js?v=6984a462:3579
+dispatchEventForPluginEventSystem @ chunk-WERSD76P.js?v=6984a462:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-WERSD76P.js?v=6984a462:5478
+dispatchEvent @ chunk-WERSD76P.js?v=6984a462:5472
+dispatchDiscreteEvent @ chunk-WERSD76P.js?v=6984a462:5449Understand this error
+Console.js:61 ❌ [SAVE CONFIG] Errore: {error: 'Errore nel salvataggio della configurazione'}
+Mt.forEach.n.<computed> @ Console.js:61
+saveConfiguration @ GoogleSheetsManager.tsx:176
+await in saveConfiguration
+onClick @ GoogleSheetsManager.tsx:702
+callCallback2 @ chunk-WERSD76P.js?v=6984a462:3674
+invokeGuardedCallbackDev @ chunk-WERSD76P.js?v=6984a462:3699
+invokeGuardedCallback @ chunk-WERSD76P.js?v=6984a462:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-WERSD76P.js?v=6984a462:3736
+executeDispatch @ chunk-WERSD76P.js?v=6984a462:7014
+processDispatchQueueItemsInOrder @ chunk-WERSD76P.js?v=6984a462:7034
+processDispatchQueue @ chunk-WERSD76P.js?v=6984a462:7043
+dispatchEventsForPlugins @ chunk-WERSD76P.js?v=6984a462:7051
+(anonymous) @ chunk-WERSD76P.js?v=6984a462:7174
+batchedUpdates$1 @ chunk-WERSD76P.js?v=6984a462:18913
+batchedUpdates @ chunk-WERSD76P.js?v=6984a462:3579
+dispatchEventForPluginEventSystem @ chunk-WERSD76P.js?v=6984a462:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-WERSD76P.js?v=6984a462:5478
+dispatchEvent @ chunk-WERSD76P.js?v=6984a462:5472
+dispatchDiscreteEvent @ chunk-WERSD76P.js?v=6984a462:5449Understand this error
+Console.js:61 ❌ [SAVE CONFIG] Errore salvataggio configurazione: Error: Errore nel salvataggio della configurazione
+    at saveConfiguration (GoogleSheetsManager.tsx:177:15)

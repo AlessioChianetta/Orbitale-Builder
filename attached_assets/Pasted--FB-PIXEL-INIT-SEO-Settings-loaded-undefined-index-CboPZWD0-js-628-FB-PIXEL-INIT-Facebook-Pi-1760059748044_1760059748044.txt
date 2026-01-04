@@ -1,0 +1,655 @@
+ [FB PIXEL INIT] SEO Settings loaded: undefined
+index-CboPZWD0.js:628 🔍 [FB PIXEL INIT] Facebook Pixel ID: undefined
+index-CboPZWD0.js:628 ❌ [FB PIXEL INIT] No Facebook Pixel ID found in settings
+index-CboPZWD0.js:792  GET https://alessiochianetta.it/api/landing-pages/slug/home 404 (Not Found)
+queryFn @ index-CboPZWD0.js:792
+a @ index-CboPZWD0.js:48
+g @ index-CboPZWD0.js:48
+start @ index-CboPZWD0.js:48
+fetch @ index-CboPZWD0.js:48
+ku @ index-CboPZWD0.js:48
+onSubscribe @ index-CboPZWD0.js:48
+subscribe @ index-CboPZWD0.js:48
+(anonymous) @ index-CboPZWD0.js:48
+fP @ index-CboPZWD0.js:38
+Hg @ index-CboPZWD0.js:40
+Lc @ index-CboPZWD0.js:40
+s2 @ index-CboPZWD0.js:40
+_o @ index-CboPZWD0.js:38
+U$ @ index-CboPZWD0.js:40
+Zo @ index-CboPZWD0.js:40
+GP @ index-CboPZWD0.js:40
+C @ index-CboPZWD0.js:25
+A @ index-CboPZWD0.js:25Understand this error
+index-CboPZWD0.js:620 🔍 Initializing Google Analytics with ID: G-2XEWBZ9ZLS
+VM180:6 ✅ Google Analytics configured with ID: G-2XEWBZ9ZLS
+index-CboPZWD0.js:628 🔍 [FB PIXEL INIT] SEO Settings loaded: {googleAnalyticsId: 'G-2XEWBZ9ZLS', googleTagManagerId: 'GT-5NXSBBN', googleSearchConsoleCode: `\x3C!-- Google tag (gtag.js) -->\n\x3Cscript async src="h…());\n\n  gtag('config', 'G-2XEWBZ9ZLS');\n\x3C/script>`, siteName: 'Alessio Chianetta - Metodo Orbitale ', siteDescription: 'Il sistema matematico per raggiungere dai 100.000 …uro di patrimonio personale nei prossimi 2-4 anni', …}
+index-CboPZWD0.js:628 🔍 [FB PIXEL INIT] Facebook Pixel ID: 3139741182854427
+index-CboPZWD0.js:628 ✅ [FB PIXEL INIT] Initializing Facebook Pixel with ID: 3139741182854427
+index-CboPZWD0.js:626 📊 Initializing Facebook Pixel with ID: 3139741182854427
+index-CboPZWD0.js:620 ✅ Google Analytics script loaded successfully
+index-CboPZWD0.js:626 🔍 Facebook Pixel script loaded, initializing...
+index-CboPZWD0.js:792  GET https://alessiochianetta.it/api/pages/home 404 (Not Found)
+queryFn @ index-CboPZWD0.js:792
+a @ index-CboPZWD0.js:48
+g @ index-CboPZWD0.js:48
+start @ index-CboPZWD0.js:48
+fetch @ index-CboPZWD0.js:48
+ku @ index-CboPZWD0.js:48
+onSubscribe @ index-CboPZWD0.js:48
+subscribe @ index-CboPZWD0.js:48
+(anonymous) @ index-CboPZWD0.js:48
+fP @ index-CboPZWD0.js:38
+Hg @ index-CboPZWD0.js:40
+Lc @ index-CboPZWD0.js:40
+s2 @ index-CboPZWD0.js:40
+_o @ index-CboPZWD0.js:38
+U$ @ index-CboPZWD0.js:40
+Zo @ index-CboPZWD0.js:40
+GP @ index-CboPZWD0.js:40
+C @ index-CboPZWD0.js:25
+A @ index-CboPZWD0.js:25Understand this error
+index-CboPZWD0.js:626 ✅ Facebook Pixel initialized with ID: 3139741182854427
+index-CboPZWD0.js:792  GET https://alessiochianetta.it/api/projects/slug/home 404 (Not Found)
+queryFn @ index-CboPZWD0.js:792
+a @ index-CboPZWD0.js:48
+g @ index-CboPZWD0.js:48
+start @ index-CboPZWD0.js:48
+fetch @ index-CboPZWD0.js:48
+ku @ index-CboPZWD0.js:48
+onSubscribe @ index-CboPZWD0.js:48
+subscribe @ index-CboPZWD0.js:48
+(anonymous) @ index-CboPZWD0.js:48
+fP @ index-CboPZWD0.js:38
+Hg @ index-CboPZWD0.js:40
+Lc @ index-CboPZWD0.js:40
+s2 @ index-CboPZWD0.js:40
+_o @ index-CboPZWD0.js:38
+U$ @ index-CboPZWD0.js:40
+Zo @ index-CboPZWD0.js:40
+GP @ index-CboPZWD0.js:40
+C @ index-CboPZWD0.js:25
+A @ index-CboPZWD0.js:25Understand this error
+index-CboPZWD0.js:632 🔍 SEO META DATA per questa pagina:
+index-CboPZWD0.js:632 📄 Title Meta SEO: Alessio Chianetta - Metodo Orbitale - Alessio Chianetta - Metodo Orbitale - Il sistema matematico per la libertà finanziaria
+index-CboPZWD0.js:632 📝 Meta Description SEO: Alessio Chianetta -  Il Metodo "Orbitale LIBERTÀ FINANZIARIA 2K" per Generare €2.000+ di Rendita Passiva al Mese e almeno 100.000 / 500.000 euro di patrimonio
+index-CboPZWD0.js:632 🌐 URL Canonico: https://alessiochianetta.it/home
+index-CboPZWD0.js:632 🖼️ Immagine OG: https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png
+index-CboPZWD0.js:632 
+index-CboPZWD0.js:632 🎯 ANALISI PRIORITÀ SEO:
+index-CboPZWD0.js:632 📄 TITLE: ✅ Specifico della pagina (PRIORITÀ MASSIMA) → "Alessio Chianetta - Metodo Orbitale"
+index-CboPZWD0.js:632 📝 DESCRIPTION: ✅ Specifica della pagina (PRIORITÀ MASSIMA) → "Alessio Chianetta -  Il Metodo "Orbitale LIBERTÀ FINANZIARIA 2K" per Generare €2.000+ di Rendita Passiva al Mese e almeno 100.000 / 500.000 euro di patrimonio"
+index-CboPZWD0.js:632 🖼️ IMMAGINE OG: ✅ Specifica della pagina (PRIORITÀ MASSIMA) → "https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png"
+index-CboPZWD0.js:632 🌐 URL CANONICO: 🌐 Costruito con dominio globale → "https://alessiochianetta.it/home"
+index-CboPZWD0.js:632 
+index-CboPZWD0.js:632 📊 RIEPILOGO SCENARIO:
+index-CboPZWD0.js:632 🎯 SCENARIO: Meta tag specifici configurati → OTTIMIZZAZIONE PERSONALIZZATA ✅
+index-CboPZWD0.js:632 🔍 SEO META DATA per questa pagina:
+index-CboPZWD0.js:632 📄 Title Meta SEO: Alessio Chianetta - Metodo Orbitale - Alessio Chianetta - Metodo Orbitale - Il sistema matematico per la libertà finanziaria
+index-CboPZWD0.js:632 📝 Meta Description SEO: Alessio Chianetta -  Il Metodo "Orbitale LIBERTÀ FINANZIARIA 2K" per Generare €2.000+ di Rendita Passiva al Mese e almeno 100.000 / 500.000 euro di patrimonio
+index-CboPZWD0.js:632 🌐 URL Canonico: https://alessiochianetta.it/home
+index-CboPZWD0.js:632 🖼️ Immagine OG: https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png
+index-CboPZWD0.js:632 
+index-CboPZWD0.js:632 🎯 ANALISI PRIORITÀ SEO:
+index-CboPZWD0.js:632 📄 TITLE: ✅ Specifico della pagina (PRIORITÀ MASSIMA) → "Alessio Chianetta - Metodo Orbitale"
+index-CboPZWD0.js:632 📝 DESCRIPTION: ✅ Specifica della pagina (PRIORITÀ MASSIMA) → "Alessio Chianetta -  Il Metodo "Orbitale LIBERTÀ FINANZIARIA 2K" per Generare €2.000+ di Rendita Passiva al Mese e almeno 100.000 / 500.000 euro di patrimonio"
+index-CboPZWD0.js:632 🖼️ IMMAGINE OG: ✅ Specifica della pagina (PRIORITÀ MASSIMA) → "https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png"
+index-CboPZWD0.js:632 🌐 URL CANONICO: 🌐 Costruito con dominio globale → "https://alessiochianetta.it/home"
+index-CboPZWD0.js:632 
+index-CboPZWD0.js:632 📊 RIEPILOGO SCENARIO:
+index-CboPZWD0.js:632 🎯 SCENARIO: Meta tag specifici configurati → OTTIMIZZAZIONE PERSONALIZZATA ✅
+index-CboPZWD0.js:632 ✅ VERIFICA DOM - Valori effettivamente applicati:
+index-CboPZWD0.js:632 📄 Title nel DOM: Alessio Chianetta - Metodo Orbitale - Alessio Chianetta - Metodo Orbitale - Il sistema matematico per la libertà finanziaria
+index-CboPZWD0.js:632 📝 Description nel DOM: Alessio Chianetta -  Il Metodo "Orbitale LIBERTÀ FINANZIARIA 2K" per Generare €2.000+ di Rendita Passiva al Mese e almeno 100.000 / 500.000 euro di patrimonio
+index-CboPZWD0.js:632 🌐 Canonical nel DOM: https://alessiochianetta.it/home
+index-CboPZWD0.js:632 🖼️ OG Image nel DOM: https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png
+index-CboPZWD0.js:632 ✅ Title SEO applicato correttamente!
+index-CboPZWD0.js:632 ✅ Description SEO applicata correttamente!
+index-CboPZWD0.js:632 ✅ VERIFICA DOM - Valori effettivamente applicati:
+index-CboPZWD0.js:632 📄 Title nel DOM: Alessio Chianetta - Metodo Orbitale - Alessio Chianetta - Metodo Orbitale - Il sistema matematico per la libertà finanziaria
+index-CboPZWD0.js:632 📝 Description nel DOM: Alessio Chianetta -  Il Metodo "Orbitale LIBERTÀ FINANZIARIA 2K" per Generare €2.000+ di Rendita Passiva al Mese e almeno 100.000 / 500.000 euro di patrimonio
+index-CboPZWD0.js:632 🌐 Canonical nel DOM: https://alessiochianetta.it/home
+index-CboPZWD0.js:632 🖼️ OG Image nel DOM: https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png
+index-CboPZWD0.js:632 ✅ Title SEO applicato correttamente!
+index-CboPZWD0.js:632 ✅ Description SEO applicata correttamente!
+index-CboPZWD0.js:626 📊 Tracking page view: /chi-siamo with GA ID: G-2XEWBZ9ZLS
+index-CboPZWD0.js:792  GET https://alessiochianetta.it/api/pages/chi-siamo 404 (Not Found)
+queryFn @ index-CboPZWD0.js:792
+a @ index-CboPZWD0.js:48
+g @ index-CboPZWD0.js:48
+start @ index-CboPZWD0.js:48
+fetch @ index-CboPZWD0.js:48
+ku @ index-CboPZWD0.js:48
+onSubscribe @ index-CboPZWD0.js:48
+subscribe @ index-CboPZWD0.js:48
+(anonymous) @ index-CboPZWD0.js:48
+fP @ index-CboPZWD0.js:38
+Hg @ index-CboPZWD0.js:40
+Lc @ index-CboPZWD0.js:40
+U$ @ index-CboPZWD0.js:40
+Zo @ index-CboPZWD0.js:40
+s2 @ index-CboPZWD0.js:40
+_o @ index-CboPZWD0.js:38
+(anonymous) @ index-CboPZWD0.js:40Understand this error
+index-CboPZWD0.js:792  GET https://alessiochianetta.it/api/landing-pages/slug/chi-siamo 404 (Not Found)
+queryFn @ index-CboPZWD0.js:792
+a @ index-CboPZWD0.js:48
+g @ index-CboPZWD0.js:48
+start @ index-CboPZWD0.js:48
+fetch @ index-CboPZWD0.js:48
+ku @ index-CboPZWD0.js:48
+setOptions @ index-CboPZWD0.js:48
+(anonymous) @ index-CboPZWD0.js:48
+Hg @ index-CboPZWD0.js:40
+Lc @ index-CboPZWD0.js:40
+U$ @ index-CboPZWD0.js:40
+Zo @ index-CboPZWD0.js:40
+s2 @ index-CboPZWD0.js:40
+_o @ index-CboPZWD0.js:38
+(anonymous) @ index-CboPZWD0.js:40
+setTimeout
+s @ index-CboPZWD0.js:48
+o @ index-CboPZWD0.js:48
+batch @ index-CboPZWD0.js:48
+Zs @ index-CboPZWD0.js:48
+setData @ index-CboPZWD0.js:48
+onSuccess @ index-CboPZWD0.js:48
+m @ index-CboPZWD0.js:48
+Promise.then
+g @ index-CboPZWD0.js:48
+start @ index-CboPZWD0.js:48
+fetch @ index-CboPZWD0.js:48
+ku @ index-CboPZWD0.js:48
+onSubscribe @ index-CboPZWD0.js:48
+subscribe @ index-CboPZWD0.js:48
+(anonymous) @ index-CboPZWD0.js:48
+fP @ index-CboPZWD0.js:38
+Hg @ index-CboPZWD0.js:40
+Lc @ index-CboPZWD0.js:40
+U$ @ index-CboPZWD0.js:40
+Zo @ index-CboPZWD0.js:40
+s2 @ index-CboPZWD0.js:40
+_o @ index-CboPZWD0.js:38
+(anonymous) @ index-CboPZWD0.js:40Understand this error
+index-CboPZWD0.js:632 🔍 SEO META DATA per questa pagina:
+index-CboPZWD0.js:632 📄 Title Meta SEO: Alessio Chianetta, Metodo ORBITALE: Chi Siamo e Missione - Alessio Chianetta - Metodo Orbitale - Il sistema matematico per la libertà finanziaria
+index-CboPZWD0.js:632 📝 Meta Description SEO: Chi è Alessio Chianetta? Scopri la logica e la missione dietro il Metodo ORBITALE: la formula scientifica per la tua libertà finanziaria e patrimonio 100k-500k€
+index-CboPZWD0.js:632 🌐 URL Canonico: https://alessiochianetta.it/chi-siamo
+index-CboPZWD0.js:632 🖼️ Immagine OG: https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png
+index-CboPZWD0.js:632 
+index-CboPZWD0.js:632 🎯 ANALISI PRIORITÀ SEO:
+index-CboPZWD0.js:632 📄 TITLE: ✅ Specifico della pagina (PRIORITÀ MASSIMA) → "Alessio Chianetta, Metodo ORBITALE: Chi Siamo e Missione"
+index-CboPZWD0.js:632 📝 DESCRIPTION: ✅ Specifica della pagina (PRIORITÀ MASSIMA) → "Chi è Alessio Chianetta? Scopri la logica e la missione dietro il Metodo ORBITALE: la formula scientifica per la tua libertà finanziaria e patrimonio 100k-500k€"
+index-CboPZWD0.js:632 🖼️ IMMAGINE OG: 🌐 Impostazioni globali SEO (PRIORITÀ MEDIA) → "https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png"
+index-CboPZWD0.js:632 🌐 URL CANONICO: 🌐 Costruito con dominio globale → "https://alessiochianetta.it/chi-siamo"
+index-CboPZWD0.js:632 
+index-CboPZWD0.js:632 📊 RIEPILOGO SCENARIO:
+index-CboPZWD0.js:632 🎯 SCENARIO: Meta tag specifici configurati → OTTIMIZZAZIONE PERSONALIZZATA ✅
+index-CboPZWD0.js:632 ✅ VERIFICA DOM - Valori effettivamente applicati:
+index-CboPZWD0.js:632 📄 Title nel DOM: Alessio Chianetta, Metodo ORBITALE: Chi Siamo e Missione - Alessio Chianetta - Metodo Orbitale - Il sistema matematico per la libertà finanziaria
+index-CboPZWD0.js:632 📝 Description nel DOM: Chi è Alessio Chianetta? Scopri la logica e la missione dietro il Metodo ORBITALE: la formula scientifica per la tua libertà finanziaria e patrimonio 100k-500k€
+index-CboPZWD0.js:632 🌐 Canonical nel DOM: https://alessiochianetta.it/chi-siamo
+index-CboPZWD0.js:632 🖼️ OG Image nel DOM: https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png
+index-CboPZWD0.js:632 ✅ Title SEO applicato correttamente!
+index-CboPZWD0.js:632 ✅ Description SEO applicata correttamente!
+index-CboPZWD0.js:626 📊 Tracking page view: /serviziale with GA ID: G-2XEWBZ9ZLS
+index-CboPZWD0.js:792  GET https://alessiochianetta.it/api/landing-pages/slug/serviziale 404 (Not Found)
+queryFn @ index-CboPZWD0.js:792
+a @ index-CboPZWD0.js:48
+g @ index-CboPZWD0.js:48
+start @ index-CboPZWD0.js:48
+fetch @ index-CboPZWD0.js:48
+ku @ index-CboPZWD0.js:48
+onSubscribe @ index-CboPZWD0.js:48
+subscribe @ index-CboPZWD0.js:48
+(anonymous) @ index-CboPZWD0.js:48
+fP @ index-CboPZWD0.js:38
+Hg @ index-CboPZWD0.js:40
+Lc @ index-CboPZWD0.js:40
+U$ @ index-CboPZWD0.js:40
+Zo @ index-CboPZWD0.js:40
+s2 @ index-CboPZWD0.js:40
+_o @ index-CboPZWD0.js:38
+(anonymous) @ index-CboPZWD0.js:40Understand this error
+index-CboPZWD0.js:792  GET https://alessiochianetta.it/api/pages/serviziale 404 (Not Found)
+queryFn @ index-CboPZWD0.js:792
+a @ index-CboPZWD0.js:48
+g @ index-CboPZWD0.js:48
+start @ index-CboPZWD0.js:48
+fetch @ index-CboPZWD0.js:48
+ku @ index-CboPZWD0.js:48
+onSubscribe @ index-CboPZWD0.js:48
+subscribe @ index-CboPZWD0.js:48
+(anonymous) @ index-CboPZWD0.js:48
+fP @ index-CboPZWD0.js:38
+Hg @ index-CboPZWD0.js:40
+Lc @ index-CboPZWD0.js:40
+U$ @ index-CboPZWD0.js:40
+Zo @ index-CboPZWD0.js:40
+s2 @ index-CboPZWD0.js:40
+_o @ index-CboPZWD0.js:38
+(anonymous) @ index-CboPZWD0.js:40Understand this error
+index-CboPZWD0.js:792  GET https://alessiochianetta.it/api/projects/slug/serviziale 404 (Not Found)
+queryFn @ index-CboPZWD0.js:792
+a @ index-CboPZWD0.js:48
+g @ index-CboPZWD0.js:48
+start @ index-CboPZWD0.js:48
+fetch @ index-CboPZWD0.js:48
+ku @ index-CboPZWD0.js:48
+onSubscribe @ index-CboPZWD0.js:48
+subscribe @ index-CboPZWD0.js:48
+(anonymous) @ index-CboPZWD0.js:48
+fP @ index-CboPZWD0.js:38
+Hg @ index-CboPZWD0.js:40
+Lc @ index-CboPZWD0.js:40
+U$ @ index-CboPZWD0.js:40
+Zo @ index-CboPZWD0.js:40
+s2 @ index-CboPZWD0.js:40
+_o @ index-CboPZWD0.js:38
+(anonymous) @ index-CboPZWD0.js:40Understand this error
+index-CboPZWD0.js:632 🔍 SEO META DATA per questa pagina:
+index-CboPZWD0.js:632 📄 Title Meta SEO: Servizi Metodo ORBITALE: Rendita Passiva e Patrimonio - Alessio Chianetta - Metodo Orbitale - Il sistema matematico per la libertà finanziaria
+index-CboPZWD0.js:632 📝 Meta Description SEO: Il percorso completo Metodo ORBITALE: 4 fasi (Liberazione, Accumulo, Moltiplicazione, Stabilità) per costruire un patrimonio e generare una rendita di 2.000€/M
+index-CboPZWD0.js:632 🌐 URL Canonico: https://alessiochianetta.it/serviziale
+index-CboPZWD0.js:632 🖼️ Immagine OG: https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png
+index-CboPZWD0.js:632 
+index-CboPZWD0.js:632 🎯 ANALISI PRIORITÀ SEO:
+index-CboPZWD0.js:632 📄 TITLE: ✅ Specifico della pagina (PRIORITÀ MASSIMA) → "Servizi Metodo ORBITALE: Rendita Passiva e Patrimonio"
+index-CboPZWD0.js:632 📝 DESCRIPTION: ✅ Specifica della pagina (PRIORITÀ MASSIMA) → "Il percorso completo Metodo ORBITALE: 4 fasi (Liberazione, Accumulo, Moltiplicazione, Stabilità) per costruire un patrimonio e generare una rendita di 2.000€/M"
+index-CboPZWD0.js:632 🖼️ IMMAGINE OG: 🌐 Impostazioni globali SEO (PRIORITÀ MEDIA) → "https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png"
+index-CboPZWD0.js:632 🌐 URL CANONICO: 🌐 Costruito con dominio globale → "https://alessiochianetta.it/serviziale"
+index-CboPZWD0.js:632 
+index-CboPZWD0.js:632 📊 RIEPILOGO SCENARIO:
+index-CboPZWD0.js:632 🎯 SCENARIO: Meta tag specifici configurati → OTTIMIZZAZIONE PERSONALIZZATA ✅
+index-CboPZWD0.js:632 🔍 SEO META DATA per questa pagina:
+index-CboPZWD0.js:632 📄 Title Meta SEO: Servizi Metodo ORBITALE: Rendita Passiva e Patrimonio - Alessio Chianetta - Metodo Orbitale - Il sistema matematico per la libertà finanziaria
+index-CboPZWD0.js:632 📝 Meta Description SEO: Il percorso completo Metodo ORBITALE: 4 fasi (Liberazione, Accumulo, Moltiplicazione, Stabilità) per costruire un patrimonio e generare una rendita di 2.000€/M
+index-CboPZWD0.js:632 🌐 URL Canonico: https://alessiochianetta.it/serviziale
+index-CboPZWD0.js:632 🖼️ Immagine OG: https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png
+index-CboPZWD0.js:632 
+index-CboPZWD0.js:632 🎯 ANALISI PRIORITÀ SEO:
+index-CboPZWD0.js:632 📄 TITLE: ✅ Specifico della pagina (PRIORITÀ MASSIMA) → "Servizi Metodo ORBITALE: Rendita Passiva e Patrimonio"
+index-CboPZWD0.js:632 📝 DESCRIPTION: ✅ Specifica della pagina (PRIORITÀ MASSIMA) → "Il percorso completo Metodo ORBITALE: 4 fasi (Liberazione, Accumulo, Moltiplicazione, Stabilità) per costruire un patrimonio e generare una rendita di 2.000€/M"
+index-CboPZWD0.js:632 🖼️ IMMAGINE OG: 🌐 Impostazioni globali SEO (PRIORITÀ MEDIA) → "https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png"
+index-CboPZWD0.js:632 🌐 URL CANONICO: 🌐 Costruito con dominio globale → "https://alessiochianetta.it/serviziale"
+index-CboPZWD0.js:632 
+index-CboPZWD0.js:632 📊 RIEPILOGO SCENARIO:
+index-CboPZWD0.js:632 🎯 SCENARIO: Meta tag specifici configurati → OTTIMIZZAZIONE PERSONALIZZATA ✅
+index-CboPZWD0.js:632 ✅ VERIFICA DOM - Valori effettivamente applicati:
+index-CboPZWD0.js:632 📄 Title nel DOM: Servizi Metodo ORBITALE: Rendita Passiva e Patrimonio - Alessio Chianetta - Metodo Orbitale - Il sistema matematico per la libertà finanziaria
+index-CboPZWD0.js:632 📝 Description nel DOM: Il percorso completo Metodo ORBITALE: 4 fasi (Liberazione, Accumulo, Moltiplicazione, Stabilità) per costruire un patrimonio e generare una rendita di 2.000€/M
+index-CboPZWD0.js:632 🌐 Canonical nel DOM: https://alessiochianetta.it/serviziale
+index-CboPZWD0.js:632 🖼️ OG Image nel DOM: https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png
+index-CboPZWD0.js:632 ✅ Title SEO applicato correttamente!
+index-CboPZWD0.js:632 ✅ Description SEO applicata correttamente!
+index-CboPZWD0.js:632 ✅ VERIFICA DOM - Valori effettivamente applicati:
+index-CboPZWD0.js:632 📄 Title nel DOM: Servizi Metodo ORBITALE: Rendita Passiva e Patrimonio - Alessio Chianetta - Metodo Orbitale - Il sistema matematico per la libertà finanziaria
+index-CboPZWD0.js:632 📝 Description nel DOM: Il percorso completo Metodo ORBITALE: 4 fasi (Liberazione, Accumulo, Moltiplicazione, Stabilità) per costruire un patrimonio e generare una rendita di 2.000€/M
+index-CboPZWD0.js:632 🌐 Canonical nel DOM: https://alessiochianetta.it/serviziale
+index-CboPZWD0.js:632 🖼️ OG Image nel DOM: https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png
+index-CboPZWD0.js:632 ✅ Title SEO applicato correttamente!
+index-CboPZWD0.js:632 ✅ Description SEO applicata correttamente!
+index-CboPZWD0.js:626 📊 Tracking page view: /progetti-ale with GA ID: G-2XEWBZ9ZLS
+index-CboPZWD0.js:792  GET https://alessiochianetta.it/api/landing-pages/slug/progetti-ale 404 (Not Found)
+queryFn @ index-CboPZWD0.js:792
+a @ index-CboPZWD0.js:48
+g @ index-CboPZWD0.js:48
+start @ index-CboPZWD0.js:48
+fetch @ index-CboPZWD0.js:48
+ku @ index-CboPZWD0.js:48
+setOptions @ index-CboPZWD0.js:48
+(anonymous) @ index-CboPZWD0.js:48
+Hg @ index-CboPZWD0.js:40
+Lc @ index-CboPZWD0.js:40
+U$ @ index-CboPZWD0.js:40
+Zo @ index-CboPZWD0.js:40
+s2 @ index-CboPZWD0.js:40
+_o @ index-CboPZWD0.js:38
+(anonymous) @ index-CboPZWD0.js:40Understand this error
+index-CboPZWD0.js:792  GET https://alessiochianetta.it/api/pages/progetti-ale 404 (Not Found)
+queryFn @ index-CboPZWD0.js:792
+a @ index-CboPZWD0.js:48
+g @ index-CboPZWD0.js:48
+start @ index-CboPZWD0.js:48
+fetch @ index-CboPZWD0.js:48
+ku @ index-CboPZWD0.js:48
+setOptions @ index-CboPZWD0.js:48
+(anonymous) @ index-CboPZWD0.js:48
+Hg @ index-CboPZWD0.js:40
+Lc @ index-CboPZWD0.js:40
+U$ @ index-CboPZWD0.js:40
+Zo @ index-CboPZWD0.js:40
+s2 @ index-CboPZWD0.js:40
+_o @ index-CboPZWD0.js:38
+(anonymous) @ index-CboPZWD0.js:40Understand this error
+index-CboPZWD0.js:792  GET https://alessiochianetta.it/api/projects/slug/progetti-ale 404 (Not Found)
+queryFn @ index-CboPZWD0.js:792
+a @ index-CboPZWD0.js:48
+g @ index-CboPZWD0.js:48
+start @ index-CboPZWD0.js:48
+fetch @ index-CboPZWD0.js:48
+ku @ index-CboPZWD0.js:48
+setOptions @ index-CboPZWD0.js:48
+(anonymous) @ index-CboPZWD0.js:48
+Hg @ index-CboPZWD0.js:40
+Lc @ index-CboPZWD0.js:40
+U$ @ index-CboPZWD0.js:40
+Zo @ index-CboPZWD0.js:40
+s2 @ index-CboPZWD0.js:40
+_o @ index-CboPZWD0.js:38
+(anonymous) @ index-CboPZWD0.js:40Understand this error
+index-CboPZWD0.js:632 🔍 SEO META DATA per questa pagina:
+index-CboPZWD0.js:632 📄 Title Meta SEO: Risultati Metodo ORBITALE: Clienti & Testimonianze - Alessio Chianetta - Metodo Orbitale - Il sistema matematico per la libertà finanziaria
+index-CboPZWD0.js:632 📝 Meta Description SEO: 600+ imprenditori e professionisti hanno costruito il loro patrimonio. Leggi le storie di successo e i risultati ottenuti con il Metodo ORBITALE in 2-4 anni.
+index-CboPZWD0.js:632 🌐 URL Canonico: https://alessiochianetta.it/progetti-ale
+index-CboPZWD0.js:632 🖼️ Immagine OG: https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png
+index-CboPZWD0.js:632 
+index-CboPZWD0.js:632 🎯 ANALISI PRIORITÀ SEO:
+index-CboPZWD0.js:632 📄 TITLE: ✅ Specifico della pagina (PRIORITÀ MASSIMA) → "Risultati Metodo ORBITALE: Clienti & Testimonianze"
+index-CboPZWD0.js:632 📝 DESCRIPTION: ✅ Specifica della pagina (PRIORITÀ MASSIMA) → "600+ imprenditori e professionisti hanno costruito il loro patrimonio. Leggi le storie di successo e i risultati ottenuti con il Metodo ORBITALE in 2-4 anni."
+index-CboPZWD0.js:632 🖼️ IMMAGINE OG: 🌐 Impostazioni globali SEO (PRIORITÀ MEDIA) → "https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png"
+index-CboPZWD0.js:632 🌐 URL CANONICO: 🌐 Costruito con dominio globale → "https://alessiochianetta.it/progetti-ale"
+index-CboPZWD0.js:632 
+index-CboPZWD0.js:632 📊 RIEPILOGO SCENARIO:
+index-CboPZWD0.js:632 🎯 SCENARIO: Meta tag specifici configurati → OTTIMIZZAZIONE PERSONALIZZATA ✅
+index-CboPZWD0.js:632 🔍 SEO META DATA per questa pagina:
+index-CboPZWD0.js:632 📄 Title Meta SEO: Risultati Metodo ORBITALE: Clienti & Testimonianze - Alessio Chianetta - Metodo Orbitale - Il sistema matematico per la libertà finanziaria
+index-CboPZWD0.js:632 📝 Meta Description SEO: 600+ imprenditori e professionisti hanno costruito il loro patrimonio. Leggi le storie di successo e i risultati ottenuti con il Metodo ORBITALE in 2-4 anni.
+index-CboPZWD0.js:632 🌐 URL Canonico: https://alessiochianetta.it/progetti-ale
+index-CboPZWD0.js:632 🖼️ Immagine OG: https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png
+index-CboPZWD0.js:632 
+index-CboPZWD0.js:632 🎯 ANALISI PRIORITÀ SEO:
+index-CboPZWD0.js:632 📄 TITLE: ✅ Specifico della pagina (PRIORITÀ MASSIMA) → "Risultati Metodo ORBITALE: Clienti & Testimonianze"
+index-CboPZWD0.js:632 📝 DESCRIPTION: ✅ Specifica della pagina (PRIORITÀ MASSIMA) → "600+ imprenditori e professionisti hanno costruito il loro patrimonio. Leggi le storie di successo e i risultati ottenuti con il Metodo ORBITALE in 2-4 anni."
+index-CboPZWD0.js:632 🖼️ IMMAGINE OG: 🌐 Impostazioni globali SEO (PRIORITÀ MEDIA) → "https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png"
+index-CboPZWD0.js:632 🌐 URL CANONICO: 🌐 Costruito con dominio globale → "https://alessiochianetta.it/progetti-ale"
+index-CboPZWD0.js:632 
+index-CboPZWD0.js:632 📊 RIEPILOGO SCENARIO:
+index-CboPZWD0.js:632 🎯 SCENARIO: Meta tag specifici configurati → OTTIMIZZAZIONE PERSONALIZZATA ✅
+index-CboPZWD0.js:632 ✅ VERIFICA DOM - Valori effettivamente applicati:
+index-CboPZWD0.js:632 📄 Title nel DOM: Risultati Metodo ORBITALE: Clienti & Testimonianze - Alessio Chianetta - Metodo Orbitale - Il sistema matematico per la libertà finanziaria
+index-CboPZWD0.js:632 📝 Description nel DOM: 600+ imprenditori e professionisti hanno costruito il loro patrimonio. Leggi le storie di successo e i risultati ottenuti con il Metodo ORBITALE in 2-4 anni.
+index-CboPZWD0.js:632 🌐 Canonical nel DOM: https://alessiochianetta.it/progetti-ale
+index-CboPZWD0.js:632 🖼️ OG Image nel DOM: https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png
+index-CboPZWD0.js:632 ✅ Title SEO applicato correttamente!
+index-CboPZWD0.js:632 ✅ Description SEO applicata correttamente!
+index-CboPZWD0.js:632 ✅ VERIFICA DOM - Valori effettivamente applicati:
+index-CboPZWD0.js:632 📄 Title nel DOM: Risultati Metodo ORBITALE: Clienti & Testimonianze - Alessio Chianetta - Metodo Orbitale - Il sistema matematico per la libertà finanziaria
+index-CboPZWD0.js:632 📝 Description nel DOM: 600+ imprenditori e professionisti hanno costruito il loro patrimonio. Leggi le storie di successo e i risultati ottenuti con il Metodo ORBITALE in 2-4 anni.
+index-CboPZWD0.js:632 🌐 Canonical nel DOM: https://alessiochianetta.it/progetti-ale
+index-CboPZWD0.js:632 🖼️ OG Image nel DOM: https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png
+index-CboPZWD0.js:632 ✅ Title SEO applicato correttamente!
+index-CboPZWD0.js:632 ✅ Description SEO applicata correttamente!
+index-CboPZWD0.js:626 📊 Tracking page view: /blog-ale with GA ID: G-2XEWBZ9ZLS
+index-CboPZWD0.js:792  GET https://alessiochianetta.it/api/pages/blog-ale 404 (Not Found)
+queryFn @ index-CboPZWD0.js:792
+a @ index-CboPZWD0.js:48
+g @ index-CboPZWD0.js:48
+start @ index-CboPZWD0.js:48
+fetch @ index-CboPZWD0.js:48
+ku @ index-CboPZWD0.js:48
+setOptions @ index-CboPZWD0.js:48
+(anonymous) @ index-CboPZWD0.js:48
+Hg @ index-CboPZWD0.js:40
+Lc @ index-CboPZWD0.js:40
+U$ @ index-CboPZWD0.js:40
+Zo @ index-CboPZWD0.js:40
+s2 @ index-CboPZWD0.js:40
+_o @ index-CboPZWD0.js:38
+(anonymous) @ index-CboPZWD0.js:40Understand this error
+index-CboPZWD0.js:792  GET https://alessiochianetta.it/api/landing-pages/slug/blog-ale 404 (Not Found)
+queryFn @ index-CboPZWD0.js:792
+a @ index-CboPZWD0.js:48
+g @ index-CboPZWD0.js:48
+start @ index-CboPZWD0.js:48
+fetch @ index-CboPZWD0.js:48
+ku @ index-CboPZWD0.js:48
+setOptions @ index-CboPZWD0.js:48
+(anonymous) @ index-CboPZWD0.js:48
+Hg @ index-CboPZWD0.js:40
+Lc @ index-CboPZWD0.js:40
+U$ @ index-CboPZWD0.js:40
+Zo @ index-CboPZWD0.js:40
+s2 @ index-CboPZWD0.js:40
+_o @ index-CboPZWD0.js:38
+(anonymous) @ index-CboPZWD0.js:40Understand this error
+index-CboPZWD0.js:792  GET https://alessiochianetta.it/api/projects/slug/blog-ale 404 (Not Found)
+queryFn @ index-CboPZWD0.js:792
+a @ index-CboPZWD0.js:48
+g @ index-CboPZWD0.js:48
+start @ index-CboPZWD0.js:48
+fetch @ index-CboPZWD0.js:48
+ku @ index-CboPZWD0.js:48
+setOptions @ index-CboPZWD0.js:48
+(anonymous) @ index-CboPZWD0.js:48
+Hg @ index-CboPZWD0.js:40
+Lc @ index-CboPZWD0.js:40
+U$ @ index-CboPZWD0.js:40
+Zo @ index-CboPZWD0.js:40
+s2 @ index-CboPZWD0.js:40
+_o @ index-CboPZWD0.js:38
+(anonymous) @ index-CboPZWD0.js:40Understand this error
+index-CboPZWD0.js:632 🔍 SEO META DATA per questa pagina:
+index-CboPZWD0.js:632 📄 Title Meta SEO: Blog Finanziario: Strategie Rendita Passiva - Alessio Chianetta - Metodo Orbitale - Il sistema matematico per la libertà finanziaria
+index-CboPZWD0.js:632 📝 Meta Description SEO: Articoli e approfondimenti sul Metodo ORBITALE, gestione debiti (Effetto Valanga), investimenti semplici (ETF) e strategie per costruire un patrimonio personale
+index-CboPZWD0.js:632 🌐 URL Canonico: https://alessiochianetta.it/blog-ale
+index-CboPZWD0.js:632 🖼️ Immagine OG: https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png
+index-CboPZWD0.js:632 
+index-CboPZWD0.js:632 🎯 ANALISI PRIORITÀ SEO:
+index-CboPZWD0.js:632 📄 TITLE: ✅ Specifico della pagina (PRIORITÀ MASSIMA) → "Blog Finanziario: Strategie Rendita Passiva"
+index-CboPZWD0.js:632 📝 DESCRIPTION: ✅ Specifica della pagina (PRIORITÀ MASSIMA) → "Articoli e approfondimenti sul Metodo ORBITALE, gestione debiti (Effetto Valanga), investimenti semplici (ETF) e strategie per costruire un patrimonio personale"
+index-CboPZWD0.js:632 🖼️ IMMAGINE OG: 🌐 Impostazioni globali SEO (PRIORITÀ MEDIA) → "https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png"
+index-CboPZWD0.js:632 🌐 URL CANONICO: 🌐 Costruito con dominio globale → "https://alessiochianetta.it/blog-ale"
+index-CboPZWD0.js:632 
+index-CboPZWD0.js:632 📊 RIEPILOGO SCENARIO:
+index-CboPZWD0.js:632 🎯 SCENARIO: Meta tag specifici configurati → OTTIMIZZAZIONE PERSONALIZZATA ✅
+index-CboPZWD0.js:632 🔍 SEO META DATA per questa pagina:
+index-CboPZWD0.js:632 📄 Title Meta SEO: Blog Finanziario: Strategie Rendita Passiva - Alessio Chianetta - Metodo Orbitale - Il sistema matematico per la libertà finanziaria
+index-CboPZWD0.js:632 📝 Meta Description SEO: Articoli e approfondimenti sul Metodo ORBITALE, gestione debiti (Effetto Valanga), investimenti semplici (ETF) e strategie per costruire un patrimonio personale
+index-CboPZWD0.js:632 🌐 URL Canonico: https://alessiochianetta.it/blog-ale
+index-CboPZWD0.js:632 🖼️ Immagine OG: https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png
+index-CboPZWD0.js:632 
+index-CboPZWD0.js:632 🎯 ANALISI PRIORITÀ SEO:
+index-CboPZWD0.js:632 📄 TITLE: ✅ Specifico della pagina (PRIORITÀ MASSIMA) → "Blog Finanziario: Strategie Rendita Passiva"
+index-CboPZWD0.js:632 📝 DESCRIPTION: ✅ Specifica della pagina (PRIORITÀ MASSIMA) → "Articoli e approfondimenti sul Metodo ORBITALE, gestione debiti (Effetto Valanga), investimenti semplici (ETF) e strategie per costruire un patrimonio personale"
+index-CboPZWD0.js:632 🖼️ IMMAGINE OG: 🌐 Impostazioni globali SEO (PRIORITÀ MEDIA) → "https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png"
+index-CboPZWD0.js:632 🌐 URL CANONICO: 🌐 Costruito con dominio globale → "https://alessiochianetta.it/blog-ale"
+index-CboPZWD0.js:632 
+index-CboPZWD0.js:632 📊 RIEPILOGO SCENARIO:
+index-CboPZWD0.js:632 🎯 SCENARIO: Meta tag specifici configurati → OTTIMIZZAZIONE PERSONALIZZATA ✅
+index-CboPZWD0.js:632 ✅ VERIFICA DOM - Valori effettivamente applicati:
+index-CboPZWD0.js:632 📄 Title nel DOM: Blog Finanziario: Strategie Rendita Passiva - Alessio Chianetta - Metodo Orbitale - Il sistema matematico per la libertà finanziaria
+index-CboPZWD0.js:632 📝 Description nel DOM: Articoli e approfondimenti sul Metodo ORBITALE, gestione debiti (Effetto Valanga), investimenti semplici (ETF) e strategie per costruire un patrimonio personale
+index-CboPZWD0.js:632 🌐 Canonical nel DOM: https://alessiochianetta.it/blog-ale
+index-CboPZWD0.js:632 🖼️ OG Image nel DOM: https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png
+index-CboPZWD0.js:632 ✅ Title SEO applicato correttamente!
+index-CboPZWD0.js:632 ✅ Description SEO applicata correttamente!
+index-CboPZWD0.js:632 ✅ VERIFICA DOM - Valori effettivamente applicati:
+index-CboPZWD0.js:632 📄 Title nel DOM: Blog Finanziario: Strategie Rendita Passiva - Alessio Chianetta - Metodo Orbitale - Il sistema matematico per la libertà finanziaria
+index-CboPZWD0.js:632 📝 Description nel DOM: Articoli e approfondimenti sul Metodo ORBITALE, gestione debiti (Effetto Valanga), investimenti semplici (ETF) e strategie per costruire un patrimonio personale
+index-CboPZWD0.js:632 🌐 Canonical nel DOM: https://alessiochianetta.it/blog-ale
+index-CboPZWD0.js:632 🖼️ OG Image nel DOM: https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png
+index-CboPZWD0.js:632 ✅ Title SEO applicato correttamente!
+index-CboPZWD0.js:632 ✅ Description SEO applicata correttamente!
+index-CboPZWD0.js:626 📊 Tracking page view: /contatti-ale with GA ID: G-2XEWBZ9ZLS
+index-CboPZWD0.js:792  GET https://alessiochianetta.it/api/landing-pages/slug/contatti-ale 404 (Not Found)
+queryFn @ index-CboPZWD0.js:792
+a @ index-CboPZWD0.js:48
+g @ index-CboPZWD0.js:48
+start @ index-CboPZWD0.js:48
+fetch @ index-CboPZWD0.js:48
+ku @ index-CboPZWD0.js:48
+setOptions @ index-CboPZWD0.js:48
+(anonymous) @ index-CboPZWD0.js:48
+Hg @ index-CboPZWD0.js:40
+Lc @ index-CboPZWD0.js:40
+U$ @ index-CboPZWD0.js:40
+Zo @ index-CboPZWD0.js:40
+s2 @ index-CboPZWD0.js:40
+_o @ index-CboPZWD0.js:38
+(anonymous) @ index-CboPZWD0.js:40Understand this error
+index-CboPZWD0.js:792  GET https://alessiochianetta.it/api/pages/contatti-ale 404 (Not Found)
+queryFn @ index-CboPZWD0.js:792
+a @ index-CboPZWD0.js:48
+g @ index-CboPZWD0.js:48
+start @ index-CboPZWD0.js:48
+fetch @ index-CboPZWD0.js:48
+ku @ index-CboPZWD0.js:48
+setOptions @ index-CboPZWD0.js:48
+(anonymous) @ index-CboPZWD0.js:48
+Hg @ index-CboPZWD0.js:40
+Lc @ index-CboPZWD0.js:40
+U$ @ index-CboPZWD0.js:40
+Zo @ index-CboPZWD0.js:40
+s2 @ index-CboPZWD0.js:40
+_o @ index-CboPZWD0.js:38
+(anonymous) @ index-CboPZWD0.js:40Understand this error
+index-CboPZWD0.js:792  GET https://alessiochianetta.it/api/projects/slug/contatti-ale 404 (Not Found)
+queryFn @ index-CboPZWD0.js:792
+a @ index-CboPZWD0.js:48
+g @ index-CboPZWD0.js:48
+start @ index-CboPZWD0.js:48
+fetch @ index-CboPZWD0.js:48
+ku @ index-CboPZWD0.js:48
+setOptions @ index-CboPZWD0.js:48
+(anonymous) @ index-CboPZWD0.js:48
+Hg @ index-CboPZWD0.js:40
+Lc @ index-CboPZWD0.js:40
+U$ @ index-CboPZWD0.js:40
+Zo @ index-CboPZWD0.js:40
+s2 @ index-CboPZWD0.js:40
+_o @ index-CboPZWD0.js:38
+(anonymous) @ index-CboPZWD0.js:40Understand this error
+index-CboPZWD0.js:632 🔍 SEO META DATA per questa pagina:
+index-CboPZWD0.js:632 📄 Title Meta SEO: Contatti & Candidatura Percorso Metodo ORBITALE - Alessio Chianetta - Metodo Orbitale - Il sistema matematico per la libertà finanziaria
+index-CboPZWD0.js:632 📝 Meta Description SEO: Vuoi costruire un patrimonio 100k-500k€? Candidati ora per una sessione strategica gratuita. Solo per professionisti determinati e pronti all'impegno.
+index-CboPZWD0.js:632 🌐 URL Canonico: https://alessiochianetta.it/contatti-ale
+index-CboPZWD0.js:632 🖼️ Immagine OG: https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png
+index-CboPZWD0.js:632 
+index-CboPZWD0.js:632 🎯 ANALISI PRIORITÀ SEO:
+index-CboPZWD0.js:632 📄 TITLE: ✅ Specifico della pagina (PRIORITÀ MASSIMA) → "Contatti & Candidatura Percorso Metodo ORBITALE"
+index-CboPZWD0.js:632 📝 DESCRIPTION: ✅ Specifica della pagina (PRIORITÀ MASSIMA) → "Vuoi costruire un patrimonio 100k-500k€? Candidati ora per una sessione strategica gratuita. Solo per professionisti determinati e pronti all'impegno."
+index-CboPZWD0.js:632 🖼️ IMMAGINE OG: 🌐 Impostazioni globali SEO (PRIORITÀ MEDIA) → "https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png"
+index-CboPZWD0.js:632 🌐 URL CANONICO: 🌐 Costruito con dominio globale → "https://alessiochianetta.it/contatti-ale"
+index-CboPZWD0.js:632 
+index-CboPZWD0.js:632 📊 RIEPILOGO SCENARIO:
+index-CboPZWD0.js:632 🎯 SCENARIO: Meta tag specifici configurati → OTTIMIZZAZIONE PERSONALIZZATA ✅
+index-CboPZWD0.js:632 🔍 SEO META DATA per questa pagina:
+index-CboPZWD0.js:632 📄 Title Meta SEO: Contatti & Candidatura Percorso Metodo ORBITALE - Alessio Chianetta - Metodo Orbitale - Il sistema matematico per la libertà finanziaria
+index-CboPZWD0.js:632 📝 Meta Description SEO: Vuoi costruire un patrimonio 100k-500k€? Candidati ora per una sessione strategica gratuita. Solo per professionisti determinati e pronti all'impegno.
+index-CboPZWD0.js:632 🌐 URL Canonico: https://alessiochianetta.it/contatti-ale
+index-CboPZWD0.js:632 🖼️ Immagine OG: https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png
+index-CboPZWD0.js:632 
+index-CboPZWD0.js:632 🎯 ANALISI PRIORITÀ SEO:
+index-CboPZWD0.js:632 📄 TITLE: ✅ Specifico della pagina (PRIORITÀ MASSIMA) → "Contatti & Candidatura Percorso Metodo ORBITALE"
+index-CboPZWD0.js:632 📝 DESCRIPTION: ✅ Specifica della pagina (PRIORITÀ MASSIMA) → "Vuoi costruire un patrimonio 100k-500k€? Candidati ora per una sessione strategica gratuita. Solo per professionisti determinati e pronti all'impegno."
+index-CboPZWD0.js:632 🖼️ IMMAGINE OG: 🌐 Impostazioni globali SEO (PRIORITÀ MEDIA) → "https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png"
+index-CboPZWD0.js:632 🌐 URL CANONICO: 🌐 Costruito con dominio globale → "https://alessiochianetta.it/contatti-ale"
+index-CboPZWD0.js:632 
+index-CboPZWD0.js:632 📊 RIEPILOGO SCENARIO:
+index-CboPZWD0.js:632 🎯 SCENARIO: Meta tag specifici configurati → OTTIMIZZAZIONE PERSONALIZZATA ✅
+index-CboPZWD0.js:632 ✅ VERIFICA DOM - Valori effettivamente applicati:
+index-CboPZWD0.js:632 📄 Title nel DOM: Contatti & Candidatura Percorso Metodo ORBITALE - Alessio Chianetta - Metodo Orbitale - Il sistema matematico per la libertà finanziaria
+index-CboPZWD0.js:632 📝 Description nel DOM: Vuoi costruire un patrimonio 100k-500k€? Candidati ora per una sessione strategica gratuita. Solo per professionisti determinati e pronti all'impegno.
+index-CboPZWD0.js:632 🌐 Canonical nel DOM: https://alessiochianetta.it/contatti-ale
+index-CboPZWD0.js:632 🖼️ OG Image nel DOM: https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png
+index-CboPZWD0.js:632 ✅ Title SEO applicato correttamente!
+index-CboPZWD0.js:632 ✅ Description SEO applicata correttamente!
+index-CboPZWD0.js:632 ✅ VERIFICA DOM - Valori effettivamente applicati:
+index-CboPZWD0.js:632 📄 Title nel DOM: Contatti & Candidatura Percorso Metodo ORBITALE - Alessio Chianetta - Metodo Orbitale - Il sistema matematico per la libertà finanziaria
+index-CboPZWD0.js:632 📝 Description nel DOM: Vuoi costruire un patrimonio 100k-500k€? Candidati ora per una sessione strategica gratuita. Solo per professionisti determinati e pronti all'impegno.
+index-CboPZWD0.js:632 🌐 Canonical nel DOM: https://alessiochianetta.it/contatti-ale
+index-CboPZWD0.js:632 🖼️ OG Image nel DOM: https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png
+index-CboPZWD0.js:632 ✅ Title SEO applicato correttamente!
+index-CboPZWD0.js:632 ✅ Description SEO applicata correttamente!
+index-CboPZWD0.js:626 📊 Tracking page view: /domande-ale with GA ID: G-2XEWBZ9ZLS
+index-CboPZWD0.js:792  GET https://alessiochianetta.it/api/pages/domande-ale 404 (Not Found)
+queryFn @ index-CboPZWD0.js:792
+a @ index-CboPZWD0.js:48
+g @ index-CboPZWD0.js:48
+start @ index-CboPZWD0.js:48
+fetch @ index-CboPZWD0.js:48
+ku @ index-CboPZWD0.js:48
+setOptions @ index-CboPZWD0.js:48
+(anonymous) @ index-CboPZWD0.js:48
+Hg @ index-CboPZWD0.js:40
+Lc @ index-CboPZWD0.js:40
+U$ @ index-CboPZWD0.js:40
+Zo @ index-CboPZWD0.js:40
+s2 @ index-CboPZWD0.js:40
+_o @ index-CboPZWD0.js:38
+(anonymous) @ index-CboPZWD0.js:40Understand this error
+index-CboPZWD0.js:792  GET https://alessiochianetta.it/api/landing-pages/slug/domande-ale 404 (Not Found)
+queryFn @ index-CboPZWD0.js:792
+a @ index-CboPZWD0.js:48
+g @ index-CboPZWD0.js:48
+start @ index-CboPZWD0.js:48
+fetch @ index-CboPZWD0.js:48
+ku @ index-CboPZWD0.js:48
+setOptions @ index-CboPZWD0.js:48
+(anonymous) @ index-CboPZWD0.js:48
+Hg @ index-CboPZWD0.js:40
+Lc @ index-CboPZWD0.js:40
+U$ @ index-CboPZWD0.js:40
+Zo @ index-CboPZWD0.js:40
+s2 @ index-CboPZWD0.js:40
+_o @ index-CboPZWD0.js:38
+(anonymous) @ index-CboPZWD0.js:40Understand this error
+index-CboPZWD0.js:792  GET https://alessiochianetta.it/api/projects/slug/domande-ale 404 (Not Found)
+queryFn @ index-CboPZWD0.js:792
+a @ index-CboPZWD0.js:48
+g @ index-CboPZWD0.js:48
+start @ index-CboPZWD0.js:48
+fetch @ index-CboPZWD0.js:48
+ku @ index-CboPZWD0.js:48
+setOptions @ index-CboPZWD0.js:48
+(anonymous) @ index-CboPZWD0.js:48
+Hg @ index-CboPZWD0.js:40
+Lc @ index-CboPZWD0.js:40
+U$ @ index-CboPZWD0.js:40
+Zo @ index-CboPZWD0.js:40
+s2 @ index-CboPZWD0.js:40
+_o @ index-CboPZWD0.js:38
+(anonymous) @ index-CboPZWD0.js:40Understand this error
+index-CboPZWD0.js:632 🔍 SEO META DATA per questa pagina:
+index-CboPZWD0.js:632 📄 Title Meta SEO: FAQ: Metodo ORBITALE, Debiti, Patrimonio e Rendita - Alessio Chianetta - Metodo Orbitale - Il sistema matematico per la libertà finanziaria
+index-CboPZWD0.js:632 📝 Meta Description SEO: Risposte chiare sulle Domande Frequenti relative al Metodo ORBITALE, l'impegno richiesto, la garanzia, il percorso e i risultati promessi. Trasparenza totale.
+index-CboPZWD0.js:632 🌐 URL Canonico: https://alessiochianetta.it/domande-ale
+index-CboPZWD0.js:632 🖼️ Immagine OG: https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png
+index-CboPZWD0.js:632 
+index-CboPZWD0.js:632 🎯 ANALISI PRIORITÀ SEO:
+index-CboPZWD0.js:632 📄 TITLE: ✅ Specifico della pagina (PRIORITÀ MASSIMA) → "FAQ: Metodo ORBITALE, Debiti, Patrimonio e Rendita"
+index-CboPZWD0.js:632 📝 DESCRIPTION: ✅ Specifica della pagina (PRIORITÀ MASSIMA) → "Risposte chiare sulle Domande Frequenti relative al Metodo ORBITALE, l'impegno richiesto, la garanzia, il percorso e i risultati promessi. Trasparenza totale."
+index-CboPZWD0.js:632 🖼️ IMMAGINE OG: 🌐 Impostazioni globali SEO (PRIORITÀ MEDIA) → "https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png"
+index-CboPZWD0.js:632 🌐 URL CANONICO: 🌐 Costruito con dominio globale → "https://alessiochianetta.it/domande-ale"
+index-CboPZWD0.js:632 
+index-CboPZWD0.js:632 📊 RIEPILOGO SCENARIO:
+index-CboPZWD0.js:632 🎯 SCENARIO: Meta tag specifici configurati → OTTIMIZZAZIONE PERSONALIZZATA ✅
+index-CboPZWD0.js:632 🔍 SEO META DATA per questa pagina:
+index-CboPZWD0.js:632 📄 Title Meta SEO: FAQ: Metodo ORBITALE, Debiti, Patrimonio e Rendita - Alessio Chianetta - Metodo Orbitale - Il sistema matematico per la libertà finanziaria
+index-CboPZWD0.js:632 📝 Meta Description SEO: Risposte chiare sulle Domande Frequenti relative al Metodo ORBITALE, l'impegno richiesto, la garanzia, il percorso e i risultati promessi. Trasparenza totale.
+index-CboPZWD0.js:632 🌐 URL Canonico: https://alessiochianetta.it/domande-ale
+index-CboPZWD0.js:632 🖼️ Immagine OG: https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png
+index-CboPZWD0.js:632 
+index-CboPZWD0.js:632 🎯 ANALISI PRIORITÀ SEO:
+index-CboPZWD0.js:632 📄 TITLE: ✅ Specifico della pagina (PRIORITÀ MASSIMA) → "FAQ: Metodo ORBITALE, Debiti, Patrimonio e Rendita"
+index-CboPZWD0.js:632 📝 DESCRIPTION: ✅ Specifica della pagina (PRIORITÀ MASSIMA) → "Risposte chiare sulle Domande Frequenti relative al Metodo ORBITALE, l'impegno richiesto, la garanzia, il percorso e i risultati promessi. Trasparenza totale."
+index-CboPZWD0.js:632 🖼️ IMMAGINE OG: 🌐 Impostazioni globali SEO (PRIORITÀ MEDIA) → "https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png"
+index-CboPZWD0.js:632 🌐 URL CANONICO: 🌐 Costruito con dominio globale → "https://alessiochianetta.it/domande-ale"
+index-CboPZWD0.js:632 
+index-CboPZWD0.js:632 📊 RIEPILOGO SCENARIO:
+index-CboPZWD0.js:632 🎯 SCENARIO: Meta tag specifici configurati → OTTIMIZZAZIONE PERSONALIZZATA ✅
+index-CboPZWD0.js:632 ✅ VERIFICA DOM - Valori effettivamente applicati:
+index-CboPZWD0.js:632 📄 Title nel DOM: FAQ: Metodo ORBITALE, Debiti, Patrimonio e Rendita - Alessio Chianetta - Metodo Orbitale - Il sistema matematico per la libertà finanziaria
+index-CboPZWD0.js:632 📝 Description nel DOM: Risposte chiare sulle Domande Frequenti relative al Metodo ORBITALE, l'impegno richiesto, la garanzia, il percorso e i risultati promessi. Trasparenza totale.
+index-CboPZWD0.js:632 🌐 Canonical nel DOM: https://alessiochianetta.it/domande-ale
+index-CboPZWD0.js:632 🖼️ OG Image nel DOM: https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png
+index-CboPZWD0.js:632 ✅ Title SEO applicato correttamente!
+index-CboPZWD0.js:632 ✅ Description SEO applicata correttamente!
+index-CboPZWD0.js:632 ✅ VERIFICA DOM - Valori effettivamente applicati:
+index-CboPZWD0.js:632 📄 Title nel DOM: FAQ: Metodo ORBITALE, Debiti, Patrimonio e Rendita - Alessio Chianetta - Metodo Orbitale - Il sistema matematico per la libertà finanziaria
+index-CboPZWD0.js:632 📝 Description nel DOM: Risposte chiare sulle Domande Frequenti relative al Metodo ORBITALE, l'impegno richiesto, la garanzia, il percorso e i risultati promessi. Trasparenza totale.
+index-CboPZWD0.js:632 🌐 Canonical nel DOM: https://alessiochianetta.it/domande-ale
+index-CboPZWD0.js:632 🖼️ OG Image nel DOM: https://i.ibb.co/n8Np4b1t/FOTO-COPERTINA-BUONA.png
+index-CboPZWD0.js:632 ✅ Title SEO applicato correttamente!
+index-CboPZWD0.js:632 ✅ Description SEO applicata correttamente!

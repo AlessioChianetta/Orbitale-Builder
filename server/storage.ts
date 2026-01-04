@@ -1,0 +1,1304 @@
+import { db } from "./db";
+import {
+  tenants, users, pages, blogPosts, leads, candidates, media, analytics,
+  categories, tags, blogPostTags, services, landingPages, builderPages, projects, globalSeoSettings,
+  settings, routeAnalytics, clients, googleSheetsCampaigns, marketingLeads,
+  type InsertTenant, type Tenant, type InsertUser, type User, type InsertPage, type Page,
+  type InsertBlogPost, type BlogPost, type BlogPostWithRelations,
+  type InsertLead, type Lead, type InsertCandidate, type Candidate,
+  type InsertMedia, type Media, type InsertService, type Service,
+  type InsertLandingPage, type LandingPage, type InsertBuilderPage, type BuilderPage,
+  type InsertProject, type Project,
+  type InsertGlobalSeoSettings, type GlobalSeoSettings,
+  type InsertRouteAnalytics, type RouteAnalytics,
+  type InsertClient, type Client,
+  type InsertGoogleSheetsCampaign, type GoogleSheetsCampaign
+} from "@shared/schema";
+import { eq, desc, asc, like, and, sql, count } from "drizzle-orm";
+import bcrypt from "bcryptjs";
+
+export class Storage {
+  // Tenant operations
+  async getTenantByDomain(domain: string): Promise<Tenant | null> {
+    console.log(`📊 [STORAGE] getTenantByDomain called with domain: "${domain}"`);
+    
+    try {
+      const [tenant] = await db.select().from(tenants as any).where(eq((tenants as any).domain, domain));
+      
+      if (tenant) {
+        console.log(`✅ [STORAGE] Tenant found in database:`, {
+          id: tenant.id,
+          name: tenant.name,
+          domain: tenant.domain,
+          isActive: tenant.isActive
+        });
+      } else {
+        console.log(`❌ [STORAGE] No tenant found for domain "${domain}"`);
+        
+        // Debug: show all tenants in database
+        const allTenants = await db.select().from(tenants as any);
+        console.log(`📋 [STORAGE] Available tenants in database (${allTenants.length} total):`);
+        allTenants.forEach((t: Tenant) => {
+          console.log(`   - "${t.domain}" → ${t.name} (ID: ${t.id}, Active: ${t.isActive})`);
+        });
+      }
+      
+      return tenant || null;
+    } catch (error) {
+      console.error(`❌ [STORAGE] Error in getTenantByDomain:`, error);
+      return null;
+    }
+  }
+
+  async getTenantById(id: number): Promise<Tenant | null> {
+    const [tenant] = await db.select().from(tenants as any).where(eq((tenants as any).id, id));
+    return tenant || null;
+  }
+
+  async createTenant(tenantData: InsertTenant): Promise<Tenant> {
+    const [tenant] = await db.insert(tenants).values(tenantData).returning();
+    return tenant;
+  }
+
+  async getAllTenants(): Promise<Tenant[]> {
+    return await db.select().from(tenants).orderBy(asc(tenants.id));
+  }
+
+  async getActiveTenants(): Promise<Tenant[]> {
+    return await db.select().from(tenants).where(eq(tenants.isActive, true)).orderBy(asc(tenants.name));
+  }
+
+  async updateTenant(id: number, updates: Partial<InsertTenant>): Promise<Tenant | null> {
+    const [updated] = await db.update(tenants)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(tenants.id, id))
+      .returning();
+    return updated || null;
+  }
+
+  // User operations
+  async createUser(userData: InsertUser): Promise<User> {
+    const hashedPassword = await bcrypt.hash(userData.password, 10);
+    const [user] = await db.insert(users).values({
+      ...userData,
+      password: hashedPassword,
+    }).returning();
+    return user;
+  }
+
+  async getUserByUsername(username: string, tenantId: number): Promise<User | null> {
+    const [user] = await db.select().from(users)
+      .where(and(eq(users.username, username), eq(users.tenantId, tenantId)));
+    return user || null;
+  }
+
+  async getUserByEmail(email: string, tenantId: number): Promise<User | null> {
+    const [user] = await db.select().from(users)
+      .where(and(eq(users.email, email), eq(users.tenantId, tenantId)));
+    return user || null;
+  }
+
+  async getUserById(id: string): Promise<User | null> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user || null;
+  }
+
+  async verifyPassword(plainPassword: string, hashedPassword: string): Promise<boolean> {
+    return bcrypt.compare(plainPassword, hashedPassword);
+  }
+
+  // Page operations
+  async createPage(pageData: InsertPage & { authorId: string; tenantId: number }): Promise<Page> {
+    const [page] = await db.insert(pages).values({
+      ...pageData,
+      updatedAt: new Date(),
+    }).returning();
+    return page;
+  }
+
+  async getPages(tenantId: number, limit = 10, offset = 0): Promise<{ pages: Page[], total: number }> {
+    const [pagesResult, totalResult] = await Promise.all([
+      db.select().from(pages)
+        .where(eq(pages.tenantId, tenantId))
+        .orderBy(desc(pages.updatedAt))
+        .limit(limit)
+        .offset(offset),
+      db.select({ count: count() }).from(pages)
+        .where(eq(pages.tenantId, tenantId))
+    ]);
+
+    return {
+      pages: pagesResult,
+      total: totalResult[0].count
+    };
+  }
+
+  async getPageBySlug(slug: string, tenantId: number): Promise<Page | null> {
+    const [page] = await db.select().from(pages)
+      .where(and(eq(pages.slug, slug), eq(pages.tenantId, tenantId)));
+    return page || null;
+  }
+
+  async getPageById(id: string, tenantId: number): Promise<Page | null> {
+    const [page] = await db.select().from(pages)
+      .where(and(eq(pages.id, id), eq(pages.tenantId, tenantId)));
+    return page || null;
+  }
+
+  async updatePage(id: string, tenantId: number, updates: Partial<InsertPage>): Promise<Page | null> {
+    const [page] = await db.update(pages)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(and(eq(pages.id, id), eq(pages.tenantId, tenantId)))
+      .returning();
+    return page || null;
+  }
+
+  async deletePage(id: string, tenantId: number): Promise<boolean> {
+    const result = await db.delete(pages)
+      .where(and(eq(pages.id, id), eq(pages.tenantId, tenantId)));
+    return (result.rowCount ?? 0) > 0;
+  }
+
+  // Blog post operations
+  async createBlogPost(postData: InsertBlogPost): Promise<BlogPostWithRelations> {
+    console.log('🔍 Storage: createBlogPost called with:', JSON.stringify(postData, null, 2));
+    console.log('🔍 Storage: postData keys:', Object.keys(postData));
+
+    // Log dettagliato per i campi data
+    console.log('🔍 Storage: Date field analysis:');
+    console.log('  - publishedAt:', postData.publishedAt, 'type:', typeof postData.publishedAt);
+    console.log('  - scheduledAt:', postData.scheduledAt, 'type:', typeof postData.scheduledAt);
+
+    if (postData.publishedAt) {
+      console.log('  - publishedAt instanceof Date:', postData.publishedAt instanceof Date);
+      console.log('  - publishedAt constructor:', postData.publishedAt.constructor.name);
+      if (typeof postData.publishedAt === 'string') {
+        console.log('  - publishedAt as string, attempting new Date():', new Date(postData.publishedAt));
+      }
+    }
+
+    if (postData.scheduledAt) {
+      console.log('  - scheduledAt instanceof Date:', postData.scheduledAt instanceof Date);
+      console.log('  - scheduledAt constructor:', postData.scheduledAt.constructor.name);
+      if (typeof postData.scheduledAt === 'string') {
+        console.log('  - scheduledAt as string, attempting new Date():', new Date(postData.scheduledAt));
+      }
+    }
+
+    try {
+      console.log('🔍 Storage: Inserting into database...');
+
+      // Converti esplicitamente le date se sono stringhe
+      const processedData = { ...postData };
+
+      if (processedData.publishedAt && typeof processedData.publishedAt === 'string') {
+        console.log('🔍 Storage: Converting publishedAt string to Date');
+        processedData.publishedAt = new Date(processedData.publishedAt);
+        console.log('  - Converted publishedAt:', processedData.publishedAt);
+      }
+
+      if (processedData.scheduledAt && typeof processedData.scheduledAt === 'string') {
+        console.log('🔍 Storage: Converting scheduledAt string to Date');
+        processedData.scheduledAt = new Date(processedData.scheduledAt);
+        console.log('  - Converted scheduledAt:', processedData.scheduledAt);
+      }
+
+      console.log('🔍 Storage: Final processed data before insert:', JSON.stringify(processedData, null, 2));
+
+      const [post] = await db.insert(blogPosts).values(processedData as any).returning();
+      console.log('✅ Storage: Blog post inserted with ID:', post.id);
+
+      console.log('🔍 Storage: Fetching full blog post data...');
+      const fullPost = await this.getBlogPostById(post.id, post.tenantId) as BlogPostWithRelations;
+      console.log('✅ Storage: Full blog post retrieved');
+
+      return fullPost;
+    } catch (error) {
+      console.error('❌ Storage: createBlogPost failed:');
+      console.error('Storage error:', error);
+      console.error('Storage error name:', error instanceof Error ? error.name : 'Unknown');
+      console.error('Storage error message:', error instanceof Error ? error.message : error);
+      console.error('Storage error stack:', error instanceof Error ? error.stack : 'No stack');
+
+      if (error instanceof Error && error.message.includes('toISOString')) {
+        console.error('🔍 Storage: toISOString error details:');
+        console.error('  - postData.publishedAt:', postData.publishedAt, typeof postData.publishedAt);
+        console.error('  - postData.scheduledAt:', postData.scheduledAt, typeof postData.scheduledAt);
+      }
+
+      throw error;
+    }
+  }
+
+  async getBlogPosts(tenantId: number, limit = 10, offset = 0, status?: string): Promise<{ posts: BlogPostWithRelations[], total: number }> {
+    const conditions = [];
+    conditions.push(eq(blogPosts.tenantId, tenantId));
+    if (status) conditions.push(eq(blogPosts.status, status));
+
+    const [postsResult, totalResult] = await Promise.all([
+      db.select({
+        id: blogPosts.id,
+        title: blogPosts.title,
+        slug: blogPosts.slug,
+        content: blogPosts.content,
+        excerpt: blogPosts.excerpt,
+        featuredImage: blogPosts.featuredImage,
+        status: blogPosts.status,
+        publishedAt: blogPosts.publishedAt,
+        scheduledAt: blogPosts.scheduledAt,
+        isFeatured: blogPosts.isFeatured,
+        categoryId: blogPosts.categoryId,
+        authorId: blogPosts.authorId,
+        views: blogPosts.views,
+        readingTime: blogPosts.readingTime,
+        createdAt: blogPosts.createdAt,
+        updatedAt: blogPosts.updatedAt,
+        author: {
+          username: users.username
+        },
+        category: {
+          name: categories.name,
+          slug: categories.slug
+        }
+      })
+      .from(blogPosts)
+      .leftJoin(users, eq(blogPosts.authorId, users.id))
+      .leftJoin(categories, eq(blogPosts.categoryId, categories.id))
+      .where(conditions.length > 0 ? and(...conditions) : undefined)
+      .orderBy(desc(blogPosts.publishedAt), desc(blogPosts.createdAt))
+      .limit(limit)
+      .offset(offset),
+      db.select({ count: count() }).from(blogPosts).where(conditions.length > 0 ? and(...conditions) : undefined)
+    ]);
+
+    // Fetch tags for each post
+    const postsWithTags = await Promise.all(
+      postsResult.map(async (post) => {
+        const postTags = await db.select({
+          name: tags.name,
+          slug: tags.slug
+        })
+        .from(blogPostTags)
+        .innerJoin(tags, eq(blogPostTags.tagId, tags.id))
+        .where(eq(blogPostTags.blogPostId, post.id));
+
+        return {
+          ...post,
+          tags: postTags
+        };
+      })
+    );
+
+    return {
+      posts: postsWithTags,
+      total: totalResult[0].count
+    };
+  }
+
+  async getBlogPostBySlug(slug: string, tenantId: number): Promise<BlogPost | null> {
+    const [post] = await db.select().from(blogPosts).where(and(eq(blogPosts.slug, slug), eq(blogPosts.tenantId, tenantId)));
+    if (post) {
+      // Increment view count
+      await db.update(blogPosts)
+        .set({ views: sql`${blogPosts.views} + 1` })
+        .where(and(eq(blogPosts.id, post.id), eq(blogPosts.tenantId, tenantId)));
+    }
+    return post || null;
+  }
+
+  async getBlogPostById(id: number, tenantId: number): Promise<BlogPost | null> {
+    const [post] = await db.select().from(blogPosts).where(and(eq(blogPosts.id, id), eq(blogPosts.tenantId, tenantId)));
+    return post || null;
+  }
+
+  async updateBlogPost(id: number, tenantId: number, updates: Partial<InsertBlogPost>): Promise<BlogPost | null> {
+    try {
+      console.log('Updating blog post in storage:', { id, updates });
+
+      // Prepare update data
+      const updateData: any = { ...updates, updatedAt: new Date() };
+
+      // Auto-set publishedAt if status is published and not already set
+      if (updateData.status === 'published' && !updateData.publishedAt) {
+        updateData.publishedAt = new Date();
+      }
+
+      // Handle publishedAt conversion
+      if (updateData.publishedAt && typeof updateData.publishedAt === 'string') {
+        updateData.publishedAt = new Date(updateData.publishedAt);
+      }
+
+      // Handle scheduledAt conversion
+      if (updateData.scheduledAt && typeof updateData.scheduledAt === 'string') {
+        updateData.scheduledAt = new Date(updateData.scheduledAt);
+      }
+
+      // Remove undefined values to avoid database errors
+      Object.keys(updateData).forEach(key => {
+        if (updateData[key] === undefined) {
+          delete updateData[key];
+        }
+      });
+
+      const [post] = await db.update(blogPosts)
+        .set(updateData)
+        .where(and(eq(blogPosts.id, id), eq(blogPosts.tenantId, tenantId)))
+        .returning();
+
+      console.log('Blog post updated successfully:', post);
+      return post || null;
+    } catch (error) {
+      console.error('Error updating blog post in storage:', error);
+      throw error;
+    }
+  }
+
+  async deleteBlogPost(id: number, tenantId: number): Promise<boolean> {
+    const result = await db.delete(blogPosts).where(and(eq(blogPosts.id, id), eq(blogPosts.tenantId, tenantId)));
+    return (result.rowCount ?? 0) > 0;
+  }
+
+  async getFeaturedBlogPosts(tenantId: number, limit = 3): Promise<BlogPost[]> {
+    return db.select().from(blogPosts)
+      .where(and(eq(blogPosts.isFeatured, true), eq(blogPosts.status, "published"), eq(blogPosts.tenantId, tenantId)))
+      .orderBy(desc(blogPosts.publishedAt))
+      .limit(limit);
+  }
+
+  // Lead operations
+  async createLead(leadData: InsertLead): Promise<Lead> {
+    const [lead] = await db.insert(leads).values(leadData).returning();
+    return lead;
+  }
+
+  async getLeads(tenantId: number, limit = 50, offset = 0, status?: string): Promise<{ leads: Lead[], total: number }> {
+    const conditions = [];
+    conditions.push(eq(leads.tenantId, tenantId));
+    if (status) conditions.push(eq(leads.status, status));
+
+    const [leadsResult, totalResult] = await Promise.all([
+      db.select().from(leads)
+        .where(conditions.length > 0 ? and(...conditions) : undefined)
+        .orderBy(desc(leads.createdAt))
+        .limit(limit)
+        .offset(offset),
+      db.select({ count: count() }).from(leads).where(conditions.length > 0 ? and(...conditions) : undefined)
+    ]);
+
+    return {
+      leads: leadsResult,
+      total: totalResult[0].count
+    };
+  }
+
+  async getLeadById(id: string, tenantId: number): Promise<Lead | null> {
+    const [lead] = await db.select().from(leads).where(and(eq(leads.id, id), eq(leads.tenantId, tenantId)));
+    return lead || null;
+  }
+
+  async updateLead(id: string, tenantId: number, updates: Partial<InsertLead & { status: string, notes: string }>): Promise<Lead | null> {
+    const [lead] = await db.update(leads)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(and(eq(leads.id, id), eq(leads.tenantId, tenantId)))
+      .returning();
+    return lead || null;
+  }
+
+  // Candidate operations
+  async createCandidate(candidateData: InsertCandidate): Promise<Candidate> {
+    const [candidate] = await db.insert(candidates).values(candidateData as any).returning();
+    return candidate;
+  }
+
+  async getCandidates(tenantId: number, limit = 50, offset = 0, status?: string): Promise<{ candidates: Candidate[], total: number }> {
+    const conditions = [];
+    conditions.push(eq(candidates.tenantId, tenantId));
+    if (status) conditions.push(eq(candidates.status, status));
+
+    const [candidatesResult, totalResult] = await Promise.all([
+      db.select().from(candidates)
+        .where(conditions.length > 0 ? and(...conditions) : undefined)
+        .orderBy(desc(candidates.createdAt))
+        .limit(limit)
+        .offset(offset),
+      db.select({ count: count() }).from(candidates).where(conditions.length > 0 ? and(...conditions) : undefined)
+    ]);
+
+    return {
+      candidates: candidatesResult,
+      total: totalResult[0].count
+    };
+  }
+
+  async getCandidateById(id: string, tenantId: number): Promise<Candidate | null> {
+    const [candidate] = await db.select().from(candidates).where(and(eq(candidates.id, id), eq(candidates.tenantId, tenantId)));
+    return candidate || null;
+  }
+
+  async updateCandidate(id: string, tenantId: number, updates: Partial<{
+    status: string,
+    reviewNotes: string,
+    reviewedBy: string
+  }>): Promise<Candidate | null> {
+    const [candidate] = await db.update(candidates)
+      .set({
+        ...updates,
+        reviewedAt: new Date(),
+        updatedAt: new Date()
+      })
+      .where(and(eq(candidates.id, id), eq(candidates.tenantId, tenantId)))
+      .returning();
+    return candidate || null;
+  }
+
+  // Media operations
+  async createMedia(mediaData: InsertMedia & { uploadedBy: string }): Promise<Media> {
+    const [mediaFile] = await db.insert(media).values(mediaData).returning();
+    return mediaFile;
+  }
+
+  async getMedia(tenantId: number, limit = 50, offset = 0): Promise<{ media: Media[], total: number }> {
+    const [mediaResult, totalResult] = await Promise.all([
+      db.select().from(media)
+        .where(eq(media.tenantId, tenantId))
+        .orderBy(desc(media.createdAt))
+        .limit(limit)
+        .offset(offset),
+      db.select({ count: count() }).from(media).where(eq(media.tenantId, tenantId))
+    ]);
+
+    return {
+      media: mediaResult,
+      total: totalResult[0].count
+    };
+  }
+
+  async getMediaById(id: number, tenantId: number): Promise<Media | null> {
+    const [mediaFile] = await db.select().from(media).where(and(eq(media.id, id), eq(media.tenantId, tenantId)));
+    return mediaFile || null;
+  }
+
+  async deleteMedia(id: number, tenantId: number): Promise<boolean> {
+    const result = await db.delete(media).where(and(eq(media.id, id), eq(media.tenantId, tenantId)));
+    return (result.rowCount ?? 0) > 0;
+  }
+
+  // Analytics operations
+  async trackEvent(event: string, data: any, tenantId: number, pageSlug?: string, postSlug?: string, request?: any): Promise<void> {
+    await db.insert(analytics).values({
+      tenantId,
+      pageSlug,
+      postSlug,
+      event,
+      data,
+      userAgent: request?.headers?.['user-agent'],
+      ip: request?.ip,
+      referrer: request?.headers?.referer,
+    });
+  }
+
+  async getAnalytics(tenantId: number, startDate: Date, endDate: Date): Promise<any> {
+    const pageViews = await db.select({
+      slug: analytics.pageSlug,
+      count: count()
+    })
+    .from(analytics)
+    .where(
+      and(
+        eq(analytics.tenantId, tenantId),
+        eq(analytics.event, 'page_view'),
+        sql`${analytics.createdAt} >= ${startDate}`,
+        sql`${analytics.createdAt} <= ${endDate}`
+      )
+    )
+    .groupBy(analytics.pageSlug);
+
+    const totalViews = await db.select({ count: count() })
+      .from(analytics)
+      .where(
+        and(
+          eq(analytics.tenantId, tenantId),
+          eq(analytics.event, 'page_view'),
+          sql`${analytics.createdAt} >= ${startDate}`,
+          sql`${analytics.createdAt} <= ${endDate}`
+        )
+      );
+
+    return {
+      pageViews,
+      totalViews: totalViews[0].count,
+    };
+  }
+
+  // Service operations
+  async createService(serviceData: InsertService): Promise<Service> {
+    const [service] = await db.insert(services).values(serviceData as any).returning();
+    return service;
+  }
+
+  async getServices(tenantId: number, category?: string, isPublic: boolean = false): Promise<Service[]> {
+    try {
+      const conditions = [eq(services.tenantId, tenantId)];
+      
+      if (category) {
+        conditions.push(eq(services.category, category));
+      }
+      
+      // Se è una chiamata pubblica, filtra solo i servizi attivi
+      if (isPublic) {
+        conditions.push(eq(services.isActive, true));
+      }
+
+      const result = await db.select()
+        .from(services)
+        .where(and(...conditions))
+        .orderBy(asc(services.order));
+      
+      return result;
+    } catch (error) {
+      console.error('Error fetching services:', error);
+      throw error;
+    }
+  }
+
+  async getServiceBySlug(slug: string, tenantId: number): Promise<Service | null> {
+    const [service] = await db.select().from(services).where(and(eq(services.slug, slug), eq(services.tenantId, tenantId)));
+    return service || null;
+  }
+
+  async getServiceById(id: number, tenantId: number): Promise<Service | null> {
+    const [service] = await db.select().from(services).where(and(eq(services.id, id), eq(services.tenantId, tenantId)));
+    return service || null;
+  }
+
+  async updateService(id: number, tenantId: number, updates: Partial<InsertService>): Promise<Service | null> {
+    const [service] = await db.update(services)
+      .set({ ...updates, updatedAt: new Date() } as any)
+      .where(and(eq(services.id, id), eq(services.tenantId, tenantId)))
+      .returning();
+    return service || null;
+  }
+
+  async deleteService(id: number, tenantId: number): Promise<boolean> {
+    const result = await db.delete(services).where(and(eq(services.id, id), eq(services.tenantId, tenantId)));
+    return (result.rowCount ?? 0) > 0;
+  }
+
+  // Landing Page operations
+  async createLandingPage(landingPageData: InsertLandingPage & { authorId: string }): Promise<LandingPage> {
+    const [landingPage] = await db.insert(landingPages).values(landingPageData).returning();
+    return landingPage;
+  }
+
+  async getLandingPages(tenantId: number, limit = 10, offset = 0, includeTemplates = false): Promise<{ landingPages: LandingPage[], total: number }> {
+    const conditions = [];
+    conditions.push(eq(landingPages.tenantId, tenantId));
+    if (!includeTemplates) conditions.push(eq(landingPages.isTemplate, false));
+
+    const [landingPagesResult, totalResult] = await Promise.all([
+      db.select().from(landingPages)
+        .where(conditions.length > 0 ? and(...conditions) : undefined)
+        .orderBy(desc(landingPages.updatedAt))
+        .limit(limit)
+        .offset(offset),
+      db.select({ count: count() }).from(landingPages).where(conditions.length > 0 ? and(...conditions) : undefined)
+    ]);
+
+    return {
+      landingPages: landingPagesResult,
+      total: totalResult[0].count
+    };
+  }
+
+  async getLandingPageById(id: number, tenantId: number): Promise<LandingPage | null> {
+    const [landingPage] = await db.select().from(landingPages).where(and(eq(landingPages.id, id), eq(landingPages.tenantId, tenantId)));
+    return landingPage || null;
+  }
+
+  async getLandingPageBySlug(slug: string, tenantId: number): Promise<LandingPage | null> {
+    const [landingPage] = await db.select().from(landingPages).where(and(eq(landingPages.slug, slug), eq(landingPages.tenantId, tenantId)));
+    if (landingPage) {
+      // Increment view count
+      await db.update(landingPages)
+        .set({ views: sql`${landingPages.views} + 1` })
+        .where(and(eq(landingPages.id, landingPage.id), eq(landingPages.tenantId, tenantId)));
+    }
+    return landingPage || null;
+  }
+
+  async updateLandingPage(id: number, tenantId: number, updates: Partial<InsertLandingPage>): Promise<LandingPage | null> {
+    try {
+      console.log('Updating landing page in storage:', { id, updates });
+
+      // Remove undefined values to avoid database errors
+      const updateData: any = { ...updates };
+      Object.keys(updateData).forEach(key => {
+        if (updateData[key] === undefined) {
+          delete updateData[key];
+        }
+      });
+
+      const [landingPage] = await db.update(landingPages)
+        .set(updateData)
+        .where(and(eq(landingPages.id, id), eq(landingPages.tenantId, tenantId)))
+        .returning();
+
+      console.log('Landing page updated successfully:', landingPage);
+      return landingPage || null;
+    } catch (error) {
+      console.error('Error updating landing page in storage:', error);
+      throw error;
+    }
+  }
+
+  async deleteLandingPage(id: number, tenantId: number): Promise<boolean> {
+    const result = await db.delete(landingPages).where(and(eq(landingPages.id, id), eq(landingPages.tenantId, tenantId)));
+    return (result.rowCount ?? 0) > 0;
+  }
+
+  async duplicateLandingPage(id: number, tenantId: number, newTitle: string, newSlug: string, authorId: string): Promise<LandingPage | null> {
+    try {
+      // Get the original landing page
+      const originalLandingPage = await this.getLandingPageById(id, tenantId);
+      if (!originalLandingPage) {
+        return null;
+      }
+
+      // Create a new landing page with the same data but different title and slug
+      const duplicateData: InsertLandingPage & { authorId: string } = {
+        title: newTitle,
+        slug: newSlug,
+        description: `Copia di: ${originalLandingPage.title}`,
+        sections: originalLandingPage.sections as any, // Type assertion for JSONB field
+        metaTitle: originalLandingPage.metaTitle,
+        metaDescription: originalLandingPage.metaDescription,
+        ogImage: originalLandingPage.ogImage,
+        isActive: false, // Start as inactive for editing
+        isTemplate: false,
+        templateName: null,
+        authorId: authorId,
+        parentLandingPageId: originalLandingPage.id // Track the original
+      };
+
+      const [duplicatedLandingPage] = await db.insert(landingPages).values(duplicateData).returning();
+      return duplicatedLandingPage;
+    } catch (error) {
+      console.error('Error duplicating landing page:', error);
+      throw error;
+    }
+  }
+
+  async getLandingPageTemplates(tenantId: number): Promise<LandingPage[]> {
+    return db.select().from(landingPages)
+      .where(and(eq(landingPages.isTemplate, true), eq(landingPages.tenantId, tenantId)))
+      .orderBy(asc(landingPages.templateName));
+  }
+
+  async toggleLandingPageStatus(id: number, tenantId: number): Promise<LandingPage | null> {
+    const landingPage = await this.getLandingPageById(id, tenantId);
+    if (!landingPage) return null;
+
+    const [updated] = await db.update(landingPages)
+      .set({ isActive: !landingPage.isActive })
+      .where(and(eq(landingPages.id, id), eq(landingPages.tenantId, tenantId)))
+      .returning();
+
+    return updated || null;
+  }
+
+  // Track conversion for landing page
+  async trackLandingPageConversion(id: number, tenantId: number): Promise<void> {
+    await db.update(landingPages)
+      .set({ conversions: sql`${landingPages.conversions} + 1` })
+      .where(and(eq(landingPages.id, id), eq(landingPages.tenantId, tenantId)));
+  }
+
+  // Duplicate from Patrimonio template
+  async duplicateFromPatrimonioTemplate(newTitle: string, newSlug: string, authorId: string, tenantId: number): Promise<LandingPage | null> {
+    try {
+      // Load the patrimonio template from JSON file
+      const fs = await import('fs');
+      const path = await import('path');
+
+      const templatePath = path.join(process.cwd(), 'server', 'templates', 'patrimonio-template.json');
+
+      if (!fs.existsSync(templatePath)) {
+        throw new Error('Patrimonio template file not found');
+      }
+
+      const templateContent = fs.readFileSync(templatePath, 'utf-8');
+      const template = JSON.parse(templateContent);
+
+      // Create a new landing page based on the template
+      const duplicateData: InsertLandingPage & { authorId: string } = {
+        title: newTitle,
+        slug: newSlug,
+        description: `Landing page basata sul template Patrimonio`,
+        sections: template.sections, // Use sections from JSON template
+        metaTitle: newTitle.length <= 60 ? newTitle : newTitle.substring(0, 57) + '...',
+        metaDescription: `Landing page personalizzata basata sul Metodo ORBITALE per ${newTitle}`,
+        ogImage: null,
+        isActive: false, // Start as inactive for editing
+        isTemplate: false,
+        templateName: null,
+        authorId: authorId,
+        tenantId: tenantId,
+        parentLandingPageId: null // No parent since we're using JSON template
+      };
+
+      const [duplicatedLandingPage] = await db.insert(landingPages).values(duplicateData).returning();
+      console.log('Duplicated landing page from Patrimonio template:', duplicatedLandingPage);
+      return duplicatedLandingPage;
+    } catch (error) {
+      console.error('Error duplicating from Patrimonio template:', error);
+      throw error;
+    }
+  }
+
+  // Builder Pages operations
+  async createBuilderPage(pageData: InsertBuilderPage & { authorId: string }): Promise<BuilderPage> {
+    const [page] = await db.insert(builderPages).values({
+      ...pageData,
+      updatedAt: new Date(),
+    }).returning();
+    return page;
+  }
+
+  async getBuilderPages(tenantId: number, limit = 10, offset = 0): Promise<{ pages: BuilderPage[], total: number }> {
+    const [pagesResult, totalResult] = await Promise.all([
+      db.select().from(builderPages)
+        .where(eq(builderPages.tenantId, tenantId))
+        .orderBy(desc(builderPages.createdAt))
+        .limit(limit)
+        .offset(offset),
+      db.select({ count: count() }).from(builderPages).where(eq(builderPages.tenantId, tenantId))
+    ]);
+
+    return {
+      pages: pagesResult,
+      total: totalResult[0].count
+    };
+  }
+
+  async getBuilderPageById(id: number, tenantId: number): Promise<BuilderPage | null> {
+    const [page] = await db.select().from(builderPages).where(and(eq(builderPages.id, id), eq(builderPages.tenantId, tenantId)));
+    return page || null;
+  }
+
+  async getBuilderPageBySlug(slug: string, tenantId: number): Promise<BuilderPage | null> {
+    const [page] = await db.select().from(builderPages).where(and(eq(builderPages.slug, slug), eq(builderPages.tenantId, tenantId)));
+    return page || null;
+  }
+
+  async updateBuilderPage(id: number, tenantId: number, updates: Partial<InsertBuilderPage>): Promise<BuilderPage | null> {
+    const [page] = await db.update(builderPages)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(and(eq(builderPages.id, id), eq(builderPages.tenantId, tenantId)))
+      .returning();
+    return page || null;
+  }
+
+  async deleteBuilderPage(id: number, tenantId: number): Promise<boolean> {
+    const result = await db.delete(builderPages).where(and(eq(builderPages.id, id), eq(builderPages.tenantId, tenantId)));
+    return (result.rowCount ?? 0) > 0;
+  }
+
+  async toggleBuilderPageStatus(id: number, tenantId: number): Promise<BuilderPage | null> {
+    const page = await this.getBuilderPageById(id, tenantId);
+    if (!page) return null;
+
+    const [updated] = await db.update(builderPages)
+      .set({ isActive: !page.isActive })
+      .where(and(eq(builderPages.id, id), eq(builderPages.tenantId, tenantId)))
+      .returning();
+
+    return updated || null;
+  }
+
+  // Project operations
+  async createProject(projectData: InsertProject & { authorId: string }): Promise<Project> {
+    const [project] = await db.insert(projects).values(projectData as any).returning();
+    return project;
+  }
+
+  async getProjects(tenantId: number, limit = 10, offset = 0, status?: string, projectType?: string, isFeatured?: boolean): Promise<{ projects: Project[], total: number }> {
+    const conditions = [];
+    conditions.push(eq(projects.tenantId, tenantId));
+    if (status) conditions.push(eq(projects.status, status));
+    if (projectType) conditions.push(eq(projects.projectType, projectType));
+    if (isFeatured !== undefined) conditions.push(eq(projects.isFeatured, isFeatured));
+    if (conditions.length === 1) conditions.push(eq(projects.isActive, true));
+
+    const [projectsResult, totalResult] = await Promise.all([
+      db.select().from(projects)
+        .where(conditions.length > 0 ? and(...conditions) : undefined)
+        .orderBy(desc(projects.order), desc(projects.createdAt))
+        .limit(limit)
+        .offset(offset),
+      db.select({ count: count() }).from(projects).where(conditions.length > 0 ? and(...conditions) : undefined)
+    ]);
+
+    return {
+      projects: projectsResult,
+      total: totalResult[0].count
+    };
+  }
+
+  async getProjectBySlug(slug: string, tenantId: number): Promise<Project | null> {
+    console.log(`🔍 [Storage] Searching for project with slug: "${slug}" in tenant: ${tenantId}`);
+    const [project] = await db.select().from(projects).where(and(eq(projects.slug, slug), eq(projects.tenantId, tenantId)));
+    
+    if (project) {
+      console.log(`✅ [Storage] Project found: ${project.title} (ID: ${project.id}, slug: ${project.slug})`);
+    } else {
+      console.log(`❌ [Storage] No project found with slug: "${slug}" in tenant: ${tenantId}`);
+      
+      // Debug: mostra tutti i progetti disponibili
+      const allProjects = await db.select({ id: projects.id, title: projects.title, slug: projects.slug })
+        .from(projects)
+        .where(eq(projects.tenantId, tenantId));
+      console.log(`📋 [Storage] Available projects in tenant ${tenantId}:`, allProjects);
+    }
+    
+    return project || null;
+  }
+
+  async getProjectById(id: number, tenantId: number): Promise<Project | null> {
+    const [project] = await db.select().from(projects).where(and(eq(projects.id, id), eq(projects.tenantId, tenantId)));
+    return project || null;
+  }
+
+  async updateProject(id: number, tenantId: number, updates: Partial<InsertProject>): Promise<Project | null> {
+    try {
+      console.log('Updating project in storage:', { id, updates });
+
+      // Prepare update data
+      const updateData: any = { ...updates, updatedAt: new Date() };
+
+      // Handle date conversions
+      if (updateData.startDate && typeof updateData.startDate === 'string') {
+        updateData.startDate = new Date(updateData.startDate);
+      }
+      if (updateData.endDate && typeof updateData.endDate === 'string') {
+        updateData.endDate = new Date(updateData.endDate);
+      }
+
+      // Remove undefined values to avoid database errors
+      Object.keys(updateData).forEach(key => {
+        if (updateData[key] === undefined) {
+          delete updateData[key];
+        }
+      });
+
+      const [project] = await db.update(projects)
+        .set(updateData)
+        .where(and(eq(projects.id, id), eq(projects.tenantId, tenantId)))
+        .returning();
+
+      console.log('Project updated successfully:', project);
+      return project || null;
+    } catch (error) {
+      console.error('Error updating project in storage:', error);
+      throw error;
+    }
+  }
+
+  async deleteProject(id: number, tenantId: number): Promise<boolean> {
+    const result = await db.delete(projects).where(and(eq(projects.id, id), eq(projects.tenantId, tenantId)));
+    return (result.rowCount ?? 0) > 0;
+  }
+
+  async getFeaturedProjects(tenantId: number, limit = 6): Promise<Project[]> {
+    return db.select().from(projects)
+      .where(and(eq(projects.isFeatured, true), eq(projects.status, "published"), eq(projects.isActive, true), eq(projects.tenantId, tenantId)))
+      .orderBy(asc(projects.order), desc(projects.createdAt))
+      .limit(limit);
+  }
+
+  async getProjectsByCategory(category: string, tenantId: number, limit = 10): Promise<Project[]> {
+    return db.select().from(projects)
+      .where(and(eq(projects.category, category), eq(projects.status, "published"), eq(projects.isActive, true), eq(projects.tenantId, tenantId)))
+      .orderBy(asc(projects.order), desc(projects.createdAt))
+      .limit(limit);
+  }
+
+  async getProjectsByType(projectType: string, tenantId: number, limit = 10): Promise<Project[]> {
+    return db.select().from(projects)
+      .where(and(eq(projects.projectType, projectType), eq(projects.status, "published"), eq(projects.isActive, true), eq(projects.tenantId, tenantId)))
+      .orderBy(asc(projects.order), desc(projects.createdAt))
+      .limit(limit);
+  }
+
+  // Global SEO Settings operations
+  async getGlobalSeoSettings(tenantId: number): Promise<GlobalSeoSettings | null> {
+    const [settings] = await db.select().from(globalSeoSettings).where(eq(globalSeoSettings.tenantId, tenantId)).limit(1);
+    return settings || null;
+  }
+
+  async upsertGlobalSeoSettings(settingsData: InsertGlobalSeoSettings & { updatedBy: string }, tenantId: number): Promise<GlobalSeoSettings> {
+    const existingSettings = await this.getGlobalSeoSettings(tenantId);
+
+    if (existingSettings) {
+      // Update existing settings
+      const updateData = { ...settingsData };
+      delete (updateData as any).id; // Remove id from update data
+
+      const [updated] = await db.update(globalSeoSettings)
+        .set(updateData as any)
+        .where(and(eq(globalSeoSettings.id, existingSettings.id), eq(globalSeoSettings.tenantId, tenantId)))
+        .returning();
+      return updated;
+    } else {
+      // Create new settings
+      const [created] = await db.insert(globalSeoSettings)
+        .values(settingsData as any)
+        .returning();
+      return created;
+    }
+  }
+
+  async updateGlobalSeoSettings(updates: Partial<InsertGlobalSeoSettings> & { updatedBy: string }, tenantId: number): Promise<GlobalSeoSettings | null> {
+    const existingSettings = await this.getGlobalSeoSettings(tenantId);
+
+    if (!existingSettings) {
+      // Create if doesn't exist
+      return this.upsertGlobalSeoSettings(updates as InsertGlobalSeoSettings & { updatedBy: string }, tenantId);
+    }
+
+    const updateData = { ...updates };
+    // Remove fields that shouldn't be updated manually
+    delete (updateData as any).id;
+    delete (updateData as any).updatedAt;
+
+    // Set updatedAt to current time
+    (updateData as any).updatedAt = new Date();
+
+    const [updated] = await db.update(globalSeoSettings)
+      .set(updateData as any)
+      .where(and(eq(globalSeoSettings.id, existingSettings.id), eq(globalSeoSettings.tenantId, tenantId)))
+      .returning();
+
+    return updated || null;
+  }
+
+  // Settings operations (assuming 'settings' table exists and is imported)
+  // NOTE: This section assumes a 'settings' table and related schema types are available.
+  // If not, these methods would need to be implemented based on the actual schema.
+  async getSetting(key: string, tenantId: number): Promise<any> {
+    try {
+      const result = await db.select().from(settings).where(and(eq(settings.key, key), eq(settings.tenantId, tenantId))).limit(1);
+      if (result.length === 0) return null;
+
+      try {
+        return JSON.parse(result[0].value);
+      } catch {
+        return result[0].value;
+      }
+    } catch (error) {
+      console.error(`Error getting setting ${key}:`, error);
+      return null;
+    }
+  }
+
+  async updateSetting(key: string, value: any, tenantId: number): Promise<any> {
+    try {
+      // Check if setting exists
+      const existingSetting = await this.getSetting(key, tenantId);
+
+      if (existingSetting !== null) {
+        // Update existing setting
+        const [updated] = await db.update(settings)
+          .set({
+            value: JSON.stringify(value),
+            updatedAt: new Date()
+          })
+          .where(and(eq(settings.key, key), eq(settings.tenantId, tenantId)))
+          .returning();
+        return updated;
+      } else {
+        // Create new setting
+        const [created] = await db.insert(settings)
+          .values({
+            key,
+            value: JSON.stringify(value),
+            tenantId,
+            updatedAt: new Date()
+          })
+          .returning();
+        return created;
+      }
+    } catch (error) {
+      console.error('Error in updateSetting:', error);
+      throw new Error(`Failed to update setting ${key}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
+
+  async getAllSettings(tenantId: number): Promise<any> {
+    try {
+      const allSettings = await db.select().from(settings).where(eq(settings.tenantId, tenantId));
+      const settingsObj: any = {};
+
+      allSettings.forEach(setting => {
+        try {
+          settingsObj[setting.key] = JSON.parse(setting.value || '');
+        } catch {
+          settingsObj[setting.key] = setting.value;
+        }
+      });
+
+      return settingsObj;
+    } catch (error) {
+      console.error('Error getting all settings:', error);
+      return {};
+    }
+  }
+
+  // Route Analytics operations
+  async createRouteAnalytics(routeData: InsertRouteAnalytics): Promise<RouteAnalytics> {
+    const [route] = await db.insert(routeAnalytics).values(routeData).returning();
+    return route;
+  }
+
+  async getAllRouteAnalytics(tenantId: number): Promise<RouteAnalytics[]> {
+    return await db.select().from(routeAnalytics).where(eq(routeAnalytics.tenantId, tenantId)).orderBy(asc(routeAnalytics.route));
+  }
+
+  async getRouteAnalyticsByRoute(route: string, tenantId: number): Promise<RouteAnalytics | null> {
+    const [result] = await db.select().from(routeAnalytics).where(and(eq(routeAnalytics.route, route), eq(routeAnalytics.tenantId, tenantId)));
+    return result || null;
+  }
+
+  async getRouteAnalyticsById(id: number, tenantId: number): Promise<RouteAnalytics | null> {
+    const [result] = await db.select().from(routeAnalytics).where(and(eq(routeAnalytics.id, id), eq(routeAnalytics.tenantId, tenantId)));
+    return result || null;
+  }
+
+  async updateRouteAnalytics(id: number, tenantId: number, updates: Partial<InsertRouteAnalytics>): Promise<RouteAnalytics | null> {
+    const [route] = await db.update(routeAnalytics)
+      .set(updates as any)
+      .where(and(eq(routeAnalytics.id, id), eq(routeAnalytics.tenantId, tenantId)))
+      .returning();
+    return route || null;
+  }
+
+  async deleteRouteAnalytics(id: number, tenantId: number): Promise<boolean> {
+    const result = await db.delete(routeAnalytics).where(and(eq(routeAnalytics.id, id), eq(routeAnalytics.tenantId, tenantId)));
+    return (result.rowCount ?? 0) > 0;
+  }
+
+  // Superadmin methods to get all content across tenants
+  async getAllPagesForSuperadmin() {
+    return await db.select({
+      id: pages.id,
+      title: pages.title,
+      slug: pages.slug,
+      status: pages.status,
+      createdAt: pages.createdAt,
+      updatedAt: pages.updatedAt,
+      tenantId: pages.tenantId,
+      tenantName: tenants.name,
+      tenantDomain: tenants.domain
+    })
+    .from(pages)
+    .leftJoin(tenants, eq(pages.tenantId, tenants.id))
+    .orderBy(desc(pages.createdAt));
+  }
+
+  async getAllBlogPostsForSuperadmin() {
+    return await db.select({
+      id: blogPosts.id,
+      title: blogPosts.title,
+      slug: blogPosts.slug,
+      status: blogPosts.status,
+      publishedAt: blogPosts.publishedAt,
+      createdAt: blogPosts.createdAt,
+      tenantId: blogPosts.tenantId,
+      tenantName: tenants.name,
+      tenantDomain: tenants.domain
+    })
+    .from(blogPosts)
+    .leftJoin(tenants, eq(blogPosts.tenantId, tenants.id))
+    .orderBy(desc(blogPosts.createdAt));
+  }
+
+  async getAllServicesForSuperadmin() {
+    return await db.select({
+      id: services.id,
+      title: services.title,
+      slug: services.slug,
+      isActive: services.isActive,
+      createdAt: services.createdAt,
+      tenantId: services.tenantId,
+      tenantName: tenants.name,
+      tenantDomain: tenants.domain
+    })
+    .from(services)
+    .leftJoin(tenants, eq(services.tenantId, tenants.id))
+    .orderBy(desc(services.createdAt));
+  }
+
+  async getAllLandingPagesForSuperadmin() {
+    return await db.select({
+      id: landingPages.id,
+      title: landingPages.title,
+      slug: landingPages.slug,
+      isActive: landingPages.isActive,
+      createdAt: landingPages.createdAt,
+      tenantId: landingPages.tenantId,
+      tenantName: tenants.name,
+      tenantDomain: tenants.domain
+    })
+    .from(landingPages)
+    .leftJoin(tenants, eq(landingPages.tenantId, tenants.id))
+    .orderBy(desc(landingPages.createdAt));
+  }
+
+  async getAllBuilderPagesForSuperadmin() {
+    return await db.select({
+      id: builderPages.id,
+      title: builderPages.title,
+      slug: builderPages.slug,
+      isPublished: builderPages.isPublished,
+      createdAt: builderPages.createdAt,
+      tenantId: builderPages.tenantId,
+      tenantName: tenants.name,
+      tenantDomain: tenants.domain
+    })
+    .from(builderPages)
+    .leftJoin(tenants, eq(builderPages.tenantId, tenants.id))
+    .orderBy(desc(builderPages.createdAt));
+  }
+
+  async getAllProjectsForSuperadmin() {
+    return await db.select({
+      id: projects.id,
+      title: projects.title,
+      slug: projects.slug,
+      isActive: projects.isActive,
+      createdAt: projects.createdAt,
+      tenantId: projects.tenantId,
+      tenantName: tenants.name,
+      tenantDomain: tenants.domain
+    })
+    .from(projects)
+    .leftJoin(tenants, eq(projects.tenantId, tenants.id))
+    .orderBy(desc(projects.createdAt));
+  }
+
+  async getAllLeadsForSuperadmin() {
+    return await db.select({
+      id: leads.id,
+      name: leads.name,
+      email: leads.email,
+      company: leads.company,
+      status: leads.status,
+      source: leads.source,
+      createdAt: leads.createdAt,
+      tenantId: leads.tenantId,
+      tenantName: tenants.name,
+      tenantDomain: tenants.domain
+    })
+    .from(leads)
+    .leftJoin(tenants, eq(leads.tenantId, tenants.id))
+    .orderBy(desc(leads.createdAt));
+  }
+
+  async getAllCandidatesForSuperadmin() {
+    return await db.select({
+      id: candidates.id,
+      name: candidates.name,
+      email: candidates.email,
+      company: candidates.company,
+      status: candidates.status,
+      createdAt: candidates.createdAt,
+      tenantId: candidates.tenantId,
+      tenantName: tenants.name,
+      tenantDomain: tenants.domain
+    })
+    .from(candidates)
+    .leftJoin(tenants, eq(candidates.tenantId, tenants.id))
+    .orderBy(desc(candidates.createdAt));
+  }
+// Google Sheets Configuration Methods
+  async getGoogleSheetsConfigs(): Promise<GoogleSheetsCampaign[]> {
+    return await db.select().from(googleSheetsCampaigns).orderBy(asc(googleSheetsCampaigns.id));
+  }
+
+  async getActiveGoogleSheetsConfigs(): Promise<GoogleSheetsCampaign[]> {
+    return await db.select().from(googleSheetsCampaigns)
+      .where(and(eq(googleSheetsCampaigns.isActive, true), eq(googleSheetsCampaigns.archived, false)))
+      .orderBy(asc(googleSheetsCampaigns.id));
+  }
+
+  async getGoogleSheetsConfig(id: number): Promise<GoogleSheetsCampaign | null> {
+    const [config] = await db.select().from(googleSheetsCampaigns)
+      .where(eq(googleSheetsCampaigns.id, id));
+    return config || null;
+  }
+
+  async createGoogleSheetsConfig(configData: InsertGoogleSheetsCampaign): Promise<GoogleSheetsCampaign> {
+    const [config] = await db.insert(googleSheetsCampaigns).values(configData).returning();
+    return config;
+  }
+
+  async updateGoogleSheetsConfig(id: number, updates: Partial<InsertGoogleSheetsCampaign>): Promise<GoogleSheetsCampaign | null> {
+    const [config] = await db.update(googleSheetsCampaigns)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(googleSheetsCampaigns.id, id))
+      .returning();
+    return config || null;
+  }
+
+  async deleteGoogleSheetsConfig(id: number): Promise<boolean> {
+    const result = await db.delete(googleSheetsCampaigns)
+      .where(eq(googleSheetsCampaigns.id, id));
+    return (result.rowCount ?? 0) > 0;
+  }
+
+  async archiveGoogleSheetsConfig(id: number): Promise<GoogleSheetsCampaign | null> {
+    const [config] = await db.update(googleSheetsCampaigns)
+      .set({ archived: true, isActive: false, updatedAt: new Date() })
+      .where(eq(googleSheetsCampaigns.id, id))
+      .returning();
+    return config || null;
+  }
+
+  async dearchiveGoogleSheetsConfig(id: number): Promise<GoogleSheetsCampaign | null> {
+    const [config] = await db.update(googleSheetsCampaigns)
+      .set({ archived: false, isActive: true, updatedAt: new Date() })
+      .where(eq(googleSheetsCampaigns.id, id))
+      .returning();
+    return config || null;
+  }
+
+  async checkCampaignHasLeads(campaign: string): Promise<boolean> {
+    const [result] = await db.select({ count: count() })
+      .from(marketingLeads)
+      .where(eq(marketingLeads.campaign, campaign));
+    return (result?.count ?? 0) > 0;
+  }
+
+  // Client Methods
+  async getClients(): Promise<Client[]> {
+    return await db.select().from(clients).orderBy(asc(clients.id));
+  }
+
+  async getClient(id: number): Promise<Client | null> {
+    const [client] = await db.select().from(clients)
+      .where(eq(clients.id, id));
+    return client || null;
+  }
+
+  async createClient(clientData: InsertClient): Promise<Client> {
+    const [client] = await db.insert(clients).values(clientData).returning();
+    return client;
+  }
+
+  async deleteClient(id: number): Promise<boolean> {
+    const result = await db.delete(clients)
+      .where(eq(clients.id, id));
+    return (result.rowCount ?? 0) > 0;
+  }
+}
+
+export const storage = new Storage();

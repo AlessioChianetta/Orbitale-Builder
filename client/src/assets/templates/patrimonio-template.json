@@ -1,0 +1,497 @@
+{
+  "templateId": "patrimonio-page",
+  "templateName": "Metodo ORBITALE - Patrimonio Page",
+  "description": "Template completo per landing page di costruzione patrimonio, identico a PatrimonioPage.tsx ma con ogni elemento editabile",
+  "sections": {
+    "header": {
+      "sectionId": "header",
+      "sectionName": "Header",
+      "enabled": true,
+      "elements": {
+        "brandName": {
+          "type": "text",
+          "value": "Metodo ORBITALE",
+          "editable": true
+        },
+        "brandSubtitle": {
+          "type": "text",
+          "value": "Costruisci il Tuo Patrimonio",
+          "editable": true
+        },
+        "navButtons": {
+          "type": "array",
+          "value": [
+            {
+              "text": "🚀 Hybrid",
+              "link": "/hybrid",
+              "variant": "outline"
+            },
+            {
+              "text": "💎 Patrimonio",
+              "link": "#",
+              "variant": "default"
+            }
+          ],
+          "editable": true
+        },
+        "ctaButton": {
+          "type": "button",
+          "text": "CANDIDATI ORA",
+          "link": "https://forms.gle/yourform",
+          "editable": true
+        }
+      }
+    },
+    "hero": {
+      "sectionId": "hero",
+      "sectionName": "Hero Section",
+      "enabled": true,
+      "elements": {
+        "mainTitle": {
+          "type": "text",
+          "value": "Non ti serve un lavoro in più. Ti serve un patrimonio che lavora al posto tuo.",
+          "editable": true
+        },
+        "subtitle": {
+          "type": "text",
+          "value": "Il sistema scientifico per imprenditori, professionisti e dipendenti determinati a costruire un patrimonio da 100.000€ a 500.000€ in 2-4 anni, anche partendo da una situazione di debiti o apparente mancanza di fondi.",
+          "editable": true
+        },
+        "ctaButton": {
+          "type": "button",
+          "text": "CANDIDATI PER UNA SESSIONE STRATEGICA",
+          "link": "https://forms.gle/yourform",
+          "editable": true
+        },
+        "disclaimer": {
+          "type": "text",
+          "value": "Attenzione: Lavoriamo solo con persone proattive, pronte a seguire un metodo. Se cerchi formule magiche o non sei disposto a impegnarti, questo percorso non fa per te.",
+          "editable": true
+        }
+      }
+    },
+    "filter": {
+      "sectionId": "filter",
+      "sectionName": "Filter Section",
+      "enabled": true,
+      "elements": {
+        "badge": {
+          "type": "text",
+          "value": "🎯 Trasparenza Totale",
+          "editable": true
+        },
+        "title": {
+          "type": "text",
+          "value": "Prima di continuare, lascia che sia brutalmente onesto su chi siamo e su chi stiamo cercando.",
+          "editable": true
+        },
+        "subtitle": {
+          "type": "text",
+          "value": "Il nostro tempo è prezioso. Il tuo anche. Mettiamo subito in chiaro le cose.",
+          "editable": true
+        },
+        "whatWeDo": {
+          "type": "object",
+          "value": {
+            "title": "✅ Quello che facciamo:",
+            "items": [
+              "Ti guidiamo a costruire un patrimonio reale, di almeno centomila euro in due-quattro anni",
+              "Generiamo una rendita stabile di almeno duemila euro al mese",
+              "Aiutiamo chi si trova soffocato dai debiti ad uscirne con il nostro metodo esclusivo, l'Effetto Valanga",
+              "Lavoriamo solo con persone davvero determinate a cambiare vita"
+            ]
+          },
+          "editable": true
+        },
+        "whatWeDontDo": {
+          "type": "object",
+          "value": {
+            "title": "❌ Quello che NON facciamo:",
+            "items": [
+              "Non lavoriamo con clienti che non sono pronti a impegnarsi fino in fondo",
+              "Non promettiamo scorciatoie o formule magiche",
+              "Non offriamo consulenze a basso costo - siamo un percorso esclusivo",
+              "Non garantiamo miracoli senza sforzo - il tuo impegno è parte del processo"
+            ]
+          },
+          "editable": true
+        }
+      }
+    },
+    "socialProof": {
+      "sectionId": "socialProof",
+      "sectionName": "Social Proof Section",
+      "enabled": true,
+      "elements": {
+        "badge": {
+          "type": "text",
+          "value": "🤔 Una Storia Interessante...",
+          "editable": true
+        },
+        "intro": {
+          "type": "text",
+          "value": "Magari ti chiedi: \"Ok, ma come siete arrivati a creare una cosa del genere?\"",
+          "editable": true
+        },
+        "storyTitle": {
+          "type": "text",
+          "value": "🧑‍💻 La mia storia personale (Alessio)",
+          "editable": true
+        },
+        "storyContent": {
+          "type": "array",
+          "value": [
+            "È una storia interessante. Io, Alessio, non nasco come marketer, ma come sviluppatore e programmatore. Sono partito da zero, letteralmente squattrinato, frustrato perché non sapevo come far fruttare i miei soldi.",
+            "In pochi anni, ho completamente ribaltato la situazione: Oltre 300 mila euro generati online, Più di 600 imprenditori aiutati, Centinaia di consulenze in 33 nicchie diverse",
+            "Ecco il \"segreto\": Questo è importante per te perché sono l'unico in Italia ad aver unito questi due mondi: la strategia di creazione di business con una logica di crescita patrimoniale che non lascia nulla al caso.",
+            "Ho creato un sistema che elimina ogni rischio e ogni dubbio, portando al risultato in modo quasi matematico."
+          ],
+          "editable": true
+        },
+        "credibilityTitle": {
+          "type": "text",
+          "value": "🏆 Credibilità & Partnership",
+          "editable": true
+        },
+        "credibilityText": {
+          "type": "text",
+          "value": "Siamo gli unici ad aver lanciato un software (Orbitale) così potente in Italia, che ti evita di dover comprare decine di altri tool. Siamo un'azienda seria, e i nostri risultati lo dimostrano.",
+          "editable": true
+        },
+        "partnerships": {
+          "type": "array",
+          "value": ["Alfio Bardolla", "Mirco Gasparotto", "Roberto Re", "Max Mariola"],
+          "editable": true
+        },
+        "bookImage": {
+          "type": "image",
+          "value": "/assets/libro-copertina-alessio.png",
+          "alt": "Copertina libro Comanda le tue Finanze",
+          "editable": true
+        },
+        "bookTitle": {
+          "type": "text",
+          "value": "📖 Il Mio Libro su Amazon",
+          "editable": true
+        },
+        "bookDescription": {
+          "type": "text",
+          "value": "Aiuto imprenditori, liberi professionisti e dipendenti a creare, gestire e proteggere il proprio denaro, risparmiarlo e investirlo strategicamente, per costruire un patrimonio compreso tra 100.000 e 500.000 euro in 2-4 anni, grazie al Metodo ORBITALE.",
+          "editable": true
+        },
+        "bookLink": {
+          "type": "link",
+          "text": "📚 Leggi su Amazon",
+          "url": "https://amzn.eu/d/cS6D9Kj",
+          "editable": true
+        }
+      }
+    },
+    "problems": {
+      "sectionId": "problems",
+      "sectionName": "Problems Section",
+      "enabled": true,
+      "elements": {
+        "title": {
+          "type": "text",
+          "value": "Se lavori sodo ma il tuo patrimonio è fermo, la colpa non è tua. È la mancanza di un sistema.",
+          "editable": true
+        },
+        "subtitle": {
+          "type": "text",
+          "value": "Probabilmente, la tua situazione finanziaria assomiglia a una di queste.",
+          "editable": true
+        },
+        "problemsList": {
+          "type": "array",
+          "value": [
+            {
+              "title": "L'Ansia da Estratto Conto",
+              "description": "Lavori 10 ore al giorno, generi un buon reddito, ma a fine mese ti chiedi dove siano finiti i soldi. Il tuo conto corrente è un campo di battaglia tra entrate e uscite impreviste.",
+              "icon": "AlertTriangle"
+            },
+            {
+              "title": "La Prigione dei Debiti \"Buoni\"",
+              "description": "Ti hanno detto che il mutuo o il finanziamento per l'auto sono \"investimenti\". La realtà è che ogni mese una fetta enorme del tuo reddito se ne va per ripagare il passato.",
+              "icon": "Building2"
+            },
+            {
+              "title": "La Paralisi da Investimento",
+              "description": "Sai che dovresti investire, che l'inflazione sta divorando i tuoi risparmi. Ma il mondo della finanza ti sembra un casinò truccato.",
+              "icon": "BarChart3"
+            },
+            {
+              "title": "La Ruota del Criceto",
+              "description": "Sei intrappolato in un ciclo senza fine. Lavori di più per guadagnare di più, ma più guadagni più spendi. Il tuo stile di vita cresce, ma il tuo patrimonio rimane immobile.",
+              "icon": "Target"
+            }
+          ],
+          "editable": true
+        }
+      }
+    },
+    "solution": {
+      "sectionId": "solution",
+      "sectionName": "Solution Section",
+      "enabled": true,
+      "elements": {
+        "title": {
+          "type": "text",
+          "value": "Per uscire dal caos non serve più impegno. Serve un piano d'azione ingegneristico.",
+          "editable": true
+        },
+        "subtitle": {
+          "type": "text",
+          "value": "Il Metodo ORBITALE è un sistema a 4 fasi che ti porta, passo dopo passo, dalla confusione alla libertà finanziaria. Niente teorie, solo azioni precise.",
+          "editable": true
+        },
+        "phases": {
+          "type": "array",
+          "value": [
+            {
+              "phase": "Fase 1",
+              "title": "LIBERAZIONE: Uscita dai Debiti e Creazione di Liquidità",
+              "description": "Attraverso il nostro metodo \"Effetto Valanga\", creiamo un piano d'attacco chirurgico per eliminare i debiti che soffocano il tuo cash flow.",
+              "transformation": "Da indebitato a liquido",
+              "icon": "Shield",
+              "color": "from-red-500 to-orange-500"
+            },
+            {
+              "phase": "Fase 2",
+              "title": "ACCUMULO: Sistema di Risparmio e Gestione Automatizzata",
+              "description": "Installiamo il nostro sistema proprietario dei \"6 Conti Intelligenti\". Automatizziamo il processo di risparmio, costringendoti a \"pagare prima te stesso\".",
+              "transformation": "Da disorganizzato a una macchina da risparmio",
+              "icon": "PiggyBank",
+              "color": "from-orange-500 to-yellow-500"
+            },
+            {
+              "phase": "Fase 3",
+              "title": "MOLTIPLICAZIONE: Investimenti Semplici e Sicuri",
+              "description": "Ti guidiamo a implementare una strategia basata su strumenti semplici, a basso costo e storicamente solidi (ETF, Oro, etc.). Solo crescita costante e prevedibile.",
+              "transformation": "Da risparmiatore a investitore strategico",
+              "icon": "TrendingUp",
+              "color": "from-yellow-500 to-green-500"
+            },
+            {
+              "phase": "Fase 4",
+              "title": "STABILITÀ: Il Patrimonio che Genera Rendita",
+              "description": "Il tuo capitale genera un flusso di reddito passivo che può coprire le tue spese. Non sei più dipendente dal tuo lavoro per vivere.",
+              "transformation": "Da dipendente del tuo lavoro a padrone del tuo patrimonio",
+              "icon": "Rocket",
+              "color": "from-green-500 to-blue-500"
+            }
+          ],
+          "editable": true
+        }
+      }
+    },
+    "valueStack": {
+      "sectionId": "valueStack",
+      "sectionName": "Value Stack Section",
+      "enabled": true,
+      "elements": {
+        "title": {
+          "type": "text",
+          "value": "Accedendo al Metodo ORBITALE, non compri un corso. Acquisisci un intero arsenale per la costruzione della ricchezza.",
+          "editable": true
+        },
+        "components": {
+          "type": "array",
+          "value": [
+            {
+              "title": "La Piattaforma Software ORBITALE",
+              "value": "1.200€/anno",
+              "description": "Il tuo centro di controllo. Un software proprietario per tracciare il Net Worth in tempo reale, gestire i 6 conti, monitorare gli investimenti.",
+              "icon": "Calculator"
+            },
+            {
+              "title": "La Master Library Formativa Definitiva",
+              "value": "2.997€",
+              "description": "La nostra enciclopedia della ricchezza personale. Oltre 17 categorie e decine di lezioni che coprono ogni aspetto.",
+              "icon": "BookOpen"
+            },
+            {
+              "title": "Coaching Esecutivo 1-a-1",
+              "value": "7.200€",
+              "description": "Il nostro tempo dedicato a te. Sessioni strategiche dove non parliamo di teoria, ma agiamo nel tuo home banking, sul tuo broker.",
+              "icon": "Users"
+            },
+            {
+              "title": "Il Sistema di Accountability",
+              "value": "Inestimabile",
+              "description": "La vera arma segreta. Esercizi settimanali, revisioni personalizzate e una struttura che ti impedisce di procrastinare.",
+              "icon": "Target"
+            }
+          ],
+          "editable": true
+        },
+        "totalValue": {
+          "type": "text",
+          "value": "VALORE TOTALE DEL PACCHETTO: 12.894€",
+          "editable": true
+        },
+        "yourInvestment": {
+          "type": "text",
+          "value": "IL TUO INVESTIMENTO OGGI: VEDI I PIANI",
+          "editable": true
+        }
+      }
+    },
+    "pricing": {
+      "sectionId": "pricing",
+      "sectionName": "Pricing Section",
+      "enabled": true,
+      "elements": {
+        "title": {
+          "type": "text",
+          "value": "Scegli il Percorso Progettato per la Tua Velocità di Crociera",
+          "editable": true
+        },
+        "plans": {
+          "type": "array",
+          "value": [
+            {
+              "name": "Percorso COSTRUTTORE",
+              "price": "297€ / mese",
+              "features": [
+                "2 Sessioni Strategiche al mese",
+                "Arsenale Completo (Software, Libreria, Template)",
+                "Supporto via Piattaforma (Risposta in 2/4h)",
+                "Canale di Supporto Diretto"
+              ],
+              "ideal": "Ideale per: Chi vuole costruire fondamenta solide con un affiancamento costante e strategico.",
+              "buttonText": "INIZIA IL PERCORSO COSTRUTTORE",
+              "buttonLink": "https://forms.gle/yourform",
+              "recommended": false
+            },
+            {
+              "name": "Percorso ACCELERATORE",
+              "price": "497€ / mese",
+              "features": [
+                "4 Sessioni Strategiche al mese",
+                "Arsenale Completo (Software, Libreria, Template)",
+                "Supporto via Piattaforma (Risposta in 1h)",
+                "Onboarding Intensivo (4 sessioni nel primo mese)",
+                "Report Mensili Personalizzati"
+              ],
+              "ideal": "Ideale per: Chi vuole la massima velocità, il massimo supporto e la certezza assoluta di raggiungere il risultato nel minor tempo possibile.",
+              "buttonText": "INIZIA IL PERCORSO ACCELERATORE",
+              "buttonLink": "https://forms.gle/yourform",
+              "recommended": true
+            }
+          ],
+          "editable": true
+        }
+      }
+    },
+    "guarantee": {
+      "sectionId": "guarantee",
+      "sectionName": "Guarantee Section",
+      "enabled": true,
+      "elements": {
+        "title": {
+          "type": "text",
+          "value": "La Nostra Garanzia",
+          "editable": true
+        },
+        "text": {
+          "type": "text",
+          "value": "Siamo così sicuri della potenza del nostro sistema che mettiamo il rischio interamente sulle nostre spalle. Se dopo i primi 30 giorni, seguendo alla lettera il piano d'azione iniziale e completando tutti gli esercizi assegnati, non sarai assolutamente convinto del valore e della direzione che abbiamo impostato, ti rimborsiamo l'intero importo versato. Senza fare domande.",
+          "editable": true
+        }
+      }
+    },
+    "fork": {
+      "sectionId": "fork",
+      "sectionName": "Fork in the Road Section",
+      "enabled": true,
+      "elements": {
+        "badge": {
+          "type": "text",
+          "value": "IL MOMENTO DECISIVO",
+          "editable": true
+        },
+        "title": {
+          "type": "text",
+          "value": "Sei arrivato al BIVIO DEFINITIVO",
+          "editable": true
+        },
+        "subtitle": {
+          "type": "text",
+          "value": "Oggi devi scegliere tra due strade completamente diverse. Non c'è via di mezzo.",
+          "editable": true
+        },
+        "statusQuoPath": {
+          "type": "object",
+          "value": {
+            "title": "❌ STRADA #1: STATUS QUO",
+            "subtitle": "Continuare Come Sempre",
+            "description": "\"Farò da solo, prima o poi ce la farò...\"",
+            "consequences": [
+              {
+                "title": "Tempo che passa",
+                "description": "Altri 2-3 anni di tentativi casuali"
+              },
+              {
+                "title": "Ansia crescente",
+                "description": "La paura del futuro aumenta ogni mese"
+              },
+              {
+                "title": "Opportunità perse",
+                "description": "Guardare gli altri costruire quello che volevi tu"
+              },
+              {
+                "title": "Stesso risultato",
+                "description": "Stessi problemi, stessa frustrazione"
+              }
+            ],
+            "finalThought": "💭 \"Tra un anno sarò ancora qui a cercare la soluzione magica...\""
+          },
+          "editable": true
+        },
+        "transformationPath": {
+          "type": "object",
+          "value": {
+            "title": "✅ STRADA #2: TRASFORMAZIONE",
+            "subtitle": "Il Metodo ORBITALE",
+            "description": "\"Costruisco un patrimonio che lavora per me\"",
+            "benefits": [
+              {
+                "title": "Piano d'azione chiaro",
+                "description": "Ogni passo è definito e testato"
+              },
+              {
+                "title": "Supporto costante",
+                "description": "Non sei mai solo in questo percorso"
+              },
+              {
+                "title": "Risultati misurabili",
+                "description": "Vedi i progressi mese dopo mese"
+              },
+              {
+                "title": "Libertà finanziaria",
+                "description": "Il patrimonio che hai sempre sognato"
+              }
+            ],
+            "finalThought": "💪 \"Tra un anno avrò il controllo totale del mio futuro\""
+          },
+          "editable": true
+        }
+      }
+    }
+  },
+  "globalSettings": {
+    "primaryColor": "#2563eb",
+    "secondaryColor": "#7c3aed",
+    "accentColor": "#ea580c",
+    "backgroundColor": "#f8fafc",
+    "textColor": "#1e293b",
+    "formLink": "https://forms.gle/yourform",
+    "brandLogo": "/assets/logo.png"
+  },
+  "metadata": {
+    "metaTitle": "Metodo ORBITALE - Costruisci il Tuo Patrimonio",
+    "metaDescription": "Sistema scientifico per costruire un patrimonio da 100.000€ a 500.000€ in 2-4 anni. Percorso per imprenditori e professionisti determinati.",
+    "ogImage": "/assets/og-patrimonio.jpg"
+  }
+}

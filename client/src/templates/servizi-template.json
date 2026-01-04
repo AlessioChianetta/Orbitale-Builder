@@ -1,0 +1,167 @@
+{
+  "templateId": "servizi",
+  "templateName": "Servizi Template",
+  "description": "Template completo per la pagina Servizi con tutti gli elementi editabili",
+  "sections": {
+    "hero": {
+      "sectionId": "hero",
+      "sectionName": "Hero Section",
+      "enabled": true,
+      "elements": {
+        "badge": {
+          "type": "text",
+          "value": "I Nostri Servizi",
+          "editable": true
+        },
+        "title": {
+          "type": "text",
+          "value": "Un",
+          "editable": true
+        },
+        "highlightTitle": {
+          "type": "text",
+          "value": "Sistema Completo",
+          "editable": true
+        },
+        "titleEnd": {
+          "type": "text",
+          "value": "per la Tua Crescita",
+          "editable": true
+        },
+        "subtitle": {
+          "type": "textarea",
+          "value": "Non offriamo semplici servizi, ma costruiamo sistemi integrati che trasformano la tua presenza digitale in un motore di crescita prevedibile.",
+          "editable": true
+        }
+      }
+    },
+    "mainServices": {
+      "sectionId": "mainServices",
+      "sectionName": "Servizi Principali",
+      "enabled": true,
+      "elements": {
+        "title": {
+          "type": "text",
+          "value": "Le Nostre Soluzioni Principali",
+          "editable": true
+        },
+        "subtitle": {
+          "type": "textarea",
+          "value": "I tre pilastri su cui si fonda la crescita digitale dei nostri clienti.",
+          "editable": true
+        },
+        "note": {
+          "type": "text",
+          "value": "Nota: I servizi principali vengono caricati dinamicamente dal database",
+          "editable": false
+        }
+      }
+    },
+    "additionalServices": {
+      "sectionId": "additionalServices",
+      "sectionName": "Servizi Specialistici",
+      "enabled": true,
+      "elements": {
+        "title": {
+          "type": "text",
+          "value": "Servizi Specialistici",
+          "editable": true
+        },
+        "subtitle": {
+          "type": "textarea",
+          "value": "Soluzioni mirate per affrontare sfide specifiche e completare la tua strategia digitale.",
+          "editable": true
+        },
+        "note": {
+          "type": "text",
+          "value": "Nota: I servizi specialistici vengono caricati dinamicamente dal database",
+          "editable": false
+        }
+      }
+    },
+    "process": {
+      "sectionId": "process",
+      "sectionName": "Il Nostro Processo",
+      "enabled": true,
+      "elements": {
+        "badge": {
+          "type": "text",
+          "value": "Metodologia Comprovata",
+          "editable": true
+        },
+        "title": {
+          "type": "text",
+          "value": "Il Nostro Processo",
+          "editable": true
+        },
+        "highlightTitle": {
+          "type": "text",
+          "value": "Collaudato",
+          "editable": true
+        },
+        "subtitle": {
+          "type": "textarea",
+          "value": "Seguiamo un metodo in 4 fasi per garantire chiarezza, efficienza e risultati misurabili in ogni progetto.",
+          "editable": true
+        },
+        "steps": {
+          "type": "array",
+          "value": [
+            {
+              "number": "01",
+              "title": "Analisi e Strategia",
+              "description": "Analizziamo il tuo business e definiamo insieme la strategia più efficace per raggiungere i tuoi obiettivi.",
+              "color": "emerald"
+            },
+            {
+              "number": "02",
+              "title": "Progettazione e Sviluppo",
+              "description": "Creiamo e sviluppiamo gli asset digitali necessari, dal sito web alle campagne.",
+              "color": "blue"
+            },
+            {
+              "number": "03",
+              "title": "Lancio e Ottimizzazione",
+              "description": "Lanciamo il progetto e monitoriamo i dati per ottimizzare le performance in tempo reale.",
+              "color": "purple"
+            },
+            {
+              "number": "04",
+              "title": "Scaling",
+              "description": "Una volta validato il sistema, lo scaliamo per massimizzare il ritorno sull'investimento.",
+              "color": "orange"
+            }
+          ],
+          "editable": true
+        }
+      }
+    },
+    "cta": {
+      "sectionId": "cta",
+      "sectionName": "Call to Action",
+      "enabled": true,
+      "elements": {
+        "title": {
+          "type": "text",
+          "value": "Pronto a Costruire il Tuo Sistema di Crescita?",
+          "editable": true
+        },
+        "subtitle": {
+          "type": "textarea",
+          "value": "Parliamone. Analizzeremo insieme i tuoi obiettivi e definiremo la strategia perfetta per la tua azienda, senza impegno.",
+          "editable": true
+        },
+        "ctaButton": {
+          "type": "button",
+          "value": {
+            "text": "Richiedi una Consulenza Gratuita",
+            "link": "/contatti"
+          },
+          "editable": true
+        }
+      }
+    }
+  },
+  "metaTitle": "Servizi di Marketing Digitale e Sviluppo Web",
+  "metaDescription": "Scopri i nostri servizi di marketing digitale, sviluppo web, SEO e consulenza business. Sistemi integrati per la crescita della tua azienda."
+}

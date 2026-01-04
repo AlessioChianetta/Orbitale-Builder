@@ -1,0 +1,213 @@
+{
+  "templateId": "blog",
+  "templateName": "Blog Template",
+  "description": "Template completo per la pagina Blog con tutti gli elementi editabili",
+  "sections": {
+    "hero": {
+      "sectionId": "hero",
+      "sectionName": "Hero Section",
+      "enabled": true,
+      "elements": {
+        "badge": {
+          "type": "text",
+          "value": "Il Nostro Blog",
+          "editable": true
+        },
+        "title": {
+          "type": "text",
+          "value": "Insights e Strategie per il",
+          "editable": true
+        },
+        "highlightTitle": {
+          "type": "text",
+          "value": "Successo Digitale",
+          "editable": true
+        },
+        "subtitle": {
+          "type": "textarea",
+          "value": "Guide pratiche, case study e le ultime tendenze del marketing digitale per far crescere il tuo business.",
+          "editable": true
+        },
+        "searchPlaceholder": {
+          "type": "text",
+          "value": "Cerca articoli, argomenti...",
+          "editable": true
+        },
+        "allCategoriesText": {
+          "type": "text",
+          "value": "Tutti",
+          "editable": true
+        }
+      }
+    },
+    "featured": {
+      "sectionId": "featured",
+      "sectionName": "Featured Section",
+      "enabled": true,
+      "elements": {
+        "title": {
+          "type": "text",
+          "value": "In Evidenza",
+          "editable": true
+        },
+        "note": {
+          "type": "text",
+          "value": "Nota: Gli articoli in evidenza vengono caricati dinamicamente dal database",
+          "editable": false
+        }
+      }
+    },
+    "latestArticles": {
+      "sectionId": "latestArticles",
+      "sectionName": "Latest Articles Section",
+      "enabled": true,
+      "elements": {
+        "titleDefault": {
+          "type": "text",
+          "value": "Ultimi Articoli",
+          "editable": true
+        },
+        "titleResults": {
+          "type": "text",
+          "value": "Risultati",
+          "editable": true
+        },
+        "noResultsTitle": {
+          "type": "text",
+          "value": "Nessun articolo trovato",
+          "editable": true
+        },
+        "noResultsDescription": {
+          "type": "textarea",
+          "value": "Prova a modificare i filtri di ricerca o esplora tutte le categorie.",
+          "editable": true
+        },
+        "showAllButton": {
+          "type": "text",
+          "value": "Mostra Tutti gli Articoli",
+          "editable": true
+        },
+        "articleCountSingular": {
+          "type": "text",
+          "value": "articolo",
+          "editable": true
+        },
+        "articleCountPlural": {
+          "type": "text",
+          "value": "articoli",
+          "editable": true
+        },
+        "note": {
+          "type": "text",
+          "value": "Nota: Gli articoli vengono caricati dinamicamente dal database",
+          "editable": false
+        }
+      }
+    },
+    "newsletterCta": {
+      "sectionId": "newsletterCta",
+      "sectionName": "Newsletter CTA Section",
+      "enabled": true,
+      "elements": {
+        "title": {
+          "type": "text",
+          "value": "Non Perdere i Nostri Consigli",
+          "editable": true
+        },
+        "subtitle": {
+          "type": "textarea",
+          "value": "Ricevi i migliori articoli e strategie di marketing digitale direttamente nella tua inbox.",
+          "editable": true
+        },
+        "emailPlaceholder": {
+          "type": "text",
+          "value": "La tua email...",
+          "editable": true
+        },
+        "ctaButton": {
+          "type": "button",
+          "text": "Iscriviti Gratis",
+          "link": "#newsletter-signup",
+          "editable": true
+        },
+        "disclaimer": {
+          "type": "text",
+          "value": "Niente spam. Solo contenuti di valore. Cancellati quando vuoi.",
+          "editable": true
+        }
+      }
+    },
+    "loadingState": {
+      "sectionId": "loadingState",
+      "sectionName": "Loading State",
+      "enabled": true,
+      "elements": {
+        "loadingText": {
+          "type": "text",
+          "value": "Caricamento articoli...",
+          "editable": true
+        }
+      }
+    }
+  },
+  "blogCardElements": {
+    "sectionId": "blogCardElements",
+    "sectionName": "Blog Card Elements",
+    "enabled": true,
+    "description": "Elementi editabili per le card degli articoli del blog",
+    "elements": {
+      "featuredBadge": {
+        "type": "text",
+        "value": "In Evidenza",
+        "editable": true
+      },
+      "readingTimeUnit": {
+        "type": "text",
+        "value": "min",
+        "editable": true
+      },
+      "readArticleButton": {
+        "type": "text",
+        "value": "Leggi Articolo",
+        "editable": true
+      },
+      "defaultImage": {
+        "type": "object",
+        "value": {
+          "fallbackText": "Articolo",
+          "iconLetter": "B"
+        },
+        "editable": true
+      },
+      "authorPrefix": {
+        "type": "text",
+        "value": "Admin",
+        "editable": true
+      }
+    }
+  },
+  "globalSettings": {
+    "primaryColor": "#2563eb",
+    "secondaryColor": "#7c3aed",
+    "accentColor": "#ea580c",
+    "backgroundColor": "#f8fafc",
+    "textColor": "#1e293b",
+    "cardBackground": "#ffffff",
+    "mutedColor": "#64748b"
+  },
+  "metadata": {
+    "metaTitle": "Blog Marketing Digitale - Strategie e Guide Pratiche",
+    "metaDescription": "Scopri insights, strategie e case study sul marketing digitale. Guide pratiche per far crescere il tuo business online con le ultime tendenze del settore.",
+    "ogImage": "/blog-og-image.jpg",
+    "keywords": [
+      "blog marketing",
+      "strategie digitali", 
+      "crescita business",
+      "marketing online",
+      "guide pratiche",
+      "case study",
+      "tendenze digitali",
+      "insights marketing"
+    ]
+  }
+}

@@ -1,0 +1,283 @@
+🔍 [FB PIXEL INIT] SEO Settings loaded: undefined
+index-CbWe8YMT.js:621 🔍 [FB PIXEL INIT] Facebook Pixel ID: undefined
+index-CbWe8YMT.js:621 ❌ [FB PIXEL INIT] No Facebook Pixel ID found in settings
+index-CbWe8YMT.js:754  GET https://fabiobianchini.it/api/pages/servizi 404 (Not Found)
+queryFn @ index-CbWe8YMT.js:754
+a @ index-CbWe8YMT.js:48
+v @ index-CbWe8YMT.js:48
+start @ index-CbWe8YMT.js:48
+fetch @ index-CbWe8YMT.js:48
+xu @ index-CbWe8YMT.js:48
+onSubscribe @ index-CbWe8YMT.js:48
+subscribe @ index-CbWe8YMT.js:48
+(anonymous) @ index-CbWe8YMT.js:48
+GI @ index-CbWe8YMT.js:38
+Rg @ index-CbWe8YMT.js:40
+Ec @ index-CbWe8YMT.js:40
+FS @ index-CbWe8YMT.js:40
+To @ index-CbWe8YMT.js:38
+l$ @ index-CbWe8YMT.js:40
+Ho @ index-CbWe8YMT.js:40
+CA @ index-CbWe8YMT.js:40
+C @ index-CbWe8YMT.js:25
+M @ index-CbWe8YMT.js:25Understand this error
+index-CbWe8YMT.js:621 🔍 [FB PIXEL INIT] SEO Settings loaded: {googleAnalyticsId: null, googleTagManagerId: null, googleSearchConsoleCode: null, siteName: null, siteDescription: null, …}
+index-CbWe8YMT.js:621 🔍 [FB PIXEL INIT] Facebook Pixel ID: null
+index-CbWe8YMT.js:621 ❌ [FB PIXEL INIT] No Facebook Pixel ID found in settings
+index-CbWe8YMT.js:754  GET https://fabiobianchini.it/api/landing-pages/slug/servizi 404 (Not Found)
+queryFn @ index-CbWe8YMT.js:754
+a @ index-CbWe8YMT.js:48
+v @ index-CbWe8YMT.js:48
+start @ index-CbWe8YMT.js:48
+fetch @ index-CbWe8YMT.js:48
+xu @ index-CbWe8YMT.js:48
+setOptions @ index-CbWe8YMT.js:48
+(anonymous) @ index-CbWe8YMT.js:48
+Rg @ index-CbWe8YMT.js:40
+Ec @ index-CbWe8YMT.js:40
+l$ @ index-CbWe8YMT.js:40
+Ho @ index-CbWe8YMT.js:40
+FS @ index-CbWe8YMT.js:40
+To @ index-CbWe8YMT.js:38
+(anonymous) @ index-CbWe8YMT.js:40
+setTimeout
+s @ index-CbWe8YMT.js:48
+o @ index-CbWe8YMT.js:48
+batch @ index-CbWe8YMT.js:48
+Bs @ index-CbWe8YMT.js:48
+setData @ index-CbWe8YMT.js:48
+onSuccess @ index-CbWe8YMT.js:48
+h @ index-CbWe8YMT.js:48
+Promise.then
+v @ index-CbWe8YMT.js:48
+start @ index-CbWe8YMT.js:48
+fetch @ index-CbWe8YMT.js:48
+xu @ index-CbWe8YMT.js:48
+onSubscribe @ index-CbWe8YMT.js:48
+subscribe @ index-CbWe8YMT.js:48
+(anonymous) @ index-CbWe8YMT.js:48
+GI @ index-CbWe8YMT.js:38
+Rg @ index-CbWe8YMT.js:40
+Ec @ index-CbWe8YMT.js:40
+FS @ index-CbWe8YMT.js:40
+To @ index-CbWe8YMT.js:38
+l$ @ index-CbWe8YMT.js:40
+Ho @ index-CbWe8YMT.js:40
+CA @ index-CbWe8YMT.js:40
+C @ index-CbWe8YMT.js:25
+M @ index-CbWe8YMT.js:25Understand this error
+index-CbWe8YMT.js:657  GET https://fabiobianchini.it/api/services 401 (Unauthorized)
+queryFn @ index-CbWe8YMT.js:657
+a @ index-CbWe8YMT.js:48
+v @ index-CbWe8YMT.js:48
+start @ index-CbWe8YMT.js:48
+fetch @ index-CbWe8YMT.js:48
+xu @ index-CbWe8YMT.js:48
+onSubscribe @ index-CbWe8YMT.js:48
+subscribe @ index-CbWe8YMT.js:48
+(anonymous) @ index-CbWe8YMT.js:48
+GI @ index-CbWe8YMT.js:38
+Rg @ index-CbWe8YMT.js:40
+Ec @ index-CbWe8YMT.js:40
+l$ @ index-CbWe8YMT.js:40
+Ho @ index-CbWe8YMT.js:40
+FS @ index-CbWe8YMT.js:40
+To @ index-CbWe8YMT.js:38
+(anonymous) @ index-CbWe8YMT.js:40
+setTimeout
+s @ index-CbWe8YMT.js:48
+o @ index-CbWe8YMT.js:48
+batch @ index-CbWe8YMT.js:48
+Bs @ index-CbWe8YMT.js:48
+setData @ index-CbWe8YMT.js:48
+onSuccess @ index-CbWe8YMT.js:48
+h @ index-CbWe8YMT.js:48
+Promise.then
+v @ index-CbWe8YMT.js:48
+start @ index-CbWe8YMT.js:48
+fetch @ index-CbWe8YMT.js:48
+xu @ index-CbWe8YMT.js:48
+setOptions @ index-CbWe8YMT.js:48
+(anonymous) @ index-CbWe8YMT.js:48
+Rg @ index-CbWe8YMT.js:40
+Ec @ index-CbWe8YMT.js:40
+l$ @ index-CbWe8YMT.js:40
+Ho @ index-CbWe8YMT.js:40
+FS @ index-CbWe8YMT.js:40
+To @ index-CbWe8YMT.js:38
+(anonymous) @ index-CbWe8YMT.js:40
+setTimeout
+s @ index-CbWe8YMT.js:48
+o @ index-CbWe8YMT.js:48
+batch @ index-CbWe8YMT.js:48
+Bs @ index-CbWe8YMT.js:48
+setData @ index-CbWe8YMT.js:48
+onSuccess @ index-CbWe8YMT.js:48
+h @ index-CbWe8YMT.js:48
+Promise.then
+v @ index-CbWe8YMT.js:48
+start @ index-CbWe8YMT.js:48
+fetch @ index-CbWe8YMT.js:48
+xu @ index-CbWe8YMT.js:48
+setOptions @ index-CbWe8YMT.js:48
+(anonymous) @ index-CbWe8YMT.js:48
+Rg @ index-CbWe8YMT.js:40
+Ec @ index-CbWe8YMT.js:40
+l$ @ index-CbWe8YMT.js:40
+Ho @ index-CbWe8YMT.js:40
+FS @ index-CbWe8YMT.js:40
+To @ index-CbWe8YMT.js:38
+(anonymous) @ index-CbWe8YMT.js:40
+setTimeout
+s @ index-CbWe8YMT.js:48
+o @ index-CbWe8YMT.js:48
+batch @ index-CbWe8YMT.js:48
+Bs @ index-CbWe8YMT.js:48
+setData @ index-CbWe8YMT.js:48
+onSuccess @ index-CbWe8YMT.js:48
+h @ index-CbWe8YMT.js:48
+Promise.then
+v @ index-CbWe8YMT.js:48
+start @ index-CbWe8YMT.js:48
+fetch @ index-CbWe8YMT.js:48
+xu @ index-CbWe8YMT.js:48
+onSubscribe @ index-CbWe8YMT.js:48
+subscribe @ index-CbWe8YMT.js:48
+(anonymous) @ index-CbWe8YMT.js:48
+GI @ index-CbWe8YMT.js:38
+Rg @ index-CbWe8YMT.js:40
+Ec @ index-CbWe8YMT.js:40
+FS @ index-CbWe8YMT.js:40
+To @ index-CbWe8YMT.js:38
+l$ @ index-CbWe8YMT.js:40
+Ho @ index-CbWe8YMT.js:40
+CA @ index-CbWe8YMT.js:40
+C @ index-CbWe8YMT.js:25
+M @ index-CbWe8YMT.js:25Understand this error
+index-CbWe8YMT.js:40 TypeError: t.filter is not a function
+    at fse (index-CbWe8YMT.js:657:105554)
+    at Dj (index-CbWe8YMT.js:38:17018)
+    at vy (index-CbWe8YMT.js:40:3139)
+    at AA (index-CbWe8YMT.js:40:44833)
+    at EA (index-CbWe8YMT.js:40:39790)
+    at a$ (index-CbWe8YMT.js:40:39718)
+    at Ef (index-CbWe8YMT.js:40:39570)
+    at Py (index-CbWe8YMT.js:40:35934)
+    at FS (index-CbWe8YMT.js:40:36738)
+    at To (index-CbWe8YMT.js:38:3279)
+xy @ index-CbWe8YMT.js:40
+n.callback @ index-CbWe8YMT.js:40
+jS @ index-CbWe8YMT.js:38
+zS @ index-CbWe8YMT.js:40
+kA @ index-CbWe8YMT.js:40
+i$ @ index-CbWe8YMT.js:40
+l$ @ index-CbWe8YMT.js:40
+Ho @ index-CbWe8YMT.js:40
+FS @ index-CbWe8YMT.js:40
+To @ index-CbWe8YMT.js:38
+(anonymous) @ index-CbWe8YMT.js:40
+setTimeout
+s @ index-CbWe8YMT.js:48
+o @ index-CbWe8YMT.js:48
+batch @ index-CbWe8YMT.js:48
+Bs @ index-CbWe8YMT.js:48
+setData @ index-CbWe8YMT.js:48
+onSuccess @ index-CbWe8YMT.js:48
+h @ index-CbWe8YMT.js:48
+Promise.then
+v @ index-CbWe8YMT.js:48
+start @ index-CbWe8YMT.js:48
+fetch @ index-CbWe8YMT.js:48
+xu @ index-CbWe8YMT.js:48
+onSubscribe @ index-CbWe8YMT.js:48
+subscribe @ index-CbWe8YMT.js:48
+(anonymous) @ index-CbWe8YMT.js:48
+GI @ index-CbWe8YMT.js:38
+Rg @ index-CbWe8YMT.js:40
+Ec @ index-CbWe8YMT.js:40
+l$ @ index-CbWe8YMT.js:40
+Ho @ index-CbWe8YMT.js:40
+FS @ index-CbWe8YMT.js:40
+To @ index-CbWe8YMT.js:38
+(anonymous) @ index-CbWe8YMT.js:40
+setTimeout
+s @ index-CbWe8YMT.js:48
+o @ index-CbWe8YMT.js:48
+batch @ index-CbWe8YMT.js:48
+Bs @ index-CbWe8YMT.js:48
+setData @ index-CbWe8YMT.js:48
+onSuccess @ index-CbWe8YMT.js:48
+h @ index-CbWe8YMT.js:48
+Promise.then
+v @ index-CbWe8YMT.js:48
+start @ index-CbWe8YMT.js:48
+fetch @ index-CbWe8YMT.js:48
+xu @ index-CbWe8YMT.js:48
+setOptions @ index-CbWe8YMT.js:48
+(anonymous) @ index-CbWe8YMT.js:48
+Rg @ index-CbWe8YMT.js:40
+Ec @ index-CbWe8YMT.js:40
+l$ @ index-CbWe8YMT.js:40
+Ho @ index-CbWe8YMT.js:40
+FS @ index-CbWe8YMT.js:40
+To @ index-CbWe8YMT.js:38
+(anonymous) @ index-CbWe8YMT.js:40
+setTimeout
+s @ index-CbWe8YMT.js:48
+o @ index-CbWe8YMT.js:48
+batch @ index-CbWe8YMT.js:48
+Bs @ index-CbWe8YMT.js:48
+setData @ index-CbWe8YMT.js:48
+onSuccess @ index-CbWe8YMT.js:48
+h @ index-CbWe8YMT.js:48
+Promise.then
+v @ index-CbWe8YMT.js:48
+start @ index-CbWe8YMT.js:48
+fetch @ index-CbWe8YMT.js:48
+xu @ index-CbWe8YMT.js:48
+setOptions @ index-CbWe8YMT.js:48
+(anonymous) @ index-CbWe8YMT.js:48
+Rg @ index-CbWe8YMT.js:40
+Ec @ index-CbWe8YMT.js:40
+l$ @ index-CbWe8YMT.js:40
+Ho @ index-CbWe8YMT.js:40
+FS @ index-CbWe8YMT.js:40
+To @ index-CbWe8YMT.js:38
+(anonymous) @ index-CbWe8YMT.js:40
+setTimeout
+s @ index-CbWe8YMT.js:48
+o @ index-CbWe8YMT.js:48
+batch @ index-CbWe8YMT.js:48
+Bs @ index-CbWe8YMT.js:48
+setData @ index-CbWe8YMT.js:48
+onSuccess @ index-CbWe8YMT.js:48
+h @ index-CbWe8YMT.js:48
+Promise.then
+v @ index-CbWe8YMT.js:48
+start @ index-CbWe8YMT.js:48
+fetch @ index-CbWe8YMT.js:48
+xu @ index-CbWe8YMT.js:48
+onSubscribe @ index-CbWe8YMT.js:48
+subscribe @ index-CbWe8YMT.js:48
+(anonymous) @ index-CbWe8YMT.js:48
+GI @ index-CbWe8YMT.js:38
+Rg @ index-CbWe8YMT.js:40
+Ec @ index-CbWe8YMT.js:40
+FS @ index-CbWe8YMT.js:40
+To @ index-CbWe8YMT.js:38
+l$ @ index-CbWe8YMT.js:40
+Ho @ index-CbWe8YMT.js:40
+CA @ index-CbWe8YMT.js:40
+C @ index-CbWe8YMT.js:25
+M @ index-CbWe8YMT.js:25Understand this error
+index-CbWe8YMT.js:657 Uncaught TypeError: t.filter is not a function
+    at fse (index-CbWe8YMT.js:657:105554)
+    at Dj (index-CbWe8YMT.js:38:17018)
+    at vy (index-CbWe8YMT.js:40:3139)
+    at AA (index-CbWe8YMT.js:40:44833)
+    at EA (index-CbWe8YMT.js:40:39790)
+    at a$ (index-CbWe8YMT.js:40:39718)
+    at Ef (index-CbWe8YMT.js:40:39570)
+    at Py (index-CbWe8YMT.js:40:35934)
+    at FS (index-CbWe8YMT.js:40:36738)
+    at To (index-CbWe8YMT.js:38:3279)

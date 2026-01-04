@@ -1,0 +1,238 @@
+{
+  "templateId": "chi-siamo",
+  "templateName": "Chi Siamo Template",
+  "description": "Template completo per la pagina Chi Siamo con tutti gli elementi editabili",
+  "sections": {
+    "hero": {
+      "sectionId": "hero",
+      "sectionName": "Hero Section", 
+      "enabled": true,
+      "elements": {
+        "badge": {
+          "type": "text",
+          "value": "LA NOSTRA MISSIONE",
+          "editable": true
+        },
+        "title": {
+          "type": "text",
+          "value": "Costruiamo",
+          "editable": true
+        },
+        "highlightTitle": {
+          "type": "text", 
+          "value": "Sistemi di Crescita",
+          "editable": true
+        },
+        "titleEnd": {
+          "type": "text",
+          "value": ", non solo Campagne.",
+          "editable": true
+        },
+        "subtitle": {
+          "type": "textarea",
+          "value": "Aiutiamo le aziende ambiziose a liberarsi dalla dipendenza dalle agenzie tradizionali, implementando asset di marketing proprietari che generano clienti in modo prevedibile e scalabile.",
+          "editable": true
+        }
+      }
+    },
+    "values": {
+      "sectionId": "values",
+      "sectionName": "I Pilastri del Nostro Metodo",
+      "enabled": true,
+      "elements": {
+        "title": {
+          "type": "text",
+          "value": "I Pilastri del Nostro Metodo",
+          "editable": true
+        },
+        "subtitle": {
+          "type": "textarea",
+          "value": "Ogni nostra azione si basa su questi quattro principi fondamentali che guidano il nostro approccio al business.",
+          "editable": true
+        },
+        "valuesList": {
+          "type": "array",
+          "value": [
+            {
+              "icon": "Target",
+              "title": "Orientati ai Risultati",
+              "description": "Ogni strategia è misurata sul ROI concreto per i nostri clienti. Non promettiamo, dimostriamo.",
+              "color": "blue"
+            },
+            {
+              "icon": "Lightbulb",
+              "title": "Innovazione Tecnologica", 
+              "description": "Usiamo la logica ingegneristica per creare sistemi di marketing scientifici e replicabili.",
+              "color": "amber"
+            },
+            {
+              "icon": "Shield",
+              "title": "Trasparenza Totale",
+              "description": "Comunicazione chiara, report dettagliati e nessuna sorpresa. Il tuo successo è misurabile.",
+              "color": "emerald"
+            },
+            {
+              "icon": "Users",
+              "title": "Partnership Strategica",
+              "description": "Non siamo fornitori, siamo partner investiti nella tua crescita a lungo termine.",
+              "color": "purple"
+            }
+          ],
+          "editable": true
+        }
+      }
+    },
+    "quote": {
+      "sectionId": "quote",
+      "sectionName": "Citazione del Founder",
+      "enabled": true,
+      "elements": {
+        "quote": {
+          "type": "textarea",
+          "value": "Il nostro obiettivo non è essere i vostri marketer. È rendervi così bravi nel marketing da non aver più bisogno di noi.",
+          "editable": true
+        },
+        "author": {
+          "type": "text",
+          "value": "Alessio Rossi, Founder",
+          "editable": true
+        }
+      }
+    },
+    "timeline": {
+      "sectionId": "timeline",
+      "sectionName": "La Nostra Storia",
+      "enabled": true,
+      "elements": {
+        "title": {
+          "type": "text",
+          "value": "La Nostra Storia in Breve",
+          "editable": true
+        },
+        "subtitle": {
+          "type": "textarea",
+          "value": "Dal sogno iniziale alla realtà di oggi: ecco come abbiamo costruito un metodo che funziona davvero.",
+          "editable": true
+        },
+        "milestones": {
+          "type": "array",
+          "value": [
+            {
+              "year": "2019",
+              "title": "L'Intuizione",
+              "description": "Nasce l'idea di unire programmazione e marketing a risposta diretta per creare sistemi automatizzati.",
+              "icon": "Lightbulb"
+            },
+            {
+              "year": "2021", 
+              "title": "Primi 100 Clienti",
+              "description": "Raggiungiamo i primi 100 clienti con un tasso di successo del 98% e risultati misurabili.",
+              "icon": "Users"
+            },
+            {
+              "year": "2023",
+              "title": "Lancio del Sistema",
+              "description": "Rilasciamo la nostra piattaforma proprietaria per la gestione automatizzata della crescita.",
+              "icon": "TrendingUp"
+            },
+            {
+              "year": "2025",
+              "title": "Il Futuro",
+              "description": "La nostra missione è diventare il punto di riferimento in Italia per la crescita sistematica.",
+              "icon": "Award"
+            }
+          ],
+          "editable": true
+        }
+      }
+    },
+    "team": {
+      "sectionId": "team",
+      "sectionName": "Il Nostro Team",
+      "enabled": true,
+      "elements": {
+        "title": {
+          "type": "text",
+          "value": "Le Menti dietro il Sistema",
+          "editable": true
+        },
+        "subtitle": {
+          "type": "textarea",
+          "value": "Un team di specialisti ossessionati dai risultati e dalla crescita dei nostri partner. Conoscenza, esperienza e passione al servizio del tuo successo.",
+          "editable": true
+        },
+        "members": {
+          "type": "array",
+          "value": [
+            {
+              "id": "1",
+              "fullName": "Alessio Rossi",
+              "title": "Founder & Lead Strategist",
+              "bio": "Unisce la logica ingegneristica del codice con i principi scientifici del marketing a risposta diretta.",
+              "profileImage": "https://via.placeholder.com/500x500/3b82f6/ffffff?text=AR",
+              "username": "alessio",
+              "role": "CEO",
+              "specialties": ["Marketing Strategy", "Business Growth", "Data Analytics"]
+            },
+            {
+              "id": "2",
+              "fullName": "Laura Bianchi",
+              "title": "Head of Operations",
+              "bio": "Organizza e ottimizza i processi per garantire che ogni progetto venga consegnato con la massima qualità.",
+              "profileImage": "https://via.placeholder.com/500x500/10b981/ffffff?text=LB",
+              "username": "laura", 
+              "role": "COO",
+              "specialties": ["Project Management", "Team Leadership", "Process Optimization"]
+            },
+            {
+              "id": "3",
+              "fullName": "Marco Verdi",
+              "title": "Lead Developer",
+              "bio": "Trasforma le strategie in piattaforme web performanti, scalabili e facili da gestire per i nostri clienti.",
+              "profileImage": "https://via.placeholder.com/500x500/8b5cf6/ffffff?text=MV",
+              "username": "marco",
+              "role": "CTO", 
+              "specialties": ["Full-Stack Development", "System Architecture", "DevOps"]
+            },
+            {
+              "id": "4",
+              "fullName": "Sofia Neri",
+              "title": "Senior Copywriter",
+              "bio": "Specializzata nella scrittura di testi persuasivi che convertono i visitatori in clienti fedeli.",
+              "profileImage": "https://via.placeholder.com/500x500/f59e0b/ffffff?text=SN",
+              "username": "sofia",
+              "role": "Creative Director",
+              "specialties": ["Copywriting", "Content Strategy", "Brand Messaging"]
+            }
+          ],
+          "editable": true
+        }
+      }
+    },
+    "cta": {
+      "sectionId": "cta",
+      "sectionName": "Call to Action",
+      "enabled": true,
+      "elements": {
+        "title": {
+          "type": "text",
+          "value": "Pronto a Lavorare con Noi?",
+          "editable": true
+        },
+        "subtitle": {
+          "type": "textarea",
+          "value": "Se condividi la nostra visione e sei pronto a costruire un sistema di crescita solido e duraturo, saremmo felici di conoscerti e valutare insieme le opportunità.",
+          "editable": true
+        },
+        "ctaButton": {
+          "type": "button",
+          "value": {
+            "text": "Contattaci Ora",
+            "link": "/contatti"
+          },
+          "editable": true
+        }
+      }
+    }
+  }
+}

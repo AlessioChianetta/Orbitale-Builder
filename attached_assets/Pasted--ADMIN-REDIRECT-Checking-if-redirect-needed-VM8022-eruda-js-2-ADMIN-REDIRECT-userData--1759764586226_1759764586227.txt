@@ -1,0 +1,25 @@
+🔍 [ADMIN REDIRECT] Checking if redirect needed...
+VM8022 eruda.js:2 🔍 [ADMIN REDIRECT] userData: {id: 'bbbcf925-bee2-4347-9d9e-4ad4d918e03c', tenantId: 1, username: 'superadmin', email: 'superadmin@system.local', role: 'superadmin', …}
+VM8022 eruda.js:2 🔍 [ADMIN REDIRECT] Current pathname: /admin
+VM8022 eruda.js:2 🔍 [ADMIN REDIRECT] User role: superadmin
+VM8022 eruda.js:2 🔍 [ADMIN REDIRECT] User is superadmin
+VM8022 eruda.js:2 🔄 [ADMIN REDIRECT] Redirecting superadmin to /superadmin dashboard
+VM8237 eruda.js:2 🔍 [FB PIXEL INIT] SEO Settings loaded: undefined
+VM8237 eruda.js:2 🔍 [FB PIXEL INIT] Facebook Pixel ID: undefined
+VM8237 eruda.js:2 ❌ [FB PIXEL INIT] No Facebook Pixel ID found in settings
+VM8237 eruda.js:2 🔍 Initializing Google Analytics with ID: G-30C117R8LF
+VM8237 eruda.js:2 ✅ Google Analytics configured with ID: G-30C117R8LF
+VM8237 eruda.js:2 🔍 [FB PIXEL INIT] SEO Settings loaded: {googleAnalyticsId: 'G-30C117R8LF', googleTagManagerId: 'GT-PHWHDBLM', googleSearchConsoleCode: `\x3C!-- Google tag (gtag.js) -->\n\x3Cscript async src="h…());\n\n  gtag('config', 'G-30C117R8LF');\n\x3C/script>`, siteName: 'Orbitale sito bello', siteDescription: 'questo è un sito di test', …}
+VM8237 eruda.js:2 🔍 [FB PIXEL INIT] Facebook Pixel ID: 3139741182854427
+VM8237 eruda.js:2 ✅ [FB PIXEL INIT] Initializing Facebook Pixel with ID: 3139741182854427
+VM8237 eruda.js:2 📊 Initializing Facebook Pixel with ID: 3139741182854427
+VM8237 eruda.js:2 ✅ Google Analytics script loaded successfully
+VM8237 eruda.js:2 🔍 Facebook Pixel script loaded, initializing...
+VM8237 eruda.js:2 🔍 [ADMIN REDIRECT] Checking if redirect needed...
+VM8237 eruda.js:2 🔍 [ADMIN REDIRECT] userData: {id: 'bbbcf925-bee2-4347-9d9e-4ad4d918e03c', tenantId: 1, username: 'superadmin', email: 'superadmin@system.local', role: 'superadmin', …}
+VM8237 eruda.js:2 🔍 [ADMIN REDIRECT] Current pathname: /admin
+VM8237 eruda.js:2 🔍 [ADMIN REDIRECT] User role: superadmin
+VM8237 eruda.js:2 🔍 [ADMIN REDIRECT] User is superadmin
+VM8237 eruda.js:2 🔄 [ADMIN REDIRECT] Redirecting superadmin to /superadmin dashboard
+VM8237 eruda.js:2 📊 Tracking page view: /admin with GA ID: G-30C117R8LF
+VM8237 eruda.js:2 ✅ Facebook Pixel initialized with ID: 3139741182854427

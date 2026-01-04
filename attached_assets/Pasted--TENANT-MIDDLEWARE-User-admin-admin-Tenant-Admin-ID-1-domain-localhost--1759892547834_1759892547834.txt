@@ -1,0 +1,75 @@
+✅ [TENANT MIDDLEWARE] User admin (admin) → Tenant: Admin (ID: 1, domain: localhost)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+❌ [Google Sheets] Errore salvataggio configurazione: error: value "1759892515235" is out of range for type integer
+    at /home/runner/workspace/node_modules/pg-pool/index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async <anonymous> (/home/runner/workspace/node_modules/src/node-postgres/session.ts:104:19)
+    at async Storage.createGoogleSheetsConfig (/home/runner/workspace/server/storage.ts:1240:22)
+    at async <anonymous> (/home/runner/workspace/server/googleSheets.ts:354:21) {
+  length: 156,
+  severity: 'ERROR',
+  code: '22003',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: "unnamed portal parameter $1 = '...'",
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'numutils.c',
+  line: '610',
+  routine: 'pg_strtoint32_safe'
+}
+3:03:14 AM [express] POST /api/google-sheets/configurations 500 in 594ms :: {"error":"Errore nel sal…
+🔐 User admin authenticated - using tenant Admin (ID: 1)
+3:03:14 AM [express] GET /api/google-sheets/sync-results 200 in 290ms :: {"success":false,"message":…
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔍 [TENANT MIDDLEWARE] NEW REQUEST
+🔍 [TENANT MIDDLEWARE] Auth header present: true
+🔍 [TENANT MIDDLEWARE] Token extracted: true
+🔍 [TENANT MIDDLEWARE] Request method: POST
+🔍 [TENANT MIDDLEWARE] Request path: /api/google-sheets/configurations
+🔍 [TENANT MIDDLEWARE] Request host: 4dbdbc8d-ec64-4078-88f9-2c2409629eb8-00-1qywntodh6dpi.spock.replit.dev
+🔍 [TENANT MIDDLEWARE] User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Sa
+🔐 [TENANT MIDDLEWARE] Attempting JWT verification...
+🔐 [TENANT MIDDLEWARE] JWT decoded successfully: Yes
+🔐 [TENANT MIDDLEWARE] User ID from token: f1b7e781-3ec1-47e3-9219-e95a86d79124
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+👤 [USER INFO] Username: admin
+👤 [USER INFO] Role: admin
+👤 [USER INFO] User Tenant ID: 1
+👤 [USER INFO] User Email: admin@example.com
+🔑 [ADMIN USER] Admin detected - can access own tenant data
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ [TENANT MIDDLEWARE] User admin (admin) → Tenant: Admin (ID: 1, domain: localhost)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔐 User admin authenticated - using tenant Admin (ID: 1)
+📊 [Google Sheets] Storage non trovato in app, importando DatabaseStorage...
+❌ [Google Sheets] Errore salvataggio configurazione: error: value "1759892520917" is out of range for type integer
+    at /home/runner/workspace/node_modules/pg-pool/index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async <anonymous> (/home/runner/workspace/node_modules/src/node-postgres/session.ts:104:19)
+    at async Storage.createGoogleSheetsConfig (/home/runner/workspace/server/storage.ts:1240:22)
+    at async <anonymous> (/home/runner/workspace/server/googleSheets.ts:354:21) {
+  length: 156,
+  severity: 'ERROR',
+  code: '22003',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: "unnamed portal parameter $1 = '...'",
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'numutils.c',
+  line: '610',
+  routine: 'pg_strtoint32_safe'
+}
