@@ -1,0 +1,102 @@
+root@srv1164256:/opt/alessia-voice/vps-voice-bridge# cat /etc/nginx/sites-available/000-builder-default
+server {
+    listen 80 default_server;       # <--- AGGIUNTO QUI
+    listen [::]:80 default_server;  # <--- E ANCHE QUI (se c'è ipv6)
+    
+    server_name _; 
+
+    location / {
+        proxy_pass http://127.0.0.1:5004;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+server {       # <--- AGGIUNTO QUI  # <--- E ANCHE QUI (se c'è ipv6)
+    server_name builder.orbitalecrm.it; # managed by Certbot
+ 
+
+    location / {
+        proxy_pass http://127.0.0.1:5004;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+
+    listen [::]:443 ssl; # managed by Certbot
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/builder.orbitalecrm.it/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/builder.orbitalecrm.it/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+}server {
+    if ($host = builder.orbitalecrm.it) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    listen 80 ;
+    listen [::]:80 ;
+    server_name builder.orbitalecrm.it;
+    return 404; # managed by Certbot
+
+
+}root@srv1164256:/opt/alessia-voice/vps-voice-bridge# cat /etc/nginx/sites-available/conorbitale.it
+server {
+    server_name conorbitale.it www.conorbitale.it;
+
+    # WebSocket support - DEVE ESSERE PRIMA di location /
+    location /ws/ {
+        proxy_pass http://127.0.0.1:5000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 86400;
+        proxy_send_timeout 86400;
+    }
+
+    location / {
+        proxy_pass http://127.0.0.1:5000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    listen [::]:443 ssl ipv6only=on; # managed by Certbot
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/conorbitale.it/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/conorbitale.it/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+}
+
+server {
+    if ($host = www.conorbitale.it) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+    if ($host = conorbitale.it) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+    listen 80;
+    listen [::]:80;
+    server_name conorbitale.it www.conorbitale.it;
+    return 404; # managed by Certbot
+}
+root@srv1164256:/opt/alessia-voice/vps-voice-bridge# 
