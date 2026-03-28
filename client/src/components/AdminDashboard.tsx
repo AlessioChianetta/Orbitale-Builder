@@ -361,116 +361,168 @@ function ServiceEditor({ serviceToEdit, onClose }: { serviceToEdit?: any; onClos
   };
 
   return (
-    <Card className="w-full max-w-4xl mx-auto my-8">
-      <CardHeader>
-        <CardTitle>{serviceToEdit ? "Modifica Servizio" : "Nuovo Servizio"}</CardTitle>
-        <CardDescription>Configura i dettagli del servizio.</CardDescription>
+    <Card className="w-full max-w-4xl mx-auto my-8 border-0 shadow-sm">
+      <CardHeader className="border-b border-slate-100 pb-4">
+        <CardTitle className="text-lg font-semibold text-slate-900">{serviceToEdit ? "Modifica Servizio" : "Nuovo Servizio"}</CardTitle>
+        <CardDescription className="text-slate-500">Configura i dettagli del servizio.</CardDescription>
       </CardHeader>
-      <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6">
         <div className="space-y-4">
-          <Input
-            placeholder="Titolo del servizio"
-            value={title}
-            onChange={(e) => {
-              setTitle(e.target.value);
-              setSlug(e.target.value.toLowerCase().replace(/\s+/g, '-'));
-            }}
-            data-testid="service-editor-title"
-          />
-          <Input
-            placeholder="Slug (es. consulenza-strategica)"
-            value={slug}
-            onChange={(e) => setSlug(e.target.value)}
-            data-testid="service-editor-slug"
-          />
-          <Textarea
-            placeholder="Descrizione completa"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            rows={4}
-            data-testid="service-editor-description"
-          />
-          <Input
-            placeholder="Descrizione breve"
-            value={shortDescription}
-            onChange={(e) => setShortDescription(e.target.value)}
-            data-testid="service-editor-short-description"
-          />
-          <div className="grid grid-cols-2 gap-2">
+          <div>
+            <Label className="text-xs font-medium text-slate-600">Titolo *</Label>
             <Input
-              placeholder="Prezzo (es. €299)"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-              data-testid="service-editor-price"
-            />
-            <Input
-              placeholder="Descrizione prezzo (es. /mese)"
-              value={priceDescription}
-              onChange={(e) => setPriceDescription(e.target.value)}
-              data-testid="service-editor-price-description"
+              placeholder="Titolo del servizio"
+              value={title}
+              onChange={(e) => {
+                setTitle(e.target.value);
+                setSlug(e.target.value.toLowerCase().replace(/\s+/g, '-'));
+              }}
+              className="border-slate-200 focus:border-indigo-300"
+              data-testid="service-editor-title"
             />
           </div>
-          <Input
-            placeholder="Icona Lucide (es. Palette)"
-            value={icon}
-            onChange={(e) => setIcon(e.target.value)}
-            data-testid="service-editor-icon"
-          />
+          <div>
+            <Label className="text-xs font-medium text-slate-600">Slug URL</Label>
+            <Input
+              placeholder="Slug (es. consulenza-strategica)"
+              value={slug}
+              onChange={(e) => setSlug(e.target.value)}
+              className="border-slate-200 focus:border-indigo-300"
+              data-testid="service-editor-slug"
+            />
+          </div>
+          <div>
+            <Label className="text-xs font-medium text-slate-600">Descrizione *</Label>
+            <Textarea
+              placeholder="Descrizione completa"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              rows={4}
+              className="border-slate-200 focus:border-indigo-300"
+              data-testid="service-editor-description"
+            />
+          </div>
+          <div>
+            <Label className="text-xs font-medium text-slate-600">Descrizione Breve</Label>
+            <Input
+              placeholder="Descrizione breve"
+              value={shortDescription}
+              onChange={(e) => setShortDescription(e.target.value)}
+              className="border-slate-200 focus:border-indigo-300"
+              data-testid="service-editor-short-description"
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <Label className="text-xs font-medium text-slate-600">Prezzo</Label>
+              <Input
+                placeholder="Es: €299"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                className="border-slate-200 focus:border-indigo-300"
+                data-testid="service-editor-price"
+              />
+            </div>
+            <div>
+              <Label className="text-xs font-medium text-slate-600">Periodo</Label>
+              <Input
+                placeholder="Es: /mese"
+                value={priceDescription}
+                onChange={(e) => setPriceDescription(e.target.value)}
+                className="border-slate-200 focus:border-indigo-300"
+                data-testid="service-editor-price-description"
+              />
+            </div>
+          </div>
+          <div>
+            <Label className="text-xs font-medium text-slate-600">Icona Lucide</Label>
+            <Input
+              placeholder="Es: Palette"
+              value={icon}
+              onChange={(e) => setIcon(e.target.value)}
+              className="border-slate-200 focus:border-indigo-300"
+              data-testid="service-editor-icon"
+            />
+          </div>
         </div>
 
         <div className="space-y-4">
-          <Textarea
-            placeholder="Caratteristiche (una per riga)"
-            value={features}
-            onChange={(e) => setFeatures(e.target.value)}
-            rows={6}
-            data-testid="service-editor-features"
-          />
-          <Textarea
-            placeholder="Benefici (uno per riga)"
-            value={benefits}
-            onChange={(e) => setBenefits(e.target.value)}
-            rows={4}
-            data-testid="service-editor-benefits"
-          />
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="w-full p-2 border rounded"
-            data-testid="service-editor-category"
-          >
-            <option value="main">Servizio Principale</option>
-            <option value="additional">Servizio Aggiuntivo</option>
-          </select>
-          <Input
-            placeholder="Landing Page Slug (opzionale)"
-            value={landingPageSlug}
-            onChange={(e) => setLandingPageSlug(e.target.value)}
-            data-testid="service-editor-landing-slug"
-          />
-          <Input
-            placeholder="Testo CTA"
-            value={ctaText}
-            onChange={(e) => setCtaText(e.target.value)}
-            data-testid="service-editor-cta-text"
-          />
-          <Input
-            type="number"
-            placeholder="Ordine di visualizzazione"
-            value={order}
-            onChange={(e) => setOrder(parseInt(e.target.value) || 0)}
-            data-testid="service-editor-order"
-          />
-          <div className="flex items-center space-x-4">
+          <div>
+            <Label className="text-xs font-medium text-slate-600">Caratteristiche (una per riga)</Label>
+            <Textarea
+              placeholder="Caratteristiche (una per riga)"
+              value={features}
+              onChange={(e) => setFeatures(e.target.value)}
+              rows={6}
+              className="border-slate-200 focus:border-indigo-300"
+              data-testid="service-editor-features"
+            />
+          </div>
+          <div>
+            <Label className="text-xs font-medium text-slate-600">Benefici (uno per riga)</Label>
+            <Textarea
+              placeholder="Benefici (uno per riga)"
+              value={benefits}
+              onChange={(e) => setBenefits(e.target.value)}
+              rows={4}
+              className="border-slate-200 focus:border-indigo-300"
+              data-testid="service-editor-benefits"
+            />
+          </div>
+          <div>
+            <Label className="text-xs font-medium text-slate-600">Categoria</Label>
+            <Select value={category} onValueChange={setCategory}>
+              <SelectTrigger className="border-slate-200 focus:border-indigo-300" data-testid="service-editor-category">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="main">Servizio Principale</SelectItem>
+                <SelectItem value="additional">Servizio Aggiuntivo</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div>
+            <Label className="text-xs font-medium text-slate-600">Landing Page Slug</Label>
+            <Input
+              placeholder="Landing Page Slug (opzionale)"
+              value={landingPageSlug}
+              onChange={(e) => setLandingPageSlug(e.target.value)}
+              className="border-slate-200 focus:border-indigo-300"
+              data-testid="service-editor-landing-slug"
+            />
+          </div>
+          <div>
+            <Label className="text-xs font-medium text-slate-600">Testo CTA</Label>
+            <Input
+              placeholder="Testo CTA"
+              value={ctaText}
+              onChange={(e) => setCtaText(e.target.value)}
+              className="border-slate-200 focus:border-indigo-300"
+              data-testid="service-editor-cta-text"
+            />
+          </div>
+          <div>
+            <Label className="text-xs font-medium text-slate-600">Ordine</Label>
+            <Input
+              type="number"
+              placeholder="Ordine di visualizzazione"
+              value={order}
+              onChange={(e) => setOrder(parseInt(e.target.value) || 0)}
+              className="border-slate-200 focus:border-indigo-300"
+              data-testid="service-editor-order"
+            />
+          </div>
+          <div className="flex items-center gap-6 py-3 px-4 bg-slate-50 rounded-lg">
             <div className="flex items-center space-x-2">
               <input
                 type="checkbox"
                 id="isPopular"
                 checked={isPopular}
                 onChange={(e) => setIsPopular(e.target.checked)}
+                className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
                 data-testid="service-editor-popular"
               />
-              <label htmlFor="isPopular" className="text-sm">Popolare</label>
+              <label htmlFor="isPopular" className="text-sm text-slate-700">Popolare</label>
             </div>
             <div className="flex items-center space-x-2">
               <input
@@ -478,9 +530,10 @@ function ServiceEditor({ serviceToEdit, onClose }: { serviceToEdit?: any; onClos
                 id="isFeatured"
                 checked={isFeatured}
                 onChange={(e) => setIsFeatured(e.target.checked)}
+                className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
                 data-testid="service-editor-featured"
               />
-              <label htmlFor="isFeatured" className="text-sm">In Evidenza</label>
+              <label htmlFor="isFeatured" className="text-sm text-slate-700">In Evidenza</label>
             </div>
             <div className="flex items-center space-x-2">
               <input
@@ -488,17 +541,19 @@ function ServiceEditor({ serviceToEdit, onClose }: { serviceToEdit?: any; onClos
                 id="isActive"
                 checked={isActive}
                 onChange={(e) => setIsActive(e.target.checked)}
+                className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
                 data-testid="service-editor-active"
               />
-              <label htmlFor="isActive" className="text-sm">Attivo</label>
+              <label htmlFor="isActive" className="text-sm text-slate-700">Attivo</label>
             </div>
           </div>
         </div>
 
-        <div className="col-span-2 flex justify-end space-x-4">
-          <Button variant="outline" onClick={onClose}>Annulla</Button>
+        <div className="col-span-2 flex justify-end gap-3 pt-4 border-t border-slate-100">
+          <Button variant="outline" onClick={onClose} className="border-slate-200 text-slate-600 hover:bg-slate-50">Annulla</Button>
           <Button
             onClick={handleSave}
+            className="bg-indigo-600 hover:bg-indigo-700 text-white"
             data-testid="service-editor-save"
             disabled={createServiceMutation.isPending || updateServiceMutation.isPending}
           >
@@ -1506,7 +1561,108 @@ export default function AdminDashboard() {
                   </div>
                 )}
 
-                {overviewSubTab === "services" && <ServicesManager />}
+                {overviewSubTab === "services" && (
+                  <div className="space-y-6">
+                    {isEditingService ? (
+                      <ServiceEditor serviceToEdit={serviceToEdit} onClose={handleCloseServiceEditor} />
+                    ) : (
+                      <>
+                        <div className="flex justify-between items-center">
+                          <div>
+                            <h3 className="text-lg font-semibold text-slate-900">Gestione Servizi</h3>
+                            <p className="text-sm text-slate-500">Configura i servizi della tua azienda</p>
+                          </div>
+                          <Button
+                            size="sm"
+                            className="bg-indigo-600 hover:bg-indigo-700"
+                            onClick={() => { setServiceToEdit(null); setIsEditingService(true); }}
+                            data-testid="button-create-service"
+                          >
+                            <Plus className="h-4 w-4 mr-1" />
+                            Nuovo Servizio
+                          </Button>
+                        </div>
+
+                        {isLoadingServices ? (
+                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {Array.from({ length: 3 }).map((_, i) => (
+                              <Card key={i} className="border-0 shadow-sm">
+                                <CardContent className="p-5 space-y-3">
+                                  <Skeleton className="h-5 w-3/4" />
+                                  <Skeleton className="h-4 w-full" />
+                                  <Skeleton className="h-4 w-2/3" />
+                                </CardContent>
+                              </Card>
+                            ))}
+                          </div>
+                        ) : services.length === 0 ? (
+                          <Card className="border-0 shadow-sm">
+                            <CardContent className="py-16 text-center">
+                              <Lightbulb className="w-12 h-12 mx-auto mb-4 text-slate-300" />
+                              <p className="text-slate-500 font-medium">Nessun servizio trovato</p>
+                              <p className="text-sm text-slate-400 mt-1">Crea il tuo primo servizio per iniziare</p>
+                            </CardContent>
+                          </Card>
+                        ) : (
+                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {services.map((service: any) => (
+                              <Card key={service.id} className="border-0 shadow-sm hover:shadow-md transition-all group">
+                                <CardContent className="p-5">
+                                  <div className="flex items-start justify-between mb-3">
+                                    <div className="flex-1">
+                                      <h4 className="font-semibold text-slate-900 line-clamp-1">{service.title}</h4>
+                                      {service.shortDescription && (
+                                        <p className="text-sm text-slate-500 mt-1 line-clamp-2">{service.shortDescription}</p>
+                                      )}
+                                    </div>
+                                    <DropdownMenu>
+                                      <DropdownMenuTrigger asChild>
+                                        <Button variant="ghost" size="icon" className="h-7 w-7 text-slate-400 hover:text-slate-700">
+                                          <MoreHorizontal className="h-4 w-4" />
+                                        </Button>
+                                      </DropdownMenuTrigger>
+                                      <DropdownMenuContent align="end">
+                                        <DropdownMenuItem onClick={() => handleEditService(service)}>
+                                          <Edit className="h-4 w-4 mr-2" />
+                                          Modifica
+                                        </DropdownMenuItem>
+                                      </DropdownMenuContent>
+                                    </DropdownMenu>
+                                  </div>
+                                  <div className="flex items-center gap-1.5 flex-wrap mt-3">
+                                    <Badge variant="outline" className={service.isActive
+                                      ? 'border-emerald-200 text-emerald-700 bg-emerald-50 text-xs'
+                                      : 'border-slate-200 text-slate-600 bg-slate-50 text-xs'
+                                    }>
+                                      {service.isActive ? 'Attivo' : 'Inattivo'}
+                                    </Badge>
+                                    <Badge variant="outline" className={service.category === 'main'
+                                      ? 'border-indigo-200 text-indigo-700 bg-indigo-50 text-xs'
+                                      : 'border-slate-200 text-slate-600 bg-slate-50 text-xs'
+                                    }>
+                                      {service.category === 'main' ? 'Principale' : 'Aggiuntivo'}
+                                    </Badge>
+                                    {service.isPopular && (
+                                      <Badge className="bg-amber-50 text-amber-700 border border-amber-200 text-xs">Popolare</Badge>
+                                    )}
+                                    {service.isFeatured && (
+                                      <Badge className="bg-indigo-50 text-indigo-700 border border-indigo-200 text-xs">In Evidenza</Badge>
+                                    )}
+                                  </div>
+                                  {service.price && (
+                                    <p className="mt-3 text-sm font-semibold text-indigo-600">
+                                      {service.price}{service.priceDescription ? ` ${service.priceDescription}` : ''}
+                                    </p>
+                                  )}
+                                </CardContent>
+                              </Card>
+                            ))}
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </div>
+                )}
 
                 {overviewSubTab === "projects" && <ProjectsManager />}
 
