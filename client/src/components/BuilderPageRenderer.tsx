@@ -816,6 +816,9 @@ function NavMenuComponent({ props }: { props: any }) {
   const alignmentClass = alignmentMap[props.alignment || 'left'] || 'justify-start';
   const isFixed = props.fixed || props.sticky;
   const hasMobileHamburger = props.mobileHamburger === true || items.length > 3;
+  const hasBrand = props.mobileHamburger === true || !!props.brandName;
+  const brandLabel = hasBrand ? (props.brandName || items[0]?.label || '') : '';
+  const navLinks = hasBrand ? (items.slice(1) as Array<{ label: string; link: string }>) : (items as Array<{ label: string; link: string }>);
 
   const navStyle: React.CSSProperties = {
     backgroundColor: props.backgroundColor || 'transparent',
@@ -856,9 +859,6 @@ function NavMenuComponent({ props }: { props: any }) {
       </nav>
     );
   }
-
-  const brandLabel = items[0]?.label || '';
-  const navLinks = items.slice(1) as Array<{ label: string; link: string }>;
 
   return (
     <nav style={navStyle}>
