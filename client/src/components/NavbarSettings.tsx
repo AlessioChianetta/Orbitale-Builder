@@ -1,14 +1,12 @@
 import { useState } from "react";
 import * as React from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { GripVertical, Plus, Trash2, Eye, EyeOff } from "lucide-react";
+import { GripVertical, Plus, Trash2, Eye, EyeOff, Menu, Link } from "lucide-react";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -39,14 +37,14 @@ function SortableNavItem({ item, onUpdate, onDelete }: { item: NavItem; onUpdate
     <div
       ref={setNodeRef}
       style={style}
-      className="flex items-center gap-3 p-4 bg-white dark:bg-slate-900 border rounded-lg"
+      className="flex items-center gap-3 p-3 bg-white border border-slate-200 rounded-lg hover:border-indigo-200 transition-colors"
     >
       <button
         {...attributes}
         {...listeners}
-        className="cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground"
+        className="cursor-grab active:cursor-grabbing text-slate-400 hover:text-slate-600"
       >
-        <GripVertical className="h-5 w-5" />
+        <GripVertical className="h-4 w-4" />
       </button>
 
       <div className="flex-1 grid grid-cols-2 gap-3">
@@ -54,28 +52,31 @@ function SortableNavItem({ item, onUpdate, onDelete }: { item: NavItem; onUpdate
           value={item.label}
           onChange={(e) => onUpdate({ ...item, label: e.target.value })}
           placeholder="Label (es: Home)"
+          className="border-slate-200 focus:border-indigo-300 text-sm"
         />
         <Input
           value={item.href}
           onChange={(e) => onUpdate({ ...item, href: e.target.value })}
           placeholder="Path (es: /)"
+          className="border-slate-200 focus:border-indigo-300 text-sm"
         />
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1">
         <Button
           variant="ghost"
           size="icon"
           onClick={() => onUpdate({ ...item, isVisible: !item.isVisible })}
           title={item.isVisible ? 'Nascondi' : 'Mostra'}
+          className={item.isVisible ? "text-emerald-600 hover:text-emerald-700" : "text-slate-400 hover:text-slate-600"}
         >
-          {item.isVisible ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4 text-muted-foreground" />}
+          {item.isVisible ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
         </Button>
         <Button
           variant="ghost"
           size="icon"
           onClick={() => onDelete(item.id)}
-          className="text-destructive hover:text-destructive"
+          className="text-slate-400 hover:text-red-600"
         >
           <Trash2 className="h-4 w-4" />
         </Button>
@@ -90,7 +91,6 @@ export default function NavbarSettings() {
   
   const [navItems, setNavItems] = useState<NavItem[]>([]);
 
-  // Carica le impostazioni navbar dal database
   const { data: settingsData, isLoading, error } = useQuery({
     queryKey: ['/api/settings'],
     queryFn: async () => {
@@ -99,19 +99,16 @@ export default function NavbarSettings() {
     }
   });
 
-  // Effetto per impostare i navItems quando i dati vengono caricati
   React.useEffect(() => {
     if (settingsData) {
       if (settingsData.navbarItems) {
         setNavItems(settingsData.navbarItems);
       } else {
-        // Navbar vuota per nuovi tenant
         setNavItems([]);
       }
     }
   }, [settingsData]);
 
-  // Salva le impostazioni navbar
   const saveNavbarMutation = useMutation({
     mutationFn: async (items: NavItem[]) => {
       const response = await apiRequest('PUT', '/api/settings', {
@@ -123,11 +120,10 @@ export default function NavbarSettings() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/settings'] });
       queryClient.invalidateQueries({ queryKey: ['/api/settings/navbar'] });
-      // Force refresh of header data
       queryClient.refetchQueries({ queryKey: ['/api/settings/navbar'] });
       toast({
-        title: "Successo!",
-        description: "Impostazioni navbar salvate.",
+        title: "Navbar aggiornata",
+        description: "Impostazioni navbar salvate con successo.",
       });
     },
     onError: () => {
@@ -186,8 +182,8 @@ export default function NavbarSettings() {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-2 text-muted-foreground">Caricamento impostazioni navbar...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mx-auto"></div>
+          <p className="mt-2 text-sm text-slate-600">Caricamento impostazioni navbar...</p>
         </div>
       </div>
     );
@@ -197,8 +193,8 @@ export default function NavbarSettings() {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <p className="text-destructive">Errore nel caricamento delle impostazioni</p>
-          <Button onClick={() => window.location.reload()} variant="outline" className="mt-2">
+          <p className="text-red-600 text-sm">Errore nel caricamento delle impostazioni</p>
+          <Button onClick={() => window.location.reload()} variant="outline" className="mt-2 border-slate-200">
             Riprova
           </Button>
         </div>
@@ -208,31 +204,31 @@ export default function NavbarSettings() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold">Gestione Navbar</h1>
-          <p className="text-muted-foreground">Configura i link del menu di navigazione</p>
-        </div>
-        <div className="flex gap-2">
-          <Button onClick={addNavItem} variant="outline">
-            <Plus className="h-4 w-4 mr-2" />
-            Aggiungi Link
-          </Button>
-          <Button onClick={handleSave} disabled={saveNavbarMutation.isPending}>
-            {saveNavbarMutation.isPending ? 'Salvataggio...' : 'Salva Modifiche'}
-          </Button>
-        </div>
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Link del Menu</CardTitle>
-          <CardDescription>
-            Trascina per riordinare, clicca sull'occhio per mostrare/nascondere
-          </CardDescription>
+      <Card className="border-0 shadow-sm">
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-indigo-50">
+                <Menu className="h-4 w-4 text-indigo-600" />
+              </div>
+              <div>
+                <CardTitle className="text-sm text-slate-800">Link del Menu</CardTitle>
+                <p className="text-xs text-slate-600 mt-0.5">Trascina per riordinare, clicca sull'occhio per mostrare/nascondere</p>
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <Button onClick={addNavItem} variant="outline" size="sm" className="border-slate-200 text-slate-600">
+                <Plus className="h-4 w-4 mr-1" />
+                Aggiungi
+              </Button>
+              <Button onClick={handleSave} disabled={saveNavbarMutation.isPending} size="sm" className="bg-indigo-600 hover:bg-indigo-700">
+                {saveNavbarMutation.isPending ? 'Salvataggio...' : 'Salva'}
+              </Button>
+            </div>
+          </div>
         </CardHeader>
         <CardContent>
-          <div className="space-y-3">
+          <div className="space-y-2">
             <DndContext
               sensors={sensors}
               collisionDetection={closestCenter}
@@ -254,10 +250,13 @@ export default function NavbarSettings() {
             </DndContext>
 
             {navItems.length === 0 && (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>Nessun link nella navbar.</p>
-                <Button onClick={addNavItem} variant="outline" className="mt-4">
-                  <Plus className="h-4 w-4 mr-2" />
+              <div className="text-center py-12">
+                <div className="p-3 rounded-lg bg-slate-50 w-fit mx-auto mb-3">
+                  <Link className="h-8 w-8 text-slate-300" />
+                </div>
+                <p className="text-sm text-slate-600 mb-3">Nessun link nella navbar.</p>
+                <Button onClick={addNavItem} variant="outline" size="sm" className="border-slate-200 text-slate-600">
+                  <Plus className="h-4 w-4 mr-1" />
                   Aggiungi il primo link
                 </Button>
               </div>
@@ -266,14 +265,18 @@ export default function NavbarSettings() {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Anteprima</CardTitle>
-          <CardDescription>Come apparirà la navbar nel sito</CardDescription>
+      <Card className="border-0 shadow-sm">
+        <CardHeader className="pb-3">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-indigo-50">
+              <Eye className="h-4 w-4 text-indigo-600" />
+            </div>
+            <CardTitle className="text-sm text-slate-800">Anteprima</CardTitle>
+          </div>
         </CardHeader>
         <CardContent>
-          <div className="flex items-center gap-6 p-4 border rounded-lg bg-muted/50">
-            <div className="font-bold text-lg">Logo</div>
+          <div className="flex items-center gap-6 p-4 border border-slate-200 rounded-lg bg-slate-800">
+            <div className="font-bold text-sm text-white">Logo</div>
             <div className="flex-1 flex gap-6">
               {navItems
                 .filter(item => item.isVisible)
@@ -282,7 +285,7 @@ export default function NavbarSettings() {
                   <a
                     key={item.id}
                     href={item.href}
-                    className="text-sm font-medium text-muted-foreground hover:text-foreground"
+                    className="text-sm text-slate-300 hover:text-white transition-colors"
                     onClick={(e) => e.preventDefault()}
                   >
                     {item.label}
