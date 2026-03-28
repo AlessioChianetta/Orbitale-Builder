@@ -9,6 +9,7 @@ import {
   insertLandingPageSchema, insertBuilderPageSchema, insertProjectSchema, insertGlobalSeoSettingsSchema, users, tenants, projects, superadminGeminiConfig
 } from "@shared/schema";
 import { encrypt, decrypt } from "./encryption";
+import { generateLandingPageContent, buildComponentsFromContent, AI_TEMPLATES, type TemplateId } from "./ai/landing-page-generator";
 import { db } from "./db";
 import { eq, asc, and } from "drizzle-orm";
 import multer from "multer";
@@ -2591,6 +2592,47 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting Gemini config:", error);
       res.status(500).json({ message: "Failed to delete Gemini config" });
+    }
+  });
+
+  // GET templates list for AI landing page generator (admin only)
+  app.get("/api/ai/landing-page-templates", authenticateToken, requireRole("admin"), async (req: AuthRequest, res: Response) => {
+    const templates = Object.values(AI_TEMPLATES).map(t => ({
+      id: t.id,
+      name: t.name,
+      description: t.description,
+      colors: t.colors,
+    }));
+    res.json({ templates });
+  });
+
+  // POST generate landing page with AI (admin only)
+  app.post("/api/ai/generate-landing-page", authenticateToken, requireRole("admin"), async (req: AuthRequest, res: Response) => {
+    try {
+      const { description, templateId } = req.body as { description: string; templateId: string };
+      if (!description || description.trim().length < 10) {
+        return res.status(400).json({ message: "Descrizione troppo breve. Inserisci almeno 10 caratteri." });
+      }
+
+      const safeTemplateId = (templateId && AI_TEMPLATES[templateId as TemplateId]) ? templateId as TemplateId : "bianco";
+
+      const content = await generateLandingPageContent(description.trim(), safeTemplateId);
+      const components = buildComponentsFromContent(content, safeTemplateId);
+
+      res.json({
+        content,
+        components,
+        suggestedTitle: content.meta.title,
+        suggestedSlug: content.meta.slug,
+        suggestedMetaTitle: content.meta.title,
+        suggestedMetaDescription: content.meta.description,
+      });
+    } catch (error: any) {
+      console.error("Error generating landing page with AI:", error);
+      if (error.message?.includes("chiave API")) {
+        return res.status(503).json({ message: error.message });
+      }
+      res.status(500).json({ message: "Errore nella generazione AI. Riprova tra qualche secondo.", detail: error.message });
     }
   });
 

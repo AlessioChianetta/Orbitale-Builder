@@ -111,6 +111,15 @@ Preferred communication style: Simple, everyday language.
 - **POST behavior**: If config already exists, can update `enabled` alone without re-submitting keys. New keys optional.
 - **UI**: "Configurazione AI" tab in SuperAdminDashboard — shows key preview, count, enable/disable toggle, key input form
 
+## AI Landing Page Generator (Task #3)
+- **Backend**: `server/ai/landing-page-generator.ts` — standalone module, NO dependency on `provider-factory.ts`
+- **API key lookup**: reads directly from `superadmin_gemini_config` via `db` + `decrypt`, then falls back to `GEMINI_API_KEY` env var
+- **Gemini model**: `gemini-2.0-flash` via `@google/genai` v1.47.0 (also requires `@google-cloud/vertexai` for the wider AI system)
+- **Templates**: 5 colori (professionale-blu, caldo-arancio, moderno-verde, elegante-viola, bianco)
+- **Routes**: `GET /api/ai/landing-page-templates`, `POST /api/ai/generate-landing-page` (auth required)
+- **Frontend modal**: `client/src/components/AiLandingPageModal.tsx` — descrizione + selezione template + anteprima colori + salvataggio in `builder_pages`
+- **Integrazione UI**: bottone "Genera con AI" in AdminDashboard (sezione Landing Pages) e in LandingPagesManager
+
 ## API Keys System
 - **External API Authentication**: Secure API key authentication for third-party integrations
 - **Key Generation**: 41-character API keys with environment prefixes (crm_live_ or crm_test_)
