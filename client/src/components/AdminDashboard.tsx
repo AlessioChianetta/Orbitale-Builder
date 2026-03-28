@@ -546,7 +546,7 @@ export default function AdminDashboard() {
   const [selectedLead, setSelectedLead] = useState(null);
   const [isEditingLeadStatus, setIsEditingLeadStatus] = useState(false);
 
-  const [contentSubTab, setContentSubTab] = useState("overview-stats");
+  const [overviewSubTab, setOverviewSubTab] = useState("stats");
   const [settingsSubTab, setSettingsSubTab] = useState("seo");
   const [leadSubTab, setLeadSubTab] = useState("leads");
 
@@ -1013,28 +1013,16 @@ export default function AdminDashboard() {
       ]
     },
     {
-      label: "Contenuti",
+      label: "Gestione",
       items: [
-        { key: "content", title: "Contenuti", icon: FolderOpen },
-        { key: "page-builder", title: "Page Builder", icon: Palette },
-      ]
-    },
-    {
-      label: "Impostazioni",
-      items: [
-        { key: "settings-section", title: "Impostazioni", icon: Wrench },
-      ]
-    },
-    {
-      label: "Marketing",
-      items: [
-        { key: "lead-section", title: "Lead & Marketing", icon: Megaphone },
-        { key: "analytics", title: "Analytics", icon: BarChart3 },
+        { key: "settings-section", title: "Impostazioni SEO", icon: SearchCheck },
+        { key: "lead-section", title: "Lead", icon: Megaphone },
       ]
     },
     {
       label: "Strumenti",
       items: [
+        { key: "analytics", title: "Analytics", icon: BarChart3 },
         { key: "candidate-form", title: "Form Candidatura", icon: FileText },
         { key: "google-sheets", title: "Google Sheets", icon: FileText },
         { key: "api-keys", title: "API Keys", icon: Key },
@@ -1044,9 +1032,6 @@ export default function AdminDashboard() {
   ];
 
   const isTabActive = (key: string) => {
-    if (key === "content") return activeTab === "content";
-    if (key === "settings-section") return activeTab === "settings-section";
-    if (key === "lead-section") return activeTab === "lead-section";
     return activeTab === key;
   };
 
@@ -1145,7 +1130,7 @@ export default function AdminDashboard() {
           </header>
 
           <main className="flex-1 p-6 space-y-6">
-            {/* Overview Tab */}
+            {/* Overview Tab with sub-tabs */}
             {activeTab === "overview" && (
               <div className="space-y-6">
                 <Card className="border-0 shadow-sm bg-gradient-to-r from-indigo-600 to-indigo-700 text-white">
@@ -1182,6 +1167,31 @@ export default function AdminDashboard() {
                   </CardContent>
                 </Card>
 
+                <div className="flex gap-1 bg-slate-100 p-1 rounded-lg w-fit">
+                  {[
+                    { key: "stats", label: "Overview" },
+                    { key: "blog", label: "Blog" },
+                    { key: "services", label: "Servizi" },
+                    { key: "projects", label: "Progetti" },
+                    { key: "page-builder", label: "Page Builder" },
+                    { key: "navbar", label: "Navbar" },
+                  ].map((tab) => (
+                    <button
+                      key={tab.key}
+                      onClick={() => setOverviewSubTab(tab.key)}
+                      className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                        overviewSubTab === tab.key
+                          ? 'bg-white text-slate-900 shadow-sm'
+                          : 'text-slate-500 hover:text-slate-700'
+                      }`}
+                    >
+                      {tab.label}
+                    </button>
+                  ))}
+                </div>
+
+                {overviewSubTab === "stats" && (
+                  <div className="space-y-6">
                 <Card className="border-0 shadow-sm">
                   <CardHeader className="pb-3">
                     <CardTitle className="text-base font-semibold text-slate-800 flex items-center gap-2">
@@ -1407,6 +1417,189 @@ export default function AdminDashboard() {
                     </div>
                   </CardContent>
                 </Card>
+                  </div>
+                )}
+
+                {overviewSubTab === "blog" && (
+                  <div className="space-y-6">
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <h3 className="text-lg font-semibold text-slate-800">Gestione Blog</h3>
+                        <p className="text-sm text-slate-500">Crea e gestisci gli articoli del blog</p>
+                      </div>
+                      <Button size="sm" className="bg-indigo-600 hover:bg-indigo-700" data-testid="button-add-blog-post-overview" onClick={() => setIsEditingPost(true)}>
+                        <Plus className="h-4 w-4 mr-1" />
+                        Nuovo Articolo
+                      </Button>
+                    </div>
+
+                    <Card className="border-0 shadow-sm">
+                      <CardContent className="pt-6">
+                        <Table>
+                          <TableHeader>
+                            <TableRow className="border-slate-100">
+                              <TableHead className="text-slate-500">Titolo</TableHead>
+                              <TableHead className="text-slate-500">Autore</TableHead>
+                              <TableHead className="text-slate-500">Status</TableHead>
+                              <TableHead className="text-slate-500">Data</TableHead>
+                              <TableHead className="text-slate-500">Visualizzazioni</TableHead>
+                              <TableHead className="text-right text-slate-500">Azioni</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {isLoadingPosts ? (
+                              <TableRow>
+                                <TableCell colSpan={6} className="text-center text-slate-400">Caricamento...</TableCell>
+                              </TableRow>
+                            ) : blogPosts.length === 0 ? (
+                              <TableRow>
+                                <TableCell colSpan={6} className="text-center text-slate-400">Nessun articolo trovato</TableCell>
+                              </TableRow>
+                            ) : (
+                              blogPosts.map((post) => {
+                                const getUIStatusForDisplay = (dbStatus: string) => {
+                                  switch(dbStatus) {
+                                    case "draft": return "Bozza";
+                                    case "published": return "Pubblicato";
+                                    case "scheduled": return "Programmato";
+                                    default: return "Bozza";
+                                  }
+                                };
+
+                                return (
+                                  <TableRow key={post.id} className="border-slate-50 hover:bg-slate-50/50">
+                                    <TableCell className="font-medium text-slate-800">{post.title}</TableCell>
+                                    <TableCell className="text-slate-500">{post.author}</TableCell>
+                                    <TableCell>
+                                      <Badge className={
+                                        post.status === 'published'
+                                          ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                                          : post.status === 'scheduled'
+                                          ? 'bg-amber-50 text-amber-700 border-amber-200'
+                                          : 'bg-slate-50 text-slate-600 border-slate-200'
+                                      }>
+                                        {getUIStatusForDisplay(post.status)}
+                                      </Badge>
+                                    </TableCell>
+                                    <TableCell className="text-slate-500">{new Date(post.createdAt).toLocaleDateString('it-IT')}</TableCell>
+                                    <TableCell className="text-slate-500">{post.views || 0}</TableCell>
+                                    <TableCell className="text-right">
+                                      <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                          <Button variant="ghost" size="icon" className="text-slate-400 hover:text-slate-700">
+                                            <MoreHorizontal className="h-4 w-4" />
+                                          </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align="end">
+                                          <DropdownMenuItem onClick={() => handleEditPost(post)}>
+                                            <Edit className="h-4 w-4 mr-2" />
+                                            Modifica
+                                          </DropdownMenuItem>
+                                          <DropdownMenuItem className="text-destructive" onClick={() => handleDeletePost(post.id)}>
+                                            <Trash2 className="h-4 w-4 mr-2" />
+                                            Elimina
+                                          </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                      </DropdownMenu>
+                                    </TableCell>
+                                  </TableRow>
+                                );
+                              })
+                            )}
+                          </TableBody>
+                        </Table>
+                      </CardContent>
+                    </Card>
+                  </div>
+                )}
+
+                {overviewSubTab === "services" && <ServicesManager />}
+
+                {overviewSubTab === "projects" && <ProjectsManager />}
+
+                {overviewSubTab === "page-builder" && (
+                  <div className="space-y-6">
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <h3 className="text-lg font-semibold text-slate-900">Page Builder</h3>
+                        <p className="text-sm text-slate-500">Crea pagine con drag & drop</p>
+                      </div>
+                      <Button
+                        size="sm"
+                        className="bg-indigo-600 hover:bg-indigo-700"
+                        onClick={() => setIsEditingBuilderPage(true)}
+                        data-testid="button-create-builder-page-overview"
+                      >
+                        <Plus className="h-4 w-4 mr-1" />
+                        Nuova Pagina Builder
+                      </Button>
+                    </div>
+
+                    <Card className="border-0 shadow-sm">
+                      <CardContent className="pt-6">
+                        <Table>
+                          <TableHeader>
+                            <TableRow className="border-slate-100">
+                              <TableHead className="text-slate-500">Titolo</TableHead>
+                              <TableHead className="text-slate-500">Slug</TableHead>
+                              <TableHead className="text-slate-500">Status</TableHead>
+                              <TableHead className="text-slate-500">Ultima Modifica</TableHead>
+                              <TableHead className="text-right text-slate-500">Azioni</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {!builderPages || builderPages.length === 0 ? (
+                              <TableRow>
+                                <TableCell colSpan={5} className="text-center text-slate-400">Nessuna pagina builder trovata</TableCell>
+                              </TableRow>
+                            ) : (
+                              builderPages.map((page: any) => (
+                                <TableRow key={page.id} className="border-slate-50 hover:bg-slate-50/50">
+                                  <TableCell className="font-medium text-slate-800">{page.title}</TableCell>
+                                  <TableCell className="text-slate-500">/{page.slug}</TableCell>
+                                  <TableCell>
+                                    <Badge className={page.isActive ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-slate-50 text-slate-600 border-slate-200'}>
+                                      {page.isActive ? 'Attiva' : 'Disattivata'}
+                                    </Badge>
+                                  </TableCell>
+                                  <TableCell className="text-slate-500">{new Date(page.updatedAt || page.createdAt).toLocaleDateString('it-IT')}</TableCell>
+                                  <TableCell className="text-right">
+                                    <DropdownMenu>
+                                      <DropdownMenuTrigger asChild>
+                                        <Button variant="ghost" size="icon" className="text-slate-400 hover:text-slate-700">
+                                          <MoreHorizontal className="h-4 w-4" />
+                                        </Button>
+                                      </DropdownMenuTrigger>
+                                      <DropdownMenuContent align="end">
+                                        <DropdownMenuItem onClick={() => window.open(`/${page.slug}`, '_blank')}>
+                                          <Eye className="h-4 w-4 mr-2" />
+                                          Anteprima
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => handleEditBuilderPage(page)}>
+                                          <Edit className="h-4 w-4 mr-2" />
+                                          Modifica
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => handleToggleBuilderPageStatus(page.id)}>
+                                          {page.isActive ? '🔴 Disattiva' : '🟢 Attiva'}
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem className="text-destructive" onClick={() => handleDeleteBuilderPage(page.id)}>
+                                          <Trash2 className="h-4 w-4 mr-2" />
+                                          Elimina
+                                        </DropdownMenuItem>
+                                      </DropdownMenuContent>
+                                    </DropdownMenu>
+                                  </TableCell>
+                                </TableRow>
+                              ))
+                            )}
+                          </TableBody>
+                        </Table>
+                      </CardContent>
+                    </Card>
+                  </div>
+                )}
+
+                {overviewSubTab === "navbar" && <NavbarSettings />}
               </div>
             )}
 
@@ -1658,322 +1851,6 @@ export default function AdminDashboard() {
               </div>
             )}
 
-            {/* Content Section (Blog, Servizi, Progetti with sub-tabs) */}
-            {activeTab === "content" && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-2xl font-bold text-slate-900">Contenuti</h2>
-                </div>
-                <div className="flex gap-1 bg-slate-100 p-1 rounded-lg w-fit">
-                  {[
-                    { key: "overview-stats", label: "Blog" },
-                    { key: "services", label: "Servizi" },
-                    { key: "projects", label: "Progetti" },
-                    { key: "navbar", label: "Navbar" },
-                  ].map((tab) => (
-                    <button
-                      key={tab.key}
-                      onClick={() => setContentSubTab(tab.key)}
-                      className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
-                        contentSubTab === tab.key
-                          ? 'bg-white text-slate-900 shadow-sm'
-                          : 'text-slate-500 hover:text-slate-700'
-                      }`}
-                    >
-                      {tab.label}
-                    </button>
-                  ))}
-                </div>
-
-                {contentSubTab === "overview-stats" && (
-                  <div className="space-y-6">
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <h3 className="text-lg font-semibold text-slate-800">Gestione Blog</h3>
-                        <p className="text-sm text-slate-500">Crea e gestisci gli articoli del blog</p>
-                      </div>
-                      <Button size="sm" className="bg-indigo-600 hover:bg-indigo-700" data-testid="button-add-blog-post" onClick={() => setIsEditingPost(true)}>
-                        <Plus className="h-4 w-4 mr-1" />
-                        Nuovo Articolo
-                      </Button>
-                    </div>
-
-                    <Card className="border-0 shadow-sm">
-                      <CardContent className="pt-6">
-                        <Table>
-                          <TableHeader>
-                            <TableRow className="border-slate-100">
-                              <TableHead className="text-slate-500">Titolo</TableHead>
-                              <TableHead className="text-slate-500">Autore</TableHead>
-                              <TableHead className="text-slate-500">Status</TableHead>
-                              <TableHead className="text-slate-500">Data</TableHead>
-                              <TableHead className="text-slate-500">Visualizzazioni</TableHead>
-                              <TableHead className="text-right text-slate-500">Azioni</TableHead>
-                            </TableRow>
-                          </TableHeader>
-                          <TableBody>
-                            {isLoadingPosts ? (
-                              <TableRow>
-                                <TableCell colSpan={6} className="text-center text-slate-400">Caricamento...</TableCell>
-                              </TableRow>
-                            ) : blogPosts.length === 0 ? (
-                              <TableRow>
-                                <TableCell colSpan={6} className="text-center text-slate-400">Nessun articolo trovato</TableCell>
-                              </TableRow>
-                            ) : (
-                              blogPosts.map((post) => {
-                                const getUIStatusForDisplay = (dbStatus: string) => {
-                                  switch(dbStatus) {
-                                    case "draft": return "Bozza";
-                                    case "published": return "Pubblicato";
-                                    case "scheduled": return "Programmato";
-                                    default: return "Bozza";
-                                  }
-                                };
-
-                                return (
-                                  <TableRow key={post.id} className="border-slate-50 hover:bg-slate-50/50">
-                                    <TableCell className="font-medium text-slate-800" data-testid={`blog-title-${post.id}`}>
-                                      {post.title}
-                                    </TableCell>
-                                    <TableCell className="text-slate-500">{post.author?.username || 'N/A'}</TableCell>
-                                    <TableCell>{getStatusBadge(getUIStatusForDisplay(post.status))}</TableCell>
-                                    <TableCell className="text-slate-500">{new Date(post.createdAt).toLocaleDateString()}</TableCell>
-                                    <TableCell className="text-slate-500">{post.views || 0}</TableCell>
-                                    <TableCell className="text-right">
-                                      <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
-                                          <Button variant="ghost" size="icon" className="text-slate-400 hover:text-slate-700" data-testid={`button-blog-actions-${post.id}`}>
-                                            <MoreHorizontal className="h-4 w-4" />
-                                          </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end">
-                                          <DropdownMenuItem>
-                                            <Eye className="h-4 w-4 mr-2" />
-                                            Anteprima
-                                          </DropdownMenuItem>
-                                          <DropdownMenuItem onClick={() => handleEditPost(post)}>
-                                            <Edit className="h-4 w-4 mr-2" />
-                                            Modifica
-                                          </DropdownMenuItem>
-                                          <DropdownMenuItem className="text-destructive">
-                                            <Trash2 className="h-4 w-4 mr-2" />
-                                            Elimina
-                                          </DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                      </DropdownMenu>
-                                    </TableCell>
-                                  </TableRow>
-                                );
-                              })
-                            )}
-                          </TableBody>
-                        </Table>
-                      </CardContent>
-                    </Card>
-                  </div>
-                )}
-
-                {contentSubTab === "services" && (
-                  <div className="space-y-6">
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <h3 className="text-lg font-semibold text-slate-800">Gestione Servizi</h3>
-                        <p className="text-sm text-slate-500">Configura i servizi offerti</p>
-                      </div>
-                      <Button size="sm" className="bg-indigo-600 hover:bg-indigo-700" data-testid="button-add-service" onClick={() => setIsEditingService(true)}>
-                        <Plus className="h-4 w-4 mr-1" />
-                        Nuovo Servizio
-                      </Button>
-                    </div>
-
-                    <Card className="border-0 shadow-sm">
-                      <CardContent className="pt-6">
-                        <Table>
-                          <TableHeader>
-                            <TableRow className="border-slate-100">
-                              <TableHead className="text-slate-500">Titolo</TableHead>
-                              <TableHead className="text-slate-500">Categoria</TableHead>
-                              <TableHead className="text-slate-500">Prezzo</TableHead>
-                              <TableHead className="text-slate-500">Status</TableHead>
-                              <TableHead className="text-slate-500">Ordine</TableHead>
-                              <TableHead className="text-right text-slate-500">Azioni</TableHead>
-                            </TableRow>
-                          </TableHeader>
-                          <TableBody>
-                            {isLoadingServices ? (
-                              <TableRow>
-                                <TableCell colSpan={6} className="text-center text-slate-400">Caricamento...</TableCell>
-                              </TableRow>
-                            ) : services.length === 0 ? (
-                              <TableRow>
-                                <TableCell colSpan={6} className="text-center text-slate-400">Nessun servizio trovato</TableCell>
-                              </TableRow>
-                            ) : (
-                              services.map((service) => (
-                                <TableRow key={service.id} className="border-slate-50 hover:bg-slate-50/50">
-                                  <TableCell className="font-medium text-slate-800" data-testid={`service-title-${service.id}`}>
-                                    {service.title}
-                                    {service.isPopular && <Badge className="ml-2 bg-amber-100 text-amber-700 border-amber-200">Popolare</Badge>}
-                                    {service.isFeatured && <Badge className="ml-2 bg-indigo-100 text-indigo-700 border-indigo-200">In Evidenza</Badge>}
-                                  </TableCell>
-                                  <TableCell>
-                                    <Badge className={service.category === 'main' ? 'bg-indigo-100 text-indigo-700 border-indigo-200' : 'bg-slate-100 text-slate-600 border-slate-200'}>
-                                      {service.category === 'main' ? 'Principale' : 'Aggiuntivo'}
-                                    </Badge>
-                                  </TableCell>
-                                  <TableCell className="text-slate-600">{service.price || 'N/A'}</TableCell>
-                                  <TableCell>
-                                    <Badge className={service.isActive ? 'bg-emerald-100 text-emerald-700 border-emerald-200' : 'bg-slate-100 text-slate-600 border-slate-200'}>
-                                      {service.isActive ? 'Attivo' : 'Inattivo'}
-                                    </Badge>
-                                  </TableCell>
-                                  <TableCell className="text-slate-500">{service.order}</TableCell>
-                                  <TableCell className="text-right">
-                                    <DropdownMenu>
-                                      <DropdownMenuTrigger asChild>
-                                        <Button variant="ghost" size="icon" className="text-slate-400 hover:text-slate-700" data-testid={`button-service-actions-${service.id}`}>
-                                          <MoreHorizontal className="h-4 w-4" />
-                                        </Button>
-                                      </DropdownMenuTrigger>
-                                      <DropdownMenuContent align="end">
-                                        <DropdownMenuItem>
-                                          <Eye className="h-4 w-4 mr-2" />
-                                          Anteprima
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem onClick={() => handleEditService(service)}>
-                                          <Edit className="h-4 w-4 mr-2" />
-                                          Modifica
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem className="text-destructive">
-                                          <Trash2 className="h-4 w-4 mr-2" />
-                                          Elimina
-                                        </DropdownMenuItem>
-                                      </DropdownMenuContent>
-                                    </DropdownMenu>
-                                  </TableCell>
-                                </TableRow>
-                              ))
-                            )}
-                          </TableBody>
-                        </Table>
-                      </CardContent>
-                    </Card>
-                  </div>
-                )}
-
-                {contentSubTab === "projects" && <ProjectsManager />}
-
-                {contentSubTab === "navbar" && <NavbarSettings />}
-              </div>
-            )}
-
-            {/* Page Builder Tab */}
-            {activeTab === "page-builder" && (
-              <div className="space-y-6">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <h2 className="text-2xl font-bold text-slate-900">Page Builder</h2>
-                    <p className="text-sm text-slate-500">Crea pagine con drag & drop</p>
-                  </div>
-                  <Button
-                    size="sm"
-                    className="bg-indigo-600 hover:bg-indigo-700"
-                    onClick={() => setIsEditingBuilderPage(true)}
-                    data-testid="button-create-builder-page"
-                  >
-                    <Plus className="h-4 w-4 mr-1" />
-                    Nuova Pagina Builder
-                  </Button>
-                </div>
-
-                <Card className="border-0 shadow-sm">
-                  <CardContent className="pt-6">
-                    <Table>
-                      <TableHeader>
-                        <TableRow className="border-slate-100">
-                          <TableHead className="text-slate-500">Titolo</TableHead>
-                          <TableHead className="text-slate-500">Slug</TableHead>
-                          <TableHead className="text-slate-500">Status</TableHead>
-                          <TableHead className="text-slate-500">Conversioni</TableHead>
-                          <TableHead className="text-slate-500">Creata</TableHead>
-                          <TableHead className="text-right text-slate-500">Azioni</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {isLoadingBuilderPages ? (
-                          <TableRow>
-                            <TableCell colSpan={6} className="text-center text-slate-400">Caricamento...</TableCell>
-                          </TableRow>
-                        ) : builderPages?.length === 0 ? (
-                          <TableRow>
-                            <TableCell colSpan={6} className="text-center text-slate-400">
-                              Nessuna builder page trovata
-                              <br />
-                              <Button
-                                variant="outline"
-                                className="mt-2 border-slate-200"
-                                onClick={() => setIsEditingBuilderPage(true)}
-                              >
-                                Crea la prima builder page
-                              </Button>
-                            </TableCell>
-                          </TableRow>
-                        ) : (
-                          builderPages?.map((page: any) => (
-                            <TableRow key={page.id} className="border-slate-50 hover:bg-slate-50/50">
-                              <TableCell className="font-medium text-slate-800" data-testid={`builder-page-title-${page.id}`}>
-                                {page.title}
-                              </TableCell>
-                              <TableCell>
-                                <code className="text-sm bg-slate-100 text-slate-600 px-2 py-1 rounded">
-                                  /{page.slug}
-                                </code>
-                              </TableCell>
-                              <TableCell>
-                                <Badge className={page.isActive ? 'bg-emerald-100 text-emerald-700 border-emerald-200' : 'bg-slate-100 text-slate-600 border-slate-200'}>
-                                  {page.isActive ? 'Attiva' : 'Inattiva'}
-                                </Badge>
-                              </TableCell>
-                              <TableCell className="text-slate-500">{page.conversions || 0}</TableCell>
-                              <TableCell className="text-slate-500">
-                                {new Date(page.createdAt).toLocaleDateString('it-IT')}
-                              </TableCell>
-                              <TableCell className="text-right">
-                                <DropdownMenu>
-                                  <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" size="icon" className="text-slate-400 hover:text-slate-700" data-testid={`button-builder-page-actions-${page.id}`}>
-                                      <MoreHorizontal className="h-4 w-4" />
-                                    </Button>
-                                  </DropdownMenuTrigger>
-                                  <DropdownMenuContent align="end">
-                                    <DropdownMenuItem onClick={() => window.open(`/${page.slug}`, '_blank')}>
-                                      <Eye className="h-4 w-4 mr-2" />
-                                      Anteprima
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem onClick={() => handleEditBuilderPage(page)}>
-                                      <Edit className="h-4 w-4 mr-2" />
-                                      Modifica
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem onClick={() => handleToggleBuilderPageStatus(page.id)}>
-                                      {page.isActive ? '🔴 Disattiva' : '🟢 Attiva'}
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem className="text-destructive" onClick={() => handleDeleteBuilderPage(page.id)}>
-                                      <Trash2 className="h-4 w-4 mr-2" />
-                                      Elimina
-                                    </DropdownMenuItem>
-                                  </DropdownMenuContent>
-                                </DropdownMenu>
-                              </TableCell>
-                            </TableRow>
-                          ))
-                        )}
-                      </TableBody>
-                    </Table>
-                  </CardContent>
-                </Card>
-              </div>
-            )}
 
             {/* Preview Tab */}
             {activeTab === "preview" && (
@@ -2418,7 +2295,7 @@ export default function AdminDashboard() {
       {/* Homepage Editor */}
       {isEditingHomepage && (
         <HomepageEditor
-          homepage={homepageToEdit}
+          pageToEdit={homepageToEdit}
           onClose={handleCloseHomepageEditor}
         />
       )}
@@ -2426,7 +2303,7 @@ export default function AdminDashboard() {
       {/* Blog Page Editor */}
       {isEditingBlogPage && (
         <BlogPageEditor
-          page={blogPageToEdit}
+          pageToEdit={blogPageToEdit}
           onClose={handleCloseBlogPageEditor}
         />
       )}
@@ -2434,7 +2311,7 @@ export default function AdminDashboard() {
       {/* Contatti Page Editor */}
       {isEditingContattiPage && (
         <ContattiPageEditor
-          page={contattiPageToEdit}
+          pageToEdit={contattiPageToEdit}
           onClose={handleCloseContattiPageEditor}
         />
       )}

@@ -68,8 +68,10 @@ Preferred communication style: Simple, everyday language.
 - **clsx & tailwind-merge**: Class name manipulation utilities
 
 ## Admin Dashboard Architecture
-- **Sidebar Navigation**: Grouped into 5 sections (Principale, Contenuti, Impostazioni, Marketing, Strumenti) with indigo/slate design theme
-- **Sub-tab Sections**: Content section (Blog, Servizi, Progetti, Navbar), Settings section (SEO, Generali, Footer, Tenant), Lead section (Lead, Marketing Leads, Landing Pages)
+- **Sidebar Navigation**: Grouped into 3 sections (Principale, Gestione, Strumenti) with indigo/slate design theme
+- **Panoramica sub-tabs**: Overview stats, Blog, Servizi, Progetti, Page Builder, Navbar
+- **Impostazioni SEO sub-tabs**: SEO, Generali, Footer, Tenant
+- **Lead sub-tabs**: Lead, Marketing Leads, Landing Pages
 - **Design System**: Indigo-600 accents, slate palette backgrounds, border-0 shadow-sm cards, white/80 backdrop-blur header
 - **Login Form**: Modern centered design with Lock icon, no credential hints shown
 - **SuperAdmin Dashboard**: Separate modernized dashboard at /superadmin with tenant/user management, impersonation, password reset
