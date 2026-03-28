@@ -21,6 +21,7 @@ import { Link } from 'wouter';
 import type { Project, BlogPostWithRelations } from '@shared/schema';
 import { SEOHead } from './SEOHead';
 import { LazyWistiaVideo } from './LazyWistiaVideo';
+import { ResponsiveImage } from './ui/ResponsiveImage';
 import type { LucideIcon } from 'lucide-react';
 interface ComponentData {
   id: string;
@@ -259,9 +260,8 @@ function ImageComponent({ props }: { props: any }) {
   };
   const radiusClass = radiusMap[props.borderRadius || 'lg'] || 'rounded-lg';
 
-  // Use explicit dimensions if provided, otherwise use aspect ratio defaults
   const imgWidth = props.imageWidth || 1200;
-  const imgHeight = props.imageHeight || (imgWidth * 9 / 16); // 16:9 default aspect ratio
+  const imgHeight = props.imageHeight || Math.round(imgWidth * 9 / 16);
 
   return (
     <div 
@@ -273,16 +273,14 @@ function ImageComponent({ props }: { props: any }) {
     >
       <div className="max-w-6xl mx-auto">
         {props.src ? (
-          <img 
-            src={props.src} 
-            alt={props.alt || 'Immagine'} 
-            style={{ width: props.width || '100%', aspectRatio: `${imgWidth} / ${imgHeight}` }}
-            className={radiusClass}
+          <ResponsiveImage
+            src={props.src}
+            alt={props.alt || 'Immagine'}
             width={imgWidth}
             height={imgHeight}
-            loading="lazy"
-            decoding="async"
-            fetchPriority="auto"
+            className={radiusClass}
+            objectFit={props.objectFit || 'cover'}
+            priority={false}
           />
         ) : (
           <div className={`bg-muted ${radiusClass} h-64 flex items-center justify-center`}>
@@ -838,13 +836,13 @@ function NavMenuComponent({ props }: { props: any }) {
     return (
       <nav style={navStyle}>
         <div className={`max-w-7xl mx-auto px-4 flex items-center ${alignmentClass}`}>
-          <ul className={`flex space-x-6 ${alignmentClass}`}>
+          <ul className={`flex flex-wrap gap-2 sm:gap-0 sm:space-x-6 ${alignmentClass}`}>
             {items.map((item: { label: string; link: string }, index: number) => (
               <li key={index}>
                 <a
                   href={item.link}
                   onClick={(e) => handleAnchorClick(e, item.link)}
-                  className="hover:opacity-75 transition-opacity"
+                  className="inline-flex items-center min-h-[44px] px-2 hover:opacity-75 transition-opacity"
                   style={{ color: props.textColor || undefined }}
                 >
                   {item.label}
@@ -881,7 +879,7 @@ function NavMenuComponent({ props }: { props: any }) {
           ))}
         </ul>
         <button
-          className="md:hidden p-2 rounded"
+          className="md:hidden p-2 rounded min-h-[44px] min-w-[44px] flex items-center justify-center"
           aria-label="Menu"
           onClick={() => setMobileOpen(o => !o)}
           style={{ color: props.textColor || undefined }}
@@ -901,7 +899,7 @@ function NavMenuComponent({ props }: { props: any }) {
                 <a
                   href={item.link}
                   onClick={(e) => handleAnchorClick(e, item.link)}
-                  className="block py-2 hover:opacity-75 transition-opacity"
+                  className="block py-3 min-h-[44px] flex items-center hover:opacity-75 transition-opacity"
                   style={{ color: props.textColor || undefined }}
                 >
                   {item.label}
@@ -1197,7 +1195,7 @@ function TransparencyFilterComponent({ props }: { props: any }) {
           )}
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Cosa facciamo - Design migliorato */}
           <div className="group relative">
             <div className="absolute -inset-1 bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl opacity-75 group-hover:opacity-100 blur transition duration-500"></div>
@@ -2336,7 +2334,7 @@ function ProblemSolutionComponent({ props }: { props: any }) {
         <div className="relative min-h-[400px]">
           {/* Problem Cards */}
           {activeTab === 'problem' && (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in">
               {problems.map((problem: any, index: number) => (
                 <Card 
                   key={index} 
@@ -2364,7 +2362,7 @@ function ProblemSolutionComponent({ props }: { props: any }) {
 
           {/* Solution Cards */}
           {activeTab === 'solution' && (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in">
               {solutions.map((solution: any, index: number) => (
                 <Card 
                   key={index} 
@@ -2489,7 +2487,7 @@ function ServiceShowcaseComponent({ props }: { props: any }) {
       }}
     >
       <div className="max-w-7xl mx-auto container-padding">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           <div className="space-y-8">
             <Badge className="border-red-400/50 text-red-700 bg-red-50 font-bold px-6 py-3 rounded-full">{props.badge || '🎯 IL TUO VERO OSTACOLO'}</Badge>
             <h2 className="text-responsive-lg font-heading font-black text-slate-900">{props.title || 'Intrappolato nella "Ruota del Criceto"'}</h2>
@@ -2564,7 +2562,7 @@ function FilterSectionComponent({ props }: { props: any }) {
             <p className="text-responsive-md text-slate-600 max-w-3xl mx-auto leading-relaxed font-medium">{props.subtitle || 'Lavoriamo solo con un numero limitato di clienti per garantire risultati eccezionali.'}</p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
             <div>
               <Card className="glass-card p-8 sm:p-10 rounded-3xl h-full border-2 border-green-200 bg-gradient-to-br from-green-50 via-emerald-50/80 to-green-50 shadow-xl">
                 <div className="space-y-6">
@@ -3029,7 +3027,7 @@ function TeamGridComponent({ props }: { props: any }) {
           {props.subtitle && <p className="text-xl text-slate-600">{props.subtitle}</p>}
         </div>
 
-        <div className={`grid gap-8 ${team.length === 4 ? 'md:grid-cols-2 lg:grid-cols-4' : team.length === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2'}`}>
+        <div className={`grid grid-cols-1 gap-8 ${team.length === 4 ? 'sm:grid-cols-2 lg:grid-cols-4' : team.length === 3 ? 'sm:grid-cols-2 md:grid-cols-3' : 'sm:grid-cols-2'}`}>
           {team.map((member: any, index: number) => (
             <Card key={index} className="hover:shadow-xl transition-shadow">
               <CardContent className="p-6 text-center">
@@ -3187,7 +3185,7 @@ function ServicesCardsComponent({ props }: { props: any }) {
           </div>
         )}
 
-        <div className={`grid gap-8 ${services.length === 3 ? 'lg:grid-cols-3' : services.length === 2 ? 'md:grid-cols-2' : 'md:grid-cols-2 lg:grid-cols-3'}`}>
+        <div className={`grid grid-cols-1 gap-8 ${services.length === 3 ? 'sm:grid-cols-2 lg:grid-cols-3' : services.length === 2 ? 'sm:grid-cols-2' : 'sm:grid-cols-2 lg:grid-cols-3'}`}>
           {services.map((service: any, index: number) => {
             const Icon = iconMap[service.icon] || Zap;
             return (
@@ -3581,7 +3579,7 @@ function renderComponent(
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {props.plans.map((plan: any, index: number) => (
               <div key={index} className="relative bg-white rounded-xl border-2 p-8 shadow-lg">
                 {plan.recommended && (
@@ -3667,7 +3665,7 @@ function renderComponent(
               </p>
             </div>
 
-            <div className="grid lg:grid-cols-2 gap-8 mb-16">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
               {/* Status Quo Path */}
               <div className="relative overflow-hidden bg-white border-2 border-red-300 rounded-xl">
                 <div className="bg-red-500 text-white text-center py-2">
@@ -3942,14 +3940,13 @@ function renderComponent(
                         <div className="relative overflow-hidden">
                           {project.featuredImage ? (
                             <div className="aspect-video overflow-hidden relative">
-                              <img 
-                                src={project.featuredImage} 
-                                alt={project.title} 
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
-                                width="800"
-                                height="450"
-                                loading="lazy"
-                                decoding="async"
+                              <ResponsiveImage
+                                src={project.featuredImage}
+                                alt={project.title}
+                                width={800}
+                                height={450}
+                                className="transition-transform duration-700 group-hover:scale-105"
+                                objectFit="cover"
                               />
                               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                             </div>
@@ -4172,16 +4169,18 @@ function renderComponent(
               {/* Featured Image */}
               {project.featuredImage && (
                 <div className="mb-12 rounded-2xl overflow-hidden shadow-2xl">
-                  <img 
-                    src={project.featuredImage} 
-                    alt={project.title} 
-                    className="w-full h-auto object-cover"
+                  <ResponsiveImage
+                    src={project.featuredImage}
+                    alt={project.title}
+                    width={1200}
+                    height={675}
+                    objectFit="cover"
                   />
                 </div>
               )}
 
               {/* Main Content Grid */}
-              <div className="grid lg:grid-cols-3 gap-12 mb-12">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 mb-12">
                 {/* Main Content */}
                 <div className="lg:col-span-2 space-y-8">
                   {/* Full Description */}
@@ -4437,14 +4436,13 @@ function renderComponent(
                       <div className="relative overflow-hidden">
                         {post.featuredImage ? (
                           <div className="aspect-video overflow-hidden">
-                            <img 
-                              src={post.featuredImage} 
-                              alt={post.title} 
-                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
-                              width="800"
-                              height="450"
-                              loading="lazy"
-                              decoding="async"
+                            <ResponsiveImage
+                              src={post.featuredImage}
+                              alt={post.title}
+                              width={800}
+                              height={450}
+                              className="transition-transform duration-700 group-hover:scale-110"
+                              objectFit="cover"
                             />
                           </div>
                         ) : (
@@ -4495,13 +4493,16 @@ function renderComponent(
         }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Immagine */}
             <div className="relative">
-              <img 
-                src={props.image || '/attached_assets/image_1759612238064.png'} 
-                alt={props.title || 'Expert'} 
-                className="w-full h-auto rounded-lg shadow-2xl"
+              <ResponsiveImage
+                src={props.image || '/attached_assets/image_1759612238064.png'}
+                alt={props.title || 'Expert'}
+                width={600}
+                height={600}
+                className="rounded-lg shadow-2xl"
+                objectFit="cover"
               />
             </div>
 
@@ -4620,7 +4621,7 @@ function renderComponent(
         }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900">{props.title || 'Pronto a Fare il Prossimo Passo?'}</h2>
               <p className="mt-4 text-lg text-slate-600">{props.description || 'Compila il modulo di contatto per ricevere una consulenza personalizzata.'}</p>
@@ -4707,7 +4708,7 @@ function renderComponent(
               <h2 className="font-heading font-bold text-4xl mb-4">{props.title || 'Le Risposte che Cerchi di Più'}</h2>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">{props.subtitle || 'Le domande più frequenti dei nostri clienti con risposte dettagliate.'}</p>
             </div>
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {questions.slice(0, props.limit || 4).map((faq: any, index: number) => (
                 <Card key={index} className="hover-elevate">
                   <CardHeader>
@@ -4920,7 +4921,7 @@ function renderComponent(
               <h2 className="font-heading font-bold text-3xl mb-4">{props.title || 'Non Hai Trovato la Risposta?'}</h2>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto">{props.subtitle || 'Il nostro team è sempre disponibile per rispondere alle tue domande specifiche.'}</p>
             </div>
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
               {channels.map((channel: any, index: number) => {
                 const IconMap: any = { MessageCircle, Phone, Mail };
                 const Icon = IconMap[channel.icon] || MessageCircle;
