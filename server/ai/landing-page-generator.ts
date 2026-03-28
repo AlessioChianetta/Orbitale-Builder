@@ -3,14 +3,12 @@ import { db } from "../db";
 import { superadminGeminiConfig } from "../../shared/schema";
 import { decrypt } from "../encryption";
 
-async function getSuperAdminGeminiKey(): Promise<string | null> {
+async function getGeminiKeysFromDb(): Promise<{ keys: string[]; enabled: boolean } | null> {
   try {
     const config = await db.select().from(superadminGeminiConfig).limit(1);
     if (!config.length || !config[0].enabled) return null;
-    const keysJson = decrypt(config[0].apiKeysEncrypted);
-    const keys = JSON.parse(keysJson) as string[];
-    if (!keys.length) return null;
-    return keys[Math.floor(Math.random() * keys.length)];
+    const keys = JSON.parse(decrypt(config[0].apiKeysEncrypted)) as string[];
+    return { keys, enabled: true };
   } catch {
     return null;
   }
@@ -169,8 +167,10 @@ export interface GeneratedLandingContent {
 }
 
 async function getGeminiApiKey(): Promise<string | null> {
-  const key = await getSuperAdminGeminiKey();
-  if (key) return key;
+  const dbKeys = await getGeminiKeysFromDb();
+  if (dbKeys && dbKeys.keys.length > 0) {
+    return dbKeys.keys[Math.floor(Math.random() * dbKeys.keys.length)];
+  }
   return process.env.GEMINI_API_KEY || null;
 }
 
@@ -286,16 +286,23 @@ function makeId(prefix: string): string {
   return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
 }
 
+interface ComponentDefinition {
+  id: string;
+  type: string;
+  props: Record<string, unknown>;
+  children?: ComponentDefinition[];
+}
+
 export function buildComponentsFromContent(
   content: GeneratedLandingContent,
   templateId: TemplateId
-): any[] {
+): ComponentDefinition[] {
   const t = (AI_TEMPLATES[templateId] || AI_TEMPLATES["bianco"]).colors;
 
   const navLinks = content.navbar.links.map(l => ({ label: l.label, link: l.anchor }));
   navLinks.push({ label: "Contattaci", link: "#contatti" });
 
-  const components: any[] = [
+  const components: ComponentDefinition[] = [
     {
       id: makeId("nav"),
       type: "nav-menu",
@@ -306,6 +313,9 @@ export function buildComponentsFromContent(
         backgroundColor: t.navBg,
         textColor: t.navText,
         paddingY: "16",
+        sticky: true,
+        mobileHamburger: true,
+        smoothScroll: true,
       }
     },
 
@@ -448,6 +458,7 @@ export function buildComponentsFromContent(
       id: makeId("testimonials-anchor"),
       type: "testimonials",
       props: {
+        id: "testimonianze",
         title: content.testimonials.section_title,
         items: content.testimonials.items.map(item => ({
           name: item.name,
@@ -456,7 +467,7 @@ export function buildComponentsFromContent(
           image: "",
         })),
         backgroundColor: t.testimonialsBg,
-        paddingY: "80",
+        paddingY: 80,
       }
     },
 

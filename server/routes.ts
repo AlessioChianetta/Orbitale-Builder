@@ -2595,6 +2595,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // GET check if AI (Gemini) key is configured (admin only)
+  app.get("/api/ai/check-config", authenticateToken, requireRole("admin"), async (_req: AuthRequest, res: Response) => {
+    try {
+      const configs = await db.select().from(superadminGeminiConfig).limit(1);
+      const hasDbKey = configs.length > 0 && configs[0].enabled && !!configs[0].apiKeysEncrypted;
+      const hasEnvKey = !!process.env.GEMINI_API_KEY;
+      res.json({ configured: hasDbKey || hasEnvKey });
+    } catch {
+      res.json({ configured: !!process.env.GEMINI_API_KEY });
+    }
+  });
+
   // GET templates list for AI landing page generator (admin only)
   app.get("/api/ai/landing-page-templates", authenticateToken, requireRole("admin"), async (req: AuthRequest, res: Response) => {
     const templates = Object.values(AI_TEMPLATES).map(t => ({

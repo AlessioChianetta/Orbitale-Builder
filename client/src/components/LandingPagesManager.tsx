@@ -30,8 +30,17 @@ interface LandingPageStats {
   createdAt: string;
 }
 
+interface BuilderPage {
+  id: number;
+  title: string;
+  slug: string;
+  isActive: boolean;
+  description?: string;
+  createdAt?: string;
+}
+
 interface LandingPagesManagerProps {
-  onPageCreated?: (page: any) => void;
+  onPageCreated?: (page: BuilderPage) => void;
 }
 
 export default function LandingPagesManager({ onPageCreated }: LandingPagesManagerProps = {}) {
@@ -81,7 +90,7 @@ export default function LandingPagesManager({ onPageCreated }: LandingPagesManag
     });
   };
 
-  const handleAiPageCreated = (page: any) => {
+  const handleAiPageCreated = (page: BuilderPage) => {
     setIsAiModalOpen(false);
     if (onPageCreated) {
       onPageCreated(page);

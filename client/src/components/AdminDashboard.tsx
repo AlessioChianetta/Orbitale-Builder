@@ -1678,15 +1678,6 @@ export default function AdminDashboard() {
                       <div className="flex items-center gap-2">
                         <Button
                           size="sm"
-                          variant="outline"
-                          className="border-indigo-200 text-indigo-700 hover:bg-indigo-50 gap-1"
-                          onClick={() => setIsAiModalOpen(true)}
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9.663 17h4.673M12 3v1m6.364 1.636-.707.707M21 12h-1M4 12H3m3.343-5.657-.707-.707m2.828 9.9a5 5 0 1 1 7.072 0l-.548.547A3.374 3.374 0 0 0 14 18.469V19a2 2 0 1 1-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
-                          Genera con AI
-                        </Button>
-                        <Button
-                          size="sm"
                           className="bg-indigo-600 hover:bg-indigo-700"
                           onClick={() => setIsEditingBuilderPage(true)}
                           data-testid="button-create-builder-page-overview"
@@ -2303,6 +2294,15 @@ export default function AdminDashboard() {
                         <p className="text-sm text-slate-500">Gestisci le landing page per le tue campagne</p>
                       </div>
                       <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="border-indigo-200 text-indigo-700 hover:bg-indigo-50 gap-1"
+                          onClick={() => setIsAiModalOpen(true)}
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9.663 17h4.673M12 3v1m6.364 1.636-.707.707M21 12h-1M4 12H3m3.343-5.657-.707-.707m2.828 9.9a5 5 0 1 1 7.072 0l-.548.547A3.374 3.374 0 0 0 14 18.469V19a2 2 0 1 1-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                          Genera con AI
+                        </Button>
                         <Button variant="outline" size="sm" className="border-slate-200" onClick={handleCreateFromPatrimonioTemplate}>
                           <Copy className="h-4 w-4 mr-1" />
                           Da Template
@@ -2499,10 +2499,7 @@ export default function AdminDashboard() {
       <AiLandingPageModal
         open={isAiModalOpen}
         onClose={() => setIsAiModalOpen(false)}
-        onPageCreated={(page) => {
-          setBuilderPageToEdit(page);
-          setIsEditingBuilderPage(true);
-        }}
+        onPageCreated={(page) => handleEditBuilderPage(page)}
       />
 
       {/* Create from Patrimonio Template Modal */}

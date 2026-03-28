@@ -344,9 +344,12 @@ function TestimonialsComponent({ props }: { props: any }) {
 
   return (
     <section 
+      id={props.id || undefined}
       className="py-16 px-4"
       style={{
         backgroundColor: props.backgroundColor || undefined,
+        paddingTop: props.paddingY ? `${props.paddingY}px` : undefined,
+        paddingBottom: props.paddingY ? `${props.paddingY}px` : undefined,
       }}
     >
       <div className="max-w-6xl mx-auto">
@@ -478,6 +481,7 @@ function SectionComponent({ props, children }: { props: any; children?: React.Re
 
   return (
     <section 
+      id={props.id || undefined}
       className={`relative ${radiusClass}`}
       style={{
         backgroundColor: props.backgroundColor || 'transparent',
@@ -802,38 +806,105 @@ function DividerComponent({ props }: { props: any }) {
 }
 
 function NavMenuComponent({ props }: { props: any }) {
+  const [mobileOpen, setMobileOpen] = useState(false);
   const items = props.items || [];
-  const layoutClass = props.layout === 'vertical' ? 'flex flex-col space-y-2' : 'flex space-x-6';
   const alignmentMap: Record<string, string> = {
     left: 'justify-start',
     center: 'justify-center',
     right: 'justify-end',
   };
   const alignmentClass = alignmentMap[props.alignment || 'left'] || 'justify-start';
+  const isFixed = props.fixed || props.sticky;
+  const hasMobileHamburger = props.mobileHamburger !== false;
+
+  const navStyle: React.CSSProperties = {
+    backgroundColor: props.backgroundColor || 'transparent',
+    color: props.textColor || undefined,
+    paddingTop: `${props.paddingY || 16}px`,
+    paddingBottom: `${props.paddingY || 16}px`,
+    ...(isFixed ? { position: 'sticky', top: 0, zIndex: 50 } : {}),
+  };
+
+  const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>, link: string) => {
+    if (link.startsWith('#')) {
+      e.preventDefault();
+      const el = document.getElementById(link.slice(1));
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setMobileOpen(false);
+    }
+  };
 
   return (
-    <nav 
-      className={`${alignmentClass}`}
-      style={{
-        backgroundColor: props.backgroundColor || 'transparent',
-        color: props.textColor || undefined,
-        paddingTop: `${props.paddingY || 16}px`,
-        paddingBottom: `${props.paddingY || 16}px`,
-      }}
-    >
-      <ul className={layoutClass}>
-        {items.map((item: any, index: number) => (
-          <li key={index}>
-            <a 
-              href={item.link} 
-              className="hover:text-primary transition-colors"
-              style={{ color: props.textColor || undefined }}
-            >
-              {item.label}
-            </a>
-          </li>
-        ))}
-      </ul>
+    <nav style={navStyle}>
+      <div className={`max-w-7xl mx-auto px-4 flex items-center justify-between ${hasMobileHamburger ? '' : alignmentClass}`}>
+        {hasMobileHamburger && (
+          <span className="font-bold text-lg" style={{ color: props.textColor || undefined }}>
+            {items[0]?.label || ''}
+          </span>
+        )}
+        <ul className={`hidden md:flex space-x-6 ${hasMobileHamburger ? '' : alignmentClass}`}>
+          {(hasMobileHamburger ? items.slice(1) : items).map((item: any, index: number) => (
+            <li key={index}>
+              <a
+                href={item.link}
+                onClick={(e) => handleAnchorClick(e, item.link)}
+                className="hover:opacity-75 transition-opacity"
+                style={{ color: props.textColor || undefined }}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+        {hasMobileHamburger && (
+          <button
+            className="md:hidden p-2 rounded"
+            aria-label="Menu"
+            onClick={() => setMobileOpen(o => !o)}
+            style={{ color: props.textColor || undefined }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              {mobileOpen
+                ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                : <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />}
+            </svg>
+          </button>
+        )}
+        {!hasMobileHamburger && (
+          <ul className={`flex space-x-6 ${alignmentClass}`}>
+            {items.map((item: any, index: number) => (
+              <li key={index}>
+                <a
+                  href={item.link}
+                  onClick={(e) => handleAnchorClick(e, item.link)}
+                  className="hover:opacity-75 transition-opacity"
+                  style={{ color: props.textColor || undefined }}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+      {hasMobileHamburger && mobileOpen && (
+        <div className="md:hidden" style={{ backgroundColor: props.backgroundColor || 'transparent' }}>
+          <ul className="flex flex-col px-4 pb-4 space-y-2">
+            {items.slice(1).map((item: any, index: number) => (
+              <li key={index}>
+                <a
+                  href={item.link}
+                  onClick={(e) => handleAnchorClick(e, item.link)}
+                  className="block py-2 hover:opacity-75 transition-opacity"
+                  style={{ color: props.textColor || undefined }}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </nav>
   );
 }
