@@ -1462,7 +1462,7 @@ export default function AdminDashboard() {
                                 return (
                                   <TableRow key={post.id} className="border-slate-50 hover:bg-slate-50/50">
                                     <TableCell className="font-medium text-slate-800">{post.title}</TableCell>
-                                    <TableCell className="text-slate-500">{post.author}</TableCell>
+                                    <TableCell className="text-slate-500">{post.author?.username ?? post.author ?? 'N/A'}</TableCell>
                                     <TableCell>
                                       <Badge className={
                                         post.status === 'published'
