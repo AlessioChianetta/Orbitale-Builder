@@ -35,12 +35,68 @@ const loadingSteps = [
   { text: "Finalizzando la riscrittura..." },
 ];
 
+const TEXT_PREVIEW_KEYS = ["text", "content", "title", "heading", "subtitle", "subheadline", "headline",
+  "badgeText", "badge", "description", "submitText", "tagline", "guaranteeText",
+  "sectionTitle", "sectionSubtitle", "ctaText", "ctaLabel", "buttonText",
+  "topHeadline", "urgencyBadge", "titlePrefix", "highlightedTitle", "titleSuffix",
+  "subtitleText", "primaryCtaText", "secondaryCtaText", "videoCaption",
+  "guaranteeTitle", "guaranteeDescription", "mainCtaText",
+  "introText", "label", "name", "role"];
+
+function extractTextChanges(
+  original: ComponentData[],
+  rewritten: ComponentData[]
+): Array<{ componentType: string; field: string; before: string; after: string }> {
+  const changes: Array<{ componentType: string; field: string; before: string; after: string }> = [];
+
+  const collectChanges = (origList: ComponentData[], rewList: ComponentData[]) => {
+    for (const orig of origList) {
+      const rew = rewList.find(r => r.id === orig.id);
+      if (!rew) continue;
+
+      for (const key of TEXT_PREVIEW_KEYS) {
+        const before = orig.props[key];
+        const after = rew.props[key];
+        if (typeof before === "string" && typeof after === "string" && before !== after) {
+          changes.push({ componentType: orig.type, field: key, before, after });
+        }
+      }
+
+      const arrayKeys = ["items", "features", "testimonials", "phases", "steps", "problems", "services"];
+      for (const key of arrayKeys) {
+        if (Array.isArray(orig.props[key]) && Array.isArray(rew.props[key])) {
+          const origArr = orig.props[key] as Array<Record<string, unknown>>;
+          const rewArr = rew.props[key] as Array<Record<string, unknown>>;
+          for (let i = 0; i < Math.min(origArr.length, rewArr.length); i++) {
+            for (const ik of ["text", "title", "description", "name", "role", "label", "content", "quote"]) {
+              const bv = origArr[i][ik];
+              const av = rewArr[i][ik];
+              if (typeof bv === "string" && typeof av === "string" && bv !== av) {
+                changes.push({ componentType: orig.type, field: `${key}[${i}].${ik}`, before: bv, after: av });
+              }
+            }
+          }
+        }
+      }
+
+      if (Array.isArray(orig.children) && Array.isArray(rew.children)) {
+        collectChanges(orig.children, rew.children);
+      }
+    }
+  };
+
+  collectChanges(original, rewritten);
+  return changes;
+}
+
 export function AiRewritePageModal({ open, onClose, components, selectedComponentId, onRewriteComplete }: AiRewritePageModalProps) {
   const { toast } = useToast();
 
+  const [step, setStep] = useState<"form" | "loading" | "preview">("form");
   const [mode, setMode] = useState<"full" | "single">("full");
   const [instructions, setInstructions] = useState("");
   const [loadingStep, setLoadingStep] = useState(0);
+  const [previewComponents, setPreviewComponents] = useState<ComponentData[] | null>(null);
 
   const { data: configData } = useQuery<{ configured: boolean }>({
     queryKey: ["/api/ai/check-config"],
@@ -66,12 +122,12 @@ export function AiRewritePageModal({ open, onClose, components, selectedComponen
       return response.json() as Promise<{ components: ComponentData[] }>;
     },
     onSuccess: (data) => {
-      onRewriteComplete(data.components);
-      toast({ title: "Riscrittura completata!", description: "I testi sono stati riscritti. Controlla e poi salva." });
-      handleClose();
+      setPreviewComponents(data.components);
+      setStep("preview");
     },
     onError: (err: Error) => {
       toast({ title: "Errore nella riscrittura", description: err.message || "Riprova", variant: "destructive" });
+      setStep("form");
     }
   });
 
@@ -82,7 +138,7 @@ export function AiRewritePageModal({ open, onClose, components, selectedComponen
   }, [selectedComponentId, open]);
 
   useEffect(() => {
-    if (!rewriteMutation.isPending) {
+    if (step !== "loading") {
       setLoadingStep(0);
       return;
     }
@@ -90,24 +146,45 @@ export function AiRewritePageModal({ open, onClose, components, selectedComponen
       setLoadingStep(prev => (prev < loadingSteps.length - 1 ? prev + 1 : prev));
     }, 5000);
     return () => clearInterval(interval);
-  }, [rewriteMutation.isPending]);
+  }, [step]);
 
   const handleClose = () => {
     setInstructions("");
     setMode("full");
     setLoadingStep(0);
+    setStep("form");
+    setPreviewComponents(null);
     onClose();
+  };
+
+  const handleGenerate = () => {
+    setStep("loading");
+    rewriteMutation.mutate();
+  };
+
+  const handleConfirm = () => {
+    if (previewComponents) {
+      onRewriteComplete(previewComponents);
+      toast({ title: "Riscrittura applicata!", description: "I testi sono stati aggiornati. Controlla e poi salva la pagina." });
+    }
+    handleClose();
+  };
+
+  const handleDiscard = () => {
+    setPreviewComponents(null);
+    setStep("form");
+    toast({ title: "Riscrittura annullata", description: "Nessuna modifica è stata applicata." });
   };
 
   const selectedComponentType = selectedComponentId
     ? components.find(c => c.id === selectedComponentId)?.type
     : null;
 
-  const isLoading = rewriteMutation.isPending;
+  const textChanges = previewComponents ? extractTextChanges(components, previewComponents) : [];
 
   return (
-    <Dialog open={open} onOpenChange={v => !v && !isLoading && handleClose()}>
-      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto p-0 gap-0 border-0 shadow-2xl">
+    <Dialog open={open} onOpenChange={v => !v && step !== "loading" && handleClose()}>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto p-0 gap-0 border-0 shadow-2xl">
         <DialogTitle className="sr-only">Riscrivi Pagina con AI</DialogTitle>
         <DialogDescription className="sr-only">Usa Gemini e il Brand Voice per riscrivere i testi della pagina.</DialogDescription>
 
@@ -124,8 +201,12 @@ export function AiRewritePageModal({ open, onClose, components, selectedComponen
               </svg>
             </div>
             <div>
-              <h2 className="text-xl font-bold text-white" aria-hidden="true">Riscrivi con AI + Brand Voice</h2>
-              <p className="text-sm text-white/70 mt-1">Riscrittura automatica dei testi usando il tuo Brand Voice</p>
+              <h2 className="text-xl font-bold text-white" aria-hidden="true">
+                {step === "preview" ? "Anteprima Riscrittura" : "Riscrivi con AI + Brand Voice"}
+              </h2>
+              <p className="text-sm text-white/70 mt-1">
+                {step === "preview" ? "Verifica le modifiche prima di applicarle" : "Riscrittura automatica dei testi usando il tuo Brand Voice"}
+              </p>
               <span className="inline-flex items-center gap-1 mt-2 px-2 py-0.5 rounded-full bg-white/10 border border-white/20 text-[10px] font-medium text-white/80 tracking-wide uppercase">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-pulse"></span>
                 Powered by Gemini
@@ -135,7 +216,7 @@ export function AiRewritePageModal({ open, onClose, components, selectedComponen
         </div>
 
         <div className="px-6 py-5">
-          {open && configData && !isKeyConfigured && (
+          {open && configData && !isKeyConfigured && step === "form" && (
             <div className="rounded-xl border border-red-200 bg-gradient-to-r from-red-50 to-rose-50 p-4 mb-5 flex items-start gap-3">
               <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -150,7 +231,7 @@ export function AiRewritePageModal({ open, onClose, components, selectedComponen
             </div>
           )}
 
-          {isLoading ? (
+          {step === "loading" && (
             <div className="flex flex-col items-center justify-center py-12 gap-6">
               <div className="relative w-20 h-20">
                 <div className="absolute inset-0 rounded-full border-[3px] border-emerald-100"></div>
@@ -185,7 +266,63 @@ export function AiRewritePageModal({ open, onClose, components, selectedComponen
                 ))}
               </div>
             </div>
-          ) : (
+          )}
+
+          {step === "preview" && previewComponents && (
+            <div className="space-y-4">
+              <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-3 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-emerald-600 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <p className="text-sm text-emerald-800">
+                  <span className="font-semibold">{textChanges.length} modifiche</span> trovate. Verifica le differenze e conferma per applicarle.
+                </p>
+              </div>
+
+              <div className="max-h-[40vh] overflow-y-auto space-y-3 pr-1">
+                {textChanges.length === 0 ? (
+                  <div className="text-center py-8 text-slate-500">
+                    <p className="text-sm font-medium">Nessuna modifica testuale rilevata</p>
+                    <p className="text-xs mt-1">I testi della pagina sono già ottimizzati.</p>
+                  </div>
+                ) : (
+                  textChanges.map((change, idx) => (
+                    <div key={idx} className="rounded-lg border border-slate-200 overflow-hidden">
+                      <div className="bg-slate-50 px-3 py-1.5 flex items-center gap-2 border-b border-slate-200">
+                        <span className="text-[10px] font-mono font-semibold text-slate-500 uppercase">{change.componentType}</span>
+                        <span className="text-[10px] text-slate-400">·</span>
+                        <span className="text-[10px] font-mono text-slate-400">{change.field}</span>
+                      </div>
+                      <div className="grid grid-cols-2 divide-x divide-slate-200">
+                        <div className="p-3">
+                          <p className="text-[10px] font-semibold text-red-500 uppercase mb-1">Prima</p>
+                          <p className="text-xs text-slate-600 leading-relaxed">{change.before.length > 200 ? change.before.slice(0, 200) + "..." : change.before}</p>
+                        </div>
+                        <div className="p-3 bg-emerald-50/30">
+                          <p className="text-[10px] font-semibold text-emerald-600 uppercase mb-1">Dopo</p>
+                          <p className="text-xs text-slate-700 leading-relaxed">{change.after.length > 200 ? change.after.slice(0, 200) + "..." : change.after}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+                <Button variant="ghost" onClick={handleDiscard} className="text-slate-500 hover:text-slate-700">
+                  Annulla
+                </Button>
+                <Button
+                  onClick={handleConfirm}
+                  disabled={textChanges.length === 0}
+                  className="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-700 hover:via-teal-700 hover:to-cyan-700 text-white gap-2 px-6 py-2.5 rounded-xl shadow-lg shadow-emerald-500/25 hover:shadow-xl hover:shadow-emerald-500/30 transition-all duration-200"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  Conferma e Applica
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {step === "form" && (
             <div className="space-y-5">
               {hasBrandVoice ? (
                 <div className="rounded-xl border border-emerald-200 bg-gradient-to-r from-emerald-50 to-teal-50 p-4 flex items-start gap-3">
@@ -272,17 +409,17 @@ export function AiRewritePageModal({ open, onClose, components, selectedComponen
                 </div>
                 <div>
                   <p className="text-xs font-semibold text-slate-700">Come funziona</p>
-                  <p className="text-[11px] text-slate-500 mt-0.5 leading-relaxed">I testi vengono riscritti mantenendo la struttura della pagina. Potrai verificare il risultato prima di salvare.</p>
+                  <p className="text-[11px] text-slate-500 mt-0.5 leading-relaxed">I testi vengono riscritti mantenendo la struttura della pagina. Vedrai un'anteprima delle modifiche prima di applicarle.</p>
                 </div>
               </div>
 
               <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
-                <Button variant="ghost" onClick={handleClose} disabled={isLoading} className="text-slate-500 hover:text-slate-700">
+                <Button variant="ghost" onClick={handleClose} className="text-slate-500 hover:text-slate-700">
                   Annulla
                 </Button>
                 <Button
-                  onClick={() => rewriteMutation.mutate()}
-                  disabled={isLoading || !isKeyConfigured || components.length === 0}
+                  onClick={handleGenerate}
+                  disabled={!isKeyConfigured || components.length === 0}
                   className="relative bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-700 hover:via-teal-700 hover:to-cyan-700 text-white gap-2 px-6 py-2.5 rounded-xl shadow-lg shadow-emerald-500/25 hover:shadow-xl hover:shadow-emerald-500/30 transition-all duration-200 disabled:opacity-50 disabled:shadow-none"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

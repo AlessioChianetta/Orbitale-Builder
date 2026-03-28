@@ -2754,7 +2754,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const brandVoiceSection = brandVoiceData ? buildBrandVoicePromptSection(brandVoiceData) : "";
 
       let componentsToRewrite = components;
-      if (mode === "single" && selectedComponentId) {
+      if (mode === "single") {
+        if (!selectedComponentId) {
+          return res.status(400).json({ message: "selectedComponentId è richiesto in modalità 'single'." });
+        }
         const found = components.find(c => c.id === selectedComponentId);
         if (!found) {
           return res.status(400).json({ message: "Componente selezionato non trovato." });

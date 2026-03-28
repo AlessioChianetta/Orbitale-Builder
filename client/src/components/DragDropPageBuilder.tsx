@@ -5136,7 +5136,7 @@ export function DragDropPageBuilder({ pageToEdit, onClose }: DragDropPageBuilder
                 <p className="text-sm text-slate-500">Costruisci la tua pagina con il drag & drop</p>
               </div>
               <div className="flex gap-2">
-                {components.length > 0 && (
+                {pageToEdit && components.length > 0 && (
                   <Button
                     variant="outline"
                     onClick={() => setIsRewriteModalOpen(true)}
