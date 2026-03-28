@@ -35,42 +35,34 @@ const loadingSteps = [
   { text: "Finalizzando la riscrittura..." },
 ];
 
-const TEXT_PREVIEW_KEYS = ["text", "content", "title", "heading", "subtitle", "subheadline", "headline",
-  "badgeText", "badge", "description", "submitText", "tagline", "guaranteeText",
-  "sectionTitle", "sectionSubtitle", "ctaText", "ctaLabel", "buttonText",
-  "topHeadline", "urgencyBadge", "titlePrefix", "highlightedTitle", "titleSuffix",
-  "subtitleText", "primaryCtaText", "secondaryCtaText", "videoCaption",
-  "guaranteeTitle", "guaranteeDescription", "mainCtaText",
-  "introText", "label", "name", "role"];
-
 function extractTextChanges(
   original: ComponentData[],
   rewritten: ComponentData[]
 ): Array<{ componentType: string; field: string; before: string; after: string }> {
   const changes: Array<{ componentType: string; field: string; before: string; after: string }> = [];
+  const SKIP_KEYS = new Set(["backgroundColor", "color", "textColor", "borderColor", "src", "link", "href", "url", "icon", "provider", "variant", "size", "width", "height", "paddingY", "paddingX", "maxWidth", "minHeight", "borderRadius", "border", "textAlign", "verticalAlign", "layout", "spacing", "fontSize", "fontWeight", "lineHeight", "weight", "tag", "id", "type", "margin", "padding", "alignment", "sticky", "mobileHamburger", "smoothScroll", "aspectRatio", "autoplay", "muted", "controls", "containerId"]);
 
   const collectChanges = (origList: ComponentData[], rewList: ComponentData[]) => {
     for (const orig of origList) {
       const rew = rewList.find(r => r.id === orig.id);
       if (!rew) continue;
 
-      for (const key of TEXT_PREVIEW_KEYS) {
+      for (const key of Object.keys(orig.props)) {
+        if (SKIP_KEYS.has(key)) continue;
         const before = orig.props[key];
         const after = rew.props[key];
         if (typeof before === "string" && typeof after === "string" && before !== after) {
           changes.push({ componentType: orig.type, field: key, before, after });
         }
-      }
-
-      const arrayKeys = ["items", "features", "testimonials", "phases", "steps", "problems", "services"];
-      for (const key of arrayKeys) {
-        if (Array.isArray(orig.props[key]) && Array.isArray(rew.props[key])) {
-          const origArr = orig.props[key] as Array<Record<string, unknown>>;
-          const rewArr = rew.props[key] as Array<Record<string, unknown>>;
+        if (Array.isArray(before) && Array.isArray(after)) {
+          const origArr = before as Array<Record<string, unknown>>;
+          const rewArr = after as Array<Record<string, unknown>>;
           for (let i = 0; i < Math.min(origArr.length, rewArr.length); i++) {
-            for (const ik of ["text", "title", "description", "name", "role", "label", "content", "quote"]) {
+            if (typeof origArr[i] !== "object" || origArr[i] === null) continue;
+            for (const ik of Object.keys(origArr[i])) {
+              if (SKIP_KEYS.has(ik)) continue;
               const bv = origArr[i][ik];
-              const av = rewArr[i][ik];
+              const av = rewArr[i]?.[ik];
               if (typeof bv === "string" && typeof av === "string" && bv !== av) {
                 changes.push({ componentType: orig.type, field: `${key}[${i}].${ik}`, before: bv, after: av });
               }
