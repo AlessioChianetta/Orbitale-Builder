@@ -1,0 +1,351 @@
+Ricerca di Mercato
+Analisi approfondita del tuo mercato in 7 fasi con AI
+L'AI analizza il tuo mercato cercando dati reali su Google, forum e recensioni. Compila almeno nicchia e target.
+
+Sistema Orbitale è una piattaf...
+Genera Ricerca di Mercato
+1. Trasformazione
+
+Stato Attuale (Problemi)
+Sono in full-out totale, lavoro 14 ore al giorno eppure a fine mese mi restano le bricioleInformazioni Business
+Nome, descrizione e bio del consulente
+Nome Display Consulente
+{{2}}
+Alessio Chianetta
+Nome Business
+{{3}}
+Sistema Orbitale
+Descrizione Business
+Sistema Orbitale è una piattaforma AI che permette alle aziende di creare Dipendenti AI personalizzati — agenti autonomi che lavorano 24/7 su WhatsApp, Instagram, Email e Telefono. Non è un chatbot generico: è un team AI completo che risponde ai lead, qualifica le opportunità, prende appuntamenti, gestisce l'assistenza clienti e fa outreach commerciale proattivo — tutto seguendo la documentazione, le regole e il tono di voce dell'azienda.
+
+La piattaforma copre l'intero ciclo commerciale: dalla ricerca di nuovi lead (Hunter) al primo contatto automatizzato (Setter AI), dalle chiamate vocali con voce naturale (Alessia AI) alla gestione email intelligente (Millie), fino al coaching operativo per l'imprenditore (Marco). Ogni dipendente AI è formato sui documenti dell'azienda e opera secondo le regole configurate dal cliente.
+Bio Consulente
+Alessio Chianetta è il fondatore di Sistema Orbitale — una piattaforma AI costruita per risolvere un problema concreto: le aziende perdono clienti perché non rispondono in tempo, rispondono in modo inconsistente, o non hanno le risorse per fare follow-up sistematico.
+
+Dopo anni di esperienza nell'automazione commerciale e nell'intelligenza artificiale applicata, Alessio ha progettato un sistema modulare dove ogni azienda può installare dipendenti AI personalizzati che lavorano esattamente come vorrebbe il titolare — ma 24 ore su 24, senza ferie, senza errori di comunicazione, senza lead persi.
+
+La filosofia è semplice: l'AI non deve sostituire le persone, deve liberarle. L'imprenditore deve dedicare il suo tempo a ciò che conta — strategia, relazioni, crescita — mentre l'AI gestisce il lavoro ripetitivo, il primo contatto, l'assistenza e il follow-up.
+
+Authority & Posizionamento
+Vision, mission, valori e USP
+Vision
+Un mondo dove ogni azienda con clienti ricorrenti ha un team AI che lavora per lei 24/7 — dove nessun lead viene perso, nessun cliente viene dimenticato, e l'imprenditore può concentrarsi solo su ciò che richiede il suo tocco umano.
+Mission
+Installare Dipendenti AI personalizzati nelle aziende italiane per eliminare i colli di bottiglia operativi — dalla risposta ai lead alla gestione clienti — permettendo agli imprenditori di scalare senza moltiplicare le ore di lavoro.
+Valori
+Aggiungi un valore...
+
+Risultati concreti, non promesse: ogni funzionalità è misurata in lead recuperati, tempo risparmiato, appuntamenti prenotati
+Personalizzazione totale: l'AI parla con la voce dell'azienda, non con un tono generico — segue le regole, i documenti e il tono del cliente
+Semplicità operativa: zero competenze tecniche richieste — se sai usare WhatsApp, sai usare Sistema Orbitale
+Trasparenza: il cliente vede tutto — ogni messaggio inviato dall'AI, ogni decisione presa, ogni task generato — con la possibilità di approvare, modificare o bloccare in qualsiasi momento
+Scalabilità modulare: si parte gratis, si scala fino all'infrastruttura enterprise, senza cambiare piattaforma
+Unique Selling Proposition (USP)
+"Installa il Dipendente AI che lavora per te 24/7 — risponde ai lead su WhatsApp e Instagram in secondi, qualifica, prenota appuntamenti e fa follow-up. Personalizzato sulla tua azienda, con la tua voce, le tue regole."
+
+La differenza rispetto ai competitor:
+
+Non è un chatbot: è un team di 9 dipendenti AI specializzati, ognuno con un ruolo preciso (vendita, assistenza, email, lead generation, coaching, social media)
+Multicanale nativo: WhatsApp, Instagram, Email, Telefono (voce reale con Alessia AI) — tutto integrato, non servizi separati
+Modello partnership: i clienti avanzati possono rivendere le licenze ai propri clienti e guadagnare il 35-50% del MRR ricorrente
+Copertura completa del ciclo: dalla ricerca del lead (Hunter) alla chiusura della vendita, dal supporto post-vendita al nurturing a lungo termine
+Chi Aiutiamo
+Segmento primario — Aziende B2B in abbonamento (SaaS, software house, MSP, servizi productized)
+
+5-30 dipendenti
+Alto volume di messaggi su WhatsApp/Instagram
+Perdono lead perché rispondono tardi o non rispondono
+Per loro il Setter AI (Livello 4) è la soluzione urgente
+Segmento secondario — Consulenti, formatori e coach
+
+Vendono corsi o servizi ricorrenti
+Hanno bisogno di automatizzare supporto post-vendita e lead generation
+Per loro i Livelli 3-4 sono ideali
+Segmento terziario — Agenzie marketing/vendita e rivenditori
+
+Vogliono offrire AI ai propri clienti senza costruire l'infrastruttura da zero
+Per loro il Livello 5 con modello partnership (35-50% MRR) è perfetto
+Rivendono i Livelli 1-3 ai loro clienti come servizio white-label
+Profilo ideale trasversale:
+
+Fatturato: PMI con ricavi ricorrenti (MRR/ARR), in fase di crescita attiva
+Dipendenti: 5-30 persone
+Dolore principale: perdita di lead per mancata risposta tempestiva, supporto clienti inconsistente, founder interrotti da domande ripetitive, onboarding lento e manuale
+Chi NON Aiutiamo
+Aziende senza clienti ricorrenti (vendita una tantum senza follow-up)
+Aziende che non hanno volume di messaggi sufficiente da giustificare l'automazione
+Chi cerca un "chatbot da mettere sul sito" senza voler personalizzare nulla
+Aziende che non vogliono delegare nessun processo all'AI (tutto manuale, per scelta)
+Startup pre-revenue senza clienti o lead da servire
+Cosa Facciamo
+PRIMA LINEA — Acquisizione & Primo Contatto
+Servizio	Cosa fa concretamente
+Hunter — Lead Generation AI	Cerca nuovi lead su Google Maps e Google Search, li qualifica con AI scoring, e li contatta automaticamente su tutti i canali (telefono, WhatsApp, email). Opera in 4 modalità: Diretto (contatto immediato), Batch (outreach massivo), Piano (con approvazione del consulente), Manuale.
+Setter AI — WhatsApp & Instagram	Agenti AI che rispondono ai lead in arrivo su WhatsApp e Instagram in secondi. Qualificano con framework BANT adattato, rispondono usando la Knowledge Base dell'azienda, e prenotano appuntamenti direttamente nel calendario. Funzionano 24/7.
+Alessia AI — Chiamate Vocali	Agente vocale con voce naturale che fa e riceve chiamate telefoniche. Qualifica lead, presenta servizi, conferma appuntamenti, gestisce FAQ vocali. Include centralino AI con coda d'attesa, routing intelligente e riconoscimento del chiamante.
+SECONDA LINEA — Team AI Autonomo
+Servizio	Cosa fa concretamente
+Millie — Email Writer AI	Gestisce l'inbox email con risposte AI automatiche, classifica la posta, genera follow-up personalizzati. Include profilo commerciale per-account e integrazione CRM per contesto cross-canale.
+Marco — Executive Coach AI	Monitora l'agenda del consulente, analizza il carico di lavoro, prepara briefing pre-consulenza, suggerisce azioni strategiche. Può contattare direttamente il consulente via telefono, email o WhatsApp.
+Stella — WhatsApp Assistant	Identifica conversazioni WhatsApp che richiedono follow-up, lead non qualificati, clienti in attesa di risposta. Invia messaggi di check-in e nurturing automaticamente.
+Echo — Summarizer	Genera riepiloghi strutturati delle consulenze e li invia ai clienti via email. Pipeline automatica: consulenza → trascrizione → summary → email al cliente.
+Nova — Social Media Manager	Analizza il calendario editoriale, identifica gap, suggerisce contenuti per i social media. Include Content Studio con generazione idee AI, calendario editoriale e AdVisage per concept pubblicitari.
+Personalizza — Assistente Custom	Dipendente AI completamente configurabile: il cliente definisce ruolo, istruzioni, canali e categorie. Accede a tutti i canali (voce, email, WhatsApp). Ideale per creare un assistente AI specifico per reparto.
+TERZA LINEA — Infrastruttura & Scalabilità
+Servizio	Cosa fa concretamente
+Assistente AI per Dipendente	Ogni membro del team aziendale riceve il proprio AI Assistant con contesto, memoria e documenti dedicati. Formato sul reparto specifico: vendite, supporto, operations, marketing.
+Knowledge Base (Cervello AI)	Repository documentale indicizzato con ricerca semantica (RAG). L'AI consulta automaticamente i documenti dell'azienda per dare risposte precise e specifiche.
+Rivendita Licenze	I clienti Livello 5 possono rivendere i Livelli 1-3 ai propri clienti, guadagnando il 35-50% del MRR. Gestione automatica pagamenti, split e attivazione account.
+Come Lo Facciamo
+Il Metodo "Installa e Scala"
+Fase 1 — Diagnosi (Giorno 1) Analizziamo il flusso di comunicazione dell'azienda: quanti messaggi ricevono, su quali canali, quanto tempo impiegano a rispondere, quanti lead perdono, quanto tempo del team è assorbito da domande ripetitive.
+
+Fase 2 — Configurazione (Giorni 2-5) Installiamo i primi dipendenti AI:
+
+Carichiamo la documentazione aziendale nella Knowledge Base (FAQ, listino, procedure, regole)
+Configuriamo il Brand Voice (tono, stile, frasi da usare/evitare)
+Creiamo gli agenti WhatsApp/Instagram con System Prompt personalizzato
+Attiviamo Hunter con il profilo del cliente ideale per la ricerca lead
+Configuriamo Alessia Voice con numero VoIP e template vocali
+Fase 3 — Test e Ottimizzazione (Giorni 5-10) Modalità "approvazione richiesta" attiva: il cliente vede ogni azione proposta dall'AI e la approva, modifica o rifiuta. Questo addestra il sistema e costruisce fiducia.
+
+Fase 4 — Autonomia Progressiva (Giorno 10+) Si alza gradualmente il livello di autonomia: da "tutto approvato" a "esecuzione automatica". Il sistema impara dai feedback e diventa progressivamente più preciso.
+
+Fase 5 — Scala (Mese 2+) Si aggiungono moduli: Email Hub, Content Studio, Formazione, ulteriori Dipendenti AI. Se il cliente vuole rivendere, si attiva il programma partnership Livello 5.
+
+Credenziali & Risultati
+Esperienza, software, libri e case studies
+Anni di Esperienza
+Clienti Aiutati
+Risultati Generati
+Es: €10M+ fatturato
+Software Creati
+Aggiungi
+Libri Pubblicati
+Aggiungi
+Case Studies
+Aggiungi
+
+Servizi & Garanzie
+Offerta commerciale e garanzie
+Servizi Offerti
+Aggiungi
+Garanzie
+Le garanzie che offri ai tuoi clienti...
+
+Voce & Stile Personale
+Come comunichi e come vuoi che l'AI scriva per te
+Tono Personale
+Descrivi come comunichi — il tuo stile naturale di scrittura
+
+Es: Diretto e provocatorio, uso spesso l'ironia. Parlo come un coach da spogliatoio, non come un professore.
+Personalità del Contenuto
+Che emozione vuoi trasmettere a chi legge?
+
+Es: Voglio che chi legge si senta capito e un po' provocato, mai giudicato.
+Linguaggio del Target
+Come parla il tuo pubblico? Che livello di formalità, slang o termini tecnici usano?
+
+Es: Il mio target sono personal trainer, parlano informale, usano termini tecnici come 'periodizzazione'.
+Cosa NON Fare Mai
+Anti-pattern espliciti — cose che l'AI non deve MAI fare nei tuoi contenuti
+
+Es: Mai iniziare con 'In un mondo dove...', mai usare elenchi puntati generici, evitare il tono motivazionale americano
+Esempi di Scrittura Reale
+Incolla 1-3 post o testi che hai scritto tu. L'AI analizzerà il tuo stile per replicarlo.
+
+Aggiungi
+Frasi Firma
+Espressioni, modi di dire o catchphrase che usi sempre
+
+Es: Il punto è questo:, Sveglia!, Non è magia, è metodo
+
+
+
+
+I lead che portiamo sono sporchi e non rispondono al telefono, i clienti dicono che è fuffa
+
+Sono schiavo di WhatsApp e delle email: rispondo sempre alle stesse domande ripetitive dei clienti e dei lead, e non ho più una vita privata o un attimo di respiro.
+
+Sono diventato il babysitter dei miei clienti e dei miei collaboratori
+
+Siamo percepiti come 'l'ennesima agenzia di marketing' e devo fare la guerra dei prezzi per chiudere un contratto, perché non abbiamo un vantaggio tecnologico reale.
+
+I miei margini sono ridotti all'osso e i clienti mi mollano dopo pochi mesi perché dicono che il servizio costa troppo rispetto ai risultati che vedono.
+
+Ogni volta che cresco devo assumere nuove persone e la gestione del team mi mangia tutto il tempo: passo le giornate a rincorrere collaboratori invece di fare strategia.
+
+Stato Ideale (Risultati)
+Vorrei un'azienda che cammina da sola senza che io debba spegnere incendi ogni 5 minuti
+
+Sogno di svegliarmi con l'agenda dei clienti piena di appuntamenti qualificati in automatico
+
+Sogno di riprendermi il mio tempo sapendo che c'è un team AI che lavora con la mia voce e le mie regole, gestendo il primo contatto e il supporto clienti meglio di come farei io.
+
+Vorrei poter spegnere il telefono il weekend senza avere l'ansia che l'agenzia esploda
+
+Voglio scalare il fatturato dell'agenzia in modo fluido, sapendo che l'infrastruttura AI gestisce il volume di messaggi e chiamate senza bisogno di assumere continuamente personale.
+
+Voglio incassare entrate ricorrenti automatiche ogni mese rivendendo licenze AI ai miei clienti, senza dover aggiungere ore di lavoro manuale per il mio team.
+
+Sogno di essere l'agenzia leader che si distingue da tutte le altre offrendo dipendenti AI 24/7, diventando un partner tecnologico indispensabile invece di un semplice fornitore.
+
+2. Avatar del Cliente
+
+Pensiero alle 3 di notte
+Sto facendo l'imprenditore o mi sono solo creato un lavoro di m***a dove sono lo schiavo di tutti? Se mi ammalo io, qui si ferma tutto.
+Paura più grande
+Ho il terrore che arrivi un ragazzino di 20 anni che ne sa più di me di AI e mi rubi i clienti vendendo il triplo dei risultati alla metà del prezzo.
+Frustrazione quotidiana
+Il 'tin' di WhatsApp del cliente che si lamenta del ROAS la domenica sera mentre cerco di stare con la mia famiglia.
+Desiderio più profondo
+Uscire una volta per tutte dal loop dell'operativo e diventare l'architetto del sistema, non l'ingranaggio.
+Situazione attuale
+Si sveglia controllando Slack e Business Manager, pranza davanti al PC spegnendo incendi e fa il vero lavoro strategico di notte quando tutti staccano.
+Stile decisionale
+Estremamente scettico perché scottato da corsi e guru; cerca infrastruttura pronta all'uso e non altra formazione teorica.
+Linguaggio usato
+Full-out, Luna nel pozzo, Ragazzini che vendono lead gen, Churn rate, Clicca clicca, Loop dell'operativo, Lead sporchi, Rendita ricorrente, Scalare, Fuffa, Micro-management
+Influenze
+Community come Fatti di Marketing o Marketers, Mastermind privati tra titolari, Thought Leaders pragmatici su LinkedIn.
+3. Leve Motivazionali
+5 selezionate
+
+Seleziona le 2-3 forze emotive più potenti che guidano il tuo pubblico:
+
+
+Sopravvivenza e Longevità
+Prolungare la carriera, garantire la salute a lungo termine
+
+
+Godersi la Vita
+Vivere senza dolori, godersi la routine quotidiana
+
+
+Libertà da Paure e Frustrazioni
+Eliminare stress, paura e frustrazione di non raggiungere obiettivi
+
+
+Compagnia / Aspetto Fisico
+Migliorare l'attrattiva fisica e l'energia
+
+
+Essere Superiore / Vincere
+Aumentare la performance, ottenere riconoscimento e supremazia
+
+
+Cura e Protezione dei Cari
+Avere salute/energia per sostenere o ispirare la famiglia
+
+
+Approvazione Sociale / Status
+Essere rispettato dalla comunità, guadagnare status
+
+
+Ricerca di Comfort e Sicurezza
+Sicurezza finanziaria, stabilità e tranquillità
+
+4. Obiezioni e Resistenze
+
+Problemi con soluzioni esistenti
+Dove fallisce la concorrenza o il fai-da-te?
+
+I corsi di scaling ti danno solo slide e teoria americana che non funziona con le PMI italiane
+
+I software di automazione sono troppo complicati e richiedono un ingegnere per essere settati
+
+Assumere setter umani costa troppo, hanno performance incostanti e non lavorano 24/7
+
+
++
+Aggiungi
+Obiezioni interne (credenze limitanti)
+Paure del cliente su sé stesso
+
+Non sono un tecnico, non riuscirò mai a configurare questa roba senza perdere giorni
+
+E se l'AI scrive una cavolata a un mio cliente storico e io faccio una figura da cioccolataio?
+
+Non ho nemmeno il tempo di guardare la demo, sono troppo incasinato a gestire le emergenze di oggi
+
+Forse non sono portato per fare l'imprenditore serio e dovrei restare piccolo
+
+Ho paura di perdere il controllo totale sulla comunicazione della mia agenzia
+
+Obiezioni esterne
+Dubbi su prodotto, prezzo, mercato
+
+Ma quanto mi costa al mese? Ho i margini già ridotti all'osso tra tasse e tool
+
+In cosa è diverso dal solito chatbot stupido che trovo su Typeform?
+
+La voce di Alessia sembra davvero umana o sembra un robot degli anni '90?
+
+Se lo rivendo ai miei clienti e il sistema si rompe, perdo la faccia con loro?
+
+Esiste un supporto vero in italiano se succede un casino con l'integrazione WhatsApp?
+
+5. Errore Nascosto (Core Lie)
+
+Falsa credenza che il mercato ha venduto al tuo cliente — il motivo nascosto per cui fallisce.
+
+Per scalare devo assumere più persone
+
+Crea costi fissi enormi e aumenta il micro-management invece di liberare tempo
+Tipo:
+Cura
+Previene
+
+Consapevole
+Importanza:
+
+10/10
+Le PMI italiane vogliono solo parlare con un umano
+
+Il cliente vuole solo una risposta veloce; l'attesa di ore uccide la vendita più di un'AI
+Tipo:
+Cura
+Previene
+
+Consapevole
+Importanza:
+
+8/10
+Nome errore (es. 'Dipendenza dal contenuto gratuito')
+
+Descrivi le conseguenze di questa credenza errata...
+Tipo:
+Cura
+Previene
+
+Consapevole
+Importanza:
+
+7/10
+L'AI serve solo per scrivere i post su Facebook
+
+Limita l'uso dell'AI a task marginali ignorando che può gestire l'intero ciclo di vendita
+Tipo:
+Cura
+Previene
+
+Consapevole
+Importanza:
+
+9/10
+
++
+Aggiungi errore nascosto
+6. Meccanismo Unico
+
+La tua metodologia proprietaria — il "COME" unico che ti differenzia. Non basta dire cosa fai, devi dire come lo fai in modo diverso.
+
+Nome del Meccanismo
+Metodo Installa e Scala con Team di 9 Dipendenti AI
+Descrizione
+Un'infrastruttura modulare che installa agenti autonomi (Hunter, Setter, Alessia Voice) formati sui documenti aziendali, che gestiscono l'intero ciclo commerciale 24/7 su WhatsApp, Instagram e Telefono.
+7. Posizionamento (UVP)
+
+Formula: Aiuto [CHI] a [FARE COSA — trasformazione] attraverso [COME — meccanismo unico]
+
+Aiuto titolari di agenzie marketing a uscire dal loop dell'operativo e creare rendite ricorrenti senza assumere nuovo personale grazie all'installazione di Dipendenti AI personalizzati che qualificano lead e fissano appuntamenti 24/7.
