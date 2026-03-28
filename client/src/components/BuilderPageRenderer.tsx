@@ -815,7 +815,7 @@ function NavMenuComponent({ props }: { props: any }) {
   };
   const alignmentClass = alignmentMap[props.alignment || 'left'] || 'justify-start';
   const isFixed = props.fixed || props.sticky;
-  const hasMobileHamburger = props.mobileHamburger !== false;
+  const hasMobileHamburger = props.mobileHamburger === true;
 
   const navStyle: React.CSSProperties = {
     backgroundColor: props.backgroundColor || 'transparent',

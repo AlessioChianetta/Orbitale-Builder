@@ -9,7 +9,7 @@
 import { GoogleGenAI } from "@google/genai";
 import { VertexAI, GenerativeModel } from "@google-cloud/vertexai";
 import { db } from "../db";
-import { vertexAiSettings, vertexAiClientAccess, users, superadminVertexConfig, consultantVertexAccess, superadminGeminiConfig } from "../../shared/schema";
+import { users, superadminGeminiConfig } from "../../shared/schema";
 import { eq, and, gt, sql } from "drizzle-orm";
 import { AiProviderMetadata } from "./retry-manager";
 import { decrypt } from "../encryption";
@@ -18,6 +18,15 @@ import { tokenTracker, TrackUsageParams } from "./token-tracker";
 import fs from "fs";
 import path from "path";
 import os from "os";
+
+// The following tables are part of the planned Vertex AI 3-tier system and are
+// not yet created in the database. They are stubbed here so this file loads
+// at startup. The functions that query them are not called in the current
+// application flow and will throw at runtime if invoked.
+const vertexAiSettings: any = null;
+const vertexAiClientAccess: any = null;
+const superadminVertexConfig: any = null;
+const consultantVertexAccess: any = null;
 
 export interface TrackingContext {
   consultantId: string;

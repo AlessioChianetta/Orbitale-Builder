@@ -10,6 +10,7 @@ import {
 } from "@shared/schema";
 import { encrypt, decrypt } from "./encryption";
 import { generateLandingPageContent, buildComponentsFromContent, AI_TEMPLATES, type TemplateId } from "./ai/landing-page-generator";
+import { getSuperAdminGeminiKeys } from "./ai/provider-factory";
 import { db } from "./db";
 import { eq, asc, and } from "drizzle-orm";
 import multer from "multer";
@@ -2598,10 +2599,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // GET check if AI (Gemini) key is configured (admin only)
   app.get("/api/ai/check-config", authenticateToken, requireRole("admin"), async (_req: AuthRequest, res: Response) => {
     try {
-      const configs = await db.select().from(superadminGeminiConfig).limit(1);
-      const hasDbKey = configs.length > 0 && configs[0].enabled && !!configs[0].apiKeysEncrypted;
+      const keys = await getSuperAdminGeminiKeys();
       const hasEnvKey = !!process.env.GEMINI_API_KEY;
-      res.json({ configured: hasDbKey || hasEnvKey });
+      const configured = (keys && keys.enabled && keys.keys.length > 0) || hasEnvKey;
+      res.json({ configured: !!configured });
     } catch {
       res.json({ configured: !!process.env.GEMINI_API_KEY });
     }

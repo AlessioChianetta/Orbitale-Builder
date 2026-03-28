@@ -1,18 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
-import { db } from "../db";
-import { superadminGeminiConfig } from "../../shared/schema";
-import { decrypt } from "../encryption";
-
-async function getGeminiKeysFromDb(): Promise<{ keys: string[]; enabled: boolean } | null> {
-  try {
-    const config = await db.select().from(superadminGeminiConfig).limit(1);
-    if (!config.length || !config[0].enabled) return null;
-    const keys = JSON.parse(decrypt(config[0].apiKeysEncrypted)) as string[];
-    return { keys, enabled: true };
-  } catch {
-    return null;
-  }
-}
+import { getSuperAdminGeminiKeys } from "./provider-factory";
 
 export const AI_TEMPLATES = {
   "professionale-blu": {
@@ -167,9 +154,9 @@ export interface GeneratedLandingContent {
 }
 
 async function getGeminiApiKey(): Promise<string | null> {
-  const dbKeys = await getGeminiKeysFromDb();
-  if (dbKeys && dbKeys.keys.length > 0) {
-    return dbKeys.keys[Math.floor(Math.random() * dbKeys.keys.length)];
+  const superAdminKeys = await getSuperAdminGeminiKeys();
+  if (superAdminKeys && superAdminKeys.enabled && superAdminKeys.keys.length > 0) {
+    return superAdminKeys.keys[Math.floor(Math.random() * superAdminKeys.keys.length)];
   }
   return process.env.GEMINI_API_KEY || null;
 }
