@@ -121,7 +121,7 @@ export default function SuperAdminDashboard() {
       return response.json();
     },
     onSuccess: (data: any) => {
-      localStorage.setItem("token", data.token);
+      localStorage.setItem("authToken", data.token);
       toast({ title: `Accesso come ${data.user.username} effettuato!` });
       window.location.href = '/admin';
     },
