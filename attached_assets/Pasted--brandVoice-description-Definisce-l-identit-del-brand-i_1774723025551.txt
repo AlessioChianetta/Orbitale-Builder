@@ -1,0 +1,335 @@
+{
+  "brandVoice": {
+    "_description": "Definisce l'identità del brand, il posizionamento, la voce e la ricerca di mercato dell'agente AI. Tutti i campi sono opzionali.",
+    
+    "sections": {
+      
+      "businessInfo": {
+        "_sectionTitle": "Informazioni Business",
+        "_sectionDescription": "Nome, descrizione e bio del consulente",
+        "_sectionIcon": "Building2",
+        "fields": {
+          "consultantDisplayName": {
+            "type": "string",
+            "label": "Nome Display Consulente",
+            "placeholder": "Es: Marco Rossi",
+            "description": "Il nome mostrato al cliente finale. Usato come variabile {{2}} nei template WhatsApp.",
+            "templateVariable": "{{2}}"
+          },
+          "businessName": {
+            "type": "string",
+            "label": "Nome Business",
+            "placeholder": "Es: Momentum Coaching",
+            "description": "Il nome dell'azienda/brand. Usato come variabile {{3}} nei template WhatsApp.",
+            "templateVariable": "{{3}}"
+          },
+          "businessDescription": {
+            "type": "string (textarea)",
+            "label": "Descrizione Business",
+            "placeholder": "Breve descrizione di cosa fa il tuo business...",
+            "description": "Descrizione sintetica dell'attività. Usata dall'AI per contestualizzare le risposte."
+          },
+          "consultantBio": {
+            "type": "string (textarea)",
+            "label": "Bio Consulente",
+            "placeholder": "Bio personale del consulente...",
+            "description": "Bio personale del professionista. L'AI la usa per costruire credibilità nelle conversazioni."
+          }
+        }
+      },
+
+      "authorityPositioning": {
+        "_sectionTitle": "Authority & Posizionamento",
+        "_sectionDescription": "Vision, mission, valori e USP",
+        "_sectionIcon": "Target",
+        "fields": {
+          "vision": {
+            "type": "string (textarea)",
+            "label": "Vision",
+            "placeholder": "La tua vision per il futuro...",
+            "description": "La visione a lungo termine del brand. L'AI può citarla per ispirare il cliente."
+          },
+          "mission": {
+            "type": "string (textarea)",
+            "label": "Mission",
+            "placeholder": "La tua mission...",
+            "description": "La missione operativa del brand. Definisce lo scopo quotidiano dell'attività."
+          },
+          "values": {
+            "type": "string[]",
+            "label": "Valori",
+            "description": "Lista di valori core del brand. L'AI li usa come guida comportamentale nelle conversazioni.",
+            "inputMode": "tag-input (aggiungi uno alla volta, visualizzati come badge rimovibili)"
+          },
+          "usp": {
+            "type": "string (textarea)",
+            "label": "Unique Selling Proposition (USP)",
+            "placeholder": "Cosa ti rende unico rispetto ai competitor...",
+            "description": "La proposta di valore unica. L'AI la usa per differenziare il brand dai competitor."
+          },
+          "whoWeHelp": {
+            "type": "string (textarea)",
+            "label": "Chi Aiutiamo",
+            "placeholder": "Il tuo cliente ideale...",
+            "description": "Descrizione del target ideale. L'AI la usa per qualificare lead e personalizzare risposte."
+          },
+          "whoWeDontHelp": {
+            "type": "string (textarea)",
+            "label": "Chi NON Aiutiamo",
+            "placeholder": "Clienti non target...",
+            "description": "Descrizione di chi NON è il cliente ideale. L'AI la usa per scartare lead non qualificati."
+          },
+          "whatWeDo": {
+            "type": "string (textarea)",
+            "label": "Cosa Facciamo",
+            "placeholder": "I servizi che offri...",
+            "description": "Descrizione dei servizi offerti. L'AI la usa per informare i clienti sull'offerta."
+          },
+          "howWeDoIt": {
+            "type": "string (textarea)",
+            "label": "Come Lo Facciamo",
+            "placeholder": "Il tuo metodo/processo...",
+            "description": "Il metodo/processo unico del brand. L'AI lo usa per spiegare l'approccio lavorativo."
+          }
+        }
+      },
+
+      "credentialsResults": {
+        "_sectionTitle": "Credenziali & Risultati",
+        "_sectionDescription": "Esperienza, software, libri e case studies",
+        "_sectionIcon": "Award",
+        "fields": {
+          "yearsExperience": {
+            "type": "number",
+            "label": "Anni di Esperienza",
+            "min": 0,
+            "description": "Numero di anni di esperienza nel settore. L'AI lo cita per costruire autorità."
+          },
+          "clientsHelped": {
+            "type": "number",
+            "label": "Clienti Aiutati",
+            "min": 0,
+            "description": "Numero totale di clienti serviti. Usato come social proof dall'AI."
+          },
+          "resultsGenerated": {
+            "type": "string",
+            "label": "Risultati Generati",
+            "placeholder": "Es: €10M+ fatturato",
+            "description": "Risultati quantificabili ottenuti. L'AI li usa come prova di competenza."
+          },
+          "softwareCreated": {
+            "type": "array",
+            "label": "Software Creati",
+            "description": "Lista di software/tool creati dal consulente. Costruisce credibilità tech.",
+            "itemSchema": {
+              "emoji": { "type": "string", "placeholder": "📱", "description": "Emoji rappresentativa del software" },
+              "name": { "type": "string", "placeholder": "Nome software", "description": "Nome del software/tool" },
+              "description": { "type": "string", "placeholder": "Breve descrizione", "description": "Cosa fa il software" }
+            }
+          },
+          "booksPublished": {
+            "type": "array",
+            "label": "Libri Pubblicati",
+            "description": "Lista di libri/pubblicazioni. L'AI può citarli come prova di expertise.",
+            "itemSchema": {
+              "title": { "type": "string", "placeholder": "Titolo del libro" },
+              "year": { "type": "string", "placeholder": "Anno" }
+            }
+          },
+          "caseStudies": {
+            "type": "array",
+            "label": "Case Studies",
+            "description": "Casi studio con risultati. L'AI li usa come storie di successo.",
+            "itemSchema": {
+              "client": { "type": "string", "placeholder": "Nome cliente" },
+              "result": { "type": "string", "placeholder": "Risultato ottenuto" }
+            }
+          }
+        }
+      },
+
+      "servicesGuarantees": {
+        "_sectionTitle": "Servizi & Garanzie",
+        "_sectionDescription": "Offerta commerciale e garanzie",
+        "_sectionIcon": "Star",
+        "fields": {
+          "servicesOffered": {
+            "type": "array",
+            "label": "Servizi Offerti",
+            "description": "Lista dettagliata dei servizi con prezzo. L'AI la usa per presentare l'offerta e qualificare.",
+            "itemSchema": {
+              "name": { "type": "string", "placeholder": "Nome servizio" },
+              "price": { "type": "string", "placeholder": "Prezzo" },
+              "description": { "type": "string (textarea)", "placeholder": "Descrizione servizio" }
+            }
+          },
+          "guarantees": {
+            "type": "string (textarea)",
+            "label": "Garanzie",
+            "placeholder": "Le garanzie che offri ai tuoi clienti...",
+            "description": "Garanzie offerte (soddisfatti o rimborsati, ecc.). L'AI le usa per superare obiezioni."
+          }
+        }
+      },
+
+      "voiceStyle": {
+        "_sectionTitle": "Voce & Stile Personale",
+        "_sectionDescription": "Come comunichi e come vuoi che l'AI scriva per te",
+        "_sectionIcon": "MessageSquare",
+        "fields": {
+          "personalTone": {
+            "type": "string (textarea)",
+            "label": "Tono Personale",
+            "placeholder": "Es: Diretto e provocatorio, uso spesso l'ironia...",
+            "description": "Descrizione dello stile comunicativo naturale del consulente. L'AI lo replica nelle risposte."
+          },
+          "contentPersonality": {
+            "type": "string (textarea)",
+            "label": "Personalità del Contenuto",
+            "placeholder": "Es: Voglio che chi legge si senta capito e un po' provocato, mai giudicato.",
+            "description": "L'emozione/sensazione che il brand vuole trasmettere. Guida il tono emotivo dell'AI."
+          },
+          "audienceLanguage": {
+            "type": "string (textarea)",
+            "label": "Linguaggio del Target",
+            "placeholder": "Es: Il mio target sono personal trainer, parlano informale...",
+            "description": "Come parla il pubblico target. L'AI adatta il registro linguistico di conseguenza."
+          },
+          "avoidPatterns": {
+            "type": "string (textarea)",
+            "label": "Cosa NON Fare Mai",
+            "placeholder": "Es: Mai iniziare con 'In un mondo dove...', mai usare elenchi puntati generici...",
+            "description": "Anti-pattern espliciti. L'AI li rispetta come vincoli assoluti nella generazione di contenuti."
+          },
+          "writingExamples": {
+            "type": "string[]",
+            "label": "Esempi di Scrittura Reale",
+            "maxItems": 3,
+            "description": "1-3 post/testi reali scritti dal consulente. L'AI analizza lo stile per replicarlo fedelmente.",
+            "inputMode": "textarea array (uno per esempio, max 3)"
+          },
+          "signaturePhrases": {
+            "type": "string[]",
+            "label": "Frasi Firma",
+            "description": "Espressioni, modi di dire o catchphrase tipiche del consulente. L'AI le usa naturalmente nelle risposte.",
+            "inputMode": "tag-input (aggiungi uno alla volta, visualizzati come badge rimovibili)"
+          }
+        }
+      },
+
+      "marketResearch": {
+        "_sectionTitle": "Ricerca di Mercato",
+        "_sectionDescription": "Analisi approfondita del tuo mercato in 7 fasi con AI",
+        "_sectionIcon": "Search",
+        "_note": "Questa sezione usa un sotto-componente MarketResearchSection. Può essere generata automaticamente dall'AI. Contiene 7 fasi progressive.",
+        "fields": {
+          "marketResearchData": {
+            "type": "MarketResearchData (object)",
+            "label": "Dati Ricerca di Mercato",
+            "description": "Oggetto strutturato con l'analisi completa del mercato. Generabile automaticamente dall'AI o compilabile manualmente fase per fase.",
+            "schema": {
+              "currentState": {
+                "type": "string[]",
+                "description": "Fase 1 — Lo stato attuale del cliente target: i problemi, le frustrazioni e la situazione da cui vuole uscire."
+              },
+              "idealState": {
+                "type": "string[]",
+                "description": "Fase 1 — Lo stato ideale desiderato: dove il cliente vuole arrivare, i risultati che sogna."
+              },
+              "avatar": {
+                "type": "object",
+                "description": "Fase 2 — Avatar del cliente ideale: profilo psicografico dettagliato.",
+                "fields": {
+                  "nightThought": { "type": "string", "description": "Cosa pensa di notte, le preoccupazioni che lo tengono sveglio" },
+                  "biggestFear": { "type": "string", "description": "La paura più grande legata al problema" },
+                  "dailyFrustration": { "type": "string", "description": "La frustrazione quotidiana che affronta" },
+                  "deepestDesire": { "type": "string", "description": "Il desiderio più profondo, ciò che vuole davvero" },
+                  "currentSituation": { "type": "string", "description": "Descrizione della situazione attuale" },
+                  "decisionStyle": { "type": "string", "description": "Come prende decisioni (impulsivo, analitico, ecc.)" },
+                  "languageUsed": { "type": "string", "description": "Il linguaggio e le espressioni che usa normalmente" },
+                  "influencers": { "type": "string", "description": "Chi ascolta, segue o considera autorevole" }
+                }
+              },
+              "emotionalDrivers": {
+                "type": "string[]",
+                "description": "Fase 3 — Leve emotive: le motivazioni profonde che spingono il cliente all'azione."
+              },
+              "existingSolutionProblems": {
+                "type": "string[]",
+                "description": "Fase 4 — Problemi con le soluzioni esistenti: cosa non funziona nelle alternative che il cliente ha già provato."
+              },
+              "internalObjections": {
+                "type": "string[]",
+                "description": "Fase 4 — Obiezioni interne: i dubbi del cliente su sé stesso ('non ce la faccio', 'non ho tempo')."
+              },
+              "externalObjections": {
+                "type": "string[]",
+                "description": "Fase 4 — Obiezioni esterne: i dubbi del cliente sulla soluzione ('costa troppo', 'non funzionerà per me')."
+              },
+              "coreLies": {
+                "type": "array",
+                "description": "Fase 5 — Bugie di mercato: le false credenze che il mercato ha e che impediscono al cliente di agire.",
+                "itemSchema": {
+                  "name": { "type": "string", "description": "Nome/titolo della bugia di mercato" },
+                  "problem": { "type": "string", "description": "Il problema che questa bugia causa" },
+                  "cureOrPrevent": { "type": "'C' | 'P'", "description": "C = Cura (risolve dopo), P = Prevenzione (evita prima)" },
+                  "isAware": { "type": "boolean", "description": "Il cliente è consapevole di questa bugia?" },
+                  "importance": { "type": "number", "description": "Livello di importanza (1-10)" }
+                }
+              },
+              "uniqueMechanism": {
+                "type": "object",
+                "description": "Fase 6 — Meccanismo unico: ciò che rende la tua soluzione diversa da tutte le altre.",
+                "fields": {
+                  "name": { "type": "string", "description": "Nome del meccanismo unico" },
+                  "description": { "type": "string", "description": "Descrizione di come funziona e perché è unico" }
+                }
+              },
+              "uvp": {
+                "type": "string",
+                "description": "Fase 7 — Unique Value Proposition: la frase che sintetizza il valore unico offerto al cliente."
+              }
+            }
+          }
+        }
+      },
+
+      "knowledgeBase": {
+        "_sectionTitle": "Knowledge Base & Documenti",
+        "_sectionDescription": "Documenti e informazioni aggiuntive per l'AI",
+        "_sectionIcon": "BookOpen",
+        "_note": "Questa sezione NON fa parte del formData del brand voice. È gestita separatamente tramite API dedicate per ogni agente (richiede agentId). Ogni documento ha un injectionMode che determina come l'AI lo utilizza.",
+        "fields": {
+          "knowledgeItems": {
+            "type": "array (gestito via API separata)",
+            "label": "Elementi Knowledge Base",
+            "description": "Documenti caricati nell'agente. L'AI li consulta per dare risposte accurate e contestualizzate.",
+            "itemSchema": {
+              "id": { "type": "string", "description": "ID univoco del documento" },
+              "title": { "type": "string", "description": "Titolo del documento" },
+              "type": { "type": "'text' | 'pdf' | 'docx' | 'txt'", "description": "Formato del documento" },
+              "content": { "type": "string", "description": "Contenuto testuale (per tipo 'text') o testo estratto dal file" },
+              "fileName": { "type": "string", "description": "Nome del file originale" },
+              "fileSize": { "type": "number", "description": "Dimensione in bytes" },
+              "injectionMode": {
+                "type": "'system_prompt' | 'file_search'",
+                "description": "Come l'AI usa il documento. 'system_prompt' = lo legge SEMPRE ad ogni messaggio (ideale per testi brevi e regole). 'file_search' = lo cerca solo quando pertinente (ideale per PDF lunghi, manuali). Default: 'system_prompt'."
+              },
+              "createdAt": { "type": "Date", "description": "Data di creazione" }
+            },
+            "uploadMethods": [
+              "Drag & Drop (upload diretto di PDF/DOCX/TXT)",
+              "Aggiungi Manualmente (testo libero)",
+              "Importa da Knowledge Base (documenti già caricati altrove)",
+              "Incolla Testo (copia-incolla rapido)"
+            ]
+          }
+        }
+      }
+    },
+
+    "autoFill": {
+      "_description": "Il bottone 'Compila con Luca' (in alto nella pagina) chiama l'API che genera automaticamente il Brand Voice completo e la Ricerca di Mercato, basandosi sui dati già presenti nel sistema. Se il Brand Voice del consulente non è ancora stato generato, lo crea da zero."
+    }
+  }
+}

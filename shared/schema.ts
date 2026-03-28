@@ -556,39 +556,61 @@ export const brandVoice = pgTable("brand_voice", {
   id: serial("id").primaryKey(),
   tenantId: integer("tenant_id").references(() => tenants.id, { onDelete: "cascade" }).notNull(),
   businessInfo: jsonb("business_info").$type<{
-    consultantName?: string;
+    consultantDisplayName?: string;
     businessName?: string;
     businessDescription?: string;
     consultantBio?: string;
   }>().default({}),
-  authority: jsonb("authority").$type<{
+  authorityPositioning: jsonb("authority_positioning").$type<{
     vision?: string;
     mission?: string;
     values?: string[];
     usp?: string;
     whoWeHelp?: string;
-    whoWeDoNotHelp?: string;
+    whoWeDontHelp?: string;
+    whatWeDo?: string;
+    howWeDoIt?: string;
   }>().default({}),
-  servicesInfo: jsonb("services_info").$type<{
-    services?: Array<{ name: string; description: string }>;
-    method?: string;
+  servicesGuarantees: jsonb("services_guarantees").$type<{
+    servicesOffered?: Array<{ name: string; price: string; description: string }>;
     guarantees?: string;
   }>().default({}),
-  credentials: jsonb("credentials").$type<{
-    yearsExperience?: string;
-    clientsHelped?: string;
+  credentialsResults: jsonb("credentials_results").$type<{
+    yearsExperience?: number;
+    clientsHelped?: number;
     resultsGenerated?: string;
-    softwareCreated?: string[];
-    booksPublished?: string[];
-    caseStudies?: Array<{ title: string; description: string }>;
+    softwareCreated?: Array<{ emoji: string; name: string; description: string }>;
+    booksPublished?: Array<{ title: string; year: string }>;
+    caseStudies?: Array<{ client: string; result: string }>;
   }>().default({}),
   voiceStyle: jsonb("voice_style").$type<{
     personalTone?: string;
     contentPersonality?: string;
-    targetLanguage?: string;
-    neverDo?: string;
+    audienceLanguage?: string;
+    avoidPatterns?: string;
     writingExamples?: string[];
     signaturePhrases?: string[];
+  }>().default({}),
+  marketResearch: jsonb("market_research").$type<{
+    currentState?: string[];
+    idealState?: string[];
+    avatar?: {
+      nightThought?: string;
+      biggestFear?: string;
+      dailyFrustration?: string;
+      deepestDesire?: string;
+      currentSituation?: string;
+      decisionStyle?: string;
+      languageUsed?: string;
+      influencers?: string;
+    };
+    emotionalDrivers?: string[];
+    existingSolutionProblems?: string[];
+    internalObjections?: string[];
+    externalObjections?: string[];
+    coreLies?: Array<{ name: string; problem: string; cureOrPrevent: string; isAware: boolean; importance: number }>;
+    uniqueMechanism?: { name: string; description: string };
+    uvp?: string;
   }>().default({}),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),

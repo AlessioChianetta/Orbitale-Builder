@@ -159,35 +159,48 @@ async function getGeminiApiKey(): Promise<string | null> {
 
 export interface BrandVoiceContext {
   businessInfo?: {
-    consultantName?: string;
+    consultantDisplayName?: string;
     businessName?: string;
     businessDescription?: string;
     consultantBio?: string;
   };
-  authority?: {
+  authorityPositioning?: {
     vision?: string;
     mission?: string;
     values?: string[];
     usp?: string;
     whoWeHelp?: string;
-    whoWeDoNotHelp?: string;
+    whoWeDontHelp?: string;
+    whatWeDo?: string;
+    howWeDoIt?: string;
   };
-  servicesInfo?: {
-    services?: Array<{ name: string; description: string }>;
-    method?: string;
+  servicesGuarantees?: {
+    servicesOffered?: Array<{ name: string; price: string; description: string }>;
     guarantees?: string;
   };
-  credentials?: {
-    yearsExperience?: string;
-    clientsHelped?: string;
+  credentialsResults?: {
+    yearsExperience?: number;
+    clientsHelped?: number;
     resultsGenerated?: string;
+    softwareCreated?: Array<{ emoji: string; name: string; description: string }>;
+    booksPublished?: Array<{ title: string; year: string }>;
+    caseStudies?: Array<{ client: string; result: string }>;
   };
   voiceStyle?: {
     personalTone?: string;
     contentPersonality?: string;
-    targetLanguage?: string;
-    neverDo?: string;
+    audienceLanguage?: string;
+    avoidPatterns?: string;
+    writingExamples?: string[];
     signaturePhrases?: string[];
+  };
+  marketResearch?: {
+    currentState?: string[];
+    idealState?: string[];
+    avatar?: Record<string, string>;
+    emotionalDrivers?: string[];
+    uniqueMechanism?: { name: string; description: string };
+    uvp?: string;
   };
 }
 
@@ -197,29 +210,38 @@ function buildBrandVoicePromptSection(bv: BrandVoiceContext): string {
   if (bv.businessInfo?.businessName) {
     parts.push(`Nome brand/azienda: ${bv.businessInfo.businessName}`);
   }
-  if (bv.businessInfo?.consultantName) {
-    parts.push(`Fondatore/Consulente: ${bv.businessInfo.consultantName}`);
+  if (bv.businessInfo?.consultantDisplayName) {
+    parts.push(`Fondatore/Consulente: ${bv.businessInfo.consultantDisplayName}`);
   }
   if (bv.businessInfo?.businessDescription) {
     parts.push(`Descrizione: ${bv.businessInfo.businessDescription}`);
   }
-  if (bv.authority?.usp) {
-    parts.push(`USP: ${bv.authority.usp}`);
+  if (bv.authorityPositioning?.usp) {
+    parts.push(`USP: ${bv.authorityPositioning.usp}`);
   }
-  if (bv.authority?.whoWeHelp) {
-    parts.push(`Target: ${bv.authority.whoWeHelp}`);
+  if (bv.authorityPositioning?.whoWeHelp) {
+    parts.push(`Target: ${bv.authorityPositioning.whoWeHelp}`);
   }
-  if (bv.servicesInfo?.services?.length) {
-    parts.push(`Servizi: ${bv.servicesInfo.services.map(s => s.name).join(", ")}`);
+  if (bv.authorityPositioning?.whatWeDo) {
+    parts.push(`Cosa facciamo: ${bv.authorityPositioning.whatWeDo}`);
   }
-  if (bv.credentials?.yearsExperience) {
-    parts.push(`Esperienza: ${bv.credentials.yearsExperience} anni`);
+  if (bv.authorityPositioning?.howWeDoIt) {
+    parts.push(`Come lo facciamo: ${bv.authorityPositioning.howWeDoIt}`);
   }
-  if (bv.credentials?.clientsHelped) {
-    parts.push(`Clienti aiutati: ${bv.credentials.clientsHelped}`);
+  if (bv.servicesGuarantees?.servicesOffered?.length) {
+    parts.push(`Servizi: ${bv.servicesGuarantees.servicesOffered.map(s => s.name).join(", ")}`);
   }
-  if (bv.credentials?.resultsGenerated) {
-    parts.push(`Risultati: ${bv.credentials.resultsGenerated}`);
+  if (bv.credentialsResults?.yearsExperience) {
+    parts.push(`Esperienza: ${bv.credentialsResults.yearsExperience} anni`);
+  }
+  if (bv.credentialsResults?.clientsHelped) {
+    parts.push(`Clienti aiutati: ${bv.credentialsResults.clientsHelped}`);
+  }
+  if (bv.credentialsResults?.resultsGenerated) {
+    parts.push(`Risultati: ${bv.credentialsResults.resultsGenerated}`);
+  }
+  if (bv.credentialsResults?.caseStudies?.length) {
+    parts.push(`Case studies: ${bv.credentialsResults.caseStudies.map(c => `${c.client}: ${c.result}`).join("; ")}`);
   }
   if (bv.voiceStyle?.personalTone) {
     parts.push(`Tono di voce: ${bv.voiceStyle.personalTone}`);
@@ -227,11 +249,17 @@ function buildBrandVoicePromptSection(bv: BrandVoiceContext): string {
   if (bv.voiceStyle?.contentPersonality) {
     parts.push(`Personalità contenuto: ${bv.voiceStyle.contentPersonality}`);
   }
-  if (bv.voiceStyle?.neverDo) {
-    parts.push(`Cosa NON fare: ${bv.voiceStyle.neverDo}`);
+  if (bv.voiceStyle?.avoidPatterns) {
+    parts.push(`Cosa NON fare: ${bv.voiceStyle.avoidPatterns}`);
   }
   if (bv.voiceStyle?.signaturePhrases?.length) {
     parts.push(`Frasi firma: ${bv.voiceStyle.signaturePhrases.join(", ")}`);
+  }
+  if (bv.marketResearch?.uvp) {
+    parts.push(`Unique Value Proposition: ${bv.marketResearch.uvp}`);
+  }
+  if (bv.marketResearch?.emotionalDrivers?.length) {
+    parts.push(`Leve emotive target: ${bv.marketResearch.emotionalDrivers.join(", ")}`);
   }
 
   if (parts.length === 0) return "";

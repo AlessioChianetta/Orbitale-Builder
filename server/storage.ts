@@ -1514,13 +1514,7 @@ export class Storage {
     return result || null;
   }
 
-  async upsertBrandVoice(tenantId: number, data: Partial<{
-    businessInfo: any;
-    authority: any;
-    servicesInfo: any;
-    credentials: any;
-    voiceStyle: any;
-  }>): Promise<BrandVoice> {
+  async upsertBrandVoice(tenantId: number, data: Partial<Pick<BrandVoice, 'businessInfo' | 'authorityPositioning' | 'servicesGuarantees' | 'credentialsResults' | 'voiceStyle' | 'marketResearch'>>): Promise<BrandVoice> {
     const existing = await this.getBrandVoice(tenantId);
     if (existing) {
       const [updated] = await db.update(brandVoice)

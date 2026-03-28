@@ -447,7 +447,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/brand-voice", authenticateToken, async (req: AuthRequest, res: Response) => {
     try {
       const data = await storage.getBrandVoice(req.tenant!.id);
-      res.json(data || { businessInfo: {}, authority: {}, servicesInfo: {}, credentials: {}, voiceStyle: {} });
+      res.json(data || {
+        businessInfo: {},
+        authorityPositioning: {},
+        servicesGuarantees: {},
+        credentialsResults: {},
+        voiceStyle: {},
+        marketResearch: {},
+      });
     } catch (error) {
       console.error("Error fetching brand voice:", error);
       res.status(500).json({ message: "Failed to fetch brand voice" });
@@ -456,13 +463,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.put("/api/brand-voice", authenticateToken, requireRole("admin"), async (req: AuthRequest, res: Response) => {
     try {
-      const { businessInfo, authority, servicesInfo, credentials, voiceStyle } = req.body;
+      const { businessInfo, authorityPositioning, servicesGuarantees, credentialsResults, voiceStyle, marketResearch } = req.body;
       const data = await storage.upsertBrandVoice(req.tenant!.id, {
         businessInfo: businessInfo || {},
-        authority: authority || {},
-        servicesInfo: servicesInfo || {},
-        credentials: credentials || {},
+        authorityPositioning: authorityPositioning || {},
+        servicesGuarantees: servicesGuarantees || {},
+        credentialsResults: credentialsResults || {},
         voiceStyle: voiceStyle || {},
+        marketResearch: marketResearch || {},
       });
       res.json(data);
     } catch (error) {
@@ -478,8 +486,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Il body deve essere un oggetto JSON valido" });
       }
 
-      const validSections = ["businessInfo", "authority", "servicesInfo", "credentials", "voiceStyle"];
-      const mapped: Record<string, any> = {};
+      type BrandVoiceSection = 'businessInfo' | 'authorityPositioning' | 'servicesGuarantees' | 'credentialsResults' | 'voiceStyle' | 'marketResearch';
+      const validSections: BrandVoiceSection[] = [
+        "businessInfo", "authorityPositioning", "servicesGuarantees",
+        "credentialsResults", "voiceStyle", "marketResearch"
+      ];
+      const mapped: Partial<Record<BrandVoiceSection, Record<string, unknown>>> = {};
 
       for (const key of validSections) {
         if (importData[key] && typeof importData[key] === 'object' && !Array.isArray(importData[key])) {
