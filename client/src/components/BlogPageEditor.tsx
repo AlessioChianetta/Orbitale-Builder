@@ -283,9 +283,6 @@ export function BlogPageEditor({ pageToEdit, onClose }: { pageToEdit?: any; onCl
             </Button>
             <h2 className="text-lg font-semibold text-slate-900">Editor Pagina Blog</h2>
           </div>
-          <Button variant="ghost" size="icon" onClick={onClose} className="text-slate-400 hover:text-slate-700">
-            <X className="h-4 w-4" />
-          </Button>
         </header>
 
         <div className="flex-1 overflow-y-auto">
