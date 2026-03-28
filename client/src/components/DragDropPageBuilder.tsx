@@ -35,17 +35,17 @@ function EmptyDropZone() {
 
   return (
     <div ref={setNodeRef} className="w-full max-w-2xl mx-auto">
-      <Card className={`border-dashed border-2 ${isOver ? 'border-primary bg-primary/10 scale-105' : 'border-muted-foreground/20'} transition-all duration-200`}>
+      <Card className={`border-dashed border-2 shadow-sm ${isOver ? 'border-indigo-400 bg-indigo-50 scale-105' : 'border-slate-200'} transition-all duration-200`}>
         <CardContent className="p-16 text-center">
-          <div className={`p-4 rounded-full bg-muted/50 w-fit mx-auto mb-4 ${isOver ? 'scale-110' : ''} transition-transform`}>
-            <Layout className="h-16 w-16 text-muted-foreground" />
+          <div className={`p-4 rounded-full bg-indigo-50 w-fit mx-auto mb-4 ${isOver ? 'scale-110' : ''} transition-transform`}>
+            <Layout className="h-16 w-16 text-indigo-400" />
           </div>
-          <h3 className="text-xl font-semibold mb-2">Inizia a Costruire</h3>
-          <p className="text-muted-foreground max-w-md mx-auto">
+          <h3 className="text-xl font-semibold text-slate-900 mb-2">Inizia a Costruire</h3>
+          <p className="text-slate-500 max-w-md mx-auto">
             Trascina i componenti dalla libreria a sinistra per iniziare a creare la tua pagina
           </p>
           {isOver && (
-            <p className="text-primary font-medium mt-4 animate-pulse">
+            <p className="text-indigo-600 font-medium mt-4 animate-pulse">
               Rilascia qui per aggiungere
             </p>
           )}
@@ -2591,25 +2591,25 @@ function SortableComponent({ component, onEdit, onDelete }: {
   const componentType = COMPONENT_TYPES.find(t => t.type === component.type);
   return (
     <div ref={setNodeRef} style={style} className="mb-4">
-      <Card className="hover-elevate">
+      <Card className="border-0 shadow-sm hover:shadow-md transition-all">
         <CardHeader className="p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <button {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing">
-                <GripVertical className="h-5 w-5 text-muted-foreground" />
+              <button {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing text-slate-400 hover:text-slate-600">
+                <GripVertical className="h-5 w-5" />
               </button>
               <div>
-                <CardTitle className="text-sm font-medium">{componentType?.label || component.type}</CardTitle>
-                <p className="text-xs text-muted-foreground mt-1">
+                <CardTitle className="text-sm font-medium text-slate-900">{componentType?.label || component.type}</CardTitle>
+                <p className="text-xs text-slate-500 mt-1">
                   {componentType?.description || 'Componente personalizzato'}
                 </p>
               </div>
             </div>
             <div className="flex gap-2">
-              <Button size="sm" variant="outline" onClick={() => onEdit(component.id)} data-testid={`button-edit-component-${component.id}`}>
+              <Button size="sm" variant="outline" onClick={() => onEdit(component.id)} className="border-slate-200 text-indigo-600 hover:bg-indigo-50 hover:text-indigo-700" data-testid={`button-edit-component-${component.id}`}>
                 Modifica
               </Button>
-              <Button size="sm" variant="outline" onClick={() => onDelete(component.id)} data-testid={`button-delete-component-${component.id}`}>
+              <Button size="sm" variant="outline" onClick={() => onDelete(component.id)} className="border-slate-200 text-slate-400 hover:text-red-500 hover:border-red-200" data-testid={`button-delete-component-${component.id}`}>
                 <X className="h-4 w-4" />
               </Button>
             </div>
@@ -2630,14 +2630,14 @@ function ComponentLibraryItem({ componentType }: { componentType: typeof COMPONE
 
   return (
     <div ref={setNodeRef} {...attributes} {...listeners}>
-      <Card className={`cursor-grab active:cursor-grabbing hover-elevate transition-all ${isDragging ? 'opacity-50' : ''}`} data-testid={`library-item-${componentType.type}`}>
+      <Card className={`cursor-grab active:cursor-grabbing border-0 shadow-sm hover:shadow-md transition-all ${isDragging ? 'opacity-50' : ''}`} data-testid={`library-item-${componentType.type}`}>
         <CardContent className="p-3">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-primary/10">
-              <Icon className="h-5 w-5 text-primary" />
+            <div className="p-2 rounded-lg bg-indigo-50">
+              <Icon className="h-5 w-5 text-indigo-600" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="font-medium text-sm truncate">{componentType.label}</p>
+              <p className="font-medium text-sm text-slate-800 truncate">{componentType.label}</p>
             </div>
           </div>
         </CardContent>
@@ -2655,15 +2655,15 @@ function BlockLibraryItem({ block }: { block: typeof ELEMENTI_PREDEFINITI[0] }) 
     });
     return (
         <div ref={setNodeRef} {...attributes} {...listeners}>
-            <Card className={`cursor-grab active:cursor-grabbing hover-elevate transition-all ${isDragging ? 'opacity-50' : ''}`}>
+            <Card className={`cursor-grab active:cursor-grabbing border-0 shadow-sm hover:shadow-md transition-all ${isDragging ? 'opacity-50' : ''}`}>
                 <CardContent className="p-3">
                     <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-lg bg-secondary/10">
-                            <Icon className="h-5 w-5 text-secondary" />
+                        <div className="p-2 rounded-lg bg-indigo-50">
+                            <Icon className="h-5 w-5 text-indigo-600" />
                         </div>
                         <div className="flex-1 min-w-0">
-                            <p className="font-medium text-sm truncate">{block.label}</p>
-                            <p className="text-xs text-muted-foreground truncate">{block.description}</p>
+                            <p className="font-medium text-sm text-slate-800 truncate">{block.label}</p>
+                            <p className="text-xs text-slate-500 truncate">{block.description}</p>
                         </div>
                     </div>
                 </CardContent>
@@ -2714,13 +2714,13 @@ function RepeaterField({ label, value = [], fields, onChange }: {
 
   return (
     <div className="space-y-4">
-      <Label className="text-lg font-semibold">{label}</Label>
-      <div className="space-y-3 rounded-lg border p-4 bg-muted/30">
+      <Label className="text-sm font-semibold text-slate-700">{label}</Label>
+      <div className="space-y-3 rounded-lg border border-slate-200 p-4 bg-slate-50/50">
         {(value || []).map((item, index) => (
-          <Collapsible key={index} defaultOpen={true} className="bg-background rounded-md border shadow-sm">
+          <Collapsible key={index} defaultOpen={true} className="bg-white rounded-md border border-slate-200 shadow-sm">
             <CollapsibleTrigger className="flex items-center w-full p-3 text-left">
-              <span className="font-semibold text-sm flex-1 truncate pr-2">
-                {item.type ? item.type.replace('-', ' ') : 'Elemento'}: <span className="text-muted-foreground font-normal italic">{item.text?.substring(0, 30) || 'Vuoto'}...</span>
+              <span className="font-semibold text-sm text-slate-800 flex-1 truncate pr-2">
+                {item.type ? item.type.replace('-', ' ') : 'Elemento'}: <span className="text-slate-400 font-normal italic">{item.text?.substring(0, 30) || 'Vuoto'}...</span>
               </span>
               <div className="flex items-center gap-1 ml-auto">
                 <Button variant="ghost" size="icon" className="h-7 w-7" onClick={(e) => { e.stopPropagation(); handleMoveItem(index, 'up'); }} disabled={index === 0}>
@@ -2735,14 +2735,14 @@ function RepeaterField({ label, value = [], fields, onChange }: {
               </div>
               <ChevronDown className="h-4 w-4 transition-transform ui-open:rotate-180 ml-2" />
             </CollapsibleTrigger>
-            <CollapsibleContent className="p-4 border-t space-y-4">
+            <CollapsibleContent className="p-4 border-t border-slate-200 space-y-4">
               {fields.map(field => {
                 if (field.type === 'select') {
                   return (
                      <div key={field.key}>
-                        <Label className="text-xs">{field.label}</Label>
+                        <Label className="text-xs text-slate-600">{field.label}</Label>
                         <Select value={item[field.key] || ''} onValueChange={(val) => handleItemChange(index, field.key, val)}>
-                          <SelectTrigger><SelectValue /></SelectTrigger>
+                          <SelectTrigger className="border-slate-200"><SelectValue /></SelectTrigger>
                           <SelectContent>
                             {field.options.map((opt: any) => (
                               <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
@@ -2755,14 +2755,15 @@ function RepeaterField({ label, value = [], fields, onChange }: {
                 if (field.type === 'textarea') {
                   return (
                     <div key={field.key}>
-                      <Label className="text-xs">{field.label}</Label>
+                      <Label className="text-xs text-slate-600">{field.label}</Label>
                       <Textarea
                         value={item[field.key] || ''}
                         onChange={(e) => handleItemChange(index, field.key, e.target.value)}
                         placeholder="Scrivi qui..."
                         rows={item.type === 'list' ? 6 : 4}
+                        className="border-slate-200 focus:border-indigo-300"
                       />
-                       <p className="text-xs text-muted-foreground mt-1">
+                       <p className="text-xs text-slate-400 mt-1">
                         Usa **testo** per il grassetto e [testo link](url) per i link.
                       </p>
                     </div>
@@ -2776,12 +2777,12 @@ function RepeaterField({ label, value = [], fields, onChange }: {
         
         <Collapsible>
             <CollapsibleTrigger asChild>
-                <Button variant="outline" className="w-full">
+                <Button variant="outline" className="w-full border-slate-200 text-indigo-600 hover:bg-indigo-50">
                     <PlusCircle className="h-4 w-4 mr-2" />
                     Aggiungi Blocco
                 </Button>
             </CollapsibleTrigger>
-            <CollapsibleContent className="p-2 mt-2 border rounded-md bg-background">
+            <CollapsibleContent className="p-2 mt-2 border border-slate-200 rounded-md bg-white">
                 <div className="grid grid-cols-2 gap-2">
                     {blockTypes.map((type: any) => (
                         <Button key={type.value} variant="ghost" size="sm" className="justify-start text-xs" onClick={() => handleAddItem(type.value)}>
@@ -2808,19 +2809,20 @@ function renderField(fieldConfig: any, value: any, onUpdate: (newProps: any) => 
     case 'text':
       return (
         <div key={key} className="space-y-1">
-          <Label className="text-sm font-medium">{displayLabel}</Label>
+          <Label className="text-xs text-slate-600">{displayLabel}</Label>
           <Input
             value={currentValue || ''}
             onChange={(e) => onUpdate({ [key]: e.target.value })}
             placeholder={`Inserisci ${displayLabel.toLowerCase()}`}
+            className="border-slate-200 focus:border-indigo-300"
           />
         </div>
       );
     case 'color':
         return (
             <div key={field.key} className="space-y-1">
-                <Label className="text-xs">{field.label}</Label>
-                <div className="flex items-center gap-2 border rounded-md pr-2">
+                <Label className="text-xs text-slate-600">{field.label}</Label>
+                <div className="flex items-center gap-2 border border-slate-200 rounded-md pr-2">
                     <Input
                         type="text"
                         value={currentValue || ''}
@@ -2839,11 +2841,11 @@ function renderField(fieldConfig: any, value: any, onUpdate: (newProps: any) => 
     case 'textarea':
       return (
         <div key={key} className="space-y-1">
-          <Label className="text-sm font-medium">{displayLabel}</Label>
+          <Label className="text-xs text-slate-600">{displayLabel}</Label>
           <Textarea
             value={currentValue || ''}
             onChange={(e) => onUpdate({ [key]: e.target.value })}
-            className="min-h-[100px]"
+            className="min-h-[100px] border-slate-200 focus:border-indigo-300"
             placeholder={`Inserisci ${displayLabel.toLowerCase()}`}
           />
         </div>
@@ -2851,9 +2853,9 @@ function renderField(fieldConfig: any, value: any, onUpdate: (newProps: any) => 
     case 'select':
       return (
         <div key={key} className="space-y-1">
-          <Label className="text-sm font-medium">{displayLabel}</Label>
+          <Label className="text-xs text-slate-600">{displayLabel}</Label>
           <Select value={currentValue} onValueChange={(newValue) => onUpdate({ [key]: newValue })}>
-            <SelectTrigger>
+            <SelectTrigger className="border-slate-200 focus:border-indigo-300">
               <SelectValue placeholder={`Seleziona ${displayLabel.toLowerCase()}`} />
             </SelectTrigger>
             <SelectContent>
@@ -2869,8 +2871,8 @@ function renderField(fieldConfig: any, value: any, onUpdate: (newProps: any) => 
         return (
         <div key={key} className="space-y-1">
           <div className="flex justify-between items-center">
-            <Label className="text-sm font-medium">{displayLabel}</Label>
-            <span className="text-sm text-muted-foreground">{!isNaN(numValue) ? numValue : (min || 0)}</span>
+            <Label className="text-xs text-slate-600">{displayLabel}</Label>
+            <span className="text-xs text-slate-400">{!isNaN(numValue) ? numValue : (min || 0)}</span>
           </div>
           <Slider
             value={[!isNaN(numValue) ? numValue : (min || 0)]}
@@ -2883,8 +2885,8 @@ function renderField(fieldConfig: any, value: any, onUpdate: (newProps: any) => 
       );
     case 'boolean':
         return (
-            <div key={key} className="flex items-center justify-between rounded-lg border p-3">
-                <Label className="text-sm font-medium">{displayLabel}</Label>
+            <div key={key} className="flex items-center justify-between rounded-lg border border-slate-200 p-3">
+                <Label className="text-xs text-slate-600">{displayLabel}</Label>
                 <Switch
                     checked={currentValue || false}
                     onCheckedChange={(checked) => onUpdate({ [key]: checked })}
@@ -2904,24 +2906,26 @@ function renderField(fieldConfig: any, value: any, onUpdate: (newProps: any) => 
     case 'number':
         return (
             <div key={key} className="space-y-1">
-                <Label className="text-sm font-medium">{displayLabel}</Label>
+                <Label className="text-xs text-slate-600">{displayLabel}</Label>
                 <Input
                     type="number"
                     value={currentValue || ''}
                     onChange={(e) => onUpdate({ [key]: parseInt(e.target.value, 10) })}
                     placeholder={`Inserisci ${displayLabel.toLowerCase()}`}
+                    className="border-slate-200 focus:border-indigo-300"
                 />
             </div>
         );
     case 'list':
         return (
             <div key={key} className="space-y-1">
-                <Label className="text-sm font-medium">{displayLabel}</Label>
+                <Label className="text-xs text-slate-600">{displayLabel}</Label>
                 <Textarea
                     value={Array.isArray(currentValue) ? currentValue.join('\n') : ''}
                     onChange={(e) => onUpdate({ [key]: e.target.value.split('\n') })}
                     placeholder={`Inserisci ogni elemento su una nuova riga`}
                     rows={3}
+                    className="border-slate-200 focus:border-indigo-300"
                 />
             </div>
         );
@@ -4404,11 +4408,12 @@ function ComponentPropertiesEditor({ component, onUpdate }: {
       case 'text':
         return (
           <div key={field.key} className="space-y-2">
-            <Label className="text-xs">{field.label}</Label>
+            <Label className="text-xs text-slate-600">{field.label}</Label>
             <Input
               value={value || ''}
               onChange={(e) => handlePropChange(field.key, e.target.value)}
               placeholder={field.label}
+              className="border-slate-200 focus:border-indigo-300"
             />
           </div>
         );
@@ -4416,12 +4421,13 @@ function ComponentPropertiesEditor({ component, onUpdate }: {
       case 'textarea':
         return (
           <div key={field.key} className="space-y-2">
-            <Label className="text-xs">{field.label}</Label>
+            <Label className="text-xs text-slate-600">{field.label}</Label>
             <Textarea
               value={value || ''}
               onChange={(e) => handlePropChange(field.key, e.target.value)}
               placeholder={field.label}
               rows={3}
+              className="border-slate-200 focus:border-indigo-300"
             />
           </div>
         );
@@ -4429,7 +4435,7 @@ function ComponentPropertiesEditor({ component, onUpdate }: {
       case 'boolean':
         return (
           <div key={field.key} className="flex items-center justify-between">
-            <Label className="text-xs">{field.label}</Label>
+            <Label className="text-xs text-slate-600">{field.label}</Label>
             <Switch
               checked={value || false}
               onCheckedChange={(checked) => handlePropChange(field.key, checked)}
@@ -4441,8 +4447,8 @@ function ComponentPropertiesEditor({ component, onUpdate }: {
         return (
           <div key={field.key} className="space-y-2">
             <div className="flex justify-between items-center">
-              <Label className="text-xs">{field.label}</Label>
-              <span className="text-xs text-muted-foreground">{value || field.min}</span>
+              <Label className="text-xs text-slate-600">{field.label}</Label>
+              <span className="text-xs text-slate-400">{value || field.min}</span>
             </div>
             <Slider
               value={[parseInt(String(value), 10) || field.min]}
@@ -4457,9 +4463,9 @@ function ComponentPropertiesEditor({ component, onUpdate }: {
       case 'select':
         return (
           <div key={field.key} className="space-y-2">
-            <Label className="text-xs">{field.label}</Label>
+            <Label className="text-xs text-slate-600">{field.label}</Label>
             <Select value={value || ''} onValueChange={(val) => handlePropChange(field.key, val)}>
-              <SelectTrigger>
+              <SelectTrigger className="border-slate-200 focus:border-indigo-300">
                 <SelectValue placeholder={`Seleziona ${field.label}`} />
               </SelectTrigger>
               <SelectContent>
@@ -4474,8 +4480,8 @@ function ComponentPropertiesEditor({ component, onUpdate }: {
       case 'color':
         return (
             <div key={field.key} className="space-y-1">
-                <Label className="text-xs">{field.label}</Label>
-                <div className="flex items-center gap-2 border rounded-md pr-2">
+                <Label className="text-xs text-slate-600">{field.label}</Label>
+                <div className="flex items-center gap-2 border border-slate-200 rounded-md pr-2">
                     <Input
                         type="text"
                         value={value || ''}
@@ -4506,7 +4512,7 @@ function ComponentPropertiesEditor({ component, onUpdate }: {
       case 'array-simple':
         return (
             <div key={field.key} className="space-y-2">
-                <Label className="text-xs">{field.label}</Label>
+                <Label className="text-xs text-slate-600">{field.label}</Label>
                 <Textarea
                     value={Array.isArray(value) ? value.join('\n') : ''}
                     onChange={(e) => {
@@ -4515,6 +4521,7 @@ function ComponentPropertiesEditor({ component, onUpdate }: {
                     }}
                     placeholder={field.fields.map((f: any) => f.placeholder || f.label).join('\n')}
                     rows={field.fields.length + 1}
+                    className="border-slate-200 focus:border-indigo-300"
                 />
             </div>
         );
@@ -4522,12 +4529,13 @@ function ComponentPropertiesEditor({ component, onUpdate }: {
       case'number':
         return (
             <div key={field.key} className="space-y-2">
-                <Label className="text-xs">{field.label}</Label>
+                <Label className="text-xs text-slate-600">{field.label}</Label>
                 <Input
                     type="number"
                     value={value || ''}
                     onChange={(e) => handlePropChange(field.key, parseInt(e.target.value, 10))}
                     placeholder={field.label}
+                    className="border-slate-200 focus:border-indigo-300"
                 />
             </div>
         );
@@ -4535,12 +4543,13 @@ function ComponentPropertiesEditor({ component, onUpdate }: {
       case 'list':
         return (
             <div key={field.key} className="space-y-2">
-                <Label className="text-xs">{field.label}</Label>
+                <Label className="text-xs text-slate-600">{field.label}</Label>
                 <Textarea
                     value={Array.isArray(value) ? value.join('\n') : ''}
                     onChange={(e) => handlePropChange(field.key, e.target.value.split('\n'))}
                     placeholder={`Inserisci ogni elemento su una nuova riga`}
                     rows={3}
+                    className="border-slate-200 focus:border-indigo-300"
                 />
             </div>
         );
@@ -5118,105 +5127,109 @@ export function DragDropPageBuilder({ pageToEdit, onClose }: DragDropPageBuilder
 
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-      <div className="fixed inset-0 z-50 bg-background">
+      <div className="fixed inset-0 z-50 bg-gradient-to-br from-slate-50 to-slate-100">
         <div className="flex h-full flex-col">
-          {/* Intestazione */}
-          <div className="border-b p-4">
+          <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-sm border-b border-slate-200 px-4 py-3">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-2xl font-bold">Costruttore di Pagine</h2>
-                <p className="text-sm text-muted-foreground">Costruisci la tua pagina con il drag & drop</p>
+                <h2 className="text-lg font-semibold text-slate-900">Costruttore di Pagine</h2>
+                <p className="text-sm text-slate-500">Costruisci la tua pagina con il drag & drop</p>
               </div>
               <div className="flex gap-2">
-                <Button variant="outline" onClick={onClose} data-testid="button-close-builder">
+                <Button variant="outline" onClick={onClose} className="border-slate-200 text-slate-600 hover:bg-slate-50" data-testid="button-close-builder">
                   Annulla
                 </Button>
-                <Button onClick={handleSave} disabled={saveMutation.isPending} data-testid="button-save-page">
+                <Button onClick={handleSave} disabled={saveMutation.isPending} className="bg-indigo-600 hover:bg-indigo-700 text-white" data-testid="button-save-page">
                   <Save className="h-4 w-4 mr-2" />
                   {saveMutation.isPending ? 'Salvataggio...' : 'Salva Pagina'}
                 </Button>
               </div>
             </div>
-          </div>
+          </header>
 
           {/* Contenuto Principale */}
           <div className="flex flex-1 overflow-hidden">
 
             {/* Barra Laterale Sinistra (con logica condizionale) */}
             {isSidebarVisible && (
-              <div className="w-72 border-r bg-muted/30 flex flex-col h-full transition-all duration-300 animate-in slide-in-from-left-2">
+              <div className="w-72 border-r border-slate-200 bg-white shadow-sm flex flex-col h-full transition-all duration-300 animate-in slide-in-from-left-2">
                 <Tabs defaultValue="components" className="flex-1 flex flex-col h-full">
-                  <TabsList className="w-full grid grid-cols-3 rounded-none border-b bg-muted/50 flex-shrink-0">
-                    <TabsTrigger value="settings" className="gap-2">
-                      <Settings className="h-4 w-4" />
-                      <span className="hidden sm:inline">Impostazioni</span>
+                  <TabsList className="w-full grid grid-cols-3 rounded-none border-b border-slate-200 bg-slate-100 p-1 flex-shrink-0">
+                    <TabsTrigger value="settings" className="gap-1.5 text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm">
+                      <Settings className="h-3.5 w-3.5" />
+                      <span className="hidden sm:inline">Impost.</span>
                     </TabsTrigger>
-                    <TabsTrigger value="blocks" className="gap-2">
-                      <Package className="h-4 w-4" />
+                    <TabsTrigger value="blocks" className="gap-1.5 text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm">
+                      <Package className="h-3.5 w-3.5" />
                       <span className="hidden sm:inline">Blocchi</span>
                     </TabsTrigger>
-                    <TabsTrigger value="components" className="gap-2">
-                      <Box className="h-4 w-4" />
-                      <span className="hidden sm:inline">Componenti</span>
+                    <TabsTrigger value="components" className="gap-1.5 text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm">
+                      <Box className="h-3.5 w-3.5" />
+                      <span className="hidden sm:inline">Comp.</span>
                     </TabsTrigger>
                   </TabsList>
 
                   <TabsContent value="settings" className="flex-1 overflow-y-auto p-4 mt-0 h-0">
                     <div className="space-y-4">
                       <div>
-                        <Label className="text-xs font-medium">Titolo Pagina</Label>
+                        <Label className="text-xs font-medium text-slate-600">Titolo Pagina</Label>
                         <Input
                           value={formData.title}
                           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                           placeholder="Inserisci il titolo"
+                          className="border-slate-200 focus:border-indigo-300"
                           data-testid="input-page-title"
                         />
                       </div>
                       <div>
-                        <Label className="text-xs font-medium">URL Slug</Label>
+                        <Label className="text-xs font-medium text-slate-600">URL Slug</Label>
                         <Input
                           value={formData.slug}
                           onChange={(e) => setFormData({ ...formData, slug: e.target.value.toLowerCase().replace(/\s+/g, '-') })}
                           placeholder="url-della-pagina"
+                          className="border-slate-200 focus:border-indigo-300"
                           data-testid="input-page-slug"
                         />
                       </div>
-                      <Separator className="my-4" />
+                      <Separator className="my-4 bg-slate-200" />
                       <div className="space-y-3">
-                        <Label className="text-sm font-semibold">SEO</Label>
+                        <Label className="text-xs font-semibold text-slate-700 uppercase tracking-wide">SEO</Label>
                         <div>
-                          <Label className="text-xs font-medium">Meta Title</Label>
+                          <Label className="text-xs font-medium text-slate-600">Meta Title</Label>
                           <Input
                             value={formData.metaTitle || ''}
                             onChange={(e) => setFormData({ ...formData, metaTitle: e.target.value })}
                             placeholder="Titolo SEO (30-60 caratteri)"
                             maxLength={60}
+                            className="border-slate-200 focus:border-indigo-300"
                             data-testid="input-meta-title"
                           />
-                          <p className="text-xs text-muted-foreground mt-1">
+                          <p className="text-xs text-slate-400 mt-1">
                             {formData.metaTitle?.length || 0}/60 caratteri
                           </p>
                         </div>
                         <div>
-                          <Label className="text-xs font-medium">Meta Description</Label>
+                          <Label className="text-xs font-medium text-slate-600">Meta Description</Label>
                           <Textarea
                             value={formData.metaDescription || ''}
                             onChange={(e) => setFormData({ ...formData, metaDescription: e.target.value })}
                             placeholder="Descrizione SEO (120-160 caratteri)"
                             maxLength={160}
                             rows={3}
+                            className="border-slate-200 focus:border-indigo-300"
                             data-testid="textarea-meta-description"
                           />
-                          <p className="text-xs text-muted-foreground mt-1">
+                          <p className="text-xs text-slate-400 mt-1">
                             {formData.metaDescription?.length || 0}/160 caratteri
                           </p>
                         </div>
                         <div>
-                          <Label className="text-xs font-medium">OG Image</Label>
+                          <Label className="text-xs font-medium text-slate-600">OG Image</Label>
                           <Input
                             value={formData.ogImage || ''}
                             onChange={(e) => setFormData({ ...formData, ogImage: e.target.value })}
                             placeholder="URL immagine per social media"
+                            className="border-slate-200 focus:border-indigo-300"
                             data-testid="input-og-image"
                           />
                         </div>
@@ -5238,10 +5251,10 @@ export function DragDropPageBuilder({ pageToEdit, onClose }: DragDropPageBuilder
                         }, {} as Record<string, typeof ELEMENTI_PREDEFINITI>)
                       ).map(([category, elements]) => (
                         <Collapsible key={category} defaultOpen={true}>
-                          <CollapsibleTrigger className="flex items-center gap-2 w-full hover:opacity-80 transition-opacity py-2 sticky top-0 bg-muted/30 z-10 -mx-4 px-4">
-                            <h3 className="font-semibold text-sm">{category}</h3>
-                            <span className="text-xs text-muted-foreground">({elements.length})</span>
-                            <ChevronDown className="h-4 w-4 ml-auto transition-transform ui-state-open:rotate-180" />
+                          <CollapsibleTrigger className="flex items-center gap-2 w-full hover:opacity-80 transition-opacity py-2 sticky top-0 bg-white z-10 -mx-4 px-4">
+                            <h3 className="font-semibold text-xs text-slate-700 uppercase tracking-wide">{category}</h3>
+                            <span className="text-xs text-slate-400">({elements.length})</span>
+                            <ChevronDown className="h-4 w-4 ml-auto text-slate-400 transition-transform ui-state-open:rotate-180" />
                           </CollapsibleTrigger>
                           <CollapsibleContent className="space-y-2 mt-2">
                             {elements.map((block) => (
@@ -5255,12 +5268,12 @@ export function DragDropPageBuilder({ pageToEdit, onClose }: DragDropPageBuilder
 
                   <TabsContent value="components" className="flex-1 overflow-hidden p-0 mt-0 h-0">
                     <div className="h-full flex flex-col">
-                      <div className="p-4 border-b">
+                      <div className="p-4 border-b border-slate-200">
                         <Input
-                          placeholder="🔍 Cerca componente..."
+                          placeholder="Cerca componente..."
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
-                          className="w-full"
+                          className="w-full border-slate-200 focus:border-indigo-300"
                         />
                       </div>
                       <div className="flex-1 overflow-y-auto p-4">
@@ -5284,7 +5297,7 @@ export function DragDropPageBuilder({ pageToEdit, onClose }: DragDropPageBuilder
                               }, {} as Record<string, typeof COMPONENT_TYPES>)
                           ).map(([category, components]) => (
                             <div key={category} className="space-y-2">
-                              <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide sticky top-0 bg-muted/30 py-1 z-10 -mx-4 px-4">
+                              <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wide sticky top-0 bg-white py-1 z-10 -mx-4 px-4">
                                 {category}
                               </h4>
                               <div className="grid grid-cols-1 gap-2">
@@ -5303,13 +5316,13 @@ export function DragDropPageBuilder({ pageToEdit, onClose }: DragDropPageBuilder
             )}
 
             {/* Centro - Anteprima Live con pulsante */}
-            <div className="relative flex-1 overflow-y-auto bg-slate-200">
+            <div className="relative flex-1 overflow-y-auto bg-gradient-to-br from-slate-100 to-slate-200/80">
               <div className="absolute top-2 left-2 z-20">
                 <Button
                   variant="secondary"
                   size="sm"
                   onClick={() => setIsSidebarVisible(!isSidebarVisible)}
-                  className="shadow-md"
+                  className="shadow-md bg-white/80 backdrop-blur-sm border-slate-200 text-slate-600 hover:bg-white"
                   aria-label="Mostra/Nascondi barra laterale"
                 >
                   <Menu className="h-4 w-4" />
@@ -5344,10 +5357,10 @@ export function DragDropPageBuilder({ pageToEdit, onClose }: DragDropPageBuilder
 
             {/* Barra Laterale Destra */}
             {selectedComponent && (
-              <div className="w-100 border-l p-4 overflow-y-auto bg-muted/30 animate-in slide-in-from-right-2">
+              <div className="w-100 border-l border-slate-200 p-4 overflow-y-auto bg-white shadow-sm animate-in slide-in-from-right-2">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold">Modifica Componente</h3>
-                  <Button size="sm" variant="ghost" onClick={() => setSelectedComponent(null)}>
+                  <h3 className="font-semibold text-slate-900 text-sm">Modifica Componente</h3>
+                  <Button size="sm" variant="ghost" onClick={() => setSelectedComponent(null)} className="text-slate-400 hover:text-slate-600">
                     <X className="h-4 w-4" />
                   </Button>
                 </div>
@@ -5362,9 +5375,9 @@ export function DragDropPageBuilder({ pageToEdit, onClose }: DragDropPageBuilder
 
         <DragOverlay>
           {activeId ? (
-            <Card className="opacity-50">
+            <Card className="opacity-70 border-0 shadow-lg">
               <CardContent className="p-4">
-                <p>Trascinamento in corso...</p>
+                <p className="text-slate-600 text-sm">Trascinamento in corso...</p>
               </CardContent>
             </Card>
           ) : null}
