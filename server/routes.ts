@@ -244,6 +244,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(409).json({ message: "Email already exists" });
       }
 
+      const allowedRoles = ['editor', 'admin'];
+      if (req.user.role !== 'superadmin') {
+        if (userData.role && !allowedRoles.includes(userData.role)) {
+          return res.status(403).json({ message: "Insufficient permissions to assign this role" });
+        }
+      }
+
       const userDataWithTenant = {
         ...userData,
         tenantId: req.tenant!.id
