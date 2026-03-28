@@ -126,7 +126,7 @@ router.get("/stats", authenticateToken, async (req: AuthRequest, res: Response) 
           COUNT(CASE WHEN created_at >= NOW() - INTERVAL '24 hours' THEN 1 END) as leads_last_24h,
           COUNT(CASE WHEN created_at >= NOW() - INTERVAL '7 days' THEN 1 END) as leads_last_7d
         FROM marketing_leads
-        WHERE tenant_id = ${tenantId} AND created_at >= NOW() - INTERVAL ${sql.raw(`'${daysNumber} days'`)}
+        WHERE tenant_id = ${tenantId} AND created_at >= NOW() - (${daysNumber} || ' days')::interval
       `;
     } else {
       statsQuery = sql`
@@ -150,7 +150,7 @@ router.get("/stats", authenticateToken, async (req: AuthRequest, res: Response) 
           COUNT(*) as count,
           COUNT(CASE WHEN created_at >= NOW() - INTERVAL '24 hours' THEN 1 END) as recent_count
         FROM marketing_leads
-        WHERE tenant_id = ${tenantId} AND created_at >= NOW() - INTERVAL ${sql.raw(`'${daysNumber} days'`)}
+        WHERE tenant_id = ${tenantId} AND created_at >= NOW() - (${daysNumber} || ' days')::interval
         GROUP BY source
         ORDER BY count DESC
       `;
@@ -718,7 +718,7 @@ router.get('/analytics', authenticateToken, async (req: AuthRequest, res) => {
     if (days !== 'all') {
       const daysNumber = parseInt(days as string);
       if (!isNaN(daysNumber) && daysNumber > 0) {
-        filters.push(sql`created_at >= NOW() - INTERVAL '${sql.raw(daysNumber.toString())} days'`);
+        filters.push(sql`created_at >= NOW() - (${daysNumber} || ' days')::interval`);
       }
     }
 
@@ -730,7 +730,6 @@ router.get('/analytics', authenticateToken, async (req: AuthRequest, res) => {
       filters.push(sql`campaign = ${campaign}`);
     }
 
-    // Crea la condizione WHERE
     const whereCondition = filters.length > 0 
       ? sql`WHERE ${sql.join(filters, sql` AND `)}`
       : sql``;
