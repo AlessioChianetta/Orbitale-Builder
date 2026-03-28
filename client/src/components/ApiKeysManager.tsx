@@ -347,99 +347,81 @@ export default function ApiKeysManager() {
               </p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Nome</TableHead>
-                    <TableHead>Chiave</TableHead>
-                    <TableHead>Environment</TableHead>
-                    <TableHead>Scopes</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Creata</TableHead>
-                    <TableHead>Ultimo Uso</TableHead>
-                    <TableHead className="text-right">Azioni</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {apiKeys.map((apiKey) => {
-                    const environment = getEnvironmentFromKey(apiKey.key);
+            <div className="space-y-3">
+              {apiKeys.map((apiKey) => {
+                const environment = getEnvironmentFromKey(apiKey.key);
 
-                    return (
-                      <TableRow key={apiKey.id}>
-                        <TableCell>
-                          <div className="font-medium text-slate-900">{apiKey.name}</div>
-                        </TableCell>
-                        <TableCell>
-                          <TooltipProvider>
-                            <div className="flex items-center gap-2">
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <code className="text-xs bg-slate-100 px-2 py-1 rounded">
-                                    {apiKey.key}
-                                  </code>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p className="text-xs">Chiave mascherata per sicurezza.<br />La chiave completa è visibile solo alla creazione.</p>
-                                </TooltipContent>
-                              </Tooltip>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => handleCopyKey(apiKey.key)}
-                                title="Copia chiave mascherata"
-                              >
-                                <Copy className="h-4 w-4" />
-                              </Button>
+                return (
+                  <div key={apiKey.id} className="border border-slate-200 rounded-lg p-4 bg-white hover:shadow-sm transition-shadow">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1 min-w-0 space-y-3">
+                        <div className="flex items-center gap-3">
+                          <div className="p-2 bg-indigo-50 rounded-lg">
+                            <Key className="h-4 w-4 text-indigo-600" />
+                          </div>
+                          <div>
+                            <h4 className="font-medium text-slate-900">{apiKey.name}</h4>
+                            <div className="flex items-center gap-2 mt-1">
+                              {getStatusBadge(apiKey.isActive)}
+                              {getEnvironmentBadge(environment)}
                             </div>
-                          </TooltipProvider>
-                        </TableCell>
-                        <TableCell>
-                          {getEnvironmentBadge(environment)}
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex flex-wrap gap-1">
-                            {apiKey.scopes.map((scope) => (
-                              <Badge key={scope} variant="outline" className="text-xs">
-                                {scope}
-                              </Badge>
-                            ))}
                           </div>
-                        </TableCell>
-                        <TableCell>
-                          {getStatusBadge(apiKey.isActive)}
-                        </TableCell>
-                        <TableCell>
-                          <div className="text-sm text-slate-600">
-                            {format(new Date(apiKey.createdAt), 'dd MMM yyyy', { locale: it })}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="text-sm text-slate-600">
-                            {apiKey.lastUsedAt 
-                              ? format(new Date(apiKey.lastUsedAt), 'dd MMM yyyy', { locale: it })
-                              : 'Mai usata'
-                            }
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center justify-end gap-2">
+                        </div>
+
+                        <TooltipProvider>
+                          <div className="flex items-center gap-2">
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <code className="text-xs bg-slate-100 px-2 py-1 rounded font-mono">
+                                  {apiKey.key}
+                                </code>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p className="text-xs">Chiave mascherata per sicurezza.<br />La chiave completa è visibile solo alla creazione.</p>
+                              </TooltipContent>
+                            </Tooltip>
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={() => setKeyToRevoke(apiKey)}
-                              disabled={!apiKey.isActive}
-                              title="Revoca"
+                              onClick={() => handleCopyKey(apiKey.key)}
+                              title="Copia chiave mascherata"
                             >
-                              <Trash2 className="h-4 w-4" />
+                              <Copy className="h-4 w-4" />
                             </Button>
                           </div>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
+                        </TooltipProvider>
+
+                        <div className="flex flex-wrap gap-1">
+                          {apiKey.scopes.map((scope) => (
+                            <Badge key={scope} variant="outline" className="text-xs">
+                              {scope}
+                            </Badge>
+                          ))}
+                        </div>
+
+                        <div className="flex items-center gap-4 text-xs text-slate-600">
+                          <span>Creata: {format(new Date(apiKey.createdAt), 'dd MMM yyyy', { locale: it })}</span>
+                          <span>Ultimo uso: {apiKey.lastUsedAt 
+                            ? format(new Date(apiKey.lastUsedAt), 'dd MMM yyyy', { locale: it })
+                            : 'Mai usata'
+                          }</span>
+                        </div>
+                      </div>
+
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setKeyToRevoke(apiKey)}
+                        disabled={!apiKey.isActive}
+                        title="Revoca"
+                        className="text-slate-400 hover:text-red-600"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           )}
         </CardContent>
