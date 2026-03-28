@@ -340,7 +340,7 @@ router.post("/", async (req: Request, res: Response) => {
         const duplicateCountResult = await db.execute(sql`
           SELECT COUNT(*) as count 
           FROM marketing_leads 
-          WHERE email = ${email} AND campaign = ${campaign || 'unknown'}
+          WHERE email = ${email} AND campaign = ${campaign || 'unknown'} AND tenant_id = ${tenantId}
         `);
         const existingCount = parseInt(String(duplicateCountResult.rows[0]?.count || '0'));
 
@@ -574,7 +574,7 @@ router.post('/marketing/leads', async (req, res) => {
       const duplicateCountResult = await db.execute(sql`
         SELECT COUNT(*) as count 
         FROM marketing_leads 
-        WHERE email = ${email} AND campaign = ${campaign || 'MovieTurbo'}
+        WHERE email = ${email} AND campaign = ${campaign || 'MovieTurbo'} AND tenant_id = ${tenantId}
       `);
       const existingCount = parseInt(String(duplicateCountResult.rows[0]?.count || '0'));
 
