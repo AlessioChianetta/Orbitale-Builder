@@ -53,7 +53,7 @@ export default function LandingPagesManager() {
       });
       toast({
         title: "Landing Page Duplicata",
-        description: "La landing page e stata duplicata con successo",
+        description: "La landing page è stata duplicata con successo",
       });
       refetch();
     } catch (error) {
@@ -70,7 +70,7 @@ export default function LandingPagesManager() {
     navigator.clipboard.writeText(url);
     toast({
       title: "Link Copiato",
-      description: "Il link della landing page e stato copiato negli appunti",
+      description: "Il link della landing page è stato copiato negli appunti",
     });
   };
 

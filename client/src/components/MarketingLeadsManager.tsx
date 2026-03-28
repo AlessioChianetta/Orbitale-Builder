@@ -115,7 +115,7 @@ export default function MarketingLeadsManager() {
       queryClient.invalidateQueries({ queryKey: ['/api/marketing-leads/stats'] });
       toast({
         title: "Lead eliminato",
-        description: "Il lead e stato eliminato con successo",
+        description: "Il lead è stato eliminato con successo",
       });
     },
     onError: () => {
@@ -264,7 +264,7 @@ export default function MarketingLeadsManager() {
                 placeholder="Data fine"
                 className="border-slate-200 focus:border-indigo-300 flex-1"
               />
-              <Button onClick={handleExportCSV} variant="outline" size="icon" className="border-slate-200 text-slate-600 hover:bg-slate-50 shrink-0">
+              <Button onClick={handleExportCSV} variant="outline" size="icon" className="border-slate-200 text-slate-600 hover:bg-slate-50 shrink-0" aria-label="Esporta CSV">
                 <Download className="h-4 w-4" />
               </Button>
             </div>
