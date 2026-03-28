@@ -75,7 +75,7 @@ export default function DynamicLandingPage() {
     queryFn: async () => {
       if (!slug) return null;
 
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('authToken');
       const headers: HeadersInit = token ? { 'Authorization': `Bearer ${token}` } : {};
 
       const response = await fetch(`/api/content/${slug}`, { headers });
@@ -105,7 +105,7 @@ export default function DynamicLandingPage() {
   }
 
   if (!contentData) {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('authToken');
     if (!token) {
       window.location.href = '/admin';
       return null;

@@ -53,7 +53,7 @@ export default function DynamicPage() {
   const { data: contentData, isLoading } = useQuery({
     queryKey: ['/api/content', slug],
     queryFn: async () => {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('authToken');
       const headers: HeadersInit = token ? { 'Authorization': `Bearer ${token}` } : {};
 
       const response = await fetch(`/api/content/${slug}`, { headers });
@@ -78,7 +78,7 @@ export default function DynamicPage() {
   }
 
   if (!contentData) {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('authToken');
     if (!token) {
       window.location.href = '/admin';
       return null;
