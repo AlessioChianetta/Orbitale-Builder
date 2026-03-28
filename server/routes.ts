@@ -2541,7 +2541,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const firstKey = keys[0];
           keyPreview = firstKey.substring(0, 8) + "••••••••••••••••";
         }
-      } catch { }
+      } catch (decryptError) {
+        console.error("Gemini config decrypt error — config may be corrupted:", decryptError);
+        return res.json({ configured: true, enabled: config.enabled, keyPreview: null, keyCount: 0, decryptError: true });
+      }
       res.json({ configured: true, enabled: config.enabled, keyPreview, keyCount });
     } catch (error) {
       console.error("Error fetching Gemini config:", error);

@@ -1,8 +1,12 @@
 import crypto from "crypto";
 
+if (!process.env.DATABASE_URL && process.env.NODE_ENV === "production") {
+  throw new Error("DATABASE_URL is required in production for encryption key derivation");
+}
+
 const ENCRYPTION_KEY = crypto
   .createHash("sha256")
-  .update(process.env.DATABASE_URL || "orbitale-cms-secret-key-2024")
+  .update(process.env.DATABASE_URL || "orbitale-cms-secret-key-dev-only")
   .digest();
 
 const IV_LENGTH = 16;
