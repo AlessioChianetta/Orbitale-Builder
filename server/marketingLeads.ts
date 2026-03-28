@@ -1,41 +1,26 @@
 import { Request, Response, Router } from "express";
 import { db } from "./db";
-import { sql, eq } from "drizzle-orm";
-import { authenticateToken } from "./auth";
+import { sql, eq, and, desc, count, gte, lte } from "drizzle-orm";
+import { authenticateToken, type AuthRequest } from "./auth";
 import { marketingLeads, users, leads } from "../shared/schema";
 
 const router = Router();
 
 // GET /api/marketing-leads - Recupera tutti i lead CON FILTRI
-router.get("/", authenticateToken, async (req: Request, res: Response) => {
-  console.log("🔍 [Marketing Leads] Inizio richiesta GET /api/marketing-leads");
-  console.log("📋 [Marketing Leads] Query params ricevuti:", req.query);
-
+router.get("/", authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const { page = 1, limit = 50, source, campaign, startDate, endDate, export: exportCsv } = req.query;
 
-    console.log("🔧 [Marketing Leads] Parametri elaborati:", {
-      page: parseInt(page as string),
-      limit: parseInt(limit as string),
-      source,
-      campaign,
-      startDate,
-      endDate,
-      export: exportCsv
-    });
-
-    // Query con parametri integrati correttamente
     const pageNum = parseInt(page as string);
     const limitNum = parseInt(limit as string);
     const offset = (pageNum - 1) * limitNum;
 
-    const authReq = req as any;
-    const tenantId = authReq.user?.tenantId;
+    const tenantId = req.user?.tenantId;
     if (!tenantId) {
       return res.status(403).json({ error: "Tenant not identified" });
     }
 
-    const conditions: any[] = [eq(marketingLeads.tenantId, tenantId)];
+    const conditions = [eq(marketingLeads.tenantId, tenantId)];
     
     if (source && source !== 'all') {
       conditions.push(eq(marketingLeads.source, source as string));
@@ -46,16 +31,12 @@ router.get("/", authenticateToken, async (req: Request, res: Response) => {
     }
     
     if (startDate) {
-      const { gte } = await import('drizzle-orm');
       conditions.push(gte(marketingLeads.createdAt, new Date(startDate as string)));
     }
     
     if (endDate) {
-      const { lte } = await import('drizzle-orm');
       conditions.push(lte(marketingLeads.createdAt, new Date(endDate as string)));
     }
-
-    const { and, desc, count } = await import('drizzle-orm');
 
     const [result, countResult] = await Promise.all([
       db.select().from(marketingLeads)
@@ -126,10 +107,9 @@ router.get("/", authenticateToken, async (req: Request, res: Response) => {
   }
 });
 
-router.get("/stats", authenticateToken, async (req: Request, res: Response) => {
+router.get("/stats", authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
-    const authReq = req as any;
-    const tenantId = authReq.user?.tenantId;
+    const tenantId = req.user?.tenantId;
     if (!tenantId) {
       return res.status(403).json({ error: "Tenant not identified" });
     }
@@ -974,117 +954,9 @@ router.post('/send-whatsapp', authenticateToken, async (req, res) => {
   }
 });
 
-// GET /api/marketing-leads/:id - Recupera dettagli di un singolo lead
-router.get("/:id", authenticateToken, async (req: Request, res: Response) => {
-  console.log(`🔍 [Marketing Lead Details] Richiesta GET /api/marketing-leads/${req.params.id}`);
-
+router.get("/:id", authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
-    const { id } = req.params;
-    const leadId = parseInt(id);
-
-    if (isNaN(leadId)) {
-      console.log("❌ [Marketing Lead Details] ID non valido:", id);
-      return res.status(400).json({
-        success: false,
-        error: "ID lead non valido"
-      });
-    }
-
-    // Query per ottenere tutti i dettagli del lead
-    const result = await db.execute(sql`
-      SELECT 
-        id,
-        business_name,
-        first_name,
-        last_name,
-        email,
-        phone,
-        source,
-        campaign,
-        email_sent,
-        whatsapp_sent,
-        utm_source,
-        utm_medium,
-        utm_campaign,
-        utm_content,
-        utm_term,
-        referrer,
-        user_agent,
-        ip_address,
-        video_watch_time,
-        video_progress,
-        pixel_events,
-        landing_page,
-        device_type,
-        browser_info,
-        additional_data,
-        created_at,
-        updated_at
-      FROM marketing_leads 
-      WHERE id = ${leadId}
-    `);
-
-    if (result.rows.length === 0) {
-      console.log("❌ [Marketing Lead Details] Lead non trovato:", leadId);
-      return res.status(404).json({
-        success: false,
-        error: "Lead non trovato"
-      });
-    }
-
-    const lead = result.rows[0];
-
-    // Mappa i dati per il frontend
-    const mappedLead = {
-      id: lead.id,
-      businessName: lead.business_name,
-      firstName: lead.first_name,
-      lastName: lead.last_name,
-      fullName: `${lead.first_name || ''} ${lead.last_name || ''}`.trim(),
-      email: lead.email,
-      phone: lead.phone,
-      source: lead.source,
-      campaign: lead.campaign,
-      emailSent: lead.email_sent,
-      whatsappSent: lead.whatsapp_sent,
-      utmSource: lead.utm_source,
-      utmMedium: lead.utm_medium,
-      utmCampaign: lead.utm_campaign,
-      utmContent: lead.utm_content,
-      utmTerm: lead.utm_term,
-      referrer: lead.referrer,
-      userAgent: lead.user_agent,
-      ipAddress: lead.ip_address,
-      videoWatchTime: lead.video_watch_time,
-      videoProgress: lead.video_progress,
-      pixelEvents: lead.pixel_events,
-      landingPage: lead.landing_page,
-      deviceType: lead.device_type,
-      browserInfo: lead.browser_info,
-      additionalData: lead.additional_data,
-      createdAt: lead.created_at,
-      updatedAt: lead.updated_at
-    };
-
-    console.log(`✅ [Marketing Lead Details] Lead ${leadId} recuperato con successo`);
-    res.json(mappedLead);
-
-  } catch (error: any) {
-    console.error(`❌ [Marketing Lead Details] Errore recupero lead ${req.params.id}:`, error);
-    console.error('❌ [Marketing Lead Details] Stack trace:', error?.stack);
-    res.status(500).json({
-      success: false,
-      error: "Errore nel recupero del lead",
-      message: error?.message
-    });
-  }
-});
-
-// DELETE /api/marketing-leads/:id - Elimina lead
-router.delete("/:id", authenticateToken, async (req: Request, res: Response) => {
-  try {
-    const authReq = req as any;
-    const tenantId = authReq.user?.tenantId;
+    const tenantId = req.user?.tenantId;
     if (!tenantId) {
       return res.status(403).json({ success: false, error: "Tenant not identified" });
     }
@@ -1099,7 +971,44 @@ router.delete("/:id", authenticateToken, async (req: Request, res: Response) => 
       });
     }
 
-    const { and } = await import('drizzle-orm');
+    const result = await db.select().from(marketingLeads)
+      .where(and(eq(marketingLeads.id, leadId), eq(marketingLeads.tenantId, tenantId)));
+
+    if (result.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: "Lead non trovato"
+      });
+    }
+
+    res.json(result[0]);
+
+  } catch (error: any) {
+    console.error("[Marketing Lead Details] Error:", error?.message);
+    res.status(500).json({
+      success: false,
+      error: "Errore nel recupero del lead"
+    });
+  }
+});
+
+// DELETE /api/marketing-leads/:id - Elimina lead
+router.delete("/:id", authenticateToken, async (req: AuthRequest, res: Response) => {
+  try {
+    const tenantId = req.user?.tenantId;
+    if (!tenantId) {
+      return res.status(403).json({ success: false, error: "Tenant not identified" });
+    }
+
+    const { id } = req.params;
+    const leadId = parseInt(id);
+
+    if (isNaN(leadId)) {
+      return res.status(400).json({
+        success: false,
+        error: "ID lead non valido"
+      });
+    }
 
     const existingLead = await db.select().from(marketingLeads)
       .where(and(eq(marketingLeads.id, leadId), eq(marketingLeads.tenantId, tenantId)));
@@ -1140,34 +1049,32 @@ router.delete("/:id", authenticateToken, async (req: Request, res: Response) => 
 });
 
 // Endpoint per controllare se una campagna ha lead associati
-router.get('/check-campaign/:campaign', authenticateToken, async (req, res) => {
-  console.log(`🔍 [Campaign Leads Check] Controllo lead per campagna: ${req.params.campaign}`);
-
+router.get('/check-campaign/:campaign', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
+    const tenantId = req.user?.tenantId;
+    if (!tenantId) {
+      return res.status(403).json({ error: "Tenant not identified" });
+    }
+
     const { campaign } = req.params;
     const decodedCampaign = decodeURIComponent(campaign);
-
-    console.log(`🔍 [Campaign Leads Check] Campagna decodificata: ${decodedCampaign}`);
 
     const checkQuery = sql`
       SELECT COUNT(*) as count 
       FROM marketing_leads 
-      WHERE campaign = ${decodedCampaign}
+      WHERE tenant_id = ${tenantId} AND campaign = ${decodedCampaign}
     `;
 
     const result = await db.execute(checkQuery);
     const leadCount = parseInt(String(result.rows[0]?.count || '0'));
-    const hasLeads = leadCount > 0;
-
-    console.log(`✅ [Campaign Leads Check] Campagna ${decodedCampaign}: ${leadCount} lead trovati`);
 
     res.json({ 
-      hasLeads,
-      leadCount: leadCount,
+      hasLeads: leadCount > 0,
+      leadCount,
       campaign: decodedCampaign
     });
   } catch (error: any) {
-    console.error(`❌ [Campaign Leads Check] Errore controllo campagna ${req.params.campaign}:`, error);
+    console.error("[Campaign Leads Check] Error:", error?.message);
     res.status(500).json({ error: "Errore nel controllo della campagna" });
   }
 });
