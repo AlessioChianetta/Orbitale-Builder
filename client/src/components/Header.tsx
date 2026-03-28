@@ -46,14 +46,14 @@ export default function Header() {
   // Carica informazioni del tenant dell'utente autenticato
   const { data: user } = useQuery<User>({
     queryKey: ['/api/auth/me'],
-    enabled: !!localStorage.getItem('token'),
+    enabled: !!localStorage.getItem('authToken'),
     retry: false
   });
 
   const { data: tenantInfo } = useQuery<TenantInfo>({
     queryKey: ['/api/tenant/info', user?.id],
     queryFn: async () => {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('authToken');
       if (token) {
         const response = await fetch('/api/tenant/info', {
           headers: {
@@ -82,7 +82,7 @@ export default function Header() {
   const { data: navItems = [], isLoading } = useQuery({
     queryKey: ['/api/settings/navbar', user?.id, tenantInfo?.id],
     queryFn: async () => {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('authToken');
       const headers: HeadersInit = token ? { 'Authorization': `Bearer ${token}` } : {};
       
       const response = await fetch('/api/settings/navbar', { headers });
@@ -244,7 +244,7 @@ export default function Header() {
                   )}
                   <DropdownMenuItem 
                     onClick={() => {
-                      localStorage.removeItem('token');
+                      localStorage.removeItem('authToken');
                       window.location.href = '/';
                     }}
                     className="cursor-pointer text-destructive focus:text-destructive"
@@ -345,7 +345,7 @@ export default function Header() {
                   )}
                   <button
                     onClick={() => {
-                      localStorage.removeItem('token');
+                      localStorage.removeItem('authToken');
                       window.location.href = '/';
                     }}
                     className="w-full text-left px-3 py-2 text-base font-medium text-destructive hover:bg-muted rounded-md"

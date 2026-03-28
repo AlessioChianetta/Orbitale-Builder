@@ -61,7 +61,7 @@ export function useFacebookPixelTracking({
     queryFn: async () => {
       console.log('🔍 [FB PIXEL HOOK] Fetching route analytics...');
       
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('authToken');
       const headers: HeadersInit = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',

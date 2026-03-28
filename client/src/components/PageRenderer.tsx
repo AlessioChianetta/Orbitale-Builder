@@ -58,7 +58,7 @@ export function PageRenderer({ page, templateType }: PageRendererProps) {
       console.log('🔍 [ROUTE ANALYTICS FETCH] Current domain:', window.location.hostname);
 
       // Get token from localStorage to include in request
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('authToken');
       console.log('🔍 [ROUTE ANALYTICS FETCH] Token in localStorage:', token ? `Present (${token.substring(0, 20)}...)` : 'Not found');
 
       const headers: HeadersInit = {

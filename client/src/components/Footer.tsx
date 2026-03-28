@@ -29,14 +29,14 @@ export default function Footer() {
   // Carica informazioni del tenant, usando l'utente autenticato se disponibile
   const { data: user } = useQuery<User>({
     queryKey: ['/api/auth/me'],
-    enabled: !!localStorage.getItem('token'),
+    enabled: !!localStorage.getItem('authToken'),
     retry: false
   });
 
   const { data: tenantInfo } = useQuery<TenantInfo>({
     queryKey: ['/api/tenant/info', user?.id],
     queryFn: async () => {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('authToken');
       console.log('🔍 Footer fetching tenant info, has token:', !!token);
       
       if (token) {

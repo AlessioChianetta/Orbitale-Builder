@@ -14,7 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { SEOHead } from "./SEOHead";
 
 const clearAuthToken = () => {
-  localStorage.removeItem("token");
+  localStorage.removeItem("authToken");
   window.location.href = '/admin';
 };
 
