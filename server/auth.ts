@@ -88,7 +88,11 @@ export function requireRole(role: string) {
       return res.status(401).json({ message: "Authentication required" });
     }
 
-    if (req.user.role !== role && req.user.role !== "admin") {
+    if (role === "superadmin") {
+      if (req.user.role !== "superadmin") {
+        return res.status(403).json({ message: "Insufficient permissions" });
+      }
+    } else if (req.user.role !== role && req.user.role !== "admin" && req.user.role !== "superadmin") {
       return res.status(403).json({ message: "Insufficient permissions" });
     }
 

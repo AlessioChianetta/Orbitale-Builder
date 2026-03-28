@@ -9,9 +9,10 @@ import {
   insertLandingPageSchema, insertBuilderPageSchema, insertProjectSchema, insertGlobalSeoSettingsSchema, users, tenants, projects
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, asc, and } from "drizzle-orm"; // Import 'and' for combined WHERE clauses
+import { eq, asc, and } from "drizzle-orm";
 import multer from "multer";
 import path from "path";
+import bcrypt from "bcryptjs";
 import { Request, Response } from "express";
 import { SEOManager } from "./utils/seo";
 import marketingLeadsRouter from "./marketingLeads";
@@ -2496,6 +2497,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(204).send();
     } catch (error) {
       res.status(500).json({ message: "Failed to delete user" });
+    }
+  });
+
+  app.put("/api/superadmin/users/:id/password", authenticateToken, requireRole("superadmin"), async (req: AuthRequest, res: Response) => {
+    try {
+      const { password } = req.body;
+      if (!password || password.length < 6) {
+        return res.status(400).json({ message: "Password must be at least 6 characters" });
+      }
+      const targetUser = await storage.getUserById(req.params.id);
+      if (!targetUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      const hashedPassword = await bcrypt.hash(password, 10);
+      await db.update(users).set({ password: hashedPassword }).where(eq(users.id, req.params.id));
+      res.json({ message: "Password updated successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update password" });
+    }
+  });
+
+  app.post("/api/superadmin/users/:id/login-as", authenticateToken, requireRole("superadmin"), async (req: AuthRequest, res: Response) => {
+    try {
+      const targetUser = await storage.getUserById(req.params.id);
+      if (!targetUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      const token = generateToken(targetUser);
+      res.json({ token, user: { id: targetUser.id, username: targetUser.username, role: targetUser.role, tenantId: targetUser.tenantId } });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to impersonate user" });
     }
   });
 
