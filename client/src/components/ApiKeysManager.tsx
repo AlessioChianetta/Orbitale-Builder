@@ -238,7 +238,7 @@ export default function ApiKeysManager() {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
           <p className="mt-4 text-slate-600">Caricamento API keys...</p>
         </div>
       </div>
@@ -249,9 +249,9 @@ export default function ApiKeysManager() {
 
   return (
     <div className="space-y-6">
-      <Card>
+      <Card className="border-0 shadow-sm">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold">Crea Nuova API Key</CardTitle>
+          <CardTitle className="text-lg font-semibold text-slate-800">Crea Nuova API Key</CardTitle>
           <CardDescription>
             Genera una nuova chiave API per integrare i tuoi sistemi esterni.
           </CardDescription>
@@ -299,7 +299,7 @@ export default function ApiKeysManager() {
                     >
                       {scope.label}
                     </label>
-                    <p className="text-sm text-muted-foreground mt-1">
+                    <p className="text-xs text-slate-600 mt-1">
                       {scope.description}
                     </p>
                   </div>
@@ -311,7 +311,7 @@ export default function ApiKeysManager() {
           <Button 
             onClick={handleCreateKey}
             disabled={createMutation.isPending}
-            className="w-full md:w-auto"
+            className="w-full md:w-auto bg-indigo-600 hover:bg-indigo-700 text-white"
           >
             {createMutation.isPending ? (
               <>
@@ -328,9 +328,9 @@ export default function ApiKeysManager() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="border-0 shadow-sm">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold">Le tue API Keys</CardTitle>
+          <CardTitle className="text-lg font-semibold text-slate-800">Le tue API Keys</CardTitle>
           <CardDescription>
             Gestisci le chiavi API per l'integrazione con sistemi esterni.
           </CardDescription>

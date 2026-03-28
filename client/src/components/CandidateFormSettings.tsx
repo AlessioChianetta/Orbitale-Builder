@@ -74,8 +74,8 @@ export function CandidateFormSettings() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold">Impostazioni Form Candidatura</h1>
-          <p className="text-muted-foreground">Caricamento...</p>
+          <h1 className="text-2xl font-semibold text-slate-800">Impostazioni Form Candidatura</h1>
+          <p className="text-sm text-slate-600">Caricamento...</p>
         </div>
       </div>
     );
@@ -85,15 +85,15 @@ export function CandidateFormSettings() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold">Impostazioni Form Candidatura</h1>
-          <p className="text-muted-foreground">Personalizza tutti i testi del form di candidatura lead generation</p>
+          <h1 className="text-2xl font-semibold text-slate-800">Impostazioni Form Candidatura</h1>
+          <p className="text-sm text-slate-600">Personalizza tutti i testi del form di candidatura lead generation</p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={() => window.open('/candidatura', '_blank')}>
             <Eye className="h-4 w-4 mr-2" />
             Anteprima
           </Button>
-          <Button onClick={handleSave} disabled={saveSettingsMutation.isPending}>
+          <Button onClick={handleSave} disabled={saveSettingsMutation.isPending} className="bg-indigo-600 hover:bg-indigo-700 text-white">
             <Save className="h-4 w-4 mr-2" />
             {saveSettingsMutation.isPending ? "Salvando..." : "Salva Impostazioni"}
           </Button>
@@ -102,7 +102,7 @@ export function CandidateFormSettings() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Header Section */}
-        <Card>
+        <Card className="border-0 shadow-sm">
           <CardHeader>
             <CardTitle>Intestazione Form</CardTitle>
             <CardDescription>Titolo e descrizione principale del form</CardDescription>
@@ -140,7 +140,7 @@ export function CandidateFormSettings() {
         </Card>
 
         {/* Action Buttons */}
-        <Card>
+        <Card className="border-0 shadow-sm">
           <CardHeader>
             <CardTitle>Pulsanti e Azioni</CardTitle>
             <CardDescription>Testi dei pulsanti e messaggi di stato</CardDescription>
@@ -177,7 +177,7 @@ export function CandidateFormSettings() {
         </Card>
 
         {/* Success Messages */}
-        <Card className="lg:col-span-2">
+        <Card className="lg:col-span-2 border-0 shadow-sm">
           <CardHeader>
             <CardTitle>Messaggi di Successo</CardTitle>
             <CardDescription>Messaggi mostrati dopo l'invio della candidatura</CardDescription>
@@ -206,26 +206,26 @@ export function CandidateFormSettings() {
         </Card>
       </div>
 
-      <Card>
+      <Card className="border-0 shadow-sm">
         <CardHeader>
           <CardTitle>Anteprima Impostazioni</CardTitle>
           <CardDescription>Visualizza come apparirà il form con le impostazioni attuali</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="border rounded-lg p-6 bg-muted/10">
+          <div className="border border-slate-200 rounded-lg p-6 bg-slate-50">
             <div className="text-center space-y-4">
-              <h3 className="text-2xl font-bold">{formData.title || "Candidatura Lead Generation"}</h3>
-              <p className="text-muted-foreground">{formData.description || "Compila il form per accedere al nostro programma esclusivo"}</p>
+              <h3 className="text-2xl font-bold text-slate-800">{formData.title || "Candidatura Lead Generation"}</h3>
+              <p className="text-slate-600">{formData.description || "Compila il form per accedere al nostro programma esclusivo"}</p>
               <div className="inline-block">
-                <span className="bg-destructive text-destructive-foreground px-3 py-1 rounded text-sm">
+                <span className="bg-indigo-600 text-white px-3 py-1 rounded text-sm">
                   {formData.badge || "Posti Limitati - Solo 20 Candidature al Mese"}
                 </span>
               </div>
               <div className="pt-4">
-                <Button className="bg-destructive hover:bg-destructive/90">
+                <Button className="bg-indigo-600 hover:bg-indigo-700 text-white">
                   {formData.submitText || "Invia Candidatura"}
                 </Button>
-                <p className="text-xs text-muted-foreground mt-2">
+                <p className="text-xs text-slate-600 mt-2">
                   {formData.footerText || "La tua candidatura verrà esaminata entro 48 ore"}
                 </p>
               </div>

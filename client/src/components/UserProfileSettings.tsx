@@ -111,10 +111,10 @@ export default function UserProfileSettings() {
 
   return (
     <div className="space-y-6">
-      <Card>
+      <Card className="border-0 shadow-sm">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Key className="h-5 w-5" />
+            <Key className="h-5 w-5 text-indigo-600" />
             Google Sheets API Key
           </CardTitle>
           <CardDescription>
@@ -142,7 +142,7 @@ export default function UserProfileSettings() {
               {showApiKey ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </Button>
           </div>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-slate-600">
             Ottieni la tua API Key dalla{' '}
             <a 
               href="https://console.cloud.google.com/apis/credentials" 
@@ -156,27 +156,27 @@ export default function UserProfileSettings() {
         </div>
 
         <div className="flex gap-2">
-          <Button onClick={saveApiKey} disabled={loading || !apiKey}>
+          <Button onClick={saveApiKey} disabled={loading || !apiKey} className="bg-indigo-600 hover:bg-indigo-700 text-white">
             {loading ? "Salvataggio..." : "Salva API Key"}
           </Button>
           <Button 
             variant="outline" 
             onClick={() => setShowGuide(!showGuide)}
           >
-            {showGuide ? "Nascondi Guida" : "📖 Guida Setup"}
+            {showGuide ? "Nascondi Guida" : "Guida Setup"}
           </Button>
         </div>
 
         {showGuide && (
-          <div className="mt-4 p-4 border rounded-lg bg-muted/50 space-y-3">
-            <h4 className="font-semibold text-sm">📋 Guida Step-by-Step: Come ottenere la tua Google Sheets API Key</h4>
+          <div className="mt-4 p-4 border border-slate-200 rounded-lg bg-slate-50 space-y-3">
+            <h4 className="font-semibold text-sm text-slate-800">Guida Step-by-Step: Come ottenere la tua Google Sheets API Key</h4>
             
             <div className="space-y-3 text-sm">
               <div className="flex gap-2">
                 <span className="font-bold text-primary">1.</span>
                 <div>
                   <p className="font-medium">Vai alla Google Cloud Console</p>
-                  <p className="text-muted-foreground">
+                  <p className="text-slate-600">
                     Apri{' '}
                     <a 
                       href="https://console.cloud.google.com" 
@@ -195,7 +195,7 @@ export default function UserProfileSettings() {
                 <span className="font-bold text-primary">2.</span>
                 <div>
                   <p className="font-medium">Crea un nuovo progetto (se necessario)</p>
-                  <p className="text-muted-foreground">
+                  <p className="text-slate-600">
                     Clicca sul menu a tendina del progetto in alto e seleziona "Nuovo progetto"
                   </p>
                 </div>
@@ -205,7 +205,7 @@ export default function UserProfileSettings() {
                 <span className="font-bold text-primary">3.</span>
                 <div>
                   <p className="font-medium">Abilita l'API di Google Sheets</p>
-                  <p className="text-muted-foreground">
+                  <p className="text-slate-600">
                     Vai su "API e servizi" → "Libreria" → Cerca "Google Sheets API" → Clicca "Abilita"
                   </p>
                 </div>
@@ -215,7 +215,7 @@ export default function UserProfileSettings() {
                 <span className="font-bold text-primary">4.</span>
                 <div>
                   <p className="font-medium">Crea le credenziali API Key</p>
-                  <p className="text-muted-foreground">
+                  <p className="text-slate-600">
                     Vai su "API e servizi" → "Credenziali" → "Crea credenziali" → "Chiave API"
                   </p>
                 </div>
@@ -225,7 +225,7 @@ export default function UserProfileSettings() {
                 <span className="font-bold text-primary">5.</span>
                 <div>
                   <p className="font-medium">Configura le restrizioni (opzionale ma consigliato)</p>
-                  <p className="text-muted-foreground">
+                  <p className="text-slate-600">
                     Clicca sulla chiave appena creata → "Restrizioni applicazione" → Scegli "Restrizioni API" → 
                     Seleziona solo "Google Sheets API"
                   </p>
@@ -236,7 +236,7 @@ export default function UserProfileSettings() {
                 <span className="font-bold text-primary">6.</span>
                 <div>
                   <p className="font-medium">Copia e incolla l'API Key</p>
-                  <p className="text-muted-foreground">
+                  <p className="text-slate-600">
                     Copia la chiave API generata e incollala nel campo qui sopra, quindi clicca "Salva API Key"
                   </p>
                 </div>
@@ -246,7 +246,7 @@ export default function UserProfileSettings() {
                 <span className="font-bold text-primary">7.</span>
                 <div>
                   <p className="font-medium">Condividi i tuoi Google Sheets</p>
-                  <p className="text-muted-foreground">
+                  <p className="text-slate-600">
                     Assicurati che i fogli Google che vuoi sincronizzare siano condivisi pubblicamente 
                     (in sola lettura) o con "Chiunque abbia il link può visualizzare"
                   </p>
@@ -275,10 +275,10 @@ export default function UserProfileSettings() {
       </CardContent>
     </Card>
 
-    <Card>
+    <Card className="border-0 shadow-sm">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <MessageCircle className="h-5 w-5" />
+            <MessageCircle className="h-5 w-5 text-indigo-600" />
             Notifiche Telegram
           </CardTitle>
           <CardDescription>
@@ -317,7 +317,7 @@ export default function UserProfileSettings() {
               onChange={(e) => setTelegramChatId(e.target.value)}
               placeholder="123456789"
             />
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-slate-600">
               Il tuo ID personale Telegram dove riceverai le notifiche
             </p>
           </div>
@@ -326,6 +326,7 @@ export default function UserProfileSettings() {
             <Button 
               onClick={saveTelegramConfig} 
               disabled={telegramLoading || !telegramBotToken || !telegramChatId}
+              className="bg-indigo-600 hover:bg-indigo-700 text-white"
             >
               {telegramLoading ? "Salvataggio..." : "Salva Configurazione"}
             </Button>
@@ -333,22 +334,22 @@ export default function UserProfileSettings() {
               variant="outline" 
               onClick={() => setShowTelegramGuide(!showTelegramGuide)}
             >
-              {showTelegramGuide ? "Nascondi Guida" : "📖 Guida Setup"}
+              {showTelegramGuide ? "Nascondi Guida" : "Guida Setup"}
             </Button>
           </div>
 
           {showTelegramGuide && (
-            <div className="mt-4 p-4 border rounded-lg bg-muted/50 space-y-3">
-              <h4 className="font-semibold text-sm">🤖 Guida Step-by-Step: Come configurare il Bot Telegram</h4>
+            <div className="mt-4 p-4 border border-slate-200 rounded-lg bg-slate-50 space-y-3">
+              <h4 className="font-semibold text-sm text-slate-800">Guida Step-by-Step: Come configurare il Bot Telegram</h4>
               
               <div className="space-y-3 text-sm">
                 <div className="flex gap-2">
                   <span className="font-bold text-primary">1.</span>
                   <div>
                     <p className="font-medium">Crea un nuovo Bot Telegram</p>
-                    <p className="text-muted-foreground">
-                      Apri Telegram e cerca <code className="px-1 py-0.5 bg-gray-200 rounded">@BotFather</code>.
-                      Invia il comando <code className="px-1 py-0.5 bg-gray-200 rounded">/newbot</code> e segui le istruzioni
+                    <p className="text-slate-600">
+                      Apri Telegram e cerca <code className="px-1 py-0.5 bg-slate-100 rounded">@BotFather</code>.
+                      Invia il comando <code className="px-1 py-0.5 bg-slate-100 rounded">/newbot</code> e segui le istruzioni
                     </p>
                   </div>
                 </div>
@@ -357,8 +358,8 @@ export default function UserProfileSettings() {
                   <span className="font-bold text-primary">2.</span>
                   <div>
                     <p className="font-medium">Copia il Token del Bot</p>
-                    <p className="text-muted-foreground">
-                      BotFather ti darà un token tipo <code className="px-1 py-0.5 bg-gray-200 rounded">123456789:ABCdefGHI...</code>. 
+                    <p className="text-slate-600">
+                      BotFather ti darà un token tipo <code className="px-1 py-0.5 bg-slate-100 rounded">123456789:ABCdefGHI...</code>. 
                       Copialo e incollalo nel campo "Bot Token" qui sopra
                     </p>
                   </div>
@@ -368,9 +369,9 @@ export default function UserProfileSettings() {
                   <span className="font-bold text-primary">3.</span>
                   <div>
                     <p className="font-medium">Ottieni il tuo Chat ID</p>
-                    <p className="text-muted-foreground">
-                      • Cerca <code className="px-1 py-0.5 bg-gray-200 rounded">@userinfobot</code> su Telegram<br />
-                      • Invia il comando <code className="px-1 py-0.5 bg-gray-200 rounded">/start</code><br />
+                    <p className="text-slate-600">
+                      • Cerca <code className="px-1 py-0.5 bg-slate-100 rounded">@userinfobot</code> su Telegram<br />
+                      • Invia il comando <code className="px-1 py-0.5 bg-slate-100 rounded">/start</code><br />
                       • Il bot ti risponderà con il tuo Chat ID (es. 123456789)
                     </p>
                   </div>
@@ -380,7 +381,7 @@ export default function UserProfileSettings() {
                   <span className="font-bold text-primary">4.</span>
                   <div>
                     <p className="font-medium">Avvia il Bot</p>
-                    <p className="text-muted-foreground">
+                    <p className="text-slate-600">
                       Cerca il tuo bot su Telegram (il nome che hai scelto al punto 1) e clicca "START" 
                       per attivare la ricezione dei messaggi
                     </p>
@@ -391,7 +392,7 @@ export default function UserProfileSettings() {
                   <span className="font-bold text-primary">5.</span>
                   <div>
                     <p className="font-medium">Salva e testa</p>
-                    <p className="text-muted-foreground">
+                    <p className="text-slate-600">
                       Clicca "Salva Configurazione" qui sopra. Al prossimo lead importato da Google Sheets, 
                       riceverai una notifica Telegram automatica!
                     </p>

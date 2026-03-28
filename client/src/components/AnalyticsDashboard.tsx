@@ -316,7 +316,7 @@ export function AnalyticsDashboard() {
   if (isLoadingSummary || isLoadingRoutes || isLoadingAvailableRoutes) {
     return (
       <div className="flex items-center justify-center h-64">
-        <RefreshCw className="w-8 h-8 animate-spin" />
+        <RefreshCw className="w-8 h-8 animate-spin text-indigo-600" />
       </div>
     );
   }
@@ -326,11 +326,11 @@ export function AnalyticsDashboard() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-3xl font-bold">Analytics & Tracking</h2>
-          <p className="text-muted-foreground">Monitora e configura il tracking per ogni route del sito</p>
+          <h2 className="text-2xl font-semibold text-slate-800">Analytics & Tracking</h2>
+          <p className="text-sm text-slate-600">Monitora e configura il tracking per ogni route del sito</p>
         </div>
         <div className="flex items-center gap-2">
-          <Button onClick={testFacebookPixel} size="sm" className="flex items-center gap-2">
+          <Button onClick={testFacebookPixel} size="sm" className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white">
             <TestTube className="w-4 h-4" />
             Test Facebook Pixel
           </Button>
@@ -342,50 +342,58 @@ export function AnalyticsDashboard() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card>
+        <Card className="border-0 shadow-sm">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Page Views Totali</p>
-                <p className="text-2xl font-bold">{analyticsSummary?.totalPageViews?.toLocaleString() || '0'}</p>
+                <p className="text-xs text-slate-600">Page Views Totali</p>
+                <p className="text-2xl font-bold text-slate-800">{analyticsSummary?.totalPageViews?.toLocaleString() || '0'}</p>
               </div>
-              <Eye className="w-8 h-8 text-blue-500" />
+              <div className="p-2 bg-indigo-50 rounded-lg">
+                <Eye className="w-5 h-5 text-indigo-600" />
+              </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-0 shadow-sm">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Visitatori Unici</p>
-                <p className="text-2xl font-bold">{analyticsSummary?.totalUniqueVisitors?.toLocaleString() || '0'}</p>
+                <p className="text-xs text-slate-600">Visitatori Unici</p>
+                <p className="text-2xl font-bold text-slate-800">{analyticsSummary?.totalUniqueVisitors?.toLocaleString() || '0'}</p>
               </div>
-              <Mouse className="w-8 h-8 text-green-500" />
+              <div className="p-2 bg-emerald-50 rounded-lg">
+                <Mouse className="w-5 h-5 text-emerald-600" />
+              </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-0 shadow-sm">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Durata Media Sessione</p>
-                <p className="text-2xl font-bold">{Math.round((analyticsSummary?.avgSessionDuration || 0) / 60)}m</p>
+                <p className="text-xs text-slate-600">Durata Media Sessione</p>
+                <p className="text-2xl font-bold text-slate-800">{Math.round((analyticsSummary?.avgSessionDuration || 0) / 60)}m</p>
               </div>
-              <Calendar className="w-8 h-8 text-purple-500" />
+              <div className="p-2 bg-violet-50 rounded-lg">
+                <Calendar className="w-5 h-5 text-violet-600" />
+              </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-0 shadow-sm">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Route Tracciati</p>
-                <p className="text-2xl font-bold">{routeAnalytics?.length || 0}</p>
+                <p className="text-xs text-slate-600">Route Tracciati</p>
+                <p className="text-2xl font-bold text-slate-800">{routeAnalytics?.length || 0}</p>
               </div>
-              <Globe className="w-8 h-8 text-orange-500" />
+              <div className="p-2 bg-amber-50 rounded-lg">
+                <Globe className="w-5 h-5 text-amber-600" />
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -399,12 +407,12 @@ export function AnalyticsDashboard() {
         </TabsList>
 
         <TabsContent value="routes" className="space-y-4">
-          <Card>
+          <Card className="border-0 shadow-sm">
             <CardHeader>
               <div className="flex justify-between items-center">
                 <CardTitle>Route del Sito</CardTitle>
                 <Badge variant="secondary">
-                  Facebook Pixel: {seoSettings?.facebookPixelId ? '✅ Configurato' : '❌ Non configurato'}
+                  Facebook Pixel: {seoSettings?.facebookPixelId ? 'Configurato' : 'Non configurato'}
                 </Badge>
               </div>
             </CardHeader>
@@ -440,7 +448,7 @@ export function AnalyticsDashboard() {
                     return (
                       <TableRow key={routeData.id}>
                         <TableCell>
-                          <code className="text-sm bg-gray-100 px-2 py-1 rounded">
+                          <code className="text-sm bg-slate-100 px-2 py-1 rounded">
                             {routeData.route}
                           </code>
                         </TableCell>
@@ -492,11 +500,11 @@ export function AnalyticsDashboard() {
 
         <TabsContent value="events" className="space-y-4">
           {selectedRoute && isEditingRoute ? (
-            <Card>
+            <Card className="border-0 shadow-sm">
               <CardHeader>
                 <div className="flex justify-between items-center">
                   <CardTitle className="flex items-center gap-2">
-                    <Target className="w-5 h-5 text-blue-500" />
+                    <Target className="w-5 h-5 text-indigo-500" />
                     Configura Eventi per: {selectedRoute.name}
                   </CardTitle>
                   <Button
@@ -509,8 +517,8 @@ export function AnalyticsDashboard() {
                     Chiudi
                   </Button>
                 </div>
-                <p className="text-sm text-muted-foreground mt-2">
-                  Route: <code className="bg-gray-100 px-2 py-1 rounded text-xs">{selectedRoute.route}</code>
+                <p className="text-sm text-slate-600 mt-2">
+                  Route: <code className="bg-slate-100 px-2 py-1 rounded text-xs">{selectedRoute.route}</code>
                 </p>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -518,7 +526,7 @@ export function AnalyticsDashboard() {
                 <div className="flex items-center justify-between p-4 border rounded-lg">
                   <div>
                     <h4 className="font-medium">Tracking Attivo</h4>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-slate-600">
                       Abilita il tracking analytics per questo route
                     </p>
                   </div>
@@ -582,7 +590,7 @@ export function AnalyticsDashboard() {
                         placeholder="es: ViewContent, Purchase, Lead"
                         className="mt-1"
                       />
-                      <p className="text-xs text-muted-foreground mt-1">
+                      <p className="text-xs text-slate-600 mt-1">
                         Usa eventi Facebook standard per migliori performance
                       </p>
                     </div>
@@ -596,7 +604,7 @@ export function AnalyticsDashboard() {
                         rows={3}
                         className="mt-1 font-mono text-xs"
                       />
-                      <p className="text-xs text-muted-foreground mt-1">
+                      <p className="text-xs text-slate-600 mt-1">
                         Parametri aggiuntivi per l'evento (formato JSON valido)
                       </p>
                     </div>
@@ -604,7 +612,7 @@ export function AnalyticsDashboard() {
                     <Button 
                       onClick={addFacebookEvent} 
                       disabled={!newEventName.trim()}
-                      className="w-full"
+                      className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
                     >
                       <Plus className="w-4 h-4 mr-2" />
                       Aggiungi Evento
@@ -640,28 +648,28 @@ export function AnalyticsDashboard() {
               </CardContent>
             </Card>
           ) : (
-            <Card>
+            <Card className="border-0 shadow-sm">
               <CardContent className="pt-6 text-center">
-                <Target className="w-16 h-16 mx-auto mb-4 text-blue-300" />
-                <h3 className="text-xl font-semibold mb-2">Come configurare gli eventi di tracking</h3>
+                <Target className="w-16 h-16 mx-auto mb-4 text-slate-300" />
+                <h3 className="text-xl font-semibold mb-2 text-slate-800">Come configurare gli eventi di tracking</h3>
                 <div className="space-y-4 text-left max-w-2xl mx-auto">
-                  <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-400">
-                    <h4 className="font-semibold text-blue-900 mb-2">📋 Passo 1: Seleziona un Route</h4>
-                    <p className="text-blue-800 text-sm">
+                  <div className="bg-slate-50 p-4 rounded-lg border-l-4 border-indigo-400">
+                    <h4 className="font-semibold text-slate-800 mb-2">Passo 1: Seleziona un Route</h4>
+                    <p className="text-slate-600 text-sm">
                       Torna alla tab <strong>"Route Analytics"</strong> e clicca il pulsante <strong>"Configura"</strong> accanto al route che vuoi tracciare.
                     </p>
                   </div>
 
-                  <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-400">
-                    <h4 className="font-semibold text-green-900 mb-2">🎯 Passo 2: Configura Eventi Facebook Pixel</h4>
-                    <p className="text-green-800 text-sm">
+                  <div className="bg-slate-50 p-4 rounded-lg border-l-4 border-emerald-400">
+                    <h4 className="font-semibold text-slate-800 mb-2">Passo 2: Configura Eventi Facebook Pixel</h4>
+                    <p className="text-slate-600 text-sm">
                       Potrai aggiungere eventi come <code>ViewContent</code>, <code>Purchase</code>, <code>Lead</code> che si attiveranno quando gli utenti visitano quella pagina.
                     </p>
                   </div>
 
-                  <div className="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-400">
-                    <h4 className="font-semibold text-purple-900 mb-2">🧪 Passo 3: Testa il Tracking</h4>
-                    <p className="text-purple-800 text-sm">
+                  <div className="bg-slate-50 p-4 rounded-lg border-l-4 border-violet-400">
+                    <h4 className="font-semibold text-slate-800 mb-2">Passo 3: Testa il Tracking</h4>
+                    <p className="text-slate-600 text-sm">
                       Usa il pulsante <strong>"Test Pixel"</strong> per verificare che Facebook riceva correttamente gli eventi.
                     </p>
                   </div>
@@ -674,7 +682,7 @@ export function AnalyticsDashboard() {
                       const routesTab = document.querySelector('[value="routes"]') as HTMLElement;
                       if (routesTab) routesTab.click();
                     }}
-                    className="bg-blue-600 hover:bg-blue-700"
+                    className="bg-indigo-600 hover:bg-indigo-700"
                   >
                     <Edit className="w-4 h-4 mr-2" />
                     Vai a Route Analytics
@@ -686,7 +694,7 @@ export function AnalyticsDashboard() {
         </TabsContent>
 
         <TabsContent value="realtime" className="space-y-4">
-          <Card>
+          <Card className="border-0 shadow-sm">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Activity className="w-5 h-5" />
@@ -701,7 +709,7 @@ export function AnalyticsDashboard() {
                       <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                       <div>
                         <div className="font-medium">{activity.event}</div>
-                        <div className="text-sm text-muted-foreground">
+                        <div className="text-sm text-slate-600">
                           {activity.route} • {new Date(activity.timestamp).toLocaleTimeString()}
                         </div>
                       </div>
@@ -713,7 +721,7 @@ export function AnalyticsDashboard() {
                     )}
                   </div>
                 )) || (
-                  <div className="text-center py-8 text-muted-foreground">
+                  <div className="text-center py-8 text-slate-600">
                     <TrendingUp className="w-8 h-8 mx-auto mb-2 opacity-50" />
                     <p>Nessuna attività recente</p>
                   </div>
