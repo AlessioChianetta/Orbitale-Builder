@@ -443,6 +443,65 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   // --- END Global SEO Settings Routes ---
 
+  // --- Brand Voice Routes ---
+  app.get("/api/brand-voice", authenticateToken, async (req: AuthRequest, res: Response) => {
+    try {
+      const data = await storage.getBrandVoice(req.tenant!.id);
+      res.json(data || { businessInfo: {}, authority: {}, servicesInfo: {}, credentials: {}, voiceStyle: {} });
+    } catch (error) {
+      console.error("Error fetching brand voice:", error);
+      res.status(500).json({ message: "Failed to fetch brand voice" });
+    }
+  });
+
+  app.put("/api/brand-voice", authenticateToken, requireRole("admin"), async (req: AuthRequest, res: Response) => {
+    try {
+      const { businessInfo, authority, servicesInfo, credentials, voiceStyle } = req.body;
+      const data = await storage.upsertBrandVoice(req.tenant!.id, {
+        businessInfo: businessInfo || {},
+        authority: authority || {},
+        servicesInfo: servicesInfo || {},
+        credentials: credentials || {},
+        voiceStyle: voiceStyle || {},
+      });
+      res.json(data);
+    } catch (error) {
+      console.error("Error saving brand voice:", error);
+      res.status(500).json({ message: "Failed to save brand voice" });
+    }
+  });
+
+  app.post("/api/brand-voice/import", authenticateToken, requireRole("admin"), async (req: AuthRequest, res: Response) => {
+    try {
+      const importData = req.body;
+      if (!importData || typeof importData !== 'object' || Array.isArray(importData)) {
+        return res.status(400).json({ message: "Il body deve essere un oggetto JSON valido" });
+      }
+
+      const validSections = ["businessInfo", "authority", "servicesInfo", "credentials", "voiceStyle"];
+      const mapped: Record<string, any> = {};
+
+      for (const key of validSections) {
+        if (importData[key] && typeof importData[key] === 'object' && !Array.isArray(importData[key])) {
+          mapped[key] = importData[key];
+        }
+      }
+
+      if (Object.keys(mapped).length === 0) {
+        return res.status(400).json({
+          message: "Nessuna sezione Brand Voice valida trovata. Sezioni accettate: " + validSections.join(", ")
+        });
+      }
+
+      const data = await storage.upsertBrandVoice(req.tenant!.id, mapped);
+      res.json({ message: "Brand Voice importato con successo", data });
+    } catch (error) {
+      console.error("Error importing brand voice:", error);
+      res.status(500).json({ message: "Failed to import brand voice" });
+    }
+  });
+  // --- END Brand Voice Routes ---
+
   // Public SEO Settings endpoint (for frontend initialization)
   app.get("/api/seo-settings/public", async (req: TenantRequest, res: Response) => {
     try {
@@ -2629,7 +2688,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const safeTemplateId = (templateId && AI_TEMPLATES[templateId as TemplateId]) ? templateId as TemplateId : "bianco";
 
-      const content = await generateLandingPageContent(description.trim(), safeTemplateId);
+      const brandVoiceData = await storage.getBrandVoice(req.tenant!.id);
+      const content = await generateLandingPageContent(description.trim(), safeTemplateId, brandVoiceData);
       const components = buildComponentsFromContent(content, safeTemplateId);
 
       res.json({

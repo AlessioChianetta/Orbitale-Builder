@@ -157,9 +157,92 @@ async function getGeminiApiKey(): Promise<string | null> {
   return pickGeminiApiKey();
 }
 
+export interface BrandVoiceContext {
+  businessInfo?: {
+    consultantName?: string;
+    businessName?: string;
+    businessDescription?: string;
+    consultantBio?: string;
+  };
+  authority?: {
+    vision?: string;
+    mission?: string;
+    values?: string[];
+    usp?: string;
+    whoWeHelp?: string;
+    whoWeDoNotHelp?: string;
+  };
+  servicesInfo?: {
+    services?: Array<{ name: string; description: string }>;
+    method?: string;
+    guarantees?: string;
+  };
+  credentials?: {
+    yearsExperience?: string;
+    clientsHelped?: string;
+    resultsGenerated?: string;
+  };
+  voiceStyle?: {
+    personalTone?: string;
+    contentPersonality?: string;
+    targetLanguage?: string;
+    neverDo?: string;
+    signaturePhrases?: string[];
+  };
+}
+
+function buildBrandVoicePromptSection(bv: BrandVoiceContext): string {
+  const parts: string[] = [];
+
+  if (bv.businessInfo?.businessName) {
+    parts.push(`Nome brand/azienda: ${bv.businessInfo.businessName}`);
+  }
+  if (bv.businessInfo?.consultantName) {
+    parts.push(`Fondatore/Consulente: ${bv.businessInfo.consultantName}`);
+  }
+  if (bv.businessInfo?.businessDescription) {
+    parts.push(`Descrizione: ${bv.businessInfo.businessDescription}`);
+  }
+  if (bv.authority?.usp) {
+    parts.push(`USP: ${bv.authority.usp}`);
+  }
+  if (bv.authority?.whoWeHelp) {
+    parts.push(`Target: ${bv.authority.whoWeHelp}`);
+  }
+  if (bv.servicesInfo?.services?.length) {
+    parts.push(`Servizi: ${bv.servicesInfo.services.map(s => s.name).join(", ")}`);
+  }
+  if (bv.credentials?.yearsExperience) {
+    parts.push(`Esperienza: ${bv.credentials.yearsExperience} anni`);
+  }
+  if (bv.credentials?.clientsHelped) {
+    parts.push(`Clienti aiutati: ${bv.credentials.clientsHelped}`);
+  }
+  if (bv.credentials?.resultsGenerated) {
+    parts.push(`Risultati: ${bv.credentials.resultsGenerated}`);
+  }
+  if (bv.voiceStyle?.personalTone) {
+    parts.push(`Tono di voce: ${bv.voiceStyle.personalTone}`);
+  }
+  if (bv.voiceStyle?.contentPersonality) {
+    parts.push(`Personalità contenuto: ${bv.voiceStyle.contentPersonality}`);
+  }
+  if (bv.voiceStyle?.neverDo) {
+    parts.push(`Cosa NON fare: ${bv.voiceStyle.neverDo}`);
+  }
+  if (bv.voiceStyle?.signaturePhrases?.length) {
+    parts.push(`Frasi firma: ${bv.voiceStyle.signaturePhrases.join(", ")}`);
+  }
+
+  if (parts.length === 0) return "";
+
+  return `\n\nBRAND VOICE DEL CLIENTE (usa queste informazioni per personalizzare i testi):\n${parts.join("\n")}`;
+}
+
 export async function generateLandingPageContent(
   description: string,
-  templateId: TemplateId
+  templateId: TemplateId,
+  brandVoice?: BrandVoiceContext | null
 ): Promise<GeneratedLandingContent> {
   const apiKey = await getGeminiApiKey();
   if (!apiKey) {
@@ -167,15 +250,16 @@ export async function generateLandingPageContent(
   }
 
   const template = AI_TEMPLATES[templateId] || AI_TEMPLATES["bianco"];
+  const brandVoiceSection = brandVoice ? buildBrandVoicePromptSection(brandVoice) : "";
 
   const systemPrompt = `Sei un copywriter esperto di landing page italiane per piccole e medie imprese.
 Il tuo compito è generare testi persuasivi, chiari e professionali in italiano per una landing page business.
-Rispondi SOLO con un oggetto JSON valido, senza markdown, senza testo prima o dopo il JSON.`;
+Rispondi SOLO con un oggetto JSON valido, senza markdown, senza testo prima o dopo il JSON.${brandVoiceSection ? "\nUsa il Brand Voice fornito per adattare tono, contenuti e stile ai dati reali del cliente." : ""}`;
 
   const userPrompt = `Genera i testi per una landing page italiana basandoti su questa descrizione:
 "${description}"
 
-Template scelto: ${template.name}
+Template scelto: ${template.name}${brandVoiceSection}
 
 Genera un oggetto JSON con questa struttura esatta:
 {

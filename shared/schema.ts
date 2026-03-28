@@ -551,6 +551,51 @@ export const apiKeys = pgTable("api_keys", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
+// Brand Voice table - per-tenant brand identity and voice configuration
+export const brandVoice = pgTable("brand_voice", {
+  id: serial("id").primaryKey(),
+  tenantId: integer("tenant_id").references(() => tenants.id, { onDelete: "cascade" }).notNull(),
+  businessInfo: jsonb("business_info").$type<{
+    consultantName?: string;
+    businessName?: string;
+    businessDescription?: string;
+    consultantBio?: string;
+  }>().default({}),
+  authority: jsonb("authority").$type<{
+    vision?: string;
+    mission?: string;
+    values?: string[];
+    usp?: string;
+    whoWeHelp?: string;
+    whoWeDoNotHelp?: string;
+  }>().default({}),
+  servicesInfo: jsonb("services_info").$type<{
+    services?: Array<{ name: string; description: string }>;
+    method?: string;
+    guarantees?: string;
+  }>().default({}),
+  credentials: jsonb("credentials").$type<{
+    yearsExperience?: string;
+    clientsHelped?: string;
+    resultsGenerated?: string;
+    softwareCreated?: string[];
+    booksPublished?: string[];
+    caseStudies?: Array<{ title: string; description: string }>;
+  }>().default({}),
+  voiceStyle: jsonb("voice_style").$type<{
+    personalTone?: string;
+    contentPersonality?: string;
+    targetLanguage?: string;
+    neverDo?: string;
+    writingExamples?: string[];
+    signaturePhrases?: string[];
+  }>().default({}),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+}, (table) => ({
+  tenantUnique: unique("brand_voice_tenant_unique").on(table.tenantId),
+}));
+
 // SuperAdmin Gemini Config table - global AI configuration (table created via direct SQL)
 export const superadminGeminiConfig = pgTable("superadmin_gemini_config", {
   id: serial("id").primaryKey(),
@@ -775,4 +820,5 @@ export type GoogleSheetsCampaign = typeof googleSheetsCampaigns.$inferSelect;
 export type InsertGoogleSheetsSyncLog = z.infer<typeof insertGoogleSheetsSyncLogSchema>;
 export type GoogleSheetsSyncLog = typeof googleSheetsSyncLog.$inferSelect;
 export type InsertApiKey = z.infer<typeof insertApiKeySchema>;
+export type BrandVoice = typeof brandVoice.$inferSelect;
 export type ApiKey = typeof apiKeys.$inferSelect;

@@ -39,6 +39,7 @@ Preferred communication style: Simple, everyday language.
 - **Leads & Candidates**: Lead generation and candidate management system
 - **Media**: File upload and management system
 - **Analytics**: Event tracking for user behavior and conversion metrics
+- **Brand Voice**: Per-tenant brand identity configuration (business info, authority, services, credentials, voice & style) stored as JSONB columns. Used by AI landing page generator to personalize content. Import endpoint at `POST /api/brand-voice/import`.
 
 ## Authentication & Authorization
 - **JWT Tokens**: Stateless authentication with 7-day expiration, JWT_SECRET required as env var (no fallback)

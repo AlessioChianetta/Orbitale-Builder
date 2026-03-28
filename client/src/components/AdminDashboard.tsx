@@ -64,6 +64,7 @@ import {
   LayoutDashboard,
   Megaphone,
   Lock,
+  Mic2,
 } from "lucide-react";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -91,6 +92,7 @@ import FooterSettings from "./FooterSettings";
 import MarketingLeadsManager from "./MarketingLeadsManager";
 import ApiKeysManager from "./ApiKeysManager";
 import ApiDocumentation from "../pages/ApiDocumentation";
+import { BrandVoiceEditor } from "./BrandVoiceEditor";
 
 const BlogEditor = lazy(() => import("./BlogEditor").then(module => ({ default: module.BlogEditor })));
 const AnalyticsDashboard = lazy(() => import("./AnalyticsDashboard").then(module => ({ default: module.AnalyticsDashboard })));
@@ -1067,6 +1069,7 @@ export default function AdminDashboard() {
       items: [
         { key: "settings-section", title: "Impostazioni SEO", icon: SearchCheck },
         { key: "lead-section", title: "Lead", icon: Megaphone },
+        { key: "brand-voice", title: "Brand Voice", icon: Mic2 },
       ]
     },
     {
@@ -2436,6 +2439,13 @@ export default function AdminDashboard() {
             {activeTab === "api-docs" && (
               <div className="space-y-6">
                 <ApiDocumentation />
+              </div>
+            )}
+
+            {/* Brand Voice Tab */}
+            {activeTab === "brand-voice" && (
+              <div className="space-y-6">
+                <BrandVoiceEditor />
               </div>
             )}
           </main>

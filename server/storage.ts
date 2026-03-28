@@ -2,7 +2,7 @@ import { db } from "./db";
 import {
   tenants, users, pages, blogPosts, leads, candidates, media, analytics,
   categories, tags, blogPostTags, services, landingPages, builderPages, projects, globalSeoSettings,
-  settings, routeAnalytics, clients, googleSheetsCampaigns, marketingLeads, apiKeys,
+  settings, routeAnalytics, clients, googleSheetsCampaigns, marketingLeads, apiKeys, brandVoice,
   type InsertTenant, type Tenant, type InsertUser, type User, type InsertPage, type Page,
   type InsertBlogPost, type BlogPost, type BlogPostWithRelations,
   type InsertLead, type Lead, type InsertCandidate, type Candidate,
@@ -13,7 +13,8 @@ import {
   type InsertRouteAnalytics, type RouteAnalytics,
   type InsertClient, type Client,
   type InsertGoogleSheetsCampaign, type GoogleSheetsCampaign,
-  type InsertApiKey, type ApiKey
+  type InsertApiKey, type ApiKey,
+  type BrandVoice
 } from "@shared/schema";
 import { eq, desc, asc, like, and, sql, count } from "drizzle-orm";
 import bcrypt from "bcryptjs";
@@ -1506,6 +1507,33 @@ export class Storage {
     await db.update(apiKeys)
       .set({ lastUsedAt: new Date() })
       .where(eq(apiKeys.id, id));
+  }
+
+  async getBrandVoice(tenantId: number): Promise<BrandVoice | null> {
+    const [result] = await db.select().from(brandVoice).where(eq(brandVoice.tenantId, tenantId));
+    return result || null;
+  }
+
+  async upsertBrandVoice(tenantId: number, data: Partial<{
+    businessInfo: any;
+    authority: any;
+    servicesInfo: any;
+    credentials: any;
+    voiceStyle: any;
+  }>): Promise<BrandVoice> {
+    const existing = await this.getBrandVoice(tenantId);
+    if (existing) {
+      const [updated] = await db.update(brandVoice)
+        .set({ ...data, updatedAt: new Date() })
+        .where(eq(brandVoice.tenantId, tenantId))
+        .returning();
+      return updated;
+    } else {
+      const [created] = await db.insert(brandVoice)
+        .values({ tenantId, ...data })
+        .returning();
+      return created;
+    }
   }
 }
 
