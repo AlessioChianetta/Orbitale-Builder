@@ -4,6 +4,7 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { identifyTenant } from "./middleware/tenant";
 import { seoInjectionMiddleware } from "./middleware/seoInjection";
+import { redactSensitiveFields } from "./utils/sanitizeUser";
 import cors from 'cors';
 
 const app = express();
@@ -59,10 +60,10 @@ app.use((req, res, next) => {
   res.on("finish", () => {
     const duration = Date.now() - start;
     if (path.startsWith("/api")) {
-      const sensitiveRoutes = ['/api/auth/login', '/api/auth/register', '/api/auth/me'];
       let logLine = `${req.method} ${path} ${res.statusCode} in ${duration}ms`;
-      if (capturedJsonResponse && !sensitiveRoutes.includes(path)) {
-        logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
+      if (capturedJsonResponse) {
+        const redacted = redactSensitiveFields(capturedJsonResponse);
+        logLine += ` :: ${JSON.stringify(redacted)}`;
       }
 
       if (logLine.length > 80) {

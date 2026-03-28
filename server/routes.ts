@@ -15,6 +15,7 @@ import path from "path";
 import bcrypt from "bcryptjs";
 import { Request, Response } from "express";
 import { SEOManager } from "./utils/seo";
+import { sanitizeUserForResponse } from "./utils/sanitizeUser";
 import marketingLeadsRouter from "./marketingLeads";
 import marketingLeadsApiRouter from "./marketingLeadsApi";
 import analyticsRouter from "./analytics";
@@ -119,9 +120,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: "Not authenticated" });
       }
 
-      // Return user data without password
-      const { password, ...userWithoutPassword } = req.user;
-      res.json(userWithoutPassword);
+      res.json(sanitizeUserForResponse(req.user));
     } catch (error) {
       console.error("Error fetching current user:", error);
       res.status(500).json({ message: "Failed to fetch user data" });
@@ -142,8 +141,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         .where(eq(users.id, req.user!.id))
         .returning();
 
-      const { password, ...userWithoutPassword } = updatedUser;
-      res.json({ success: true, user: userWithoutPassword });
+      res.json({ success: true, user: sanitizeUserForResponse(updatedUser) });
     } catch (error) {
       console.error("Error updating Google Sheets API Key:", error);
       res.status(500).json({ message: "Failed to update API Key" });
@@ -168,8 +166,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         .where(eq(users.id, req.user!.id))
         .returning();
 
-      const { password, ...userWithoutPassword } = updatedUser;
-      res.json({ success: true, user: userWithoutPassword });
+      res.json({ success: true, user: sanitizeUserForResponse(updatedUser) });
     } catch (error) {
       console.error("Error updating Telegram config:", error);
       res.status(500).json({ message: "Failed to update Telegram configuration" });
@@ -219,11 +216,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const token = generateToken(user);
-      const { password: _, ...userWithoutPassword } = user;
 
       res.json({
         token,
-        user: userWithoutPassword
+        user: sanitizeUserForResponse(user)
       });
     } catch (error) {
       res.status(500).json({ message: "Login failed" });
@@ -258,11 +254,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const user = await storage.createUser(userDataWithTenant);
       const token = generateToken(user);
-      const { password: _, ...userWithoutPassword } = user;
 
       res.status(201).json({
         token,
-        user: userWithoutPassword
+        user: sanitizeUserForResponse(user)
       });
     } catch (error) {
       res.status(400).json({ message: "Registration failed" });
@@ -2454,7 +2449,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         id: users.id,
         username: users.username,
         email: users.email,
-        password: users.password,
         role: users.role,
         tenantId: users.tenantId,
         createdAt: users.createdAt,
@@ -2482,8 +2476,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const user = await storage.createUser({ username, email, password, role: role || 'admin', tenantId });
-      const { password: _, ...userWithoutPassword } = user;
-      res.status(201).json(userWithoutPassword);
+      res.status(201).json(sanitizeUserForResponse(user));
     } catch (error) {
       res.status(400).json({ message: "Failed to create user", error: error instanceof Error ? error.message : 'Unknown error' });
     }
