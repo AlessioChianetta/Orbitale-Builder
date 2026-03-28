@@ -321,7 +321,7 @@ function FeaturesComponent({ props }: { props: any }) {
             {props.title}
           </h2>
         )}
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
           {items.map((item: any, index: number) => (
             <Card key={index}>
               <CardContent className="p-6">
@@ -356,7 +356,7 @@ function TestimonialsComponent({ props }: { props: any }) {
         {props.title && (
           <h2 className="text-3xl font-bold text-center mb-12">{props.title}</h2>
         )}
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
           {items.map((item: any, index: number) => (
             <Card key={index}>
               <CardContent className="p-6">
@@ -1611,11 +1611,11 @@ function ProblemsGridRDPComponent({ props }: { props: any }) {
         paddingBottom: `${props.paddingY || 80}px`,
       }}
     >
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto px-4">
         <h2 className="text-3xl md:text-5xl font-bold text-center mb-16" style={{ color: props.titleColor || '#ffffff' }}>
           {props.title || 'I Problemi che Affronti Ogni Giorno'}
         </h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {problems.map((problem: any, index: number) => (
             <div key={index} className="bg-slate-800 p-6 rounded-xl border border-slate-700 hover:border-blue-400 transition-all">
               <div className="text-5xl mb-4">{problem.icon || '💰'}</div>
@@ -1659,17 +1659,17 @@ function MethodTimelineRDPComponent({ props }: { props: any }) {
         </div>
         <div className="space-y-12">
           {steps.map((step: any, index: number) => (
-            <div key={index} className="flex items-start gap-8">
+            <div key={index} className="flex flex-col sm:flex-row items-start gap-6 sm:gap-8">
               <div className="flex-shrink-0">
-                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-                  <span className="text-3xl font-black text-white">{step.number || `0${index + 1}`}</span>
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                  <span className="text-2xl sm:text-3xl font-black text-white">{step.number || `0${index + 1}`}</span>
                 </div>
               </div>
               <div className="flex-1">
-                <h3 className="text-2xl font-bold mb-3" style={{ color: props.textColor || '#ffffff' }}>
+                <h3 className="text-xl sm:text-2xl font-bold mb-3" style={{ color: props.textColor || '#ffffff' }}>
                   {step.title}
                 </h3>
-                <p className="text-lg" style={{ color: props.textColor || '#ffffff' }}>
+                <p className="text-base sm:text-lg" style={{ color: props.textColor || '#ffffff' }}>
                   {step.description}
                 </p>
               </div>
@@ -1694,11 +1694,11 @@ function OfferEcosystemComponent({ props }: { props: any }) {
         paddingBottom: `${props.paddingY || 80}px`,
       }}
     >
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto px-4">
         <h2 className="text-3xl md:text-5xl font-bold text-center mb-16" style={{ color: props.titleColor || '#ffffff' }}>
           {props.title || 'L\'Ecosistema Completo che Ti Offro'}
         </h2>
-        <div className="grid md:grid-cols-2 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
           {items.map((item: any, index: number) => (
             <div key={index} className="bg-slate-800 p-8 rounded-xl border-2 border-blue-400">
               <div className="text-5xl mb-6">{item.icon || '💼'}</div>
@@ -1742,7 +1742,7 @@ function RequirementsCompareComponent({ props }: { props: any }) {
         paddingBottom: `${props.paddingY || 80}px`,
       }}
     >
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-5xl font-bold mb-4" style={{ color: props.textColor || '#ffffff' }}>
             {props.title || 'Requisiti per Potersi Candidare'}
@@ -1753,7 +1753,7 @@ function RequirementsCompareComponent({ props }: { props: any }) {
             </p>
           )}
         </div>
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Lavoriamo con chi */}
           <div className="bg-green-900/30 border-2 border-green-400 rounded-xl p-8">
             <h3 className="text-2xl font-bold mb-6 flex items-center gap-3" style={{ color: props.textColor || '#ffffff' }}>
@@ -1823,7 +1823,7 @@ function GuaranteeCTASectionComponent({ props }: { props: any }) {
         </div>
         {props.ctaText && (
           <div className="space-y-4">
-            <Button size="lg" className="text-xl px-12 py-8 bg-yellow-400 hover:bg-yellow-500 text-black font-black" asChild>
+            <Button size="lg" className="w-full sm:w-auto text-lg sm:text-xl px-8 sm:px-12 py-6 sm:py-8 bg-yellow-400 hover:bg-yellow-500 text-black font-black" asChild>
               <a href={props.ctaLink || '#'}>{props.ctaText}</a>
             </Button>
             {props.limitedSpots && (
@@ -2424,13 +2424,13 @@ function ProblemSolutionComponent({ props }: { props: any }) {
 
 function SimpleTextHeroComponent({ props }: { props: any }) {
   const titleSizeMap: Record<string, string> = {
-    '2xl': 'text-2xl',
-    '3xl': 'text-3xl',
-    '4xl': 'text-4xl',
-    '5xl': 'text-5xl font-bold',
-    '6xl': 'text-6xl font-bold',
+    '2xl': 'text-xl sm:text-2xl',
+    '3xl': 'text-2xl sm:text-3xl',
+    '4xl': 'text-3xl sm:text-4xl',
+    '5xl': 'text-3xl sm:text-4xl md:text-5xl font-bold',
+    '6xl': 'text-4xl sm:text-5xl md:text-6xl font-bold',
   };
-  const titleClass = titleSizeMap[props.titleSize || '5xl'] || 'text-5xl font-bold';
+  const titleClass = titleSizeMap[props.titleSize || '5xl'] || 'text-3xl sm:text-4xl md:text-5xl font-bold';
 
   const subtitleSizeMap: Record<string, string> = {
     'base': 'text-base',
