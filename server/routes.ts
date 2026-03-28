@@ -444,7 +444,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // --- END Global SEO Settings Routes ---
 
   // --- Brand Voice Routes ---
-  app.get("/api/brand-voice", authenticateToken, async (req: AuthRequest, res: Response) => {
+  app.get("/api/brand-voice", authenticateToken, requireRole("admin"), async (req: AuthRequest, res: Response) => {
     try {
       const data = await storage.getBrandVoice(req.tenant!.id);
       res.json(data || {
@@ -481,9 +481,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/brand-voice/import", authenticateToken, requireRole("admin"), async (req: AuthRequest, res: Response) => {
     try {
-      const importData = req.body;
+      let importData = req.body;
       if (!importData || typeof importData !== 'object' || Array.isArray(importData)) {
         return res.status(400).json({ message: "Il body deve essere un oggetto JSON valido" });
+      }
+
+      if (importData.brandVoice && typeof importData.brandVoice === 'object') {
+        importData = importData.brandVoice;
+      }
+      if (importData.sections && typeof importData.sections === 'object') {
+        importData = importData.sections;
       }
 
       type BrandVoiceSection = 'businessInfo' | 'authorityPositioning' | 'servicesGuarantees' | 'credentialsResults' | 'voiceStyle' | 'marketResearch';
