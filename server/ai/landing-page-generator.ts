@@ -1,5 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
-import { getSuperAdminGeminiKeys } from "./provider-factory";
+import { pickGeminiApiKey } from "./gemini-keys";
 
 export const AI_TEMPLATES = {
   "professionale-blu": {
@@ -154,11 +154,7 @@ export interface GeneratedLandingContent {
 }
 
 async function getGeminiApiKey(): Promise<string | null> {
-  const superAdminKeys = await getSuperAdminGeminiKeys();
-  if (superAdminKeys && superAdminKeys.enabled && superAdminKeys.keys.length > 0) {
-    return superAdminKeys.keys[Math.floor(Math.random() * superAdminKeys.keys.length)];
-  }
-  return process.env.GEMINI_API_KEY || null;
+  return pickGeminiApiKey();
 }
 
 export async function generateLandingPageContent(

@@ -10,7 +10,7 @@ import {
 } from "@shared/schema";
 import { encrypt, decrypt } from "./encryption";
 import { generateLandingPageContent, buildComponentsFromContent, AI_TEMPLATES, type TemplateId } from "./ai/landing-page-generator";
-import { getSuperAdminGeminiKeys } from "./ai/provider-factory";
+import { getSuperAdminGeminiKeys } from "./ai/gemini-keys";
 import { db } from "./db";
 import { eq, asc, and } from "drizzle-orm";
 import multer from "multer";

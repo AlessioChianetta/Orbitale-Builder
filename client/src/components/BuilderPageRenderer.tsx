@@ -834,45 +834,12 @@ function NavMenuComponent({ props }: { props: any }) {
     }
   };
 
-  return (
-    <nav style={navStyle}>
-      <div className={`max-w-7xl mx-auto px-4 flex items-center justify-between ${hasMobileHamburger ? '' : alignmentClass}`}>
-        {hasMobileHamburger && (
-          <span className="font-bold text-lg" style={{ color: props.textColor || undefined }}>
-            {items[0]?.label || ''}
-          </span>
-        )}
-        <ul className={`hidden md:flex space-x-6 ${hasMobileHamburger ? '' : alignmentClass}`}>
-          {(hasMobileHamburger ? items.slice(1) : items).map((item: any, index: number) => (
-            <li key={index}>
-              <a
-                href={item.link}
-                onClick={(e) => handleAnchorClick(e, item.link)}
-                className="hover:opacity-75 transition-opacity"
-                style={{ color: props.textColor || undefined }}
-              >
-                {item.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-        {hasMobileHamburger && (
-          <button
-            className="md:hidden p-2 rounded"
-            aria-label="Menu"
-            onClick={() => setMobileOpen(o => !o)}
-            style={{ color: props.textColor || undefined }}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              {mobileOpen
-                ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                : <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />}
-            </svg>
-          </button>
-        )}
-        {!hasMobileHamburger && (
+  if (!hasMobileHamburger) {
+    return (
+      <nav style={navStyle}>
+        <div className={`max-w-7xl mx-auto px-4 flex items-center ${alignmentClass}`}>
           <ul className={`flex space-x-6 ${alignmentClass}`}>
-            {items.map((item: any, index: number) => (
+            {items.map((item: { label: string; link: string }, index: number) => (
               <li key={index}>
                 <a
                   href={item.link}
@@ -885,12 +852,51 @@ function NavMenuComponent({ props }: { props: any }) {
               </li>
             ))}
           </ul>
-        )}
+        </div>
+      </nav>
+    );
+  }
+
+  const brandLabel = items[0]?.label || '';
+  const navLinks = items.slice(1) as Array<{ label: string; link: string }>;
+
+  return (
+    <nav style={navStyle}>
+      <div className="max-w-7xl mx-auto px-4 flex items-center justify-between">
+        <span className="font-bold text-lg" style={{ color: props.textColor || undefined }}>
+          {brandLabel}
+        </span>
+        <ul className="hidden md:flex space-x-6">
+          {navLinks.map((item, index: number) => (
+            <li key={index}>
+              <a
+                href={item.link}
+                onClick={(e) => handleAnchorClick(e, item.link)}
+                className="hover:opacity-75 transition-opacity"
+                style={{ color: props.textColor || undefined }}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+        <button
+          className="md:hidden p-2 rounded"
+          aria-label="Menu"
+          onClick={() => setMobileOpen(o => !o)}
+          style={{ color: props.textColor || undefined }}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            {mobileOpen
+              ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              : <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />}
+          </svg>
+        </button>
       </div>
-      {hasMobileHamburger && mobileOpen && (
+      {mobileOpen && (
         <div className="md:hidden" style={{ backgroundColor: props.backgroundColor || 'transparent' }}>
           <ul className="flex flex-col px-4 pb-4 space-y-2">
-            {items.slice(1).map((item: any, index: number) => (
+            {navLinks.map((item, index: number) => (
               <li key={index}>
                 <a
                   href={item.link}
