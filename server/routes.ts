@@ -2552,21 +2552,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // POST Gemini config (superadmin only)
   app.post("/api/superadmin/gemini-config", authenticateToken, requireRole("superadmin"), async (req: AuthRequest, res: Response) => {
     try {
-      const { apiKeys, enabled } = req.body as { apiKeys: string[]; enabled: boolean };
-      if (!Array.isArray(apiKeys) || apiKeys.length === 0) {
-        return res.status(400).json({ message: "Inserisci almeno una API key" });
-      }
-      const cleanKeys = apiKeys.map((k: string) => k.trim()).filter(Boolean);
-      if (cleanKeys.length === 0) {
-        return res.status(400).json({ message: "API key non valida" });
-      }
-      const encrypted = encrypt(JSON.stringify(cleanKeys));
+      const { apiKeys, enabled } = req.body as { apiKeys?: string[]; enabled: boolean };
       const existing = await db.select().from(superadminGeminiConfig).limit(1);
+      const hasNewKeys = Array.isArray(apiKeys) && apiKeys.map((k: string) => k.trim()).filter(Boolean).length > 0;
+
       if (existing.length > 0) {
+        const updatePayload: any = { enabled: enabled !== false, updatedAt: new Date() };
+        if (hasNewKeys) {
+          const cleanKeys = (apiKeys as string[]).map((k: string) => k.trim()).filter(Boolean);
+          updatePayload.apiKeysEncrypted = encrypt(JSON.stringify(cleanKeys));
+        }
         await db.update(superadminGeminiConfig)
-          .set({ apiKeysEncrypted: encrypted, enabled: enabled !== false, updatedAt: new Date() })
+          .set(updatePayload)
           .where(eq(superadminGeminiConfig.id, existing[0].id));
       } else {
+        if (!hasNewKeys) {
+          return res.status(400).json({ message: "Inserisci almeno una API key" });
+        }
+        const cleanKeys = (apiKeys as string[]).map((k: string) => k.trim()).filter(Boolean);
+        const encrypted = encrypt(JSON.stringify(cleanKeys));
         await db.insert(superadminGeminiConfig).values({ apiKeysEncrypted: encrypted, enabled: enabled !== false });
       }
       res.json({ message: "Configurazione AI salvata con successo" });

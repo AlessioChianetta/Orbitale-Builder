@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
@@ -50,8 +50,14 @@ export default function SuperAdminDashboard() {
     queryKey: ['/api/superadmin/gemini-config'],
   });
 
+  useEffect(() => {
+    if (geminiConfig?.configured && typeof geminiConfig.enabled === "boolean") {
+      setGeminiEnabled(geminiConfig.enabled);
+    }
+  }, [geminiConfig]);
+
   const saveGeminiConfigMutation = useMutation({
-    mutationFn: async ({ apiKeys, enabled }: { apiKeys: string[]; enabled: boolean }) => {
+    mutationFn: async ({ apiKeys, enabled }: { apiKeys?: string[]; enabled: boolean }) => {
       const response = await apiRequest("POST", "/api/superadmin/gemini-config", { apiKeys, enabled });
       return response.json();
     },
@@ -674,15 +680,25 @@ export default function SuperAdminDashboard() {
                             </p>
                           </div>
 
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center justify-between rounded-lg border p-3">
+                            <div className="space-y-0.5">
+                              <Label htmlFor="gemini-enabled" className="cursor-pointer text-sm font-medium">
+                                {geminiEnabled ? "AI abilitata" : "AI disabilitata"}
+                              </Label>
+                              {geminiConfig?.configured && (
+                                <p className="text-xs text-slate-400">Il toggle aggiorna lo stato senza reinserire le chiavi</p>
+                              )}
+                            </div>
                             <Switch
                               id="gemini-enabled"
                               checked={geminiEnabled}
-                              onCheckedChange={setGeminiEnabled}
+                              onCheckedChange={(val) => {
+                                setGeminiEnabled(val);
+                                if (geminiConfig?.configured) {
+                                  saveGeminiConfigMutation.mutate({ enabled: val });
+                                }
+                              }}
                             />
-                            <Label htmlFor="gemini-enabled" className="cursor-pointer">
-                              {geminiEnabled ? "AI abilitata" : "AI disabilitata"}
-                            </Label>
                           </div>
 
                           <Button
@@ -690,7 +706,7 @@ export default function SuperAdminDashboard() {
                             disabled={saveGeminiConfigMutation.isPending || !geminiApiKeysInput.trim()}
                             className="bg-indigo-600 hover:bg-indigo-700"
                           >
-                            {saveGeminiConfigMutation.isPending ? "Salvataggio..." : "Salva configurazione AI"}
+                            {saveGeminiConfigMutation.isPending ? "Salvataggio..." : geminiConfig?.configured ? "Aggiorna chiavi API" : "Salva configurazione AI"}
                           </Button>
                         </div>
                       </>

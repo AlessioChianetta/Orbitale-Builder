@@ -103,6 +103,14 @@ Preferred communication style: Simple, everyday language.
 - **Event Configuration**: Configure event name, custom data, and activation status per route in admin panel
 - **Comprehensive Logging**: Detailed console logging for debugging event tracking and tenant routing
 
+## AI / Gemini Configuration
+- **Table**: `superadmin_gemini_config` — created via direct SQL (see `sql/superadmin_gemini_config.sql`)
+- **Note**: All DB schema changes in this project use direct SQL, NOT Drizzle push/migrations
+- **Encryption**: API keys stored AES-256-CBC encrypted using a key derived from `DATABASE_URL` via SHA-256 (`server/encryption.ts`)
+- **Routes**: GET/POST/DELETE `/api/superadmin/gemini-config` — superadmin-only protected
+- **POST behavior**: If config already exists, can update `enabled` alone without re-submitting keys. New keys optional.
+- **UI**: "Configurazione AI" tab in SuperAdminDashboard — shows key preview, count, enable/disable toggle, key input form
+
 ## API Keys System
 - **External API Authentication**: Secure API key authentication for third-party integrations
 - **Key Generation**: 41-character API keys with environment prefixes (crm_live_ or crm_test_)
