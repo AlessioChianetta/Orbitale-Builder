@@ -2753,87 +2753,101 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const brandVoiceData = await storage.getBrandVoice(req.tenant!.id);
       const brandVoiceSection = brandVoiceData ? buildBrandVoicePromptSection(brandVoiceData) : "";
 
-      let componentsToRewrite = components;
+      type CompShape = { id: string; type: string; props: Record<string, unknown>; children?: CompShape[] };
+
+      const findComponentRecursive = (list: CompShape[], id: string): CompShape | null => {
+        for (const c of list) {
+          if (c.id === id) return c;
+          if (Array.isArray(c.children)) {
+            const found = findComponentRecursive(c.children, id);
+            if (found) return found;
+          }
+        }
+        return null;
+      };
+
+      let componentsToRewrite = components as CompShape[];
       if (mode === "single") {
         if (!selectedComponentId) {
           return res.status(400).json({ message: "selectedComponentId è richiesto in modalità 'single'." });
         }
-        const found = components.find(c => c.id === selectedComponentId);
+        const found = findComponentRecursive(components, selectedComponentId);
         if (!found) {
           return res.status(400).json({ message: "Componente selezionato non trovato." });
         }
         componentsToRewrite = [found];
       }
 
-      const TEXT_KEYS = [
-        "text", "content", "title", "heading", "subtitle", "subheadline", "headline",
-        "badgeText", "badge", "description", "submitText", "tagline", "guaranteeText",
-        "sectionTitle", "sectionSubtitle", "ctaText", "ctaLabel", "buttonText",
-        "section_title", "section_subtitle",
-        "topHeadline", "urgencyBadge", "titlePrefix", "highlightedTitle", "titleSuffix",
-        "subtitleText", "primaryCtaText", "secondaryCtaText", "videoCaption",
-        "guaranteeTitle", "guaranteeDescription", "mainCtaText",
-        "introText", "label", "name", "role", "client", "result", "quote",
-      ];
-      const ARRAY_KEYS = ["items", "features", "testimonials", "phases", "steps", "problems", "services", "benefits", "points", "links", "fields"];
-      const ITEM_TEXT_KEYS = ["text", "title", "description", "name", "role", "label", "content", "quote", "result", "client", "subtitle", "heading"];
+      const NON_TEXT_KEYS = new Set([
+        "backgroundColor", "background", "backgroundImage", "color", "textColor",
+        "borderColor", "src", "link", "href", "url", "icon", "emoji",
+        "provider", "variant", "size", "width", "height",
+        "paddingY", "paddingX", "maxWidth", "minHeight",
+        "borderRadius", "border", "textAlign", "verticalAlign",
+        "layout", "spacing", "fontSize", "fontWeight", "lineHeight", "weight",
+        "tag", "margin", "padding", "alignment", "sticky",
+        "mobileHamburger", "smoothScroll", "aspectRatio", "autoplay", "muted",
+        "controls", "containerId", "id", "type", "required",
+        "aspectRatio", "shadowColor", "shadowSize",
+      ]);
 
-      const extractTextFields = (comp: { id: string; type: string; props: Record<string, unknown>; children?: Array<{ id: string; type: string; props: Record<string, unknown> }> }) => {
-        const textProps: Record<string, unknown> = {};
-        for (const key of TEXT_KEYS) {
-          if (typeof comp.props[key] === "string" && comp.props[key]) {
-            textProps[key] = comp.props[key];
+      const isTextValue = (val: unknown): val is string =>
+        typeof val === "string" && val.length > 0 && val.length < 2000;
+
+      const extractTexts = (obj: Record<string, unknown>): Record<string, unknown> => {
+        const result: Record<string, unknown> = {};
+        for (const [key, val] of Object.entries(obj)) {
+          if (NON_TEXT_KEYS.has(key)) continue;
+          if (isTextValue(val)) {
+            result[key] = val;
+          } else if (Array.isArray(val) && val.length > 0) {
+            if (typeof val[0] === "string") {
+              result[key] = val;
+            } else if (typeof val[0] === "object" && val[0] !== null) {
+              result[key] = val.map(item => {
+                if (typeof item !== "object" || item === null) return item;
+                return extractTexts(item as Record<string, unknown>);
+              });
+            }
           }
         }
-        for (const key of ARRAY_KEYS) {
-          if (Array.isArray(comp.props[key])) {
-            const items = comp.props[key] as Array<Record<string, unknown>>;
-            textProps[key] = items.map(item => {
-              const textOnly: Record<string, unknown> = {};
-              for (const ik of ITEM_TEXT_KEYS) {
-                if (typeof item[ik] === "string" && item[ik]) {
-                  textOnly[ik] = item[ik];
-                }
-              }
-              return textOnly;
-            });
-          }
-        }
-        if (Array.isArray(comp.children)) {
-          textProps._children = comp.children.map(ch => ({
-            id: ch.id,
-            type: ch.type,
-            ...extractTextFields(ch)
-          }));
-        }
-        return textProps;
+        return result;
       };
 
-      const textData = componentsToRewrite.map(c => ({
-        id: c.id,
-        type: c.type,
-        ...extractTextFields(c)
-      }));
+      const extractComponentTexts = (comp: CompShape): Record<string, unknown> => {
+        const extracted: Record<string, unknown> = {
+          id: comp.id,
+          type: comp.type,
+          ...extractTexts(comp.props),
+        };
+        if (Array.isArray(comp.children) && comp.children.length > 0) {
+          extracted._children = comp.children.map(ch => extractComponentTexts(ch));
+        }
+        return extracted;
+      };
 
-      const systemPrompt = `Sei un copywriter esperto italiano. Il tuo compito è riscrivere i testi di componenti di una pagina web mantenendo la stessa struttura JSON.
+      const textData = componentsToRewrite.map(c => extractComponentTexts(c));
+
+      const systemPrompt = `Sei un copywriter esperto italiano. Il tuo compito è riscrivere i testi di componenti di una pagina web mantenendo la stessa identica struttura JSON.
 ${brandVoiceSection ? `\n${brandVoiceSection}` : ""}
-REGOLE:
-- Riscrivi SOLO i campi testuali (text, content, title, heading, subtitle, description, ecc.)
-- NON modificare gli ID, i tipi, le strutture, i colori o le proprietà non testuali
-- Mantieni la stessa struttura JSON in uscita
-- Per gli array di items/features/testimonials, riscrivi i campi testuali interni mantenendo la stessa lunghezza dell'array
+REGOLE FONDAMENTALI:
+- Riscrivi TUTTI i campi di testo che trovi nel JSON (titoli, descrizioni, testi, label, quote, ecc.)
+- NON modificare gli ID e i tipi dei componenti
+- NON aggiungere o rimuovere campi — mantieni esattamente la stessa struttura
+- Per gli array, mantieni lo stesso numero di elementi
+- NON inventare campi nuovi che non esistono nell'input
 - Tutti i testi devono essere in ITALIANO
 - I testi devono essere professionali, persuasivi e coerenti con il brand
-- Rispondi SOLO con il JSON, senza markdown o testo aggiuntivo`;
+- Rispondi SOLO con il JSON, senza markdown, commenti o testo aggiuntivo`;
 
       const userPrompt = `Riscrivi i testi dei seguenti componenti di pagina web.
-${instructions ? `\nISTRUZIONI AGGIUNTIVE: ${instructions}` : ""}
+${instructions ? `\nISTRUZIONI AGGIUNTIVE DELL'UTENTE: ${instructions}` : ""}
 
-COMPONENTI DA RISCRIVERE:
+COMPONENTI DA RISCRIVERE (JSON):
 ${JSON.stringify(textData, null, 2)}
 
-Restituisci un array JSON con la stessa struttura, con gli stessi ID e tipi, ma con i testi riscritti.
-Rispondi SOLO con l'array JSON, nessun testo prima o dopo.`;
+Restituisci un array JSON con la stessa identica struttura, stessi ID e tipi, ma con tutti i testi riscritti.
+Rispondi SOLO con l'array JSON.`;
 
       const ai = new GoogleGenAI({ apiKey });
       const result = await ai.models.generateContent({
@@ -2852,60 +2866,64 @@ Rispondi SOLO con l'array JSON, nessun testo prima o dopo.`;
         throw new Error("Gemini non ha restituito un JSON valido.");
       }
 
-      const rewrittenTextData = JSON.parse(jsonMatch[0]) as Array<{ id: string; type: string; [key: string]: unknown }>;
+      const rewrittenTextData = JSON.parse(jsonMatch[0]) as Array<Record<string, unknown>>;
 
-      const mergeRewritten = (
-        original: { id: string; type: string; props: Record<string, unknown>; children?: Array<{ id: string; type: string; props: Record<string, unknown> }> },
-        rewritten: Record<string, unknown>
-      ) => {
-        const merged = { ...original, props: { ...original.props } };
-        for (const key of TEXT_KEYS) {
-          if (typeof rewritten[key] === "string") {
-            merged.props[key] = rewritten[key];
+      const mergeTextsBack = (original: Record<string, unknown>, rewritten: Record<string, unknown>): Record<string, unknown> => {
+        const merged = { ...original };
+        for (const [key, rVal] of Object.entries(rewritten)) {
+          if (NON_TEXT_KEYS.has(key) || key === "id" || key === "type" || key === "_children") continue;
+          if (typeof rVal === "string" && typeof original[key] === "string") {
+            merged[key] = rVal;
+          } else if (Array.isArray(rVal) && Array.isArray(original[key])) {
+            const origArr = original[key] as unknown[];
+            if (typeof origArr[0] === "string" && typeof rVal[0] === "string") {
+              merged[key] = origArr.map((_, idx) => idx < rVal.length ? rVal[idx] : origArr[idx]);
+            } else {
+              merged[key] = origArr.map((origItem, idx) => {
+                if (idx >= rVal.length || typeof origItem !== "object" || origItem === null) return origItem;
+                const rItem = rVal[idx];
+                if (typeof rItem !== "object" || rItem === null) return origItem;
+                return mergeTextsBack(origItem as Record<string, unknown>, rItem as Record<string, unknown>);
+              });
+            }
           }
-        }
-        for (const key of ARRAY_KEYS) {
-          if (Array.isArray(rewritten[key]) && Array.isArray(merged.props[key])) {
-            const originalArr = merged.props[key] as Array<Record<string, unknown>>;
-            const rewrittenArr = rewritten[key] as Array<Record<string, unknown>>;
-            merged.props[key] = originalArr.map((origItem, idx) => {
-              if (idx >= rewrittenArr.length) return origItem;
-              const rItem = rewrittenArr[idx];
-              const mergedItem = { ...origItem };
-              for (const ik of ITEM_TEXT_KEYS) {
-                if (typeof rItem[ik] === "string") {
-                  mergedItem[ik] = rItem[ik];
-                }
-              }
-              return mergedItem;
-            });
-          }
-        }
-        if (Array.isArray(rewritten._children) && Array.isArray(original.children)) {
-          merged.children = original.children.map(ch => {
-            const rCh = (rewritten._children as Array<Record<string, unknown>>).find((r) => r.id === ch.id);
-            if (rCh) return mergeRewritten(ch, rCh);
-            return ch;
-          });
         }
         return merged;
       };
 
-      let rewrittenComponents;
-      if (mode === "single" && selectedComponentId) {
-        rewrittenComponents = components.map(c => {
-          if (c.id === selectedComponentId && rewrittenTextData.length > 0) {
-            return mergeRewritten(c, rewrittenTextData[0]);
+      const mergeComponent = (original: CompShape, rewritten: Record<string, unknown>): CompShape => {
+        const mergedProps = mergeTextsBack(original.props, rewritten);
+        const result: CompShape = { ...original, props: mergedProps };
+        if (Array.isArray(rewritten._children) && Array.isArray(original.children)) {
+          result.children = original.children.map(ch => {
+            const rCh = (rewritten._children as Array<Record<string, unknown>>).find(r => r.id === ch.id);
+            if (rCh) return mergeComponent(ch, rCh);
+            return ch;
+          });
+        }
+        return result;
+      };
+
+      const applyRewriteRecursive = (compList: CompShape[], rewrittenList: Array<Record<string, unknown>>, targetId?: string): CompShape[] => {
+        return compList.map(c => {
+          if (targetId) {
+            if (c.id === targetId && rewrittenList.length > 0) {
+              return mergeComponent(c, rewrittenList[0]);
+            }
+            if (Array.isArray(c.children)) {
+              return { ...c, children: applyRewriteRecursive(c.children, rewrittenList, targetId) };
+            }
+            return c;
           }
+          const rewritten = rewrittenList.find(r => r.id === c.id);
+          if (rewritten) return mergeComponent(c, rewritten);
           return c;
         });
-      } else {
-        rewrittenComponents = components.map(c => {
-          const rewritten = rewrittenTextData.find(r => r.id === c.id);
-          if (rewritten) return mergeRewritten(c, rewritten);
-          return c;
-        });
-      }
+      };
+
+      const rewrittenComponents = mode === "single" && selectedComponentId
+        ? applyRewriteRecursive(components as CompShape[], rewrittenTextData, selectedComponentId)
+        : applyRewriteRecursive(components as CompShape[], rewrittenTextData);
 
       res.json({ components: rewrittenComponents });
     } catch (error: unknown) {
