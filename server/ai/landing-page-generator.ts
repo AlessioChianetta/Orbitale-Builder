@@ -240,22 +240,9 @@ IMPORTANTE:
       temperature: 0.7,
       maxOutputTokens: 2048,
     }
-  }) as any;
+  });
 
-  let rawText = "";
-  if (typeof result?.response?.text === "function") {
-    rawText = result.response.text();
-  } else if (typeof result?.response?.text === "string") {
-    rawText = result.response.text;
-  } else if (result?.response?.candidates?.[0]?.content?.parts?.[0]?.text) {
-    rawText = result.response.candidates[0].content.parts[0].text;
-  } else if (typeof result?.text === "string") {
-    rawText = result.text;
-  } else if (typeof result?.text === "function") {
-    rawText = result.text();
-  } else if (result?.candidates?.[0]?.content?.parts?.[0]?.text) {
-    rawText = result.candidates[0].content.parts[0].text;
-  }
+  const rawText = result.text ?? "";
   const jsonMatch = rawText.match(/\{[\s\S]*\}/);
   if (!jsonMatch) {
     throw new Error("Gemini non ha restituito un JSON valido. Riprova.");
