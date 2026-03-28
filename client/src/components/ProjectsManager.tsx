@@ -1,33 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { motion } from "framer-motion";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,23 +15,20 @@ import {
   Plus,
   Edit,
   Trash2,
-  MoreHorizontal,
+  MoreVertical,
   Star,
-  Calendar,
   ExternalLink,
   Users,
-  Rocket,
-  Target,
-  Clock,
   CheckCircle,
   AlertCircle,
   Briefcase,
   Handshake,
-  Filter
+  FolderOpen,
+  Image as ImageIcon,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { type Project, type InsertProject } from "@shared/schema";
+import { type Project } from "@shared/schema";
 import { ProjectEditor } from "./ProjectEditor";
 
 interface ProjectsResponse {
@@ -62,150 +36,125 @@ interface ProjectsResponse {
   total: number;
 }
 
-function ProjectsTable({ projects, onEdit, onDelete }: { 
-  projects: Project[]; 
-  onEdit: (project: Project) => void; 
-  onDelete: (id: number) => void; 
+function ProjectCard({ project, onEdit, onDelete }: {
+  project: Project;
+  onEdit: (project: Project) => void;
+  onDelete: (id: number) => void;
 }) {
-  if (!projects.length) {
-    return (
-      <div className="text-center py-8 text-muted-foreground">
-        <Briefcase className="w-12 h-12 mx-auto mb-4 opacity-50" />
-        <p>Nessun progetto trovato</p>
-      </div>
-    );
-  }
-
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Progetto</TableHead>
-          <TableHead>Cliente</TableHead>
-          <TableHead>Tipo</TableHead>
-          <TableHead>Categoria</TableHead>
-          <TableHead>Stato</TableHead>
-          <TableHead>Azioni</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {projects.map((project) => (
-          <TableRow key={project.id}>
-            <TableCell>
-              <div className="flex items-start gap-3">
-                {project.featuredImage && (
-                  <div className="w-12 h-12 rounded overflow-hidden flex-shrink-0">
-                    <img 
-                      src={project.featuredImage} 
-                      alt={project.title}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                )}
-                <div>
-                  <div className="font-medium flex items-center gap-2">
-                    {project.title}
-                    {project.isFeatured && <Star className="w-4 h-4 text-amber-500" />}
-                  </div>
-                  <div className="text-sm text-muted-foreground">
-                    {project.shortDescription}
-                  </div>
-                  {project.technologies && project.technologies.length > 0 && (
-                    <div className="flex gap-1 mt-1">
-                      {project.technologies.slice(0, 3).map((tech, i) => (
-                        <Badge key={i} variant="outline" className="text-xs">
-                          {tech}
-                        </Badge>
-                      ))}
-                      {project.technologies.length > 3 && (
-                        <Badge variant="outline" className="text-xs">
-                          +{project.technologies.length - 3}
-                        </Badge>
-                      )}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </TableCell>
-            <TableCell>
-              <div className="flex items-center gap-2">
-                <Users className="w-4 h-4 text-muted-foreground" />
-                {project.clientName || "Non specificato"}
-              </div>
-            </TableCell>
-            <TableCell>
-              <Badge variant={project.projectType === 'project' ? 'default' : 'secondary'}>
-                {project.projectType === 'project' ? (
-                  <><Briefcase className="w-3 h-3 mr-1" />Progetto</>
-                ) : (
-                  <><Handshake className="w-3 h-3 mr-1" />Partnership</>
-                )}
-              </Badge>
-            </TableCell>
-            <TableCell>
-              <Badge variant="outline">
-                {project.category === 'development' ? 'Sviluppo' : 
-                 project.category === 'marketing' ? 'Marketing' : 
-                 project.category === 'consulting' ? 'Consulenza' : project.category}
-              </Badge>
-            </TableCell>
-            <TableCell>
-              <div className="flex items-center gap-2">
-                <Badge variant={project.status === 'published' ? 'default' : 'secondary'}>
-                  {project.status === 'published' ? (
-                    <><CheckCircle className="w-3 h-3 mr-1" />Pubblicato</>
-                  ) : (
-                    <><AlertCircle className="w-3 h-3 mr-1" />Bozza</>
-                  )}
-                </Badge>
-                {!project.isActive && (
-                  <Badge variant="destructive" className="text-xs">Inattivo</Badge>
-                )}
-              </div>
-            </TableCell>
-            <TableCell>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" data-testid={`button-actions-${project.id}`}>
-                    <MoreHorizontal className="w-4 h-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => onEdit(project)} data-testid={`button-edit-${project.id}`}>
-                    <Edit className="w-4 h-4 mr-2" />
-                    Modifica
-                  </DropdownMenuItem>
-                  {project.projectUrl && (
-                    <DropdownMenuItem asChild>
-                      <a href={project.projectUrl} target="_blank" rel="noopener noreferrer">
-                        <ExternalLink className="w-4 h-4 mr-2" />
-                        Visualizza Progetto
-                      </a>
-                    </DropdownMenuItem>
-                  )}
-                  {project.caseStudyUrl && (
-                    <DropdownMenuItem asChild>
-                      <a href={project.caseStudyUrl} target="_blank" rel="noopener noreferrer">
-                        <ExternalLink className="w-4 h-4 mr-2" />
-                        Case Study
-                      </a>
-                    </DropdownMenuItem>
-                  )}
-                  <DropdownMenuItem 
-                    onClick={() => onDelete(project.id)} 
-                    className="text-destructive"
-                    data-testid={`button-delete-${project.id}`}
-                  >
-                    <Trash2 className="w-4 h-4 mr-2" />
-                    Elimina
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <Card className="border-0 shadow-sm hover:shadow-md transition-all group overflow-hidden">
+      <div className="relative h-40 bg-slate-100 overflow-hidden">
+        {project.featuredImage ? (
+          <img
+            src={project.featuredImage}
+            alt={project.title}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <ImageIcon className="w-10 h-10 text-slate-300" />
+          </div>
+        )}
+        <div className="absolute top-2 left-2 flex gap-1.5">
+          {project.isFeatured && (
+            <Badge className="bg-amber-500 text-white border-0 text-xs shadow-sm">
+              <Star className="w-3 h-3 mr-1" />
+              In Evidenza
+            </Badge>
+          )}
+        </div>
+        <div className="absolute top-2 right-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="secondary" size="icon" className="h-7 w-7 bg-white/90 backdrop-blur-sm shadow-sm hover:bg-white" data-testid={`button-actions-${project.id}`}>
+                <MoreVertical className="w-3.5 h-3.5 text-slate-600" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-44">
+              <DropdownMenuItem onClick={() => onEdit(project)} data-testid={`button-edit-${project.id}`}>
+                <Edit className="w-4 h-4 mr-2" />
+                Modifica
+              </DropdownMenuItem>
+              {project.projectUrl && (
+                <DropdownMenuItem asChild>
+                  <a href={project.projectUrl} target="_blank" rel="noopener noreferrer">
+                    <ExternalLink className="w-4 h-4 mr-2" />
+                    Visualizza
+                  </a>
+                </DropdownMenuItem>
+              )}
+              {project.caseStudyUrl && (
+                <DropdownMenuItem asChild>
+                  <a href={project.caseStudyUrl} target="_blank" rel="noopener noreferrer">
+                    <ExternalLink className="w-4 h-4 mr-2" />
+                    Case Study
+                  </a>
+                </DropdownMenuItem>
+              )}
+              <DropdownMenuItem
+                onClick={() => onDelete(project.id)}
+                className="text-red-600 focus:text-red-600"
+                data-testid={`button-delete-${project.id}`}
+              >
+                <Trash2 className="w-4 h-4 mr-2" />
+                Elimina
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
+      <CardContent className="p-4 space-y-3">
+        <div>
+          <h3 className="font-semibold text-slate-900 line-clamp-1">{project.title}</h3>
+          {project.shortDescription && (
+            <p className="text-sm text-slate-500 mt-1 line-clamp-2">{project.shortDescription}</p>
+          )}
+        </div>
+        <div className="flex items-center gap-2 text-xs text-slate-500">
+          <Users className="w-3.5 h-3.5" />
+          <span>{project.clientName || "Nessun cliente"}</span>
+        </div>
+        <div className="flex items-center gap-1.5 flex-wrap">
+          <Badge variant="outline" className={project.projectType === 'project'
+            ? 'border-indigo-200 text-indigo-700 bg-indigo-50 text-xs'
+            : 'border-violet-200 text-violet-700 bg-violet-50 text-xs'
+          }>
+            {project.projectType === 'project' ? (
+              <><Briefcase className="w-3 h-3 mr-1" />Progetto</>
+            ) : (
+              <><Handshake className="w-3 h-3 mr-1" />Partnership</>
+            )}
+          </Badge>
+          <Badge variant="outline" className={project.status === 'published'
+            ? 'border-emerald-200 text-emerald-700 bg-emerald-50 text-xs'
+            : 'border-slate-200 text-slate-600 bg-slate-50 text-xs'
+          }>
+            {project.status === 'published' ? (
+              <><CheckCircle className="w-3 h-3 mr-1" />Pubblicato</>
+            ) : (
+              <><AlertCircle className="w-3 h-3 mr-1" />Bozza</>
+            )}
+          </Badge>
+          {!project.isActive && (
+            <Badge className="bg-red-50 text-red-600 border border-red-200 text-xs">Inattivo</Badge>
+          )}
+        </div>
+        {project.technologies && project.technologies.length > 0 && (
+          <div className="flex gap-1 flex-wrap">
+            {project.technologies.slice(0, 3).map((tech, i) => (
+              <span key={i} className="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
+                {tech}
+              </span>
+            ))}
+            {project.technologies.length > 3 && (
+              <span className="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-500">
+                +{project.technologies.length - 3}
+              </span>
+            )}
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 }
 
@@ -213,11 +162,10 @@ export default function ProjectsManager() {
   const [isEditingProject, setIsEditingProject] = useState(false);
   const [projectToEdit, setProjectToEdit] = useState<Project | null>(null);
   const [filter, setFilter] = useState("all");
-  
+
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  // Fetch all projects
   const { data: projectsData, isLoading } = useQuery<ProjectsResponse>({
     queryKey: ['/api/projects'],
   });
@@ -230,7 +178,7 @@ export default function ProjectsManager() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/projects'] });
       queryClient.invalidateQueries({ queryKey: ['/api/projects/featured'] });
-      toast({ title: "Progetto creato con successo!" });
+      toast({ title: "Progetto creato con successo" });
       setIsEditingProject(false);
       setProjectToEdit(null);
     },
@@ -247,7 +195,7 @@ export default function ProjectsManager() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/projects'] });
       queryClient.invalidateQueries({ queryKey: ['/api/projects/featured'] });
-      toast({ title: "Progetto aggiornato con successo!" });
+      toast({ title: "Progetto aggiornato con successo" });
       setIsEditingProject(false);
       setProjectToEdit(null);
     },
@@ -263,7 +211,7 @@ export default function ProjectsManager() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/projects'] });
       queryClient.invalidateQueries({ queryKey: ['/api/projects/featured'] });
-      toast({ title: "Progetto eliminato con successo!" });
+      toast({ title: "Progetto eliminato con successo" });
     },
     onError: () => {
       toast({ title: "Errore nell'eliminazione del progetto", variant: "destructive" });
@@ -316,10 +264,9 @@ export default function ProjectsManager() {
     partnerships: projectsData?.projects?.filter(p => p.projectType === 'partnership')?.length || 0,
   };
 
-  // Show ProjectEditor in fullscreen when editing or creating
   if (isEditingProject) {
     return (
-      <div className="fixed inset-0 z-50 bg-background">
+      <div className="fixed inset-0 z-50 bg-gradient-to-br from-slate-50 to-slate-100">
         <ProjectEditor
           initialProject={projectToEdit || undefined}
           onSave={handleSaveProject}
@@ -332,114 +279,109 @@ export default function ProjectsManager() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Gestione Progetti</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-2xl font-bold text-slate-900">Gestione Progetti</h1>
+          <p className="text-sm text-slate-500 mt-1">
             Gestisci i progetti e le partnership della tua azienda
           </p>
         </div>
-        <Button onClick={handleNewProject} data-testid="button-new-project">
+        <Button onClick={handleNewProject} className="bg-indigo-600 hover:bg-indigo-700 text-white" data-testid="button-new-project">
           <Plus className="w-4 h-4 mr-2" />
           Nuovo Progetto
         </Button>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Totale Progetti</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.total}</div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <Card className="border-0 shadow-sm">
+          <CardContent className="p-4">
+            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">Totale</p>
+            <p className="text-2xl font-bold text-slate-900 mt-1">{stats.total}</p>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">In Evidenza</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold flex items-center gap-2">
-              {stats.featured}
-              <Star className="w-5 h-5 text-amber-500" />
+        <Card className="border-0 shadow-sm">
+          <CardContent className="p-4">
+            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">In Evidenza</p>
+            <div className="flex items-center gap-2 mt-1">
+              <p className="text-2xl font-bold text-slate-900">{stats.featured}</p>
+              <Star className="w-4 h-4 text-amber-500" />
             </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Pubblicati</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold flex items-center gap-2">
-              {stats.published}
-              <CheckCircle className="w-5 h-5 text-green-500" />
+        <Card className="border-0 shadow-sm">
+          <CardContent className="p-4">
+            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">Pubblicati</p>
+            <div className="flex items-center gap-2 mt-1">
+              <p className="text-2xl font-bold text-slate-900">{stats.published}</p>
+              <CheckCircle className="w-4 h-4 text-emerald-500" />
             </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Partnership</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold flex items-center gap-2">
-              {stats.partnerships}
-              <Handshake className="w-5 h-5 text-blue-500" />
+        <Card className="border-0 shadow-sm">
+          <CardContent className="p-4">
+            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">Partnership</p>
+            <div className="flex items-center gap-2 mt-1">
+              <p className="text-2xl font-bold text-slate-900">{stats.partnerships}</p>
+              <Handshake className="w-4 h-4 text-indigo-500" />
             </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Filters */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Filter className="w-5 h-5" />
-            Filtra Progetti
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Tabs value={filter} onValueChange={setFilter}>
-            <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6">
-              <TabsTrigger value="all" data-testid="filter-all">Tutti</TabsTrigger>
-              <TabsTrigger value="featured" data-testid="filter-featured">In Evidenza</TabsTrigger>
-              <TabsTrigger value="published" data-testid="filter-published">Pubblicati</TabsTrigger>
-              <TabsTrigger value="draft" data-testid="filter-draft">Bozze</TabsTrigger>
-              <TabsTrigger value="project" data-testid="filter-project">Progetti</TabsTrigger>
-              <TabsTrigger value="partnership" data-testid="filter-partnership">Partnership</TabsTrigger>
-            </TabsList>
-          </Tabs>
-        </CardContent>
-      </Card>
+      <div className="flex items-center gap-4">
+        <Tabs value={filter} onValueChange={setFilter}>
+          <TabsList className="bg-slate-100 p-1">
+            <TabsTrigger value="all" className="text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm" data-testid="filter-all">Tutti</TabsTrigger>
+            <TabsTrigger value="featured" className="text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm" data-testid="filter-featured">In Evidenza</TabsTrigger>
+            <TabsTrigger value="published" className="text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm" data-testid="filter-published">Pubblicati</TabsTrigger>
+            <TabsTrigger value="draft" className="text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm" data-testid="filter-draft">Bozze</TabsTrigger>
+            <TabsTrigger value="project" className="text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm" data-testid="filter-project">Progetti</TabsTrigger>
+            <TabsTrigger value="partnership" className="text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm" data-testid="filter-partnership">Partnership</TabsTrigger>
+          </TabsList>
+        </Tabs>
+        <span className="text-sm text-slate-500">{filteredProjects.length} risultati</span>
+      </div>
 
-      {/* Projects Table */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Progetti ({filteredProjects.length})</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {isLoading ? (
-            <div className="space-y-3">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <div key={i} className="flex items-center space-x-4">
-                  <Skeleton className="h-12 w-12 rounded" />
-                  <div className="space-y-2 flex-1">
-                    <Skeleton className="h-4 w-[200px]" />
-                    <Skeleton className="h-4 w-[100px]" />
-                  </div>
+      {isLoading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <Card key={i} className="border-0 shadow-sm overflow-hidden">
+              <Skeleton className="h-40 w-full rounded-none" />
+              <CardContent className="p-4 space-y-3">
+                <Skeleton className="h-5 w-3/4" />
+                <Skeleton className="h-4 w-full" />
+                <div className="flex gap-2">
+                  <Skeleton className="h-5 w-20" />
+                  <Skeleton className="h-5 w-20" />
                 </div>
-              ))}
-            </div>
-          ) : (
-            <ProjectsTable 
-              projects={filteredProjects}
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      ) : filteredProjects.length === 0 ? (
+        <Card className="border-0 shadow-sm">
+          <CardContent className="py-16 text-center">
+            <FolderOpen className="w-12 h-12 mx-auto mb-4 text-slate-300" />
+            <p className="text-slate-500 font-medium">Nessun progetto trovato</p>
+            <p className="text-sm text-slate-400 mt-1">Crea il tuo primo progetto per iniziare</p>
+            <Button onClick={handleNewProject} className="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white">
+              <Plus className="w-4 h-4 mr-2" />
+              Nuovo Progetto
+            </Button>
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filteredProjects.map((project) => (
+            <ProjectCard
+              key={project.id}
+              project={project}
               onEdit={handleEdit}
               onDelete={handleDelete}
             />
-          )}
-        </CardContent>
-      </Card>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
