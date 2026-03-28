@@ -204,7 +204,7 @@ export interface BrandVoiceContext {
   };
 }
 
-function buildBrandVoicePromptSection(bv: BrandVoiceContext): string {
+export function buildBrandVoicePromptSection(bv: BrandVoiceContext): string {
   const parts: string[] = [];
 
   if (bv.businessInfo?.businessName) {

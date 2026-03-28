@@ -9,8 +9,9 @@ import {
   insertLandingPageSchema, insertBuilderPageSchema, insertProjectSchema, insertGlobalSeoSettingsSchema, users, tenants, projects, superadminGeminiConfig
 } from "@shared/schema";
 import { encrypt, decrypt } from "./encryption";
-import { generateLandingPageContent, buildComponentsFromContent, AI_TEMPLATES, type TemplateId } from "./ai/landing-page-generator";
-import { getSuperAdminGeminiKeys } from "./ai/gemini-keys";
+import { generateLandingPageContent, buildComponentsFromContent, buildBrandVoicePromptSection, AI_TEMPLATES, type TemplateId } from "./ai/landing-page-generator";
+import { getSuperAdminGeminiKeys, pickGeminiApiKey } from "./ai/gemini-keys";
+import { GoogleGenAI } from "@google/genai";
 import { db } from "./db";
 import { eq, asc, and } from "drizzle-orm";
 import multer from "multer";
@@ -2725,6 +2726,192 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(503).json({ message: error.message });
       }
       res.status(500).json({ message: "Errore nella generazione AI. Riprova tra qualche secondo.", detail: error.message });
+    }
+  });
+
+  app.post("/api/ai/rewrite-page", authenticateToken, requireRole("admin"), async (req: AuthRequest, res: Response) => {
+    try {
+      const { components, instructions, mode, selectedComponentId } = req.body as {
+        components: Array<{ id: string; type: string; props: Record<string, unknown>; children?: Array<{ id: string; type: string; props: Record<string, unknown> }> }>;
+        instructions?: string;
+        mode: "full" | "single";
+        selectedComponentId?: string;
+      };
+
+      if (!components || !Array.isArray(components) || components.length === 0) {
+        return res.status(400).json({ message: "Nessun componente da riscrivere." });
+      }
+      if (mode !== "full" && mode !== "single") {
+        return res.status(400).json({ message: "Modalità non valida. Usa 'full' o 'single'." });
+      }
+
+      const apiKey = await pickGeminiApiKey();
+      if (!apiKey) {
+        return res.status(503).json({ message: "Nessuna chiave API Gemini configurata. Vai su Super Admin → Configurazione AI." });
+      }
+
+      const brandVoiceData = await storage.getBrandVoice(req.tenant!.id);
+      const brandVoiceSection = brandVoiceData ? buildBrandVoicePromptSection(brandVoiceData) : "";
+
+      let componentsToRewrite = components;
+      if (mode === "single" && selectedComponentId) {
+        const found = components.find(c => c.id === selectedComponentId);
+        if (!found) {
+          return res.status(400).json({ message: "Componente selezionato non trovato." });
+        }
+        componentsToRewrite = [found];
+      }
+
+      const TEXT_KEYS = [
+        "text", "content", "title", "heading", "subtitle", "subheadline", "headline",
+        "badgeText", "badge", "description", "submitText", "tagline", "guaranteeText",
+        "sectionTitle", "sectionSubtitle", "ctaText", "ctaLabel", "buttonText",
+        "section_title", "section_subtitle",
+        "topHeadline", "urgencyBadge", "titlePrefix", "highlightedTitle", "titleSuffix",
+        "subtitleText", "primaryCtaText", "secondaryCtaText", "videoCaption",
+        "guaranteeTitle", "guaranteeDescription", "mainCtaText",
+        "introText", "label", "name", "role", "client", "result", "quote",
+      ];
+      const ARRAY_KEYS = ["items", "features", "testimonials", "phases", "steps", "problems", "services", "benefits", "points", "links", "fields"];
+      const ITEM_TEXT_KEYS = ["text", "title", "description", "name", "role", "label", "content", "quote", "result", "client", "subtitle", "heading"];
+
+      const extractTextFields = (comp: { id: string; type: string; props: Record<string, unknown>; children?: Array<{ id: string; type: string; props: Record<string, unknown> }> }) => {
+        const textProps: Record<string, unknown> = {};
+        for (const key of TEXT_KEYS) {
+          if (typeof comp.props[key] === "string" && comp.props[key]) {
+            textProps[key] = comp.props[key];
+          }
+        }
+        for (const key of ARRAY_KEYS) {
+          if (Array.isArray(comp.props[key])) {
+            const items = comp.props[key] as Array<Record<string, unknown>>;
+            textProps[key] = items.map(item => {
+              const textOnly: Record<string, unknown> = {};
+              for (const ik of ITEM_TEXT_KEYS) {
+                if (typeof item[ik] === "string" && item[ik]) {
+                  textOnly[ik] = item[ik];
+                }
+              }
+              return textOnly;
+            });
+          }
+        }
+        if (Array.isArray(comp.children)) {
+          textProps._children = comp.children.map(ch => ({
+            id: ch.id,
+            type: ch.type,
+            ...extractTextFields(ch)
+          }));
+        }
+        return textProps;
+      };
+
+      const textData = componentsToRewrite.map(c => ({
+        id: c.id,
+        type: c.type,
+        ...extractTextFields(c)
+      }));
+
+      const systemPrompt = `Sei un copywriter esperto italiano. Il tuo compito è riscrivere i testi di componenti di una pagina web mantenendo la stessa struttura JSON.
+${brandVoiceSection ? `\n${brandVoiceSection}` : ""}
+REGOLE:
+- Riscrivi SOLO i campi testuali (text, content, title, heading, subtitle, description, ecc.)
+- NON modificare gli ID, i tipi, le strutture, i colori o le proprietà non testuali
+- Mantieni la stessa struttura JSON in uscita
+- Per gli array di items/features/testimonials, riscrivi i campi testuali interni mantenendo la stessa lunghezza dell'array
+- Tutti i testi devono essere in ITALIANO
+- I testi devono essere professionali, persuasivi e coerenti con il brand
+- Rispondi SOLO con il JSON, senza markdown o testo aggiuntivo`;
+
+      const userPrompt = `Riscrivi i testi dei seguenti componenti di pagina web.
+${instructions ? `\nISTRUZIONI AGGIUNTIVE: ${instructions}` : ""}
+
+COMPONENTI DA RISCRIVERE:
+${JSON.stringify(textData, null, 2)}
+
+Restituisci un array JSON con la stessa struttura, con gli stessi ID e tipi, ma con i testi riscritti.
+Rispondi SOLO con l'array JSON, nessun testo prima o dopo.`;
+
+      const ai = new GoogleGenAI({ apiKey });
+      const result = await ai.models.generateContent({
+        model: "gemini-2.0-flash",
+        contents: [{ role: "user", parts: [{ text: userPrompt }] }],
+        config: {
+          systemInstruction: { role: "system", parts: [{ text: systemPrompt }] },
+          temperature: 0.7,
+          maxOutputTokens: 8192,
+        }
+      });
+
+      const rawText = result.text ?? "";
+      const jsonMatch = rawText.match(/\[[\s\S]*\]/);
+      if (!jsonMatch) {
+        throw new Error("Gemini non ha restituito un JSON valido.");
+      }
+
+      const rewrittenTextData = JSON.parse(jsonMatch[0]) as Array<{ id: string; type: string; [key: string]: unknown }>;
+
+      const mergeRewritten = (
+        original: { id: string; type: string; props: Record<string, unknown>; children?: Array<{ id: string; type: string; props: Record<string, unknown> }> },
+        rewritten: Record<string, unknown>
+      ) => {
+        const merged = { ...original, props: { ...original.props } };
+        for (const key of TEXT_KEYS) {
+          if (typeof rewritten[key] === "string") {
+            merged.props[key] = rewritten[key];
+          }
+        }
+        for (const key of ARRAY_KEYS) {
+          if (Array.isArray(rewritten[key]) && Array.isArray(merged.props[key])) {
+            const originalArr = merged.props[key] as Array<Record<string, unknown>>;
+            const rewrittenArr = rewritten[key] as Array<Record<string, unknown>>;
+            merged.props[key] = originalArr.map((origItem, idx) => {
+              if (idx >= rewrittenArr.length) return origItem;
+              const rItem = rewrittenArr[idx];
+              const mergedItem = { ...origItem };
+              for (const ik of ITEM_TEXT_KEYS) {
+                if (typeof rItem[ik] === "string") {
+                  mergedItem[ik] = rItem[ik];
+                }
+              }
+              return mergedItem;
+            });
+          }
+        }
+        if (Array.isArray(rewritten._children) && Array.isArray(original.children)) {
+          merged.children = original.children.map(ch => {
+            const rCh = (rewritten._children as Array<Record<string, unknown>>).find((r) => r.id === ch.id);
+            if (rCh) return mergeRewritten(ch, rCh);
+            return ch;
+          });
+        }
+        return merged;
+      };
+
+      let rewrittenComponents;
+      if (mode === "single" && selectedComponentId) {
+        rewrittenComponents = components.map(c => {
+          if (c.id === selectedComponentId && rewrittenTextData.length > 0) {
+            return mergeRewritten(c, rewrittenTextData[0]);
+          }
+          return c;
+        });
+      } else {
+        rewrittenComponents = components.map(c => {
+          const rewritten = rewrittenTextData.find(r => r.id === c.id);
+          if (rewritten) return mergeRewritten(c, rewritten);
+          return c;
+        });
+      }
+
+      res.json({ components: rewrittenComponents });
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : String(error);
+      console.error("Error rewriting page with AI:", msg);
+      if (msg.includes("chiave API") || msg.includes("Gemini")) {
+        return res.status(503).json({ message: msg });
+      }
+      res.status(500).json({ message: "Errore nella riscrittura AI. Riprova.", detail: msg });
     }
   });
 

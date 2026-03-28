@@ -26,6 +26,7 @@ import {
   Settings, Package, Box, ChevronUp, Menu 
 } from "lucide-react";
 import { BuilderPageRenderer } from "./BuilderPageRenderer";
+import { AiRewritePageModal } from "./AiRewritePageModal";
 
 // Empty drop zone for when no components exist
 function EmptyDropZone() {
@@ -4963,9 +4964,8 @@ export function DragDropPageBuilder({ pageToEdit, onClose }: DragDropPageBuilder
   const [activeId, setActiveId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-     // --- AGGIUNGI QUESTA RIGA ---
-      const [isSidebarVisible, setIsSidebarVisible] = useState(true);
-      // --- FINE AGGIUNTA ---
+  const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+  const [isRewriteModalOpen, setIsRewriteModalOpen] = useState(false);
     
   // Sync selected component with components array
   useEffect(() => {
@@ -5136,6 +5136,16 @@ export function DragDropPageBuilder({ pageToEdit, onClose }: DragDropPageBuilder
                 <p className="text-sm text-slate-500">Costruisci la tua pagina con il drag & drop</p>
               </div>
               <div className="flex gap-2">
+                {components.length > 0 && (
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsRewriteModalOpen(true)}
+                    className="border-emerald-200 text-emerald-700 hover:bg-emerald-50 hover:border-emerald-300"
+                  >
+                    <Sparkles className="h-4 w-4 mr-2" />
+                    Riscrivi con AI
+                  </Button>
+                )}
                 <Button variant="outline" onClick={onClose} className="border-slate-200 text-slate-600 hover:bg-slate-50" data-testid="button-close-builder">
                   Annulla
                 </Button>
@@ -5383,6 +5393,17 @@ export function DragDropPageBuilder({ pageToEdit, onClose }: DragDropPageBuilder
           ) : null}
         </DragOverlay>
       </div>
+
+      <AiRewritePageModal
+        open={isRewriteModalOpen}
+        onClose={() => setIsRewriteModalOpen(false)}
+        components={components}
+        selectedComponentId={selectedComponent?.id}
+        onRewriteComplete={(newComponents) => {
+          setComponents(newComponents);
+          setSelectedComponent(null);
+        }}
+      />
     </DndContext>
   );
 }
