@@ -704,31 +704,29 @@ router.post('/marketing/leads', async (req, res) => {
 });
 
 // Endpoint per ottenere analytics dettagliate dei lead - OTTIMIZZATO
-router.get('/analytics', authenticateToken, async (req, res) => {
-  console.log("📊 [Marketing Analytics] Inizio richiesta GET /marketing/leads/analytics");
-  console.log("📋 [Marketing Analytics] Query params:", req.query);
-
+router.get('/analytics', authenticateToken, async (req: AuthRequest, res) => {
   try {
+    const tenantId = req.user?.tenantId;
+    if (!tenantId) {
+      return res.status(403).json({ error: "Tenant not identified" });
+    }
+
     const { days = '7', source, campaign } = req.query;
 
-    // Costruisci i filtri per la query
-    const filters: any[] = [];
+    const filters: any[] = [sql`tenant_id = ${tenantId}`];
     
     if (days !== 'all') {
       const daysNumber = parseInt(days as string);
       if (!isNaN(daysNumber) && daysNumber > 0) {
-        console.log(`📅 [Marketing Analytics] Filtro giorni: ${daysNumber}`);
         filters.push(sql`created_at >= NOW() - INTERVAL '${sql.raw(daysNumber.toString())} days'`);
       }
     }
 
     if (source) {
-      console.log(`📊 [Marketing Analytics] Filtro source: ${source}`);
       filters.push(sql`source = ${source}`);
     }
 
     if (campaign) {
-      console.log(`📊 [Marketing Analytics] Filtro campaign: ${campaign}`);
       filters.push(sql`campaign = ${campaign}`);
     }
 
@@ -791,7 +789,6 @@ router.get('/analytics', authenticateToken, async (req, res) => {
       ORDER BY type NULLS FIRST, count DESC NULLS LAST
     `;
 
-    console.log("📝 [Marketing Analytics] Query unica ottimizzata");
     const result = await db.execute(combinedAnalyticsQuery);
 
     // Processa i risultati
@@ -832,77 +829,79 @@ router.get('/analytics', authenticateToken, async (req, res) => {
 });
 
 // Endpoint per ottenere le campagne attive
-router.get('/campaigns', authenticateToken, async (req, res) => {
-  console.log("📋 [Marketing Campaigns] Richiesta campagne attive");
-
+router.get('/campaigns', authenticateToken, async (req: AuthRequest, res) => {
   try {
+    const tenantId = req.user?.tenantId;
+    if (!tenantId) {
+      return res.status(403).json({ error: "Tenant not identified" });
+    }
+
     const campaignsQuery = sql`
       SELECT DISTINCT campaign 
       FROM marketing_leads 
-      WHERE campaign IS NOT NULL 
+      WHERE campaign IS NOT NULL AND tenant_id = ${tenantId}
       ORDER BY campaign ASC
     `;
 
     const result = await db.execute(campaignsQuery);
     const campaigns = result.rows.map(row => row.campaign);
 
-    console.log(`✅ [Marketing Campaigns] ${campaigns.length} campagne trovate:`, campaigns);
     res.json(campaigns);
   } catch (error: any) {
-    console.error("❌ [Marketing Campaigns] Errore recupero campagne:", error);
+    console.error("[Marketing Campaigns] Errore recupero campagne:", error);
     res.status(500).json({ error: "Errore nel recupero delle campagne" });
   }
 });
 
 // Endpoint per ottenere le sources attive
-router.get('/sources', authenticateToken, async (req, res) => {
-  console.log("📋 [Marketing Sources] Richiesta sources attive");
-
+router.get('/sources', authenticateToken, async (req: AuthRequest, res) => {
   try {
+    const tenantId = req.user?.tenantId;
+    if (!tenantId) {
+      return res.status(403).json({ error: "Tenant not identified" });
+    }
+
     const sourcesQuery = sql`
       SELECT DISTINCT source 
       FROM marketing_leads 
-      WHERE source IS NOT NULL 
+      WHERE source IS NOT NULL AND tenant_id = ${tenantId}
       ORDER BY source ASC
     `;
 
     const result = await db.execute(sourcesQuery);
     const sources = result.rows.map(row => row.source);
 
-    console.log(`✅ [Marketing Sources] ${sources.length} sources trovate:`, sources);
     res.json(sources);
   } catch (error: any) {
-    console.error("❌ [Marketing Sources] Errore recupero sources:", error);
+    console.error("[Marketing Sources] Errore recupero sources:", error);
     res.status(500).json({ error: "Errore nel recupero delle sources" });
   }
 });
 
 // Endpoint per invio WhatsApp manuale
-router.post('/send-whatsapp', authenticateToken, async (req, res) => {
-  console.log("📱 [Manual WhatsApp] Richiesta invio WhatsApp manuale");
-  console.log("📋 [Manual WhatsApp] Body:", req.body);
-
+router.post('/send-whatsapp', authenticateToken, async (req: AuthRequest, res) => {
   try {
+    const tenantId = req.user?.tenantId;
+    if (!tenantId) {
+      return res.status(403).json({ error: "Tenant not identified" });
+    }
+
     const { leadId, phone, name, businessName, campaign } = req.body;
 
     if (!leadId || !phone || !name || !campaign) {
-      console.log("❌ [Manual WhatsApp] Campi obbligatori mancanti");
       return res.status(400).json({ error: 'Campi obbligatori mancanti' });
     }
 
-    // Verifica che il lead esista
     const leadQuery = sql`
-      SELECT * FROM marketing_leads WHERE id = ${leadId}
+      SELECT * FROM marketing_leads WHERE id = ${leadId} AND tenant_id = ${tenantId}
     `;
     const leadResult = await db.execute(leadQuery);
 
     if (leadResult.rows.length === 0) {
-      console.log("❌ [Manual WhatsApp] Lead non trovato:", leadId);
       return res.status(404).json({ error: 'Lead non trovato' });
     }
 
     const lead = leadResult.rows[0];
-    console.log("✅ [Manual WhatsApp] Lead trovato:", lead.email);
 
     // Invia messaggio WhatsApp
     const { sendWhatsAppWelcomeMessage } = await import('./whatsapp');
@@ -916,13 +915,10 @@ router.post('/send-whatsapp', authenticateToken, async (req, res) => {
     });
 
     if (whatsappResult.success) {
-      console.log('✅ [Manual WhatsApp] Messaggio inviato con successo');
-
-      // Aggiorna il flag nel database
       const updateQuery = sql`
         UPDATE marketing_leads 
         SET whatsapp_sent = true 
-        WHERE id = ${leadId}
+        WHERE id = ${leadId} AND tenant_id = ${tenantId}
       `;
       await db.execute(updateQuery);
 

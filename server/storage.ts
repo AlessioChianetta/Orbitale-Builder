@@ -21,32 +21,11 @@ import bcrypt from "bcryptjs";
 export class Storage {
   // Tenant operations
   async getTenantByDomain(domain: string): Promise<Tenant | null> {
-    console.log(`📊 [STORAGE] getTenantByDomain called with domain: "${domain}"`);
-    
     try {
       const [tenant] = await db.select().from(tenants as any).where(eq((tenants as any).domain, domain));
-      
-      if (tenant) {
-        console.log(`✅ [STORAGE] Tenant found in database:`, {
-          id: tenant.id,
-          name: tenant.name,
-          domain: tenant.domain,
-          isActive: tenant.isActive
-        });
-      } else {
-        console.log(`❌ [STORAGE] No tenant found for domain "${domain}"`);
-        
-        // Debug: show all tenants in database
-        const allTenants = await db.select().from(tenants as any);
-        console.log(`📋 [STORAGE] Available tenants in database (${allTenants.length} total):`);
-        allTenants.forEach((t: Tenant) => {
-          console.log(`   - "${t.domain}" → ${t.name} (ID: ${t.id}, Active: ${t.isActive})`);
-        });
-      }
-      
       return tenant || null;
     } catch (error) {
-      console.error(`❌ [STORAGE] Error in getTenantByDomain:`, error);
+      console.error('[STORAGE] Error in getTenantByDomain:', error);
       return null;
     }
   }
@@ -162,56 +141,20 @@ export class Storage {
 
   // Blog post operations
   async createBlogPost(postData: InsertBlogPost): Promise<BlogPostWithRelations> {
-    console.log('🔍 Storage: createBlogPost called with:', JSON.stringify(postData, null, 2));
-    console.log('🔍 Storage: postData keys:', Object.keys(postData));
-
-    // Log dettagliato per i campi data
-    console.log('🔍 Storage: Date field analysis:');
-    console.log('  - publishedAt:', postData.publishedAt, 'type:', typeof postData.publishedAt);
-    console.log('  - scheduledAt:', postData.scheduledAt, 'type:', typeof postData.scheduledAt);
-
-    if (postData.publishedAt) {
-      console.log('  - publishedAt instanceof Date:', postData.publishedAt instanceof Date);
-      console.log('  - publishedAt constructor:', postData.publishedAt.constructor.name);
-      if (typeof postData.publishedAt === 'string') {
-        console.log('  - publishedAt as string, attempting new Date():', new Date(postData.publishedAt));
-      }
-    }
-
-    if (postData.scheduledAt) {
-      console.log('  - scheduledAt instanceof Date:', postData.scheduledAt instanceof Date);
-      console.log('  - scheduledAt constructor:', postData.scheduledAt.constructor.name);
-      if (typeof postData.scheduledAt === 'string') {
-        console.log('  - scheduledAt as string, attempting new Date():', new Date(postData.scheduledAt));
-      }
-    }
-
     try {
-      console.log('🔍 Storage: Inserting into database...');
-
-      // Converti esplicitamente le date se sono stringhe
       const processedData = { ...postData };
 
       if (processedData.publishedAt && typeof processedData.publishedAt === 'string') {
-        console.log('🔍 Storage: Converting publishedAt string to Date');
         processedData.publishedAt = new Date(processedData.publishedAt);
-        console.log('  - Converted publishedAt:', processedData.publishedAt);
       }
 
       if (processedData.scheduledAt && typeof processedData.scheduledAt === 'string') {
-        console.log('🔍 Storage: Converting scheduledAt string to Date');
         processedData.scheduledAt = new Date(processedData.scheduledAt);
-        console.log('  - Converted scheduledAt:', processedData.scheduledAt);
       }
 
-      console.log('🔍 Storage: Final processed data before insert:', JSON.stringify(processedData, null, 2));
-
       const [post] = await db.insert(blogPosts).values(processedData as any).returning();
-      console.log('✅ Storage: Blog post inserted with ID:', post.id);
 
-      console.log('🔍 Storage: Fetching full blog post data...');
       const fullPost = await this.getBlogPostById(post.id, post.tenantId) as BlogPostWithRelations;
-      console.log('✅ Storage: Full blog post retrieved');
 
       return fullPost;
     } catch (error) {
@@ -314,8 +257,6 @@ export class Storage {
 
   async updateBlogPost(id: number, tenantId: number, updates: Partial<InsertBlogPost>): Promise<BlogPost | null> {
     try {
-      console.log('Updating blog post in storage:', { id, updates });
-
       // Prepare update data
       const updateData: any = { ...updates, updatedAt: new Date() };
 
@@ -346,7 +287,6 @@ export class Storage {
         .where(and(eq(blogPosts.id, id), eq(blogPosts.tenantId, tenantId)))
         .returning();
 
-      console.log('Blog post updated successfully:', post);
       return post || null;
     } catch (error) {
       console.error('Error updating blog post in storage:', error);
@@ -847,8 +787,6 @@ export class Storage {
 
   async updateLandingPage(id: number, tenantId: number, updates: Partial<InsertLandingPage>): Promise<LandingPage | null> {
     try {
-      console.log('Updating landing page in storage:', { id, updates });
-
       // Remove undefined values to avoid database errors
       const updateData: any = { ...updates };
       Object.keys(updateData).forEach(key => {
@@ -862,7 +800,6 @@ export class Storage {
         .where(and(eq(landingPages.id, id), eq(landingPages.tenantId, tenantId)))
         .returning();
 
-      console.log('Landing page updated successfully:', landingPage);
       return landingPage || null;
     } catch (error) {
       console.error('Error updating landing page in storage:', error);
@@ -966,7 +903,6 @@ export class Storage {
       };
 
       const [duplicatedLandingPage] = await db.insert(landingPages).values(duplicateData).returning();
-      console.log('Duplicated landing page from Patrimonio template:', duplicatedLandingPage);
       return duplicatedLandingPage;
     } catch (error) {
       console.error('Error duplicating from Patrimonio template:', error);
@@ -1005,20 +941,7 @@ export class Storage {
   }
 
   async getBuilderPageBySlug(slug: string, tenantId: number): Promise<BuilderPage | null> {
-    console.log(`🔍 [STORAGE] getBuilderPageBySlug: slug="${slug}", tenantId=${tenantId}`);
     const [page] = await db.select().from(builderPages).where(and(eq(builderPages.slug, slug), eq(builderPages.tenantId, tenantId)));
-    
-    if (page) {
-      console.log(`✅ [STORAGE] Builder page found: ${page.title} (id: ${page.id}, isActive: ${page.isActive})`);
-    } else {
-      console.log(`❌ [STORAGE] Builder page not found for slug: "${slug}" in tenant: ${tenantId}`);
-      // Debug: mostra tutte le builder pages disponibili
-      const allPages = await db.select({ id: builderPages.id, title: builderPages.title, slug: builderPages.slug, tenantId: builderPages.tenantId })
-        .from(builderPages)
-        .where(eq(builderPages.tenantId, tenantId));
-      console.log(`📋 [STORAGE] Available builder pages in tenant ${tenantId}:`, allPages);
-    }
-    
     return page || null;
   }
 
@@ -1077,21 +1000,7 @@ export class Storage {
   }
 
   async getProjectBySlug(slug: string, tenantId: number): Promise<Project | null> {
-    console.log(`🔍 [Storage] Searching for project with slug: "${slug}" in tenant: ${tenantId}`);
     const [project] = await db.select().from(projects).where(and(eq(projects.slug, slug), eq(projects.tenantId, tenantId)));
-    
-    if (project) {
-      console.log(`✅ [Storage] Project found: ${project.title} (ID: ${project.id}, slug: ${project.slug})`);
-    } else {
-      console.log(`❌ [Storage] No project found with slug: "${slug}" in tenant: ${tenantId}`);
-      
-      // Debug: mostra tutti i progetti disponibili
-      const allProjects = await db.select({ id: projects.id, title: projects.title, slug: projects.slug })
-        .from(projects)
-        .where(eq(projects.tenantId, tenantId));
-      console.log(`📋 [Storage] Available projects in tenant ${tenantId}:`, allProjects);
-    }
-    
     return project || null;
   }
 
@@ -1102,8 +1011,6 @@ export class Storage {
 
   async updateProject(id: number, tenantId: number, updates: Partial<InsertProject>): Promise<Project | null> {
     try {
-      console.log('Updating project in storage:', { id, updates });
-
       // Prepare update data
       const updateData: any = { ...updates, updatedAt: new Date() };
 
@@ -1127,7 +1034,6 @@ export class Storage {
         .where(and(eq(projects.id, id), eq(projects.tenantId, tenantId)))
         .returning();
 
-      console.log('Project updated successfully:', project);
       return project || null;
     } catch (error) {
       console.error('Error updating project in storage:', error);
@@ -1535,6 +1441,12 @@ export class Storage {
   async deleteClient(id: number): Promise<boolean> {
     const result = await db.delete(clients)
       .where(eq(clients.id, id));
+    return (result.rowCount ?? 0) > 0;
+  }
+
+  async deleteClientByOwner(id: number, ownerId: string): Promise<boolean> {
+    const result = await db.delete(clients)
+      .where(and(eq(clients.id, id), eq(clients.ownerId, ownerId)));
     return (result.rowCount ?? 0) > 0;
   }
 

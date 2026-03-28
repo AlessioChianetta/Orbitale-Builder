@@ -99,7 +99,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.delete("/api/clients/:id", authenticateToken, async (req: AuthRequest, res: Response) => {
     try {
       const clientId = parseInt(req.params.id);
-      const deleted = await storage.deleteClient(clientId);
+      const deleted = await storage.deleteClientByOwner(clientId, req.user.id);
 
       if (deleted) {
         res.json({ message: "Client deleted successfully" });
