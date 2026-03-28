@@ -1515,6 +1515,12 @@ export class Storage {
     return await db.select().from(clients).orderBy(asc(clients.id));
   }
 
+  async getClientsByOwner(ownerId: string): Promise<Client[]> {
+    return await db.select().from(clients)
+      .where(eq(clients.ownerId, ownerId))
+      .orderBy(asc(clients.id));
+  }
+
   async getClient(id: number): Promise<Client | null> {
     const [client] = await db.select().from(clients)
       .where(eq(clients.id, id));

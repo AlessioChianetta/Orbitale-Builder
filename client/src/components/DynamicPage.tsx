@@ -77,8 +77,12 @@ export default function DynamicPage() {
     return <div className="min-h-screen flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin" /></div>;
   }
 
-  // Se non abbiamo trovato nessun contenuto, mostra 404
   if (!contentData) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      window.location.href = '/admin';
+      return null;
+    }
     return <NotFound />;
   }
 

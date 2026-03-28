@@ -4,17 +4,17 @@ import type { Tenant } from "@shared/schema";
 import type { AuthRequest } from "../auth";
 import jwt from "jsonwebtoken";
 
-const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key-change-in-production";
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  throw new Error("JWT_SECRET environment variable is required");
+}
 
-// Dummy function for verifyToken, assuming it's defined elsewhere or will be added.
-// In a real scenario, this would be imported or defined with the actual JWT verification logic.
 async function verifyToken(token: string) {
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
     return decoded;
   } catch (error) {
-    console.error("JWT Verification Error:", error);
-    throw error; // Re-throw to be caught by the caller
+    throw error;
   }
 }
 

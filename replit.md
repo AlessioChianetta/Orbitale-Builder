@@ -41,10 +41,13 @@ Preferred communication style: Simple, everyday language.
 - **Analytics**: Event tracking for user behavior and conversion metrics
 
 ## Authentication & Authorization
-- **JWT Tokens**: Stateless authentication with 7-day expiration
+- **JWT Tokens**: Stateless authentication with 7-day expiration, JWT_SECRET required as env var (no fallback)
 - **Role-Based Access**: Admin and editor roles with different permission levels
 - **Middleware Protection**: Route-level authentication for admin endpoints
 - **Password Security**: bcrypt hashing with salt rounds for secure password storage
+- **Registration**: Admin-only (requires authenticated admin to create new users)
+- **Tenant Isolation**: All data queries enforce tenantId filtering; marketing leads, stats, clients all scoped to authenticated user's tenant
+- **Public Routes**: When content is not found for unauthenticated users, redirect to login page instead of showing 404
 
 ## External Dependencies
 

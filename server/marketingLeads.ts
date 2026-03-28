@@ -29,79 +29,49 @@ router.get("/", authenticateToken, async (req: Request, res: Response) => {
     const limitNum = parseInt(limit as string);
     const offset = (pageNum - 1) * limitNum;
 
-    // Costruisci WHERE clause dinamicamente
-    let whereConditions: string[] = [];
+    const authReq = req as any;
+    const tenantId = authReq.user?.tenantId;
+    if (!tenantId) {
+      return res.status(403).json({ error: "Tenant not identified" });
+    }
+
+    const conditions: any[] = [eq(marketingLeads.tenantId, tenantId)];
     
     if (source && source !== 'all') {
-      whereConditions.push(`source = '${source}'`);
+      conditions.push(eq(marketingLeads.source, source as string));
     }
     
     if (campaign && campaign !== 'all') {
-      whereConditions.push(`campaign = '${campaign}'`);
+      conditions.push(eq(marketingLeads.campaign, campaign as string));
     }
     
     if (startDate) {
-      whereConditions.push(`created_at >= '${startDate}'::timestamp`);
+      const { gte } = await import('drizzle-orm');
+      conditions.push(gte(marketingLeads.createdAt, new Date(startDate as string)));
     }
     
     if (endDate) {
-      whereConditions.push(`created_at <= '${endDate}'::timestamp`);
+      const { lte } = await import('drizzle-orm');
+      conditions.push(lte(marketingLeads.createdAt, new Date(endDate as string)));
     }
 
-    const whereClause = whereConditions.length > 0 
-      ? `WHERE ${whereConditions.join(' AND ')}` 
-      : '';
+    const { and, desc, count } = await import('drizzle-orm');
 
-    console.log("🔧 [Marketing Leads] WHERE clause:", whereClause);
-    console.log("🔧 [Marketing Leads] Parametri calcolati:", { limit: limitNum, offset });
+    const [result, countResult] = await Promise.all([
+      db.select().from(marketingLeads)
+        .where(and(...conditions))
+        .orderBy(desc(marketingLeads.createdAt))
+        .limit(limitNum)
+        .offset(offset),
+      db.select({ total: count() }).from(marketingLeads)
+        .where(and(...conditions))
+    ]);
 
-    const result = await db.execute(sql.raw(`
-      SELECT 
-        id, 
-        business_name, 
-        first_name, 
-        last_name, 
-        email, 
-        phone, 
-        source, 
-        campaign, 
-        email_sent,
-        whatsapp_sent,
-        additional_data,
-        COALESCE(created_at, NOW()) as created_at
-      FROM marketing_leads
-      ${whereClause}
-      ORDER BY COALESCE(created_at, NOW()) DESC
-      LIMIT ${limitNum} OFFSET ${offset}
-    `));
-    console.log(`✅ [Marketing Leads] Query eseguita con successo, risultati trovati: ${result.rows.length}`);
-
-    // Count query con stessi filtri
-    console.log("📝 [Marketing Leads] Eseguo count query");
-
-    const countResult = await db.execute(sql.raw(`
-      SELECT COUNT(*) as total FROM marketing_leads
-      ${whereClause}
-    `));
-    const total = countResult.rows[0]?.total || 0;
+    const total = countResult[0]?.total || 0;
 
     console.log(`📊 [Marketing Leads] Conteggio totale: ${total}`);
 
-    // Map snake_case to camelCase for frontend
-    const mappedLeads = result.rows.map(lead => ({
-      id: lead.id,
-      businessName: lead.business_name,
-      firstName: lead.first_name,
-      lastName: lead.last_name,
-      email: lead.email,
-      phone: lead.phone,
-      source: lead.source,
-      campaign: lead.campaign,
-      emailSent: lead.email_sent,
-      whatsappSent: lead.whatsapp_sent,
-      additionalData: lead.additional_data,
-      createdAt: lead.created_at
-    }));
+    const mappedLeads = result;
 
     // Se richiesto export CSV, genera e restituisci CSV
     if (exportCsv === 'true' || exportCsv === '1') {
@@ -148,55 +118,36 @@ router.get("/", authenticateToken, async (req: Request, res: Response) => {
       }
     };
 
-    console.log("✅ [Marketing Leads] Risposta preparata con successo:");
-    console.log(`   - Lead restituiti: ${result.rows.length}`);
-    console.log(`   - Pagina corrente: ${responseData.pagination.page}`);
-    console.log(`   - Totale pagine: ${responseData.pagination.pages}`);
-
     res.json(responseData);
 
   } catch (error: any) {
-    console.error("❌ [Marketing Leads] Errore nel recupero dei lead:", error);
-    console.error("❌ [Marketing Leads] Stack trace:", error?.stack);
-    console.error("❌ [Marketing Leads] Query params originali:", req.query);
+    console.error("[Marketing Leads] Error:", error?.message);
     res.status(500).json({ error: "Errore nel recupero dei lead" });
   }
 });
 
-// GET /api/marketing-leads/stats - Statistiche aggregate (originale)
 router.get("/stats", authenticateToken, async (req: Request, res: Response) => {
-  console.log("📊 [Marketing Stats] Inizio richiesta GET /api/marketing-leads/stats");
-  console.log("📋 [Marketing Stats] Query params:", req.query);
-
   try {
-    const { days = '30' } = req.query;
-    console.log(`📅 [Marketing Stats] Periodo analisi: ${days} giorni`);
+    const authReq = req as any;
+    const tenantId = authReq.user?.tenantId;
+    if (!tenantId) {
+      return res.status(403).json({ error: "Tenant not identified" });
+    }
 
-    // Stats generali
+    const { days = '30' } = req.query;
+
     let statsQuery;
-    if (days !== 'all') {
-      const daysNumber = parseInt(days as string);
-      if (!isNaN(daysNumber) && daysNumber > 0) {
-        console.log(`📅 [Marketing Stats] Filtro data applicato: ${daysNumber} giorni`);
-        statsQuery = sql`
-          SELECT 
-            COUNT(*) as total_leads,
-            COUNT(DISTINCT source) as unique_sources,
-            COUNT(CASE WHEN created_at >= NOW() - INTERVAL '24 hours' THEN 1 END) as leads_last_24h,
-            COUNT(CASE WHEN created_at >= NOW() - INTERVAL '7 days' THEN 1 END) as leads_last_7d
-          FROM marketing_leads
-          WHERE created_at >= NOW() - INTERVAL ${sql.raw(`'${daysNumber} days'`)}
-        `;
-      } else {
-        statsQuery = sql`
-          SELECT 
-            COUNT(*) as total_leads,
-            COUNT(DISTINCT source) as unique_sources,
-            COUNT(CASE WHEN created_at >= NOW() - INTERVAL '24 hours' THEN 1 END) as leads_last_24h,
-            COUNT(CASE WHEN created_at >= NOW() - INTERVAL '7 days' THEN 1 END) as leads_last_7d
-          FROM marketing_leads
-        `;
-      }
+    const daysNumber = parseInt(days as string);
+    if (days !== 'all' && !isNaN(daysNumber) && daysNumber > 0) {
+      statsQuery = sql`
+        SELECT 
+          COUNT(*) as total_leads,
+          COUNT(DISTINCT source) as unique_sources,
+          COUNT(CASE WHEN created_at >= NOW() - INTERVAL '24 hours' THEN 1 END) as leads_last_24h,
+          COUNT(CASE WHEN created_at >= NOW() - INTERVAL '7 days' THEN 1 END) as leads_last_7d
+        FROM marketing_leads
+        WHERE tenant_id = ${tenantId} AND created_at >= NOW() - INTERVAL ${sql.raw(`'${daysNumber} days'`)}
+      `;
     } else {
       statsQuery = sql`
         SELECT 
@@ -205,39 +156,24 @@ router.get("/stats", authenticateToken, async (req: Request, res: Response) => {
           COUNT(CASE WHEN created_at >= NOW() - INTERVAL '24 hours' THEN 1 END) as leads_last_24h,
           COUNT(CASE WHEN created_at >= NOW() - INTERVAL '7 days' THEN 1 END) as leads_last_7d
         FROM marketing_leads
+        WHERE tenant_id = ${tenantId}
       `;
     }
 
-    console.log("📝 [Marketing Stats] Eseguo stats query");
     const statsResult = await db.execute(statsQuery);
-    console.log("✅ [Marketing Stats] Stats generali ottenute:", statsResult.rows[0]);
 
-    // Stats per fonte
     let sourceStatsQuery;
-    if (days !== 'all') {
-      const daysNumber = parseInt(days as string);
-      if (!isNaN(daysNumber) && daysNumber > 0) {
-        sourceStatsQuery = sql`
-          SELECT 
-            source,
-            COUNT(*) as count,
-            COUNT(CASE WHEN created_at >= NOW() - INTERVAL '24 hours' THEN 1 END) as recent_count
-          FROM marketing_leads
-          WHERE created_at >= NOW() - INTERVAL ${sql.raw(`'${daysNumber} days'`)}
-          GROUP BY source
-          ORDER BY count DESC
-        `;
-      } else {
-        sourceStatsQuery = sql`
-          SELECT 
-            source,
-            COUNT(*) as count,
-            COUNT(CASE WHEN created_at >= NOW() - INTERVAL '24 hours' THEN 1 END) as recent_count
-          FROM marketing_leads
-          GROUP BY source
-          ORDER BY count DESC
-        `;
-      }
+    if (days !== 'all' && !isNaN(daysNumber) && daysNumber > 0) {
+      sourceStatsQuery = sql`
+        SELECT 
+          source,
+          COUNT(*) as count,
+          COUNT(CASE WHEN created_at >= NOW() - INTERVAL '24 hours' THEN 1 END) as recent_count
+        FROM marketing_leads
+        WHERE tenant_id = ${tenantId} AND created_at >= NOW() - INTERVAL ${sql.raw(`'${daysNumber} days'`)}
+        GROUP BY source
+        ORDER BY count DESC
+      `;
     } else {
       sourceStatsQuery = sql`
         SELECT 
@@ -245,42 +181,34 @@ router.get("/stats", authenticateToken, async (req: Request, res: Response) => {
           COUNT(*) as count,
           COUNT(CASE WHEN created_at >= NOW() - INTERVAL '24 hours' THEN 1 END) as recent_count
         FROM marketing_leads
+        WHERE tenant_id = ${tenantId}
         GROUP BY source
         ORDER BY count DESC
       `;
     }
 
-    console.log("📝 [Marketing Stats] Eseguo source stats query");
     const sourceStatsResult = await db.execute(sourceStatsQuery);
-    console.log(`✅ [Marketing Stats] Stats per fonte ottenute: ${sourceStatsResult.rows.length} fonti`);
 
-    // Stats giornaliere (ultimi 30 giorni)
     const dailyStatsQuery = sql`
       SELECT 
         DATE(created_at) as date,
         COUNT(*) as count
       FROM marketing_leads
-      WHERE created_at >= NOW() - INTERVAL '30 days'
+      WHERE tenant_id = ${tenantId} AND created_at >= NOW() - INTERVAL '30 days'
       GROUP BY DATE(created_at)
       ORDER BY date ASC
     `;
 
-    console.log("📝 [Marketing Stats] Eseguo daily stats query");
     const dailyStatsResult = await db.execute(dailyStatsQuery);
-    console.log(`✅ [Marketing Stats] Stats giornaliere ottenute: ${dailyStatsResult.rows.length} giorni`);
 
-    const responseData = {
+    res.json({
       general: statsResult.rows[0],
       by_source: sourceStatsResult.rows,
       daily_trend: dailyStatsResult.rows
-    };
-
-    console.log("✅ [Marketing Stats] Risposta preparata con successo");
-    res.json(responseData);
+    });
 
   } catch (error: any) {
-    console.error("❌ [Marketing Stats] Errore nel recupero delle statistiche:", error);
-    console.error("❌ [Marketing Stats] Stack trace:", error?.stack);
+    console.error("[Marketing Stats] Error:", error.message);
     res.status(500).json({ error: "Errore nel recupero delle statistiche" });
   }
 });
@@ -1154,9 +1082,13 @@ router.get("/:id", authenticateToken, async (req: Request, res: Response) => {
 
 // DELETE /api/marketing-leads/:id - Elimina lead
 router.delete("/:id", authenticateToken, async (req: Request, res: Response) => {
-  console.log(`🗑️ [Marketing Lead Delete] Richiesta DELETE /api/marketing-leads/${req.params.id}`);
-
   try {
+    const authReq = req as any;
+    const tenantId = authReq.user?.tenantId;
+    if (!tenantId) {
+      return res.status(403).json({ success: false, error: "Tenant not identified" });
+    }
+
     const { id } = req.params;
     const leadId = parseInt(id);
 
@@ -1167,10 +1099,10 @@ router.delete("/:id", authenticateToken, async (req: Request, res: Response) => 
       });
     }
 
-    // eq è già importato in cima al file
+    const { and } = await import('drizzle-orm');
 
-    // Prima verifica se il lead esiste
-    const existingLead = await db.select().from(marketingLeads).where(eq(marketingLeads.id, leadId));
+    const existingLead = await db.select().from(marketingLeads)
+      .where(and(eq(marketingLeads.id, leadId), eq(marketingLeads.tenantId, tenantId)));
 
     if (existingLead.length === 0) {
       return res.status(404).json({
@@ -1179,8 +1111,9 @@ router.delete("/:id", authenticateToken, async (req: Request, res: Response) => 
       });
     }
 
-    // Elimina il lead
-    const result = await db.delete(marketingLeads).where(eq(marketingLeads.id, leadId)).returning();
+    const result = await db.delete(marketingLeads)
+      .where(and(eq(marketingLeads.id, leadId), eq(marketingLeads.tenantId, tenantId)))
+      .returning();
 
     console.log(`✅ [Marketing Lead Delete] Lead ${leadId} eliminato con successo`);
     res.json({

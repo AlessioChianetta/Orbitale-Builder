@@ -61,10 +61,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const googleSheetsRouter = await import('./googleSheets');
   app.use("/api/google-sheets", googleSheetsRouter.default);
 
-  // Clients Routes - for managing campaign clients
   app.get("/api/clients", authenticateToken, async (req: AuthRequest, res: Response) => {
     try {
-      const clients = await storage.getClients();
+      const clients = await storage.getClientsByOwner(req.user!.id);
       res.json({ clients });
     } catch (error) {
       console.error("Error fetching clients:", error);
@@ -231,7 +230,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/auth/register", async (req: TenantRequest, res: Response) => {
+  app.post("/api/auth/register", authenticateToken, requireRole("admin"), async (req: AuthRequest, res: Response) => {
     try {
       const userData = insertUserSchema.parse(req.body);
 
@@ -261,11 +260,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       res.status(400).json({ message: "Registration failed" });
     }
-  });
-
-  app.get("/api/auth/me", authenticateToken, (req: AuthRequest, res: Response) => {
-    const { password: _, ...userWithoutPassword } = req.user!;
-    res.json({ user: userWithoutPassword });
   });
 
   // Public endpoint to get list of active tenants (for login dropdown)
@@ -954,9 +948,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       res.status(400).json({
-        message: "Failed to create blog post",
-        error: error instanceof Error ? error.message : 'Unknown error',
-        details: error instanceof Error ? error.stack : undefined
+        message: "Failed to create blog post"
       });
     }
   });

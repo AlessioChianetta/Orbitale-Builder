@@ -104,8 +104,12 @@ export default function DynamicLandingPage() {
     );
   }
 
-  // Se non abbiamo trovato nessun contenuto, mostra 404
   if (!contentData) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      window.location.href = '/admin';
+      return null;
+    }
     return <NotFound />;
   }
 

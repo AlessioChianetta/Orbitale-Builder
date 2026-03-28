@@ -41,3 +41,8 @@ waitForPort = 5000
 [agent]
 integrations = ["javascript_database:1.0.0", "javascript_google_analytics:1.0.0", "javascript_log_in_with_replit:1.0.0"]
 expertMode = true
+
+[userenv]
+
+[userenv.shared]
+JWT_SECRET = "1599831040dabf56b3d84d27b656f2fccb857e4122bad13b47fde5ef4b9a2c13a3e0329d89fefd4f8d87d425de02ba92ef29670119e9d296d565911a03c370ae"
