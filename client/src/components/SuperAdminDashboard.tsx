@@ -4,6 +4,8 @@ import { apiRequest } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -29,6 +31,8 @@ export default function SuperAdminDashboard() {
   const [passwordDialog, setPasswordDialog] = useState<{ open: boolean; userId: string; username: string }>({ open: false, userId: "", username: "" });
   const [loginAsDialog, setLoginAsDialog] = useState<{ open: boolean; userId: string; username: string }>({ open: false, userId: "", username: "" });
   const [newPassword, setNewPassword] = useState("");
+  const [geminiApiKeysInput, setGeminiApiKeysInput] = useState("");
+  const [geminiEnabled, setGeminiEnabled] = useState(true);
 
   const { data: tenants = [], isLoading: loadingTenants } = useQuery<any[]>({
     queryKey: ['/api/superadmin/tenants'],
@@ -41,6 +45,47 @@ export default function SuperAdminDashboard() {
   const { data: allContent, isLoading: loadingContent } = useQuery<any>({
     queryKey: ['/api/superadmin/content/all'],
   });
+
+  const { data: geminiConfig, isLoading: loadingGeminiConfig } = useQuery<any>({
+    queryKey: ['/api/superadmin/gemini-config'],
+  });
+
+  const saveGeminiConfigMutation = useMutation({
+    mutationFn: async ({ apiKeys, enabled }: { apiKeys: string[]; enabled: boolean }) => {
+      const response = await apiRequest("POST", "/api/superadmin/gemini-config", { apiKeys, enabled });
+      return response.json();
+    },
+    onSuccess: () => {
+      toast({ title: "Configurazione AI salvata!" });
+      queryClient.invalidateQueries({ queryKey: ['/api/superadmin/gemini-config'] });
+      setGeminiApiKeysInput("");
+    },
+    onError: (error: any) => {
+      toast({ title: "Errore nel salvataggio", description: error.message || "Riprova", variant: "destructive" });
+    }
+  });
+
+  const deleteGeminiConfigMutation = useMutation({
+    mutationFn: async () => {
+      await apiRequest("DELETE", "/api/superadmin/gemini-config");
+    },
+    onSuccess: () => {
+      toast({ title: "Configurazione AI rimossa" });
+      queryClient.invalidateQueries({ queryKey: ['/api/superadmin/gemini-config'] });
+    },
+    onError: () => {
+      toast({ title: "Errore nella rimozione", variant: "destructive" });
+    }
+  });
+
+  const handleSaveGeminiConfig = () => {
+    const keys = geminiApiKeysInput.split("\n").map(k => k.trim()).filter(Boolean);
+    if (keys.length === 0) {
+      toast({ title: "Inserisci almeno una API key", variant: "destructive" });
+      return;
+    }
+    saveGeminiConfigMutation.mutate({ apiKeys: keys, enabled: geminiEnabled });
+  };
 
   const createTenantMutation = useMutation({
     mutationFn: async (tenantData: any) => {
@@ -210,6 +255,9 @@ export default function SuperAdminDashboard() {
               </TabsTrigger>
               <TabsTrigger value="content" className="data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 px-6 py-2.5">
                 Contenuti
+              </TabsTrigger>
+              <TabsTrigger value="ai" className="data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 px-6 py-2.5">
+                Configurazione AI
               </TabsTrigger>
             </TabsList>
 
@@ -560,6 +608,110 @@ export default function SuperAdminDashboard() {
                     </Card>
                   </>
                 )}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="ai">
+              <div className="space-y-6">
+                <Card className="border-0 shadow-sm">
+                  <CardHeader>
+                    <CardTitle className="text-2xl font-semibold text-slate-900">Configurazione AI</CardTitle>
+                    <CardDescription>Gestisci la chiave API di Google AI Studio (Gemini) per la generazione automatica di contenuti</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {loadingGeminiConfig ? (
+                      <div className="flex items-center justify-center py-8 text-slate-500">Caricamento...</div>
+                    ) : (
+                      <>
+                        {geminiConfig?.configured ? (
+                          <div className="rounded-xl border bg-emerald-50 border-emerald-200 p-4">
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                              </div>
+                              <div className="flex-1">
+                                <p className="font-medium text-emerald-800">AI configurata</p>
+                                <p className="text-sm text-emerald-600">
+                                  {geminiConfig.keyCount} chiave{geminiConfig.keyCount !== 1 ? " configurate" : " configurata"} · {geminiConfig.keyPreview}
+                                  {geminiConfig.enabled ? " · Attiva" : " · Disabilitata"}
+                                </p>
+                              </div>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="text-red-500 border-red-200 hover:bg-red-50"
+                                onClick={() => deleteGeminiConfigMutation.mutate()}
+                                disabled={deleteGeminiConfigMutation.isPending}
+                              >
+                                Rimuovi
+                              </Button>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="rounded-xl border bg-slate-50 border-slate-200 p-4">
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                              </div>
+                              <p className="text-slate-600">AI non configurata. Inserisci una API key per abilitare la generazione di contenuti.</p>
+                            </div>
+                          </div>
+                        )}
+
+                        <div className="space-y-4 pt-2">
+                          <div className="space-y-2">
+                            <Label htmlFor="gemini-keys">API Key Google AI Studio</Label>
+                            <Textarea
+                              id="gemini-keys"
+                              placeholder={"AIzaSy...\nAIzaSy... (una per riga se hai più chiavi)"}
+                              value={geminiApiKeysInput}
+                              onChange={(e) => setGeminiApiKeysInput(e.target.value)}
+                              rows={4}
+                              className="font-mono text-sm"
+                            />
+                            <p className="text-xs text-slate-500">
+                              Ottieni la chiave su <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:underline">aistudio.google.com/apikey</a>. Inserisci una per riga se ne hai più di una (verranno usate a rotazione).
+                            </p>
+                          </div>
+
+                          <div className="flex items-center gap-3">
+                            <Switch
+                              id="gemini-enabled"
+                              checked={geminiEnabled}
+                              onCheckedChange={setGeminiEnabled}
+                            />
+                            <Label htmlFor="gemini-enabled" className="cursor-pointer">
+                              {geminiEnabled ? "AI abilitata" : "AI disabilitata"}
+                            </Label>
+                          </div>
+
+                          <Button
+                            onClick={handleSaveGeminiConfig}
+                            disabled={saveGeminiConfigMutation.isPending || !geminiApiKeysInput.trim()}
+                            className="bg-indigo-600 hover:bg-indigo-700"
+                          >
+                            {saveGeminiConfigMutation.isPending ? "Salvataggio..." : "Salva configurazione AI"}
+                          </Button>
+                        </div>
+                      </>
+                    )}
+                  </CardContent>
+                </Card>
+
+                <Card className="border-0 shadow-sm">
+                  <CardHeader>
+                    <CardTitle className="text-base font-medium text-slate-700">Come usare l'AI</CardTitle>
+                  </CardHeader>
+                  <CardContent className="text-sm text-slate-600 space-y-2">
+                    <p>Una volta configurata la chiave API, l'AI di Gemini sarà disponibile per:</p>
+                    <ul className="list-disc list-inside space-y-1 text-slate-500">
+                      <li>Generare landing page complete partendo da una descrizione</li>
+                      <li>Creare testi per sezioni, hero, servizi e CTA</li>
+                      <li>Ottimizzare i contenuti esistenti</li>
+                    </ul>
+                    <p className="pt-2 text-xs text-slate-400">Le chiavi sono salvate in modo cifrato nel database e non vengono mai esposte in chiaro.</p>
+                  </CardContent>
+                </Card>
               </div>
             </TabsContent>
           </Tabs>

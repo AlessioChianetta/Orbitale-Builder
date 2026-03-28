@@ -551,6 +551,15 @@ export const apiKeys = pgTable("api_keys", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
+// SuperAdmin Gemini Config table - global AI configuration (table created via direct SQL)
+export const superadminGeminiConfig = pgTable("superadmin_gemini_config", {
+  id: serial("id").primaryKey(),
+  apiKeysEncrypted: text("api_keys_encrypted").notNull(),
+  enabled: boolean("enabled").notNull().default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Zod schemas
 export const insertTenantSchema = createInsertSchema(tenants).omit({
   id: true,

@@ -6,8 +6,9 @@ import { TenantRequest, identifyTenant } from "./middleware/tenant";
 import {
   insertUserSchema, insertPageSchema, insertBlogPostSchema,
   insertLeadSchema, insertCandidateSchema, insertServiceSchema,
-  insertLandingPageSchema, insertBuilderPageSchema, insertProjectSchema, insertGlobalSeoSettingsSchema, users, tenants, projects
+  insertLandingPageSchema, insertBuilderPageSchema, insertProjectSchema, insertGlobalSeoSettingsSchema, users, tenants, projects, superadminGeminiConfig
 } from "@shared/schema";
+import { encrypt, decrypt } from "./encryption";
 import { db } from "./db";
 import { eq, asc, and } from "drizzle-orm";
 import multer from "multer";
@@ -2520,6 +2521,69 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ token, user: { id: targetUser.id, username: targetUser.username, role: targetUser.role, tenantId: targetUser.tenantId } });
     } catch (error) {
       res.status(500).json({ message: "Failed to impersonate user" });
+    }
+  });
+
+  // GET Gemini config (superadmin only)
+  app.get("/api/superadmin/gemini-config", authenticateToken, requireRole("superadmin"), async (req: AuthRequest, res: Response) => {
+    try {
+      const configs = await db.select().from(superadminGeminiConfig).limit(1);
+      if (!configs.length) {
+        return res.json({ configured: false, enabled: false, keyPreview: null });
+      }
+      const config = configs[0];
+      let keyPreview: string | null = null;
+      let keyCount = 0;
+      try {
+        const keys = JSON.parse(decrypt(config.apiKeysEncrypted)) as string[];
+        keyCount = keys.length;
+        if (keys.length > 0) {
+          const firstKey = keys[0];
+          keyPreview = firstKey.substring(0, 8) + "••••••••••••••••";
+        }
+      } catch { }
+      res.json({ configured: true, enabled: config.enabled, keyPreview, keyCount });
+    } catch (error) {
+      console.error("Error fetching Gemini config:", error);
+      res.status(500).json({ message: "Failed to fetch Gemini config" });
+    }
+  });
+
+  // POST Gemini config (superadmin only)
+  app.post("/api/superadmin/gemini-config", authenticateToken, requireRole("superadmin"), async (req: AuthRequest, res: Response) => {
+    try {
+      const { apiKeys, enabled } = req.body as { apiKeys: string[]; enabled: boolean };
+      if (!Array.isArray(apiKeys) || apiKeys.length === 0) {
+        return res.status(400).json({ message: "Inserisci almeno una API key" });
+      }
+      const cleanKeys = apiKeys.map((k: string) => k.trim()).filter(Boolean);
+      if (cleanKeys.length === 0) {
+        return res.status(400).json({ message: "API key non valida" });
+      }
+      const encrypted = encrypt(JSON.stringify(cleanKeys));
+      const existing = await db.select().from(superadminGeminiConfig).limit(1);
+      if (existing.length > 0) {
+        await db.update(superadminGeminiConfig)
+          .set({ apiKeysEncrypted: encrypted, enabled: enabled !== false, updatedAt: new Date() })
+          .where(eq(superadminGeminiConfig.id, existing[0].id));
+      } else {
+        await db.insert(superadminGeminiConfig).values({ apiKeysEncrypted: encrypted, enabled: enabled !== false });
+      }
+      res.json({ message: "Configurazione AI salvata con successo" });
+    } catch (error) {
+      console.error("Error saving Gemini config:", error);
+      res.status(500).json({ message: "Failed to save Gemini config" });
+    }
+  });
+
+  // DELETE Gemini config (superadmin only)
+  app.delete("/api/superadmin/gemini-config", authenticateToken, requireRole("superadmin"), async (req: AuthRequest, res: Response) => {
+    try {
+      await db.delete(superadminGeminiConfig);
+      res.json({ message: "Configurazione AI rimossa" });
+    } catch (error) {
+      console.error("Error deleting Gemini config:", error);
+      res.status(500).json({ message: "Failed to delete Gemini config" });
     }
   });
 
