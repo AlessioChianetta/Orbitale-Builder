@@ -10,19 +10,27 @@ const app = express();
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: false, limit: '50mb' }));
 
+const isProduction = process.env.NODE_ENV === 'production';
 const allowedOrigins = process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(',').map(s => s.trim())
   : [];
 
+if (isProduction && allowedOrigins.length === 0) {
+  console.warn('[SECURITY] ALLOWED_ORIGINS not set in production. CORS will reject cross-origin requests. Set ALLOWED_ORIGINS env var with comma-separated domains.');
+}
+
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || process.env.NODE_ENV === 'development') {
+    if (!origin) {
+      return callback(null, true);
+    }
+    if (!isProduction) {
       return callback(null, true);
     }
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);
     }
-    callback(new Error('Not allowed by CORS'));
+    callback(null, false);
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],

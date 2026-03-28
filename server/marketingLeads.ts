@@ -50,13 +50,11 @@ router.get("/", authenticateToken, async (req: AuthRequest, res: Response) => {
 
     const total = countResult[0]?.total || 0;
 
-    console.log(`📊 [Marketing Leads] Conteggio totale: ${total}`);
 
     const mappedLeads = result;
 
     // Se richiesto export CSV, genera e restituisci CSV
     if (exportCsv === 'true' || exportCsv === '1') {
-      console.log("📄 [Marketing Leads] Generazione CSV richiesta");
       
       const csvHeaders = ['ID', 'Business Name', 'First Name', 'Last Name', 'Email', 'Phone', 'Source', 'Campaign', 'Email Sent', 'WhatsApp Sent', 'Created At'];
       const csvRows = mappedLeads.map(lead => [
@@ -195,20 +193,11 @@ router.get("/stats", authenticateToken, async (req: AuthRequest, res: Response) 
 
 // POST /api/marketing-leads - Crea un nuovo lead
 router.post("/", async (req: Request, res: Response) => {
-  console.log("➕ [Marketing Leads] Inizio richiesta POST /api/marketing-leads");
-  console.log("📋 [Marketing Leads] Body ricevuto:", JSON.stringify(req.body, null, 2));
 
   try {
     const { businessName, firstName, lastName, email, phone, source, campaign } = req.body;
 
-    console.log("🔍 [Marketing Leads] Validazione campi obbligatori...");
     if (!businessName || !firstName || !lastName || !email) {
-      console.log("❌ [Marketing Leads] Campi obbligatori mancanti:", {
-        businessName: !!businessName,
-        firstName: !!firstName, 
-        lastName: !!lastName,
-        email: !!email
-      });
       return res.status(400).json({ error: "Campi obbligatori mancanti" });
     }
 
@@ -219,7 +208,6 @@ router.post("/", async (req: Request, res: Response) => {
       return res.status(400).json({ error: "Tenant non identificato" });
     }
     const tenantId = tenant.id;
-    console.log("🔧 [Marketing Leads] Tenant ID:", tenantId, "- Tenant Name:", tenant.name);
 
     // Recupera configurazioni utente per Telegram
     let owner = null;
@@ -234,15 +222,12 @@ router.post("/", async (req: Request, res: Response) => {
       
       if (ownerResult && ownerResult.length > 0) {
         owner = ownerResult[0];
-        console.log("✅ [Marketing Leads] Configurazioni utente recuperate");
       } else {
-        console.log("⚠️ [Marketing Leads] Nessun utente trovato per tenant ID:", tenantId);
       }
     } catch (error) {
       console.error("❌ [Marketing Leads] Errore recupero configurazioni utente:", error);
     }
 
-    console.log("📝 [Marketing Leads] Inserimento lead nel database...");
     
     const result = await db.insert(marketingLeads).values({
       tenantId: tenantId,
@@ -258,11 +243,9 @@ router.post("/", async (req: Request, res: Response) => {
     }).returning();
 
     const savedLead = result[0];
-    console.log("✅ [Marketing Leads] Lead creato con successo:", savedLead);
 
     // 🔄 SINCRONIZZA CON TABELLA LEADS (CRM)
     try {
-      console.log("🔄 [Marketing Leads] Sincronizzazione con tabella leads (CRM)...");
       
       const existingCrmLead = await db.execute(sql`
         SELECT id FROM leads 
@@ -284,9 +267,7 @@ router.post("/", async (req: Request, res: Response) => {
           status: 'new',
           notes: null,
         });
-        console.log("✅ [Marketing Leads] Lead sincronizzato in tabella CRM");
       } else {
-        console.log("ℹ️ [Marketing Leads] Lead già esistente in CRM, skip duplicato");
       }
     } catch (syncError: any) {
       console.error("❌ [Marketing Leads] Errore sincronizzazione CRM:", syncError);
@@ -295,7 +276,6 @@ router.post("/", async (req: Request, res: Response) => {
     // Invia email di benvenuto personalizzata se non già inviata
       if (savedLead.email && !savedLead.emailSent) {
         try {
-          console.log('📧 [Lead API] Invio email di benvenuto personalizzata...');
           const { sendCustomSuccessEmail } = await import('./email');
 
           // Determina lo slug dalla campagna o usa movieturbo come default
@@ -309,7 +289,6 @@ router.post("/", async (req: Request, res: Response) => {
             // movieturbo rimane il default per retrocompatibilità
           }
 
-          console.log(`📧 [Lead API] Invio email con template: ${emailSlug}`);
 
           const emailResult = await sendCustomSuccessEmail(
             savedLead.email,
@@ -319,13 +298,12 @@ router.post("/", async (req: Request, res: Response) => {
           );
 
           if (emailResult.success) {
-            console.log(`✅ [Lead API] Email di benvenuto inviata con successo a ${savedLead.email}`);
             // Aggiorna il flag nel database
             await db.update(marketingLeads)
               .set({ emailSent: true })
               .where(eq(marketingLeads.id, savedLead.id));
           } else {
-            console.error(`❌ [Lead API] Errore invio email benvenuto a ${savedLead.email}:`, emailResult.error);
+            console.error("[Lead API] Errore invio email:", emailResult.error);
           }
         } catch (error: any) {
           console.error('❌ [Lead API] Errore durante invio email:', error);
@@ -345,14 +323,11 @@ router.post("/", async (req: Request, res: Response) => {
         const existingCount = parseInt(String(duplicateCountResult.rows[0]?.count || '0'));
 
         if (existingCount > 1) {
-          console.log(`🔄 [Marketing Leads] DUPLICATO TRACCIATO: ${email} si è iscritto alla campagna ${campaign || 'unknown'} per la ${existingCount}ª volta`);
         } else {
-          console.log(`✨ [Marketing Leads] NUOVO LEAD: ${email} prima iscrizione alla campagna ${campaign || 'unknown'}`);
         }
 
         // 🤖 INVIA NOTIFICA AL BOT TELEGRAM
         try {
-          console.log('🤖 [Telegram Bot] Invio notifica nuovo lead...');
           const telegramMessage = `🚨 NUOVO LEAD MARKETING!\n\n` +
             `👤 Nome: ${firstName} ${lastName}\n` +
             `🏢 Azienda: ${businessName}\n` +
@@ -363,7 +338,6 @@ router.post("/", async (req: Request, res: Response) => {
 
           // Verifica se l'utente ha configurato Telegram
           if (!owner?.telegramBotToken || !owner?.telegramChatId) {
-            console.log('⚠️ [Telegram Bot] Configurazione Telegram non trovata per l\'utente');
           } else {
 
           const telegramUrl = `https://api.telegram.org/bot${owner.telegramBotToken}/sendMessage`;
@@ -381,7 +355,6 @@ router.post("/", async (req: Request, res: Response) => {
           });
 
           if (telegramResponse.ok) {
-            console.log('✅ [Telegram Bot] Notifica nuovo lead inviata con successo!');
           } else {
             const errorData = await telegramResponse.text();
             console.error('❌ [Telegram Bot] Errore invio notifica:', errorData);
@@ -393,7 +366,6 @@ router.post("/", async (req: Request, res: Response) => {
 
         // Invia SEMPRE WhatsApp automaticamente (anche per duplicati)
         if (phone) {
-          console.log('📱 [Marketing Leads] Invio automatico WhatsApp per nuovo lead...');
           const { sendWhatsAppWelcomeMessage } = await import('./whatsapp');
 
           const whatsappResult = await sendWhatsAppWelcomeMessage({
@@ -405,16 +377,14 @@ router.post("/", async (req: Request, res: Response) => {
           });
 
           if (whatsappResult.success) {
-            console.log(`✅ [Marketing Leads] WhatsApp automatico inviato con successo per ${email}!`);
             // Aggiorna il flag nel database
             await db.update(marketingLeads)
               .set({ whatsappSent: true })
               .where(eq(marketingLeads.id, savedLead.id));
           } else {
-            console.error(`❌ [Marketing Leads] Errore invio WhatsApp automatico per ${email}:`, whatsappResult.error);
+            console.error("[Marketing Leads] Errore invio WhatsApp:", whatsappResult.error);
           }
         } else {
-          console.log(`⚠️ [Marketing Leads] Numero telefono mancante per ${email} - WhatsApp non inviato`);
         }
       } catch (error: any) {
         console.error('❌ [Marketing Leads] Errore durante tracking/WhatsApp/Telegram automatico:', error);
@@ -425,11 +395,8 @@ router.post("/", async (req: Request, res: Response) => {
 
   } catch (error: any) {
     console.error("❌ [Marketing Leads] Errore nella creazione del lead:", error);
-    console.error("❌ [Marketing Leads] Error code:", error?.code);
-    console.error("❌ [Marketing Leads] Stack trace:", error?.stack);
 
     if (error?.code === '23505') {
-      console.log("⚠️ [Marketing Leads] Email duplicata rilevata");
       res.status(409).json({ error: "Email già esistente" });
     } else {
       res.status(500).json({ error: "Errore nella creazione del lead" });
@@ -439,8 +406,6 @@ router.post("/", async (req: Request, res: Response) => {
 
 // Marketing Leads Routes - Advanced endpoint
 router.post('/marketing/leads', async (req, res) => {
-  console.log("➕ [Marketing Advanced] Inizio richiesta POST /marketing/leads");
-  console.log("📋 [Marketing Advanced] Body completo:", JSON.stringify(req.body, null, 2));
 
   try {
     const { 
@@ -468,38 +433,26 @@ router.post('/marketing/leads', async (req, res) => {
       browserInfo
     } = req.body;
 
-    console.log("🔍 [Marketing Advanced] Validazione input...");
     // Validazione input
     if (!businessName || !firstName || !lastName || !email || !phone) {
-      console.log("❌ [Marketing Advanced] Campi obbligatori mancanti");
       return res.status(400).json({ error: 'Tutti i campi sono obbligatori' });
     }
 
     // Validazione email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      console.log("❌ [Marketing Advanced] Email non valida:", email);
       return res.status(400).json({ error: 'Email non valida' });
     }
 
     // Validazione telefono (semplice)
     const phoneRegex = /^[+]?[\d\s-()]+$/;
     if (!phoneRegex.test(phone)) {
-      console.log("❌ [Marketing Advanced] Telefono non valido:", phone);
       return res.status(400).json({ error: 'Numero di telefono non valido' });
     }
 
     // Estrai informazioni dal User Agent
     const clientIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress || ipAddress;
     const clientUserAgent = req.headers['user-agent'] || userAgent;
-
-    console.log("🌐 [Marketing Advanced] Info client:", {
-      clientIP,
-      clientUserAgent: clientUserAgent?.substring(0, 100) + '...',
-      deviceType,
-      videoWatchTime,
-      videoProgress
-    });
 
     // Recupera tenant ID dal middleware
     const tenant = (req as any).tenant;
@@ -508,7 +461,6 @@ router.post('/marketing/leads', async (req, res) => {
       return res.status(400).json({ error: "Tenant non identificato" });
     }
     const tenantId = tenant.id;
-    console.log("🔧 [Marketing Advanced] Tenant ID:", tenantId, "- Tenant Name:", tenant.name);
 
     // Recupera configurazioni utente per Telegram
     let owner = null;
@@ -523,15 +475,12 @@ router.post('/marketing/leads', async (req, res) => {
       
       if (ownerResult && ownerResult.length > 0) {
         owner = ownerResult[0];
-        console.log("✅ [Marketing Advanced] Configurazioni utente recuperate");
       } else {
-        console.log("⚠️ [Marketing Advanced] Nessun utente trovato per tenant ID:", tenantId);
       }
     } catch (error: any) {
       console.error("❌ [Marketing Advanced] Errore recupero configurazioni utente:", error);
     }
 
-    console.log("📝 [Marketing Advanced] Inserimento lead nel database...");
     
     // Prepara additionalData con tutti i campi di tracking avanzato
     const additionalData = {
@@ -566,7 +515,6 @@ router.post('/marketing/leads', async (req, res) => {
     }).returning();
 
     const newLead = result[0];
-    console.log("✅ [Marketing Advanced] Lead creato con ID:", newLead.id);
 
     // 📊 TRACKING DUPLICATI E INVIO WHATSAPP + TELEGRAM BOT AUTOMATICO
     try {
@@ -579,15 +527,11 @@ router.post('/marketing/leads', async (req, res) => {
       const existingCount = parseInt(String(duplicateCountResult.rows[0]?.count || '0'));
 
       if (existingCount > 1) {
-        console.log(`🔄 [Marketing Advanced] DUPLICATO TRACCIATO: ${email} si è iscritto alla campagna ${campaign || 'MovieTurbo'} per la ${existingCount}ª volta`);
       } else {
-        console.log(`✨ [Marketing Advanced] NUOVO LEAD: ${email} prima iscrizione alla campagna ${campaign || 'MovieTurbo'}`);
       }
 
       // 🤖 INVIA NOTIFICA AL BOT TELEGRAM
       try {
-        console.log('🤖 [Telegram Bot Advanced] Invio notifica nuovo lead...');
-        console.log('🤖 [Telegram Bot Advanced] Dati lead:', { firstName, lastName, email, campaign });
 
         const telegramMessage = `🚨 NUOVO LEAD MARKETING (Advanced)!\n\n` +
           `👤 Nome: ${firstName} ${lastName}\n` +
@@ -600,17 +544,13 @@ router.post('/marketing/leads', async (req, res) => {
           `📱 Device: ${deviceType || 'Sconosciuto'}\n` +
           `🕐 Data: ${new Date().toLocaleString('it-IT')}`;
 
-        console.log('🤖 [Telegram Bot Advanced] Messaggio da inviare:', telegramMessage);
 
         // Verifica se l'utente ha configurato Telegram
         if (!owner?.telegramBotToken || !owner?.telegramChatId) {
-          console.log('⚠️ [Telegram Bot Advanced] Configurazione Telegram non trovata per l\'utente');
         } else {
 
         const telegramUrl = `https://api.telegram.org/bot${owner.telegramBotToken}/sendMessage`;
 
-        console.log('🤖 [Telegram Bot Advanced] URL Telegram configurato per utente');
-        console.log('🤖 [Telegram Bot Advanced] Chat ID:', owner.telegramChatId);
 
         const telegramResponse = await fetch(telegramUrl, {
           method: 'POST',
@@ -624,12 +564,9 @@ router.post('/marketing/leads', async (req, res) => {
           })
         });
 
-        console.log('🤖 [Telegram Bot Advanced] Status risposta:', telegramResponse.status);
 
         if (telegramResponse.ok) {
           const responseData = await telegramResponse.json();
-          console.log('✅ [Telegram Bot Advanced] Notifica nuovo lead inviata con successo!');
-          console.log('✅ [Telegram Bot Advanced] Risposta Telegram:', responseData);
         } else {
           const errorData = await telegramResponse.text();
           console.error('❌ [Telegram Bot Advanced] Errore invio notifica:', errorData);
@@ -641,7 +578,6 @@ router.post('/marketing/leads', async (req, res) => {
 
       // Invia SEMPRE messaggio WhatsApp di benvenuto (anche per duplicati)
       if (phone) {
-        console.log('📱 [Marketing Advanced] Invio messaggio WhatsApp di benvenuto...');
         const { sendWhatsAppWelcomeMessage } = await import('./whatsapp');
 
         const whatsappResult = await sendWhatsAppWelcomeMessage({
@@ -653,34 +589,18 @@ router.post('/marketing/leads', async (req, res) => {
         });
 
         if (whatsappResult.success) {
-          console.log(`✅ [Marketing Advanced] Messaggio WhatsApp inviato con successo per ${email}!`);
           // Aggiorna il flag nel database
           await db.update(marketingLeads)
             .set({ whatsappSent: true })
             .where(eq(marketingLeads.id, newLead.id));
         } else {
-          console.error(`❌ [Marketing Advanced] Errore invio WhatsApp per ${email}:`, whatsappResult.error);
+          console.error("[Marketing Advanced] Errore invio WhatsApp:", whatsappResult.error);
         }
       } else {
-        console.log(`⚠️ [Marketing Advanced] Numero telefono mancante per ${email} - WhatsApp non inviato`);
       }
     } catch (trackingError: any) {
       console.error('❌ [Marketing Advanced] Errore durante tracking/WhatsApp/Telegram:', trackingError);
     }
-
-    // Video analytics sono già salvati in additionalData del lead
-    // La tabella video_analytics separata non esiste nello schema corrente
-    if (videoWatchTime && videoProgress) {
-      console.log("📹 [Marketing Advanced] Video analytics salvati in additionalData del lead");
-    }
-
-    console.log('📧 [Marketing Advanced] Nuovo lead marketing creato:', { 
-      id: newLead.id, 
-      email, 
-      source, 
-      videoProgress,
-      deviceType 
-    });
 
     res.json({ 
       success: true, 
@@ -698,7 +618,6 @@ router.post('/marketing/leads', async (req, res) => {
     });
   } catch (error: any) {
     console.error('❌ [Marketing Advanced] Errore nella creazione del lead marketing:', error);
-    console.error('❌ [Marketing Advanced] Stack trace:', error?.stack);
     res.status(500).json({ error: 'Errore interno del server' });
   }
 });
@@ -818,11 +737,9 @@ router.get('/analytics', authenticateToken, async (req: AuthRequest, res) => {
       conversionFunnel
     };
 
-    console.log("✅ [Marketing Analytics] Risposta preparata con successo (query ottimizzata)");
     res.json(responseData);
   } catch (error: any) {
     console.error('❌ [Marketing Analytics] Errore nel recupero analytics lead:', error);
-    console.error('❌ [Marketing Analytics] Stack trace:', error?.stack);
     res.status(500).json({ error: 'Errore nel recupero analytics' });
   }
 });
@@ -1019,7 +936,6 @@ router.delete("/:id", authenticateToken, async (req: AuthRequest, res: Response)
       .where(and(eq(marketingLeads.id, leadId), eq(marketingLeads.tenantId, tenantId)))
       .returning();
 
-    console.log(`✅ [Marketing Lead Delete] Lead ${leadId} eliminato con successo`);
     res.json({
       success: true,
       data: {
