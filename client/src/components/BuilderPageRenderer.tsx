@@ -273,15 +273,17 @@ function ImageComponent({ props }: { props: any }) {
     >
       <div className="max-w-6xl mx-auto">
         {props.src ? (
-          <ResponsiveImage
-            src={props.src}
-            alt={props.alt || 'Immagine'}
-            width={imgWidth}
-            height={imgHeight}
-            className={radiusClass}
-            objectFit={props.objectFit || 'cover'}
-            priority={false}
-          />
+          <div style={{ width: props.width || '100%' }}>
+            <ResponsiveImage
+              src={props.src}
+              alt={props.alt || 'Immagine'}
+              width={imgWidth}
+              height={imgHeight}
+              className={radiusClass}
+              objectFit={props.objectFit || 'cover'}
+              priority={false}
+            />
+          </div>
         ) : (
           <div className={`bg-muted ${radiusClass} h-64 flex items-center justify-center`}>
             <p className="text-muted-foreground">Nessuna immagine</p>
@@ -813,7 +815,7 @@ function NavMenuComponent({ props }: { props: any }) {
   };
   const alignmentClass = alignmentMap[props.alignment || 'left'] || 'justify-start';
   const isFixed = props.fixed || props.sticky;
-  const hasMobileHamburger = props.mobileHamburger === true;
+  const hasMobileHamburger = props.mobileHamburger === true || items.length > 3;
 
   const navStyle: React.CSSProperties = {
     backgroundColor: props.backgroundColor || 'transparent',
