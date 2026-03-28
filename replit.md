@@ -67,6 +67,13 @@ Preferred communication style: Simple, everyday language.
 - **class-variance-authority**: Utility for creating variant-based component APIs
 - **clsx & tailwind-merge**: Class name manipulation utilities
 
+## Admin Dashboard Architecture
+- **Sidebar Navigation**: Grouped into 5 sections (Principale, Contenuti, Impostazioni, Marketing, Strumenti) with indigo/slate design theme
+- **Sub-tab Sections**: Content section (Blog, Servizi, Progetti, Navbar), Settings section (SEO, Generali, Footer, Tenant), Lead section (Lead, Marketing Leads, Landing Pages)
+- **Design System**: Indigo-600 accents, slate palette backgrounds, border-0 shadow-sm cards, white/80 backdrop-blur header
+- **Login Form**: Modern centered design with Lock icon, no credential hints shown
+- **SuperAdmin Dashboard**: Separate modernized dashboard at /superadmin with tenant/user management, impersonation, password reset
+
 ## Content Management System
 - **Rich Text Editor**: React Quill integration for WYSIWYG content editing
 - **Template System**: JSON-based landing page templates with editable sections
