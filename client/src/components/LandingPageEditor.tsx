@@ -41,7 +41,7 @@ const TitledListEditor = ({ value = { title: '', items: [] }, onChange }: { valu
         <div className="space-y-2">
             <Input placeholder="Titolo della sezione" value={value.title} onChange={e => handleTitleChange(e.target.value)} />
             <div className="pl-4 border-l-2">
-                <Label className="text-sm text-muted-foreground">Elementi della lista</Label>
+                <Label className="text-xs text-slate-600">Elementi della lista</Label>
                 <SimpleListEditor value={value.items} onChange={handleItemsChange} />
             </div>
         </div>
@@ -208,8 +208,8 @@ export function LandingPageEditor({ landingPageToEdit, onClose }: { landingPageT
   return (
     <div className="fixed inset-0 z-50 flex bg-black bg-opacity-50" onClick={onClose}>
       <div className="w-full max-w-screen-2xl mx-auto flex h-full" onClick={e => e.stopPropagation()}>
-        <div className="w-2/5 bg-background border-r overflow-y-auto flex flex-col">
-          <div className="sticky top-0 bg-background border-b p-4 flex justify-between items-center"><h2 className="text-lg font-semibold">{landingPageToEdit ? 'Modifica Landing Page' : 'Nuova Pagina'}</h2><Button variant="ghost" size="sm" onClick={onClose}><X className="h-4 w-4" /></Button></div>
+        <div className="w-2/5 bg-white border-r overflow-y-auto flex flex-col">
+          <div className="sticky top-0 z-10 bg-white/80 backdrop-blur-sm border-b border-slate-200 p-4 flex justify-between items-center"><h2 className="text-lg font-semibold text-slate-800">{landingPageToEdit ? 'Modifica Landing Page' : 'Nuova Pagina'}</h2><Button variant="ghost" size="sm" onClick={onClose}><X className="h-4 w-4" /></Button></div>
           <div className="p-4 flex-grow">
             <Tabs defaultValue="content">
               <TabsList className="grid w-full grid-cols-2"><TabsTrigger value="content">Contenuti</TabsTrigger><TabsTrigger value="settings">Impostazioni</TabsTrigger></TabsList>
@@ -224,17 +224,17 @@ export function LandingPageEditor({ landingPageToEdit, onClose }: { landingPageT
                   </Accordion>
               </TabsContent>
               <TabsContent value="settings" className="space-y-4 pt-4">
-                <Card><CardHeader><CardTitle>Informazioni Base</CardTitle></CardHeader><CardContent className="space-y-4"><Input placeholder="Titolo" value={title} onChange={e => setTitle(e.target.value)} /><Input placeholder="Slug" value={slug} onChange={e => setSlug(e.target.value)} /><Textarea placeholder="Descrizione interna" value={description} onChange={e => setDescription(e.target.value)} /><div className="flex items-center space-x-2"><Switch id="isActive" checked={isActive} onCheckedChange={setIsActive} /><Label htmlFor="isActive">Pagina Attiva</Label></div></CardContent></Card>
-                <Card><CardHeader><CardTitle>SEO</CardTitle></CardHeader><CardContent className="space-y-4"><Input placeholder="Meta Title" value={metadata.metaTitle} onChange={e => setMetadata(p => ({...p, metaTitle: e.target.value}))} /><Textarea placeholder="Meta Description" value={metadata.metaDescription} onChange={e => setMetadata(p => ({...p, metaDescription: e.target.value}))} /></CardContent></Card>
+                <Card className="border-0 shadow-sm"><CardHeader><CardTitle>Informazioni Base</CardTitle></CardHeader><CardContent className="space-y-4"><Input placeholder="Titolo" value={title} onChange={e => setTitle(e.target.value)} /><Input placeholder="Slug" value={slug} onChange={e => setSlug(e.target.value)} /><Textarea placeholder="Descrizione interna" value={description} onChange={e => setDescription(e.target.value)} /><div className="flex items-center space-x-2"><Switch id="isActive" checked={isActive} onCheckedChange={setIsActive} /><Label htmlFor="isActive">Pagina Attiva</Label></div></CardContent></Card>
+                <Card className="border-0 shadow-sm"><CardHeader><CardTitle>SEO</CardTitle></CardHeader><CardContent className="space-y-4"><Input placeholder="Meta Title" value={metadata.metaTitle} onChange={e => setMetadata(p => ({...p, metaTitle: e.target.value}))} /><Textarea placeholder="Meta Description" value={metadata.metaDescription} onChange={e => setMetadata(p => ({...p, metaDescription: e.target.value}))} /></CardContent></Card>
               </TabsContent>
             </Tabs>
           </div>
-          <div className="sticky bottom-0 bg-background border-t p-4 flex justify-between">
+          <div className="sticky bottom-0 z-10 bg-white/80 backdrop-blur-sm border-t border-slate-200 p-4 flex justify-between">
             <Button variant="outline" onClick={onClose}>Annulla</Button>
-            <Button onClick={handleSave} disabled={mutation.isPending}><Save className="h-4 w-4 mr-2" />{mutation.isPending ? "Salvataggio..." : "Salva"}</Button>
+            <Button onClick={handleSave} disabled={mutation.isPending} className="bg-indigo-600 hover:bg-indigo-700 text-white"><Save className="h-4 w-4 mr-2" />{mutation.isPending ? "Salvataggio..." : "Salva"}</Button>
           </div>
         </div>
-        <div className="w-3/5 bg-slate-200 overflow-y-auto p-4">
+        <div className="w-3/5 bg-slate-100 overflow-y-auto p-4">
            <div className="bg-white rounded-lg shadow-xl mx-auto max-w-screen-lg transform scale-95 origin-top"><PatrimonioLandingRenderer landingPage={previewPageData} /></div>
         </div>
       </div>

@@ -32,7 +32,7 @@ const ColorPicker = ({ value, onChange, label }: { value: string, onChange: (col
   
   return (
     <div className="space-y-2">
-      <Label className="text-xs font-medium">{label}</Label>
+      <Label className="text-xs font-medium text-slate-600">{label}</Label>
       <div className="flex items-center gap-2">
         <input 
           type="color" 
@@ -78,7 +78,7 @@ const FontFamilySelector = ({ value, onChange }: { value: string, onChange: (fon
   
   return (
     <div className="space-y-1">
-      <Label className="text-xs font-medium">Font Family</Label>
+      <Label className="text-xs font-medium text-slate-600">Font Family</Label>
       <Select value={value || 'inherit'} onValueChange={onChange}>
         <SelectTrigger className="h-8">
           <SelectValue />
@@ -121,7 +121,7 @@ const TypographyControls = ({
     <div className="space-y-3">
       <div className="grid grid-cols-2 gap-2">
         <div>
-          <Label className="text-xs font-medium">Font Size (px)</Label>
+          <Label className="text-xs font-medium text-slate-600">Font Size (px)</Label>
           <div className="flex items-center gap-2">
             <Slider 
               value={[fontSize || 16]} 
@@ -134,7 +134,7 @@ const TypographyControls = ({
         </div>
         
         <div>
-          <Label className="text-xs font-medium">Font Weight</Label>
+          <Label className="text-xs font-medium text-slate-600">Font Weight</Label>
           <Select value={fontWeight || 'normal'} onValueChange={onFontWeightChange}>
             <SelectTrigger className="h-8">
               <SelectValue />
@@ -152,7 +152,7 @@ const TypographyControls = ({
       
       <div className="grid grid-cols-2 gap-2">
         <div>
-          <Label className="text-xs font-medium">Line Height</Label>
+          <Label className="text-xs font-medium text-slate-600">Line Height</Label>
           <div className="flex items-center gap-2">
             <Slider 
               value={[lineHeight || 1.5]} 
@@ -165,7 +165,7 @@ const TypographyControls = ({
         </div>
         
         <div>
-          <Label className="text-xs font-medium">Letter Spacing</Label>
+          <Label className="text-xs font-medium text-slate-600">Letter Spacing</Label>
           <div className="flex items-center gap-2">
             <Slider 
               value={[letterSpacing || 0]} 
@@ -179,7 +179,7 @@ const TypographyControls = ({
       </div>
       
       <div>
-        <Label className="text-xs font-medium">Text Align</Label>
+        <Label className="text-xs font-medium text-slate-600">Text Align</Label>
         <div className="flex gap-1 mt-1">
           {[
             { value: 'left', icon: AlignLeft },
@@ -445,7 +445,7 @@ export function HomepageEditor({ pageToEdit, onClose }: { pageToEdit?: any; onCl
             
             {/* Text Content */}
             <div>
-              <Label className="text-xs font-medium">Contenuto</Label>
+              <Label className="text-xs font-medium text-slate-600">Contenuto</Label>
               {String(element.value).length > 100 ? 
                 <Textarea 
                   value={element.value} 
@@ -545,7 +545,7 @@ export function HomepageEditor({ pageToEdit, onClose }: { pageToEdit?: any; onCl
                   
                   {/* Spacing & Layout */}
                   <div className="space-y-3">
-                    <Label className="text-xs font-medium">Spaziatura</Label>
+                    <Label className="text-xs font-medium text-slate-600">Spaziatura</Label>
                     <div className="grid grid-cols-2 gap-2">
                       <div>
                         <Label className="text-xs">Padding (px)</Label>
@@ -583,7 +583,7 @@ export function HomepageEditor({ pageToEdit, onClose }: { pageToEdit?: any; onCl
                   
                   {/* Border & Effects */}
                   <div className="space-y-3">
-                    <Label className="text-xs font-medium">Bordi e Effetti</Label>
+                    <Label className="text-xs font-medium text-slate-600">Bordi e Effetti</Label>
                     <div className="grid grid-cols-2 gap-2">
                       <div>
                         <Label className="text-xs">Border Radius (px)</Label>
@@ -699,7 +699,7 @@ export function HomepageEditor({ pageToEdit, onClose }: { pageToEdit?: any; onCl
                   
                   {/* Button Size */}
                   <div>
-                    <Label className="text-xs font-medium">Dimensioni</Label>
+                    <Label className="text-xs font-medium text-slate-600">Dimensioni</Label>
                     <div className="grid grid-cols-2 gap-2 mt-1">
                       <div>
                         <Label className="text-xs">Padding X (px)</Label>
@@ -737,7 +737,7 @@ export function HomepageEditor({ pageToEdit, onClose }: { pageToEdit?: any; onCl
                   
                   {/* Button Border */}
                   <div>
-                    <Label className="text-xs font-medium">Border Radius (px)</Label>
+                    <Label className="text-xs font-medium text-slate-600">Border Radius (px)</Label>
                     <div className="flex items-center gap-2">
                       <Slider 
                         value={[element.style?.borderRadius || 6]} 
@@ -811,7 +811,7 @@ export function HomepageEditor({ pageToEdit, onClose }: { pageToEdit?: any; onCl
                   
                   {/* Image Dimensions */}
                   <div>
-                    <Label className="text-xs font-medium">Dimensioni</Label>
+                    <Label className="text-xs font-medium text-slate-600">Dimensioni</Label>
                     <div className="grid grid-cols-2 gap-2 mt-1">
                       <div>
                         <Label className="text-xs">Larghezza (px)</Label>
@@ -843,7 +843,7 @@ export function HomepageEditor({ pageToEdit, onClose }: { pageToEdit?: any; onCl
                   
                   {/* Object Fit */}
                   <div>
-                    <Label className="text-xs font-medium">Modalità Visualizzazione</Label>
+                    <Label className="text-xs font-medium text-slate-600">Modalità Visualizzazione</Label>
                     <Select 
                       value={element.style?.objectFit || 'cover'} 
                       onValueChange={(objectFit) => updateSectionElement(sectionId, elementKey, {
@@ -914,7 +914,7 @@ export function HomepageEditor({ pageToEdit, onClose }: { pageToEdit?: any; onCl
                   
                   {/* Shadow */}
                   <div>
-                    <Label className="text-xs font-medium">Ombra</Label>
+                    <Label className="text-xs font-medium text-slate-600">Ombra</Label>
                     <Select 
                       value={element.style?.boxShadow || 'none'} 
                       onValueChange={(boxShadow) => updateSectionElement(sectionId, elementKey, {
@@ -1003,9 +1003,9 @@ export function HomepageEditor({ pageToEdit, onClose }: { pageToEdit?: any; onCl
     <div className="fixed inset-0 z-50 flex bg-black bg-opacity-50" onClick={onClose}>
       <div className="w-full max-w-screen-2xl mx-auto flex h-full" onClick={e => e.stopPropagation()}>
         {/* Editor Panel */}
-        <div className="w-2/5 bg-background border-r overflow-y-auto flex flex-col">
-          <div className="sticky top-0 bg-background border-b p-4 flex justify-between items-center">
-            <h2 className="text-lg font-semibold">{pageToEdit ? 'Modifica Homepage' : 'Nuova Homepage'}</h2>
+        <div className="w-2/5 bg-white border-r overflow-y-auto flex flex-col">
+          <div className="sticky top-0 z-10 bg-white/80 backdrop-blur-sm border-b border-slate-200 p-4 flex justify-between items-center">
+            <h2 className="text-lg font-semibold text-slate-800">{pageToEdit ? 'Modifica Homepage' : 'Nuova Homepage'}</h2>
             <Button variant="ghost" size="sm" onClick={onClose}><X className="h-4 w-4" /></Button>
           </div>
           
@@ -1036,7 +1036,7 @@ export function HomepageEditor({ pageToEdit, onClose }: { pageToEdit?: any; onCl
               </TabsContent>
               
               <TabsContent value="settings" className="space-y-4 pt-4">
-                <Card>
+                <Card className="border-0 shadow-sm">
                   <CardHeader>
                     <CardTitle>Informazioni Base</CardTitle>
                   </CardHeader>
@@ -1051,12 +1051,12 @@ export function HomepageEditor({ pageToEdit, onClose }: { pageToEdit?: any; onCl
                     {slug === 'home' ? (
                       <p className="text-xs text-blue-600">Questa è la homepage attiva - visibile su /</p>
                     ) : (
-                      <p className="text-xs text-muted-foreground">Homepage personalizzata - per attivarla usa "Imposta come Predefinita"</p>
+                      <p className="text-xs text-slate-600">Homepage personalizzata - per attivarla usa "Imposta come Predefinita"</p>
                     )}
                   </CardContent>
                 </Card>
                 
-                <Card>
+                <Card className="border-0 shadow-sm">
                   <CardHeader>
                     <CardTitle>SEO</CardTitle>
                   </CardHeader>
@@ -1069,7 +1069,7 @@ export function HomepageEditor({ pageToEdit, onClose }: { pageToEdit?: any; onCl
             </Tabs>
           </div>
           
-          <div className="sticky bottom-0 bg-background border-t p-4 flex justify-between items-center">
+          <div className="sticky bottom-0 z-10 bg-white/80 backdrop-blur-sm border-t border-slate-200 p-4 flex justify-between items-center">
             <div className="flex gap-2">
               <Button variant="outline" onClick={onClose}>Annulla</Button>
               <Button 
@@ -1081,7 +1081,7 @@ export function HomepageEditor({ pageToEdit, onClose }: { pageToEdit?: any; onCl
                 Reset Completo
               </Button>
             </div>
-            <Button onClick={handleSave} disabled={mutation.isPending}>
+            <Button onClick={handleSave} disabled={mutation.isPending} className="bg-indigo-600 hover:bg-indigo-700 text-white">
               <Save className="h-4 w-4 mr-2" />
               {mutation.isPending ? "Salvataggio..." : "Salva"}
             </Button>
@@ -1089,7 +1089,7 @@ export function HomepageEditor({ pageToEdit, onClose }: { pageToEdit?: any; onCl
         </div>
 
         {/* Preview Panel */}
-        <div className="w-3/5 bg-slate-200 overflow-y-auto p-4">
+        <div className="w-3/5 bg-slate-100 overflow-y-auto p-4">
           <div className="bg-white rounded-lg shadow-xl mx-auto max-w-screen-lg transform scale-95 origin-top">
             <HomepageRenderer homepage={previewData} applyElementStyle={applyElementStyle} />
           </div>

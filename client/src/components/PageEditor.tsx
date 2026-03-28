@@ -407,8 +407,8 @@ export function PageEditor({ pageToEdit, templateType, onClose }: PageEditorProp
       <div className="bg-white rounded-lg w-[95vw] h-[95vh] flex overflow-hidden">
         {/* Editor Panel - 40% */}
         <div className="w-2/5 flex flex-col border-r">
-          <div className="p-4 border-b flex justify-between items-center">
-            <h2 className="text-xl font-bold">Editor Pagina - {template.templateName}</h2>
+          <div className="sticky top-0 z-10 bg-white/80 backdrop-blur-sm border-b border-slate-200 p-4 flex justify-between items-center">
+            <h2 className="text-lg font-semibold text-slate-800">Editor Pagina - {template.templateName}</h2>
             <Button variant="ghost" size="sm" onClick={onClose}>
               <X className="h-4 w-4" />
             </Button>
@@ -431,7 +431,7 @@ export function PageEditor({ pageToEdit, templateType, onClose }: PageEditorProp
                       <AccordionContent className="space-y-4">
                         {Object.entries(section.elements || {}).map(([elementKey, element]: [string, any]) => (
                           <div key={elementKey} className="space-y-2">
-                            <Label className="text-sm font-medium capitalize">
+                            <Label className="text-xs text-slate-600 capitalize">
                               {elementKey.replace(/([A-Z])/g, ' $1').trim()}
                             </Label>
                             {renderElementEditor(sectionKey, elementKey, element)}
@@ -465,7 +465,7 @@ export function PageEditor({ pageToEdit, templateType, onClose }: PageEditorProp
                   <div className="space-y-3 pt-4 border-t">
                     <div>
                       <Label className="text-base font-semibold">Eventi Facebook Pixel</Label>
-                      <p className="text-sm text-muted-foreground mt-1">
+                      <p className="text-xs text-slate-600 mt-1">
                         Eventi custom che verranno tracciati quando questa pagina viene caricata
                       </p>
                     </div>
@@ -553,7 +553,7 @@ export function PageEditor({ pageToEdit, templateType, onClose }: PageEditorProp
                         }}
                         data-testid="button-test-fb-pixel"
                       >
-                        🧪 Testa Facebook Pixel
+                        Testa Facebook Pixel
                       </Button>
                     </div>
                   </div>
@@ -562,22 +562,21 @@ export function PageEditor({ pageToEdit, templateType, onClose }: PageEditorProp
             </Tabs>
           </div>
 
-          {/* Buttons Sticky */}
-          <div className="p-4 border-t bg-white space-x-2">
-            <Button onClick={handleSave} disabled={mutation.isPending}>
-              <Save className="h-4 w-4 mr-2" />
-              {mutation.isPending ? 'Salvando...' : 'Salva'}
-            </Button>
+          <div className="sticky bottom-0 z-10 bg-white/80 backdrop-blur-sm border-t border-slate-200 p-4 flex justify-between">
             <Button variant="outline" onClick={onClose}>
               Annulla
+            </Button>
+            <Button onClick={handleSave} disabled={mutation.isPending} className="bg-indigo-600 hover:bg-indigo-700 text-white">
+              <Save className="h-4 w-4 mr-2" />
+              {mutation.isPending ? 'Salvando...' : 'Salva'}
             </Button>
           </div>
         </div>
 
         {/* Preview Panel - 60% */}
-        <div className="w-3/5 flex flex-col">
-          <div className="p-4 border-b">
-            <h3 className="text-lg font-semibold">Anteprima Live</h3>
+        <div className="w-3/5 flex flex-col bg-slate-100">
+          <div className="p-4 border-b border-slate-200 bg-white/80 backdrop-blur-sm">
+            <h3 className="text-sm font-medium text-slate-600">Anteprima Live</h3>
           </div>
           <div className="flex-1 overflow-auto">
             <div className="transform scale-95 origin-top-left w-[105.26%] h-[105.26%]">

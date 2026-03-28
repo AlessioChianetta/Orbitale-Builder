@@ -110,13 +110,13 @@ export function ContattiPageEditor({ pageToEdit, onClose }: { pageToEdit?: any; 
       return apiRequest(method, url, data);
     },
     onSuccess: () => {
-      toast({ title: "✅ Pagina Contatti salvata con successo!" });
+      toast({ title: "Pagina Contatti salvata con successo" });
       queryClient.invalidateQueries({ queryKey: ['/api/pages'] });
       onClose();
     },
     onError: (error: any) => {
       toast({ 
-        title: "❌ Errore nel salvataggio", 
+        title: "Errore nel salvataggio", 
         description: error.message || "Si è verificato un errore",
         variant: "destructive" 
       });
@@ -126,7 +126,7 @@ export function ContattiPageEditor({ pageToEdit, onClose }: { pageToEdit?: any; 
   const handleSave = () => {
     if (!title.trim()) {
       toast({ 
-        title: "⚠️ Titolo richiesto", 
+        title: "Titolo richiesto", 
         description: "Inserisci un titolo per la pagina",
         variant: "destructive" 
       });
@@ -135,7 +135,7 @@ export function ContattiPageEditor({ pageToEdit, onClose }: { pageToEdit?: any; 
 
     if (!slug.trim()) {
       toast({ 
-        title: "⚠️ Slug richiesto", 
+        title: "Slug richiesto", 
         description: "Inserisci uno slug per la pagina",
         variant: "destructive" 
       });
@@ -273,10 +273,9 @@ export function ContattiPageEditor({ pageToEdit, onClose }: { pageToEdit?: any; 
     <div className="fixed inset-0 z-50 flex bg-black bg-opacity-50" onClick={onClose}>
       <div className="w-full max-w-screen-2xl mx-auto flex h-full" onClick={e => e.stopPropagation()}>
         {/* SIDEBAR EDITOR - 40% */}
-        <div className="w-2/5 bg-background border-r flex flex-col">
-          {/* Header fisso */}
-          <div className="flex items-center justify-between p-4 border-b bg-background">
-            <h2 className="text-xl font-semibold">Editor Pagina Contatti</h2>
+        <div className="w-2/5 bg-white border-r flex flex-col">
+          <div className="sticky top-0 z-10 bg-white/80 backdrop-blur-sm border-b border-slate-200 p-4 flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-slate-800">Editor Pagina Contatti</h2>
             <Button variant="ghost" size="sm" onClick={onClose}>
               <X className="h-4 w-4" />
             </Button>
@@ -303,7 +302,7 @@ export function ContattiPageEditor({ pageToEdit, onClose }: { pageToEdit?: any; 
                           {Object.entries(section.elements || {}).map(([elementKey, element]: [string, any]) => (
                             element.editable !== false && (
                               <div key={elementKey} className="space-y-2">
-                                <Label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                                <Label className="text-xs text-slate-600 uppercase tracking-wide">
                                   {elementKey.replace(/([A-Z])/g, ' $1')}
                                 </Label>
                                 {renderElementEditor(sectionId, elementKey, element)}
@@ -318,7 +317,7 @@ export function ContattiPageEditor({ pageToEdit, onClose }: { pageToEdit?: any; 
               </TabsContent>
 
               <TabsContent value="settings" className="space-y-4">
-                <Card>
+                <Card className="border-0 shadow-sm">
                   <CardHeader>
                     <CardTitle className="text-base">Informazioni Pagina</CardTitle>
                   </CardHeader>
@@ -342,7 +341,7 @@ export function ContattiPageEditor({ pageToEdit, onClose }: { pageToEdit?: any; 
                   </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="border-0 shadow-sm">
                   <CardHeader>
                     <CardTitle className="text-base">SEO</CardTitle>
                   </CardHeader>
@@ -371,26 +370,23 @@ export function ContattiPageEditor({ pageToEdit, onClose }: { pageToEdit?: any; 
           </div>
         </div>
 
-        {/* Footer fisso con pulsanti */}
-        <div className="border-t bg-background p-4">
-          <div className="flex gap-2">
+        <div className="sticky bottom-0 z-10 bg-white/80 backdrop-blur-sm border-t border-slate-200 p-4 flex justify-between">
+            <Button variant="outline" onClick={onClose}>
+              Annulla
+            </Button>
             <Button 
               onClick={handleSave} 
               disabled={savePageMutation.isPending}
-              className="flex-1"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white"
             >
               <Save className="h-4 w-4 mr-2" />
               {savePageMutation.isPending ? "Salvataggio..." : "Salva"}
             </Button>
-            <Button variant="outline" onClick={onClose}>
-              Annulla
-            </Button>
-          </div>
         </div>
         </div>
 
         {/* ANTEPRIMA - 60% */}
-        <div className="w-3/5 bg-gray-50 overflow-y-auto">
+        <div className="w-3/5 bg-slate-100 overflow-y-auto">
           <div className="p-4">
             <div className="bg-white rounded-lg shadow-sm border" style={{ transform: 'scale(0.95)', transformOrigin: 'top left', width: '105.26%' }}>
               <ContattiRenderer 
