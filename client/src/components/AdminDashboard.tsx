@@ -43,13 +43,11 @@ import {
   Globe,
   Plus,
   Search,
-  Filter,
   MoreHorizontal,
   Edit,
   Trash2,
   Eye,
   TrendingUp,
-  Calendar,
   Mail,
   X,
   Copy,
@@ -62,14 +60,10 @@ import {
   Palette,
   Lightbulb,
   Menu,
-  UserPlus,
   Key,
   LayoutDashboard,
-  FolderOpen,
   Megaphone,
-  Wrench,
   Lock,
-  ChevronRight,
 } from "lucide-react";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -89,7 +83,6 @@ import ProjectsManager from "./ProjectsManager";
 import SEOSettings from "./SEOSettings";
 import CandidateFormSettings from "./CandidateFormSettings";
 import NavbarSettings from "./NavbarSettings";
-import TenantSettings from "./TenantSettings";
 import { PreviewFrame } from "./PreviewFrame";
 import GoogleSheetsManager from "../pages/GoogleSheetsManager";
 import { SEOHead } from "./SEOHead";
@@ -1009,7 +1002,7 @@ export default function AdminDashboard() {
         { key: "overview", title: "Panoramica", icon: LayoutDashboard },
         { key: "preview", title: "Anteprima Sito", icon: Eye },
         { key: "pages", title: "Pagine", icon: Globe },
-        { key: "homepage-duplicates", title: "Homepage Duplicate", icon: Copy },
+        { key: "homepage-duplicates", title: "Homepage", icon: Copy },
       ]
     },
     {
@@ -1895,9 +1888,8 @@ export default function AdminDashboard() {
                 <div className="flex gap-1 bg-slate-100 p-1 rounded-lg w-fit">
                   {[
                     { key: "seo", label: "SEO" },
-                    { key: "settings", label: "Generali" },
+                    { key: "settings", label: "Impostazioni" },
                     { key: "footer", label: "Footer" },
-                    { key: "tenant", label: "Sito / Tenant" },
                   ].map((tab) => (
                     <button
                       key={tab.key}
@@ -1921,7 +1913,6 @@ export default function AdminDashboard() {
                 )}
                 {settingsSubTab === "settings" && <SettingsEditor />}
                 {settingsSubTab === "footer" && <FooterSettings />}
-                {settingsSubTab === "tenant" && <TenantSettings />}
               </div>
             )}
 
