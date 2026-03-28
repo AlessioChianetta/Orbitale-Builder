@@ -70,8 +70,9 @@ Preferred communication style: Simple, everyday language.
 ## Admin Dashboard Architecture
 - **Sidebar Navigation**: Grouped into 3 sections (Principale, Gestione, Strumenti) with indigo/slate design theme
 - **Panoramica sub-tabs**: Overview stats, Blog, Servizi, Progetti, Page Builder, Navbar
-- **Impostazioni SEO sub-tabs**: SEO, Generali, Footer, Tenant
+- **Impostazioni SEO sub-tabs**: SEO, Impostazioni, Footer
 - **Lead sub-tabs**: Lead, Marketing Leads, Landing Pages
+- **PageEditor**: Uses early-return pattern — when isEditingPage is true, replaces entire dashboard with full-screen PageEditor
 - **Design System**: Indigo-600 accents, slate palette backgrounds, border-0 shadow-sm cards, white/80 backdrop-blur header
 - **Login Form**: Modern centered design with Lock icon, no credential hints shown
 - **SuperAdmin Dashboard**: Separate modernized dashboard at /superadmin with tenant/user management, impersonation, password reset
